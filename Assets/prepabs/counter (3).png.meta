@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 8535d8cb224351b46a851684fc1a9e28
+guid: 33455c3f2bc0ed74493d72c09906d52d
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 6931557737204250816
-    second: boiled-egg_0
+      213: -9041442680269034555
+    second: counter (3)_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: boiled-egg_0
+      name: counter (3)_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 13
-        width: 512
-        height: 486
+        y: 0
+        width: 3328
+        height: 1280
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 0c87b2a7907d13060800000000000000
-      internalID: 6931557737204250816
+      spriteID: 5cb228139c7568280800000000000000
+      internalID: -9041442680269034555
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      boiled-egg_0: 6931557737204250816
+      counter (3)_0: -9041442680269034555
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
