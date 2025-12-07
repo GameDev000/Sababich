@@ -25,11 +25,21 @@ public class SelectionList : MonoBehaviour
         UpdateText();
     }
 
-    public void AddIngredient(string ingredientName)
+    public bool TryAddIngredient(string ingredientName)
     {
-        Debug.Log("Adding ingredient: " + ingredientName);
-        selectedIngredients.Add(ingredientName);
+        string lower = ingredientName.ToLower();
+
+        
+        if (selectedIngredients.Count == 0 && lower != "pitta")
+        {
+            Debug.Log("First ingredient must be Pitta. ");
+            return false;
+        }
+
+        Debug.Log("Adding ingredient: " + lower);
+        selectedIngredients.Add(lower);
         UpdateText();
+        return true;
     }
 
     public void ClearIngredients()
@@ -70,5 +80,10 @@ public class SelectionList : MonoBehaviour
         }
 
         return true;
+    }
+
+    public List<string> GetSelectedIngredients()
+    {
+        return new List<string>(selectedIngredients);
     }
 }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class CheckOrder : MonoBehaviour
 {
     [SerializeField] private SelectionList selectionList;
-    [SerializeField] private List<string> correctOrder = new List<string> { "pitta", "tahini", "eggplant", "egg" };
+    [SerializeField] private List<string> correctOrder = new List<string> { "pitta", "tahini", "eggplant", "egg" ,"salad", "amba" };
     private void OnMouseDown()
     {
         if (selectionList == null)
@@ -15,16 +15,22 @@ public class CheckOrder : MonoBehaviour
 
         bool isCorrect = selectionList.IsSelectionMatching(correctOrder);
 
-        if (isCorrect)
+       if (isCorrect)
         {
             GetComponent<CustomerMoodTimer>().CustomerServed();
             selectionList.ClearIngredients();
             Debug.Log("Correct!");
+
+            if (TutorialManager.Instance != null)
+            {
+                TutorialManager.Instance.CustomerOrderServed();
+            }
         }
         else
         {
-            Debug.Log("Wrong!");
-
+            Debug.Log("Wrong! - The entered order is" + string.Join(", ", selectionList.GetSelectedIngredients()));
+             Debug.Log("Correct order is" + string.Join(", ", correctOrder));
         }
+
     }
 }
