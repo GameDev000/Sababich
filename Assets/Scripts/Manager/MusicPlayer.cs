@@ -22,7 +22,7 @@ public class MusicPlayer : MonoBehaviour
     /// <summary>
     /// Toggles the sound on and off by muting or unmuting the AudioSource.
     /// </summary>
-    public void ToggleSound() 
+    public void ToggleSound()
     {
         audioSource.mute = !audioSource.mute;
     }

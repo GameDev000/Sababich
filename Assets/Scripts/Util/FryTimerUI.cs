@@ -25,7 +25,7 @@ public class FryTimerUI : MonoBehaviour
 
     private void Update()
     {   // Update the timer UI based on the frying progress
-        if (fryZone == null || !fryZone.IsFrying)   
+        if (fryZone == null || !fryZone.IsFrying)
         {
             if (timerImage != null && timerImage.enabled)
                 timerImage.enabled = false;

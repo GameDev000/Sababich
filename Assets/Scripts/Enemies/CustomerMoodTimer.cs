@@ -1,10 +1,10 @@
 using UnityEngine;
 using System.Collections;
 
- /// <summary>
- /// Manages the mood timer for a customer, changing their mood over time and handling their departure.
- /// The customer goes through different mood faces at set intervals and eventually walks away if not served.
- /// </summary>
+/// <summary>
+/// Manages the mood timer for a customer, changing their mood over time and handling their departure.
+/// The customer goes through different mood faces at set intervals and eventually walks away if not served.
+/// </summary>
 public class CustomerMoodTimer : MonoBehaviour
 {
     [SerializeField] private Sprite[] moodFaces; // Array of sprites representing different mood faces
@@ -25,7 +25,7 @@ public class CustomerMoodTimer : MonoBehaviour
     {
         if (spriteRenderer == null)
             spriteRenderer = GetComponent<SpriteRenderer>(); // Get the SpriteRenderer if not assigned at row 12
-            
+
         startPosition = transform.position; // Store the initial position of the customer
 
         if (moodFaces != null && moodFaces.Length > 0)
@@ -55,7 +55,7 @@ public class CustomerMoodTimer : MonoBehaviour
         }
     }
     // Call this method when the customer is served correctly
-    public void CustomerServed() 
+    public void CustomerServed()
     {
         moodStopped = true;
         currentFace = 0;
@@ -63,7 +63,7 @@ public class CustomerMoodTimer : MonoBehaviour
         StartCoroutine(WalkAwayAndNotify());
     }
     // Coroutine to handle walking away animation and notify when done
-    private IEnumerator WalkAwayAndNotify() 
+    private IEnumerator WalkAwayAndNotify()
     {
         elapsed = 0f;
         Vector3 start = transform.position;

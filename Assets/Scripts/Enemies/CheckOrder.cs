@@ -12,7 +12,7 @@ public class CheckOrder : MonoBehaviour
     [SerializeField] private List<string> correctOrder = new List<string> { "pitta", "tahini", "eggplant", "egg", "salad", "amba" };
     // Reference to the CustomerMoodTimer component
     [SerializeField] private CustomerMoodTimer customerMoodTimer;
-    
+
     // This method is called when the customer is clicked
     private void OnMouseDown()
     {
@@ -25,7 +25,7 @@ public class CheckOrder : MonoBehaviour
         bool isCorrect = selectionList.IsSelectionMatching(correctOrder);
 
         if (isCorrect)
-        {   
+        {
             if (customerMoodTimer != null)
                 customerMoodTimer.CustomerServed(); // Notify the customer mood timer that the customer has been served
             selectionList.ClearIngredients(); // Clear the selected ingredients for the next order

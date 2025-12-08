@@ -18,7 +18,7 @@ public class FryZoneEggplant : MonoBehaviour
     [Header("Tray")]
     [SerializeField] private EggplantTray eggplantTray; // Reference to the eggplant tray
     private FryState state = FryState.Empty; // Current frying state
-    private float timer = 0f;
+    public float timer = 0f;
 
     public bool IsReady => state == FryState.Ready;
     public bool IsFrying => state == FryState.Frying;
@@ -58,7 +58,7 @@ public class FryZoneEggplant : MonoBehaviour
         SetState(FryState.Frying);// Transition to frying state 
     }
 
-    public void ClearPan() 
+    public void ClearPan()
     {
         SetState(FryState.Empty); // Transition to empty state
     }
@@ -114,4 +114,6 @@ public class FryZoneEggplant : MonoBehaviour
         }
 
     }
+
+
 }

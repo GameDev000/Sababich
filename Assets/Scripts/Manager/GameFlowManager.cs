@@ -5,7 +5,7 @@ using UnityEngine;
 /// </summary>
 public class GameFlowManager : MonoBehaviour
 {
-    [SerializeField] private UIInstructions uiInstructions; // Reference to the UIInstructions component
+    [SerializeField] public UIInstructions uiInstructions; // Reference to the UIInstructions component
 
     public GamePhase CurrentPhase { get; private set; } // Current phase of the game
 
@@ -50,5 +50,13 @@ public class GameFlowManager : MonoBehaviour
                 uiInstructions.SetInstructions("The customer is done. Prepare for the next customer and repeat the process.");
                 break;
         }
+    }
+
+    public string GetInstructions()
+    {
+        if (uiInstructions != null)
+            return uiInstructions.GetCurrentText();
+
+        return string.Empty;
     }
 }
