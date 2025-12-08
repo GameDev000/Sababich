@@ -2,18 +2,22 @@
 using UnityEngine.SceneManagement;
 using UnityEngine;
 
+/// <summary>
+/// Manages the tutorial flow, guiding the player through frying eggplant and building a sandwich.
+/// </summary>
 public class TutorialManager : MonoBehaviour
 {
-    private enum TutorialPhase
+    private enum TutorialPhase // Different phases of the tutorial for eggplant frying and sandwich building
     {
         FryEggplant,
         BuildSandwich,
         Done
     }
 
-    private TutorialPhase phase = TutorialPhase.FryEggplant;
+    private TutorialPhase phase = TutorialPhase.FryEggplant; // Current phase of the tutorial
     private int buildStep = 0;
 
+    // The correct order of ingredients for building the sandwich
     private readonly string[] buildOrderNames =
     {
         "pitta",
@@ -24,44 +28,52 @@ public class TutorialManager : MonoBehaviour
         "tahini"
     };
 
-    public static TutorialManager Instance { get; private set; }
+    public static TutorialManager Instance { get; private set; } // Singleton instance
 
     [Header("Items")]
-    [SerializeField] private Item eggplantItem;
-    [SerializeField] private Item[] otherItems;
+    [SerializeField] private Item eggplantItem; // Reference to the eggplant item (row)
+    [SerializeField] private Item[] otherItems; // References to other items used in sandwich building
 
     [Header("Arrow")]
-    [SerializeField] private GameObject arrowEggplant;
+    [SerializeField] private GameObject arrowEggplant; // Arrow indicator for guiding the player to the eggplant first and then to other items
 
     [Header("Fry Zone")]
-    [SerializeField] private FryZoneEggplant fryZoneEggplant;
+    [SerializeField] private FryZoneEggplant fryZoneEggplant; // Reference to the fry zone for eggplant
 
     [Header("Customer")]
-    [SerializeField] private Transform customerTarget;
+    [SerializeField] private Transform customerTarget; // Target position for the customer
 
     [Header("Customer Visuals")]
-    [SerializeField] private SpriteRenderer customerRenderer;
-    [SerializeField] private Sprite[] customerSprites;
-    [SerializeField] private int tutorialCustomersCount = 3;
-    private int servedCustomers = 0;
+    [SerializeField] private SpriteRenderer customerRenderer; // Sprite renderer for the customer
+    [SerializeField] private Sprite[] customerSprites; // Array of customer sprites for different moods or appearances
+    [SerializeField] private int tutorialCustomersCount = 3; // Number of customers in the tutorial
+    private int servedCustomers = 0; // Counter for served customers
 
     [Header("Game Flow Manager")]
-    [SerializeField] private GameFlowManager gameFlowManager;
+    [SerializeField] private GameFlowManager gameFlowManager; // Reference to the GameFlowManager to update game phases
 
     [Header("Customer Logic")]
-    [SerializeField] private CustomerMoodTimer customerLogic;
+    [SerializeField] private CustomerMoodTimer customerLogic; // Reference to the CustomerMoodTimer for managing customer behavior
 
 
     private void Awake()
     {
-        Instance = this;
+        Instance = this; // Set the singleton instance
     }
 
     private void Start()
     {
-        StartCustomerRound();
+        StartCustomerRound(); // Start the first customer round
     }
 
+
+    /// <summary>
+    /// Handles ingredient clicks during the tutorial based on the current phase.
+    /// </summary>
+    /// <param name="item">The item that was clicked.</param>
+    /// <param name="ingredientName">The name of the ingredient associated with the item.</param>
+    /// <remarks> This method routes the click event to the appropriate handler based on the tutorial phase. </remarks>
+    /// </summary>
     public void OnIngredientClicked(Item item, string ingredientName)
     {
         if (item == null)
@@ -72,11 +84,11 @@ public class TutorialManager : MonoBehaviour
 
         switch (phase)
         {
-            case TutorialPhase.FryEggplant:
+            case TutorialPhase.FryEggplant: // Handle eggplant frying phase
                 HandleFryPhaseClick(item, ingredientName);
                 break;
 
-            case TutorialPhase.BuildSandwich:
+            case TutorialPhase.BuildSandwich: // Handle sandwich building phase
                 HandleBuildSandwichClick(item, ingredientName);
                 break;
 
@@ -85,6 +97,12 @@ public class TutorialManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Handles clicks during the eggplant frying phase of the tutorial.
+    /// </summary>
+    /// <param name="item">The item that was clicked.</param>
+    /// <param name="ingredientName">The name of the ingredient associated with the item.</param>
+    /// </summary>
     private void HandleFryPhaseClick(Item item, string ingredientName)
     {
         if (item != eggplantItem && ingredientName != "eggplantrow")
@@ -96,11 +114,16 @@ public class TutorialManager : MonoBehaviour
 
         if (fryZoneEggplant != null)
         {
-            fryZoneEggplant.StartFry();
-            SetGamePhase(GamePhase.FryingEggplant);
+            fryZoneEggplant.StartFry(); // Start frying the eggplant
+            SetGamePhase(GamePhase.FryingEggplant); // Update game phase to frying eggplant
         }
     }
 
+    /// <summary>
+    /// Called when the eggplant has finished frying.
+    /// </summary>
+    /// <param name="fryZone">The fry zone where the eggplant was fried.</param>
+    /// </summary>
     public void OnEggplantFried(FryZoneEggplant fryZone)
     {
         Debug.Log("[TutorialManager] Eggplant is fried - show arrow on pan");
@@ -114,34 +137,42 @@ public class TutorialManager : MonoBehaviour
         ShowArrow(false);
     }
 
+    /// <summary>
+    /// Called when the eggplant tray is full and ready for sandwich building.
+    /// </summary>
     public void OnEggplantTrayFull()
     {
         Debug.Log("[TutorialManager] Eggplant tray is full");
 
-        phase = TutorialPhase.BuildSandwich;
+        phase = TutorialPhase.BuildSandwich; // Switch to sandwich building phase
         buildStep = 0;
-        SetGamePhase(GamePhase.AssembleDish);
+        SetGamePhase(GamePhase.AssembleDish); // Update game phase to assemble dish
 
         if (eggplantItem != null)
             eggplantItem.SetClickable(false);
 
-        SetAllOtherItemsClickable(false);
+        SetAllOtherItemsClickable(false); // Disable all other items initially
 
         if (otherItems != null && otherItems.Length > 0 && otherItems[0] != null)
         {
-            otherItems[0].SetClickable(true);
-            ShowArrowAbove(otherItems[0].transform, 2f);
+            otherItems[0].SetClickable(true); // Enable the first other item for sandwich building
+            ShowArrowAbove(otherItems[0].transform, 2f); // Show arrow above the first item
         }
     }
 
+    /// <summary>
+    /// Handles clicks during the sandwich building phase of the tutorial.
+    /// </summary>
+    /// <param name="item"></param>
+    /// <param name="ingredientName"></param>
     private void HandleBuildSandwichClick(Item item, string ingredientName)
     {
         if (buildStep >= buildOrderNames.Length)
             return;
 
-        string expected = buildOrderNames[buildStep];
+        string expected = buildOrderNames[buildStep]; // Get the expected ingredient for the current build step
 
-        if (ingredientName != expected)
+        if (ingredientName != expected) // Incorrect ingredient clicked just in the tutorial
         {
             Debug.Log($"[Tutorial] Expected {expected}, but got {ingredientName}");
             return;
@@ -153,21 +184,21 @@ public class TutorialManager : MonoBehaviour
             buildStep < otherItems.Length &&
             otherItems[buildStep] != null)
         {
-            otherItems[buildStep].SetClickable(false);
+            otherItems[buildStep].SetClickable(false);// Disable the current item after it's been used
         }
 
-        buildStep++;
+        buildStep++; // Move to the next step
 
-        if (buildStep >= buildOrderNames.Length)
+        if (buildStep >= buildOrderNames.Length) // Completed all steps
         {
             Debug.Log("[Tutorial] Sandwich build tutorial DONE");
 
-            phase = TutorialPhase.Done;
+            phase = TutorialPhase.Done; // Mark tutorial as done
 
             if (customerTarget != null)
             {
-                ShowArrowAbove(customerTarget, 2f);
-                SetGamePhase(GamePhase.ServeCustomer);
+                ShowArrowAbove(customerTarget, 2f); // Show arrow above the customer
+                SetGamePhase(GamePhase.ServeCustomer); // Update game phase to serve customer
             }
             else
             {
@@ -176,68 +207,77 @@ public class TutorialManager : MonoBehaviour
 
             return;
         }
-
+        // Enable the next item in the build order
         if (otherItems != null &&
             buildStep < otherItems.Length &&
             otherItems[buildStep] != null)
         {
-            Item nextItem = otherItems[buildStep];
-            nextItem.SetClickable(true);
-            ShowArrowAbove(nextItem.transform, 2f);
+            Item nextItem = otherItems[buildStep]; // Get the next item
+            nextItem.SetClickable(true); // Enable the next item
+            ShowArrowAbove(nextItem.transform, 2f); // Show arrow above the next item
         }
     }
 
+    /// <summary>
+    /// Called when the customer has been served successfully.
+    /// </summary>
     public void CustomerOrderServed()
     {
         Debug.Log("[Tutorial] Customer served successfully");
         ShowArrow(false);
 
         if (ScoreManager.Instance != null)
-            ScoreManager.Instance.AddMoney(30);
-        SetGamePhase(GamePhase.NextCustomer);
+            ScoreManager.Instance.AddMoney(30); // Reward the player with money for serving the customer
+        SetGamePhase(GamePhase.NextCustomer); // Update game phase to next customer
     }
 
+    /// <summary>
+    /// Starts a new customer round in the tutorial.
+    /// </summary>
     private void StartCustomerRound()
     {
-        if (servedCustomers == 0)
+        if (servedCustomers == 0) // First customer - start with frying eggplant
         {
-            phase = TutorialPhase.FryEggplant;
-            buildStep = 0;
+            phase = TutorialPhase.FryEggplant; // Switch to fry eggplant phase
+            buildStep = 0; // Reset build step
 
             if (eggplantItem != null)
-                eggplantItem.SetClickable(true);
+                eggplantItem.SetClickable(true); // Enable eggplant item
 
-            SetAllOtherItemsClickable(false);
-            ShowArrowAbove(eggplantItem ? eggplantItem.transform : null, 2.5f);
-            SetGamePhase(GamePhase.AddRowEggplant);
+            SetAllOtherItemsClickable(false); // Disable all other items
+            ShowArrowAbove(eggplantItem ? eggplantItem.transform : null, 2.5f); // Show arrow above eggplant item
+            SetGamePhase(GamePhase.AddRowEggplant); // Update game phase to add row eggplant
         }
         else
         {
-            phase = TutorialPhase.BuildSandwich;
-            buildStep = 0;
+            phase = TutorialPhase.BuildSandwich; // Switch to build sandwich phase if not the first customer
+            buildStep = 0; // Reset build step
 
             if (eggplantItem != null)
                 eggplantItem.SetClickable(false);
 
-            SetAllOtherItemsClickable(false);
+            SetAllOtherItemsClickable(false); // Disable all other items
 
+            // Enable the first other item for sandwich building
             if (otherItems != null && otherItems.Length > 0 && otherItems[0] != null)
             {
                 otherItems[0].SetClickable(true);
-                ShowArrowAbove(otherItems[0].transform, 2f);
+                ShowArrowAbove(otherItems[0].transform, 2f); // Show arrow above the first item
             }
 
-            SetGamePhase(GamePhase.AssembleDish);
+            SetGamePhase(GamePhase.AssembleDish); // Update game phase to assemble dish
         }
 
-        UpdateCustomerSprite();
+        UpdateCustomerSprite(); // Update the customer sprite based on the number of served customers
 
         if (customerLogic != null)
-            customerLogic.ResetCustomer();
+            customerLogic.ResetCustomer(); // Reset the customer logic for the new round
     }
 
 
-
+    /// <summary>
+    /// Updates the customer sprite based on the number of served customers.
+    /// </summary> 
     private void UpdateCustomerSprite()
     {
         if (customerRenderer == null || customerSprites == null || customerSprites.Length == 0)
@@ -247,6 +287,9 @@ public class TutorialManager : MonoBehaviour
         customerRenderer.sprite = customerSprites[index];
     }
 
+    /// <summary>
+    /// Enables or disables all other items except the currently active one.
+    /// </summary>
     private void SetAllOtherItemsClickable(bool clickable)
     {
         if (otherItems == null)
@@ -259,12 +302,18 @@ public class TutorialManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Shows or hides the arrow indicator.
+    /// </summary>
     private void ShowArrow(bool visible)
     {
         if (arrowEggplant != null)
             arrowEggplant.SetActive(visible);
     }
 
+    /// <summary>
+    /// Shows the arrow indicator above a specified target transform.
+    /// </summary>
     private void ShowArrowAbove(Transform target, float yOffset)
     {
         if (arrowEggplant == null || target == null)
@@ -275,13 +324,18 @@ public class TutorialManager : MonoBehaviour
         arrowEggplant.transform.position = pos + new Vector3(0f, yOffset, 0f);
     }
 
+    /// <summary>
+    /// Sets the current game phase in the GameFlowManager.
+    /// </summary>
     private void SetGamePhase(GamePhase newPhase)
     {
         if (gameFlowManager != null)
             gameFlowManager.SetPhase(newPhase);
     }
 
-
+    /// <summary>
+    /// Called when the customer has left the scene.
+    /// </summary>
     public void OnCustomerLeftScene()
     {
         Debug.Log("[Tutorial] Customer left scene");
@@ -291,11 +345,11 @@ public class TutorialManager : MonoBehaviour
 
         if (servedCustomers < tutorialCustomersCount)
         {
-            StartCustomerRound();
+            StartCustomerRound(); // Start a new customer round if there are more customers to serve
         }
         else
         {
-            SceneManager.LoadScene("TutorialEndScene");
+            SceneManager.LoadScene("TutorialEndScene"); // Load the tutorial end scene after serving all customers
         }
     }
 

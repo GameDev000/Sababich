@@ -289,6 +289,7 @@ MonoBehaviour:
   - Egg
   - amba
   - salad
+  customerMoodTimer: {fileID: 118900259}
 --- !u!114 &118900256
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -397,7 +398,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   moodFaces:
   - {fileID: 21300000, guid: ef64289f5a4014343a14dbe0a44662e0, type: 3}
-  interval: 30
+  interval: 60
   spriteRenderer: {fileID: 118900257}
   duration: 4
 --- !u!1 &140186244

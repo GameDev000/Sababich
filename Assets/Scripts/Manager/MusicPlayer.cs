@@ -1,8 +1,10 @@
 using UnityEngine;
-
+//// <summary>
+/// Singleton class that manages background music playback and sound toggling.
+/// </summary>
 public class MusicPlayer : MonoBehaviour
 {
-    public static MusicPlayer Instance;
+    [SerializeField] public static MusicPlayer Instance;
     public AudioSource audioSource;
 
     void Awake()
@@ -12,12 +14,15 @@ public class MusicPlayer : MonoBehaviour
             Destroy(this.gameObject);
             return;
         }
-        Instance = this;
-        audioSource = GetComponent<AudioSource>();
-        DontDestroyOnLoad(this.gameObject);
+        Instance = this; // Set the singleton instance
+        audioSource = GetComponent<AudioSource>(); // Get the AudioSource component
+        DontDestroyOnLoad(this.gameObject); // Persist across scenes
     }
 
-    public void ToggleSound()
+    /// <summary>
+    /// Toggles the sound on and off by muting or unmuting the AudioSource.
+    /// </summary>
+    public void ToggleSound() 
     {
         audioSource.mute = !audioSource.mute;
     }
