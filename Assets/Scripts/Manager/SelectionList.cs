@@ -29,7 +29,7 @@ public class SelectionList : MonoBehaviour
     {
         string lower = ingredientName.ToLower();
 
-        
+
         if (selectedIngredients.Count == 0 && lower != "pitta")
         {
             Debug.Log("First ingredient must be Pitta. ");

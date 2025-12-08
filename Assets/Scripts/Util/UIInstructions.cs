@@ -7,7 +7,7 @@ public class UIInstructions : MonoBehaviour
 
     private void Start()
     {
-    
+
     }
     public void SetInstructions(string text)
     {
@@ -17,6 +17,6 @@ public class UIInstructions : MonoBehaviour
             instructionsText.text = text;
         }
 
-            
+
     }
 }

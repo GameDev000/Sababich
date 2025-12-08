@@ -194,47 +194,47 @@ public class TutorialManager : MonoBehaviour
 
         if (ScoreManager.Instance != null)
             ScoreManager.Instance.AddMoney(30);
-            SetGamePhase(GamePhase.NextCustomer);
+        SetGamePhase(GamePhase.NextCustomer);
     }
 
-private void StartCustomerRound()
-{
-    if (servedCustomers == 0)
+    private void StartCustomerRound()
     {
-        phase = TutorialPhase.FryEggplant;
-        buildStep = 0;
-
-        if (eggplantItem != null)
-            eggplantItem.SetClickable(true);
-
-        SetAllOtherItemsClickable(false);
-        ShowArrowAbove(eggplantItem ? eggplantItem.transform : null, 2.5f);
-        SetGamePhase(GamePhase.AddRowEggplant);
-    }
-    else
-    {
-        phase = TutorialPhase.BuildSandwich;
-        buildStep = 0;
-
-        if (eggplantItem != null)
-            eggplantItem.SetClickable(false);
-
-        SetAllOtherItemsClickable(false);
-
-        if (otherItems != null && otherItems.Length > 0 && otherItems[0] != null)
+        if (servedCustomers == 0)
         {
-            otherItems[0].SetClickable(true);
-            ShowArrowAbove(otherItems[0].transform, 2f);
+            phase = TutorialPhase.FryEggplant;
+            buildStep = 0;
+
+            if (eggplantItem != null)
+                eggplantItem.SetClickable(true);
+
+            SetAllOtherItemsClickable(false);
+            ShowArrowAbove(eggplantItem ? eggplantItem.transform : null, 2.5f);
+            SetGamePhase(GamePhase.AddRowEggplant);
+        }
+        else
+        {
+            phase = TutorialPhase.BuildSandwich;
+            buildStep = 0;
+
+            if (eggplantItem != null)
+                eggplantItem.SetClickable(false);
+
+            SetAllOtherItemsClickable(false);
+
+            if (otherItems != null && otherItems.Length > 0 && otherItems[0] != null)
+            {
+                otherItems[0].SetClickable(true);
+                ShowArrowAbove(otherItems[0].transform, 2f);
+            }
+
+            SetGamePhase(GamePhase.AssembleDish);
         }
 
-        SetGamePhase(GamePhase.AssembleDish);
+        UpdateCustomerSprite();
+
+        if (customerLogic != null)
+            customerLogic.ResetCustomer();
     }
-
-    UpdateCustomerSprite();
-
-    if (customerLogic != null)
-        customerLogic.ResetCustomer();
-}
 
 
 
@@ -283,20 +283,20 @@ private void StartCustomerRound()
 
 
     public void OnCustomerLeftScene()
-{
-    Debug.Log("[Tutorial] Customer left scene");
-
-    servedCustomers++;
-    Debug.Log("[Tutorial] Customers served in tutorial: " + servedCustomers);
-
-    if (servedCustomers < tutorialCustomersCount)
     {
-        StartCustomerRound();
+        Debug.Log("[Tutorial] Customer left scene");
+
+        servedCustomers++;
+        Debug.Log("[Tutorial] Customers served in tutorial: " + servedCustomers);
+
+        if (servedCustomers < tutorialCustomersCount)
+        {
+            StartCustomerRound();
+        }
+        else
+        {
+            SceneManager.LoadScene("TutorialEndScene");
+        }
     }
-    else
-    {
-        SceneManager.LoadScene("TutorialEndScene");
-    }
-}
 
 }

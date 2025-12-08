@@ -25,23 +25,23 @@ public class EggplantTray : MonoBehaviour
     }
 
     public void FillFromPan()
-{
-    Debug.Log("[Tray] FillFromPan CALLED");
-
-    //hasEggplant = true;
-
-    if (trayRenderer != null && fullTraySprite != null)
     {
-        trayRenderer.enabled = true;
-        trayRenderer.sprite = fullTraySprite;
-    }
+        Debug.Log("[Tray] FillFromPan CALLED");
 
-    if (TutorialManager.Instance != null)
-    {
-        Debug.Log("[Tray] Calling TutorialManager.OnEggplantTrayFull()");
-        TutorialManager.Instance.OnEggplantTrayFull();
+        //hasEggplant = true;
+
+        if (trayRenderer != null && fullTraySprite != null)
+        {
+            trayRenderer.enabled = true;
+            trayRenderer.sprite = fullTraySprite;
+        }
+
+        if (TutorialManager.Instance != null)
+        {
+            Debug.Log("[Tray] Calling TutorialManager.OnEggplantTrayFull()");
+            TutorialManager.Instance.OnEggplantTrayFull();
+        }
     }
-}
 
 
 

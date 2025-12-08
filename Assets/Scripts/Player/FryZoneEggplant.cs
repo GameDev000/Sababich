@@ -5,12 +5,12 @@ public class FryZoneEggplant : MonoBehaviour
     public enum FryState { Empty, Frying, Ready }
 
     [Header("Sprites")]
-    [SerializeField] private SpriteRenderer overlayRenderer; 
-    [SerializeField] private Sprite rawEggplantSprite;       
-    [SerializeField] private Sprite friedEggplantSprite;     
+    [SerializeField] private SpriteRenderer overlayRenderer;
+    [SerializeField] private Sprite rawEggplantSprite;
+    [SerializeField] private Sprite friedEggplantSprite;
 
     [Header("Timing")]
-    [SerializeField] private float fryTimeSeconds = 5f;      
+    [SerializeField] private float fryTimeSeconds = 5f;
 
     [Header("Tray")]
     [SerializeField] private EggplantTray eggplantTray;
@@ -18,8 +18,8 @@ public class FryZoneEggplant : MonoBehaviour
     private float timer = 0f;
 
     public bool IsReady => state == FryState.Ready;
-    public bool IsFrying   => state == FryState.Frying;
-    public float FryProgress => (state == FryState.Frying && fryTimeSeconds > 0f) ? Mathf.Clamp01(timer / fryTimeSeconds): (state == FryState.Ready ? 1f : 0f);
+    public bool IsFrying => state == FryState.Frying;
+    public float FryProgress => (state == FryState.Frying && fryTimeSeconds > 0f) ? Mathf.Clamp01(timer / fryTimeSeconds) : (state == FryState.Ready ? 1f : 0f);
 
     private void Start()
     {

@@ -14,19 +14,19 @@ public class Item : MonoBehaviour
         if (SelectionList.Instance != null)
         {
             string lower = ingredientName.ToLower();
-    
-            if( lower != "eggplantrow" && lower != "fryzone")
+
+            if (lower != "eggplantrow" && lower != "fryzone")
             {
-              bool added = SelectionList.Instance.TryAddIngredient(ingredientName);
+                bool added = SelectionList.Instance.TryAddIngredient(ingredientName);
 
                 if (!added)
                 {
                     Debug.Log("Ingredient " + ingredientName + " was not added to selection list.");
                     return;
                 }
- 
+
             }
-          
+
         }
         else
         {

@@ -80,7 +80,7 @@
 //         OnReachedExit();
 //         //Destroy(gameObject);
 //     }
-    
+
 // }
 
 
