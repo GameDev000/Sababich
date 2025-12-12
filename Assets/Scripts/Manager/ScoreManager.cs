@@ -41,6 +41,7 @@
 // }
 
 
+
 using TMPro;
 using UnityEngine;
 
@@ -52,7 +53,7 @@ public class ScoreManager : MonoBehaviour
     [SerializeField] private int startMoney = 0;
 
     [Header("Visual FX")]
-    [SerializeField] private ParticleSystem coinSparkles; // ← הוספנו
+    [SerializeField] private ParticleSystem coinSparkles; // מערכת הניצוצות
 
     public int CurrentMoney { get; private set; }
 
@@ -72,11 +73,18 @@ public class ScoreManager : MonoBehaviour
         CurrentMoney += amount;
         UpdateScoreUI();
 
-        // ← אפקט הניצוצות מופיע בכל פעם שמתווספים מטבעות
+        // אפקט הניצוצות מופיע בכל פעם שמתווספים מטבעות
         if (coinSparkles != null)
         {
-            coinSparkles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
-            coinSparkles.Play();
+            // נמקם את מערכת החלקיקים על טקסט המטבעות (ליתר ביטחון)
+           // coinSparkles.transform.position = ScoreText.transform.position;
+
+            // יורה X חלקיקים בלי תלות ב-Play On Awake או Burst
+            coinSparkles.Emit(30);
+        }
+        else
+        {
+            Debug.LogWarning("coinSparkles is not assigned on ScoreManager!");
         }
     }
 
