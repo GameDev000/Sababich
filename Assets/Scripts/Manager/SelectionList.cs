@@ -10,7 +10,7 @@ public class SelectionList : MonoBehaviour
     public static SelectionList Instance { get; private set; } // Singleton instance
 
     [SerializeField] private TextMeshProUGUI selectedText; // Reference to the UI text component - will remove in later versions
-
+    [SerializeField] private PitaBuilder pitaBuilder;
     private List<string> selectedIngredients = new List<string>(); // List of selected ingredients
 
     private void Awake()
@@ -67,6 +67,8 @@ public class SelectionList : MonoBehaviour
         }
 
         selectedText.text = result; // Update the UI text component
+
+        pitaBuilder.BuildFromSelection(selectedIngredients);
     }
 
     /// <summary>

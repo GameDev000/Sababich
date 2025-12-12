@@ -52,11 +52,4 @@ public class GameFlowManager : MonoBehaviour
         }
     }
 
-    public string GetInstructions()
-    {
-        if (uiInstructions != null)
-            return uiInstructions.GetCurrentText();
-
-        return string.Empty;
-    }
 }

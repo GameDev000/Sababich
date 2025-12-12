@@ -45,6 +45,23 @@ public class Item : MonoBehaviour
         {
             Debug.LogWarning("TutorialManager.Instance is null!");
         }
+
+
+    var bottlePhysics = GetComponent<SauceBottleWobble>();
+    if (bottlePhysics != null)
+    {
+        bottlePhysics.Shake();
+    }
+
+    if (TutorialManager.Instance != null)
+    {
+        Debug.Log("Calling TutorialManager.OnIngredientClicked");
+        TutorialManager.Instance.OnIngredientClicked(this, ingredientName);
+    }
+    else
+    {
+        Debug.LogWarning("TutorialManager.Instance is null!");
+    }
     }
 
     public void SetClickable(bool value)

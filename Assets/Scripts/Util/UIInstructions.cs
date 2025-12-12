@@ -7,7 +7,6 @@ using UnityEngine;
 public class UIInstructions : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI instructionsText; // Reference to the instructions text component
-    private string currentText = "";
     private void Start()
     {
 
@@ -21,12 +20,7 @@ public class UIInstructions : MonoBehaviour
         {
             instructionsText.ClearMesh();
             instructionsText.text = text;
-            currentText = text;
         }
-    }
-    public string GetCurrentText()
-    {
-        return currentText;
     }
 
 }
