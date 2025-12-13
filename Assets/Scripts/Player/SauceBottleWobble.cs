@@ -26,8 +26,8 @@ public class SauceBottleWobble : MonoBehaviour
     {
         isWobbling = true;
 
-        Quaternion left  = initialRotation * Quaternion.Euler(0,0,tiltAngle);
-        Quaternion right = initialRotation * Quaternion.Euler(0,0,-tiltAngle);
+        Quaternion left = initialRotation * Quaternion.Euler(0, 0, tiltAngle);
+        Quaternion right = initialRotation * Quaternion.Euler(0, 0, -tiltAngle);
 
         for (int i = 0; i < wobbleCycles; i++)
         {

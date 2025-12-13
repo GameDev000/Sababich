@@ -12,6 +12,6 @@ public class RotateAfterDelay : MonoBehaviour
 
     private void Rotate()
     {
-        transform.Rotate(0, 0, -rotationAngle); 
+        transform.Rotate(0, 0, -rotationAngle);
     }
 }
