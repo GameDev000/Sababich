@@ -36,7 +36,7 @@ public class GameFlowManager : MonoBehaviour
                 break;
 
             case GamePhase.AssembleDish:
-                uiInstructions.SetInstructions("הרכב את המנה – הוסף חציל ותוספות לפי ההזמנה של הלקוח.");
+                uiInstructions.SetInstructions("הרכב את המנה – הוסף תוספות לפי ההזמנה של הלקוח.");
                 //uiInstructions.SetInstructions("Follow the customer's order to assemble the dish - follow the arrows");
                 break;
 

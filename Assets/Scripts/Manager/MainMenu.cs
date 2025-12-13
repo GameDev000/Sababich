@@ -21,6 +21,6 @@ public class MainMenu : MonoBehaviour
     }
         public void PhaseOneButtonClicked()
     {
-        SceneManager.LoadScene("Phase1"); // Load the main menu scene
+        SceneManager.LoadScene("level1 - israel"); // Load the main menu scene
     }
 }

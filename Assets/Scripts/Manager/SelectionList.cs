@@ -60,15 +60,36 @@ public class SelectionList : MonoBehaviour
     {
         if (selectedText == null) return;
 
-        string result = "Selected items:\n";
+        string result = "פריטים נבחרים: \n";
         foreach (string ing in selectedIngredients)
         {
-            result += "- " + ing + "\n"; // Append each ingredient to the result string
+            result += "- " + ToHebrew(ing) + "\n"; // Append each ingredient to the result string
         }
 
         selectedText.text = result; // Update the UI text component
 
         pitaBuilder.BuildFromSelection(selectedIngredients);
+    }
+
+    private string ToHebrew(string ingredient)
+    {
+        switch (ingredient.ToLower())
+        {
+            case "pitta":
+                return "פיתה";
+            case "salad":
+                return "סלט";
+            case "egg":
+                return "ביצה";
+            case "tahini":
+                return "טחינה";
+            case "amba":
+                return "עמבה";
+            case "eggplant":
+                return "חציל";
+            default:
+                return ingredient;
+        }
     }
 
     /// <summary>
