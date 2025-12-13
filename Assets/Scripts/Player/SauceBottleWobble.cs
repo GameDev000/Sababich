@@ -4,9 +4,9 @@ using UnityEngine;
 public class SauceBottleWobble : MonoBehaviour
 {
     [Header("Tilt settings")]
-    [SerializeField] private float tiltAngle = 20f;      // כמה מעלות כל צד
-    [SerializeField] private float wobbleDuration = 0.15f; // זמן לכל חצי תנועה
-    [SerializeField] private int wobbleCycles = 2;       // כמה פעמים לזגזג
+    [SerializeField] private float tiltAngle = 20f;
+    [SerializeField] private float wobbleDuration = 0.15f;
+    [SerializeField] private int wobbleCycles = 2;
 
     private bool isWobbling = false;
     private Quaternion initialRotation;
@@ -31,9 +31,9 @@ public class SauceBottleWobble : MonoBehaviour
 
         for (int i = 0; i < wobbleCycles; i++)
         {
-            yield return RotateOverTime(initialRotation, left,  wobbleDuration);
-            yield return RotateOverTime(left,           right, wobbleDuration * 2f);
-            yield return RotateOverTime(right,          initialRotation, wobbleDuration);
+            yield return RotateOverTime(initialRotation,left,wobbleDuration);
+            yield return RotateOverTime(left,right, wobbleDuration * 2f);
+            yield return RotateOverTime(right,initialRotation,wobbleDuration);
         }
 
         transform.rotation = initialRotation;
