@@ -47,21 +47,21 @@ public class Item : MonoBehaviour
         }
 
 
-    var bottlePhysics = GetComponent<SauceBottleWobble>();
-    if (bottlePhysics != null)
-    {
-        bottlePhysics.Shake();
-    }
+        var bottlePhysics = GetComponent<SauceBottleWobble>();
+        if (bottlePhysics != null)
+        {
+            bottlePhysics.Shake();
+        }
 
-    if (TutorialManager.Instance != null)
-    {
-        Debug.Log("Calling TutorialManager.OnIngredientClicked");
-        TutorialManager.Instance.OnIngredientClicked(this, ingredientName);
-    }
-    else
-    {
-        Debug.LogWarning("TutorialManager.Instance is null!");
-    }
+        if (TutorialManager.Instance != null)
+        {
+            Debug.Log("Calling TutorialManager.OnIngredientClicked");
+            TutorialManager.Instance.OnIngredientClicked(this, ingredientName);
+        }
+        else
+        {
+            Debug.LogWarning("TutorialManager.Instance is null!");
+        }
     }
 
     public void SetClickable(bool value)

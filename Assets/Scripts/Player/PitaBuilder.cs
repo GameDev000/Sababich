@@ -5,14 +5,14 @@ using UnityEngine;
 public class PitaBuilder : MonoBehaviour
 {
     [Header("Pita Sprites")]
-    [SerializeField] private SpriteRenderer backPita;   
+    [SerializeField] private SpriteRenderer backPita;
     [SerializeField] private SpriteRenderer frontPita;
 
     [Header("Front pita variants (sauces)")]
-    [SerializeField] private Sprite frontDefault;        
-    [SerializeField] private Sprite frontTahini;         
-    [SerializeField] private Sprite frontAmba;           
-    [SerializeField] private Sprite frontTahiniAndAmba;  
+    [SerializeField] private Sprite frontDefault;
+    [SerializeField] private Sprite frontTahini;
+    [SerializeField] private Sprite frontAmba;
+    [SerializeField] private Sprite frontTahiniAndAmba;
 
     [Header("Inner ingredient layers")]
     [SerializeField] private SpriteRenderer eggplantLayer;

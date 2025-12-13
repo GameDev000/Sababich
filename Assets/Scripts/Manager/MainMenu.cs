@@ -15,11 +15,11 @@ public class MainMenu : MonoBehaviour
         Debug.Log("Play button clicked - gameplay scene not implemented yet.");
         // SceneManager.LoadScene("GameScene"); //Will load the gameplay scene when implemented
     }
-        public void OnBackToMainButtonClicked()
+    public void OnBackToMainButtonClicked()
     {
         SceneManager.LoadScene("MainMenu"); // Load the main menu scene
     }
-        public void PhaseOneButtonClicked()
+    public void PhaseOneButtonClicked()
     {
         SceneManager.LoadScene("level1 - israel"); // Load the main menu scene
     }

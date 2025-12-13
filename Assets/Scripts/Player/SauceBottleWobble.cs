@@ -26,14 +26,14 @@ public class SauceBottleWobble : MonoBehaviour
     {
         isWobbling = true;
 
-        Quaternion left  = initialRotation * Quaternion.Euler(0, 0, tiltAngle);
-        Quaternion right = initialRotation * Quaternion.Euler(0, 0, -tiltAngle);
+        Quaternion left  = initialRotation * Quaternion.Euler(0,0,tiltAngle);
+        Quaternion right = initialRotation * Quaternion.Euler(0,0,-tiltAngle);
 
         for (int i = 0; i < wobbleCycles; i++)
         {
-            yield return RotateOverTime(initialRotation,left,wobbleDuration);
-            yield return RotateOverTime(left,right, wobbleDuration * 2f);
-            yield return RotateOverTime(right,initialRotation,wobbleDuration);
+            yield return RotateOverTime(initialRotation, left, wobbleDuration);
+            yield return RotateOverTime(left, right, wobbleDuration * 2f);
+            yield return RotateOverTime(right, initialRotation, wobbleDuration);
         }
 
         transform.rotation = initialRotation;
