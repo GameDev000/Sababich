@@ -19,6 +19,7 @@ public class Level1GameFlow : MonoBehaviour
             return;
         }
         Instance = this;
+        DontDestroyOnLoad(gameObject);
     }
 
     private void Start()
@@ -57,5 +58,6 @@ public void OnIngredientClickedFromItem(Item item, string ingredientName)
     if (lower == "eggplant" && trayState != null)
         trayState.ConsumeOne();
 }
+
 
 }

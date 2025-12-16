@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: f577bae3a14590847802e4f893f8c4c8
+guid: 86972088847a76d4eadd8f8b4f3636b3
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 6924258067061407507
-    second: Gemini_Generated_Image_l2w8wul2w8wul2w8_0
+      213: 9137287151966872161
+    second: Elvis_front_2_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Gemini_Generated_Image_l2w8wul2w8wul2w8_0
+      name: Elvis_front_2_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 2848
-        height: 1504
+        x: 1164
+        y: 50
+        width: 536
+        height: 1351
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 31ff3549608e71060800000000000000
-      internalID: 6924258067061407507
+      spriteID: 162e9b7d04a2ece70800000000000000
+      internalID: 9137287151966872161
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Gemini_Generated_Image_l2w8wul2w8wul2w8_0: 6924258067061407507
+      Elvis_front_2_0: 9137287151966872161
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

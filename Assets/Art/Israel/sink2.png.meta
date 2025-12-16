@@ -1,13 +1,10 @@
 fileFormatVersion: 2
-guid: 9e4bcaa098353344a94c6c26e85e8d1c
+guid: ee37dcb9fb17cd74f933f764f468db68
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -5814021883501083472
-    second: Elvis_right_0
-  - first:
-      213: 9154601042027989048
-    second: Elvis_right_1
+      213: 5013553510095604821
+    second: sink3_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -40,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -49,7 +46,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -116,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Elvis_right_0
+      name: sink3_0
       rect:
         serializedVersion: 2
-        x: 110
-        y: 81
-        width: 1284
-        height: 2719
+        x: 2
+        y: 0
+        width: 2782
+        height: 1511
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -131,30 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 0b40295a6e1705fa0800000000000000
-      internalID: -5814021883501083472
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Elvis_right_1
-      rect:
-        serializedVersion: 2
-        x: 1248
-        y: 61
-        width: 99
-        height: 101
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 838cf72052dab0f70800000000000000
-      internalID: 9154601042027989048
+      spriteID: 55c49afba58b39540800000000000000
+      internalID: 5013553510095604821
       vertices: []
       indices: 
       edges: []
@@ -163,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -173,8 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Elvis_right_0: -5814021883501083472
-      Elvis_right_1: 9154601042027989048
+      sink3_0: 5013553510095604821
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

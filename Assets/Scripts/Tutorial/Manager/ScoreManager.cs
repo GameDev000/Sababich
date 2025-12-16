@@ -13,20 +13,28 @@ public class ScoreManager : MonoBehaviour
     [SerializeField] private int startMoney = 0;
 
     [Header("Visual FX")]
-    [SerializeField] private ParticleSystem coinSparkles; // מערכת הניצוצות
+    [SerializeField] private ParticleSystem coinSparkles;
 
     public int CurrentMoney { get; private set; }
 
     private void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
         Instance = this;
+        DontDestroyOnLoad(gameObject);
+        CurrentMoney = startMoney;
     }
 
-    private void Start()
-    {
-        CurrentMoney = startMoney;
-        UpdateScoreUI();
-    }
+    // private void Start()
+    // {
+    //    // CurrentMoney = startMoney;
+    //     UpdateScoreUI();
+    // }
 
     public void AddMoney(int amount)
     {
@@ -47,5 +55,16 @@ public class ScoreManager : MonoBehaviour
     {
         if (ScoreText != null)
             ScoreText.text = "Coins: " + CurrentMoney;
+    }
+
+    public int GetCurrentMoney()
+    {
+        return CurrentMoney;
+    }
+
+    public void ResetMoney()
+    {
+        CurrentMoney = startMoney;
+        UpdateScoreUI();
     }
 }

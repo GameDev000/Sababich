@@ -1,10 +1,13 @@
 fileFormatVersion: 2
-guid: 6e7706b5bf095d54199881b8c3d74b9c
+guid: 269c56fca0535f84a8c291f7e0a1a957
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -5117285734235391316
-    second: Gemini_Generated_Image_fu6qrqfu6qrqfu6q_0
+      213: 7372103226891241779
+    second: orthodox_front_2_0
+  - first:
+      213: -5172423265135315541
+    second: orthodox_front_2_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +116,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Gemini_Generated_Image_fu6qrqfu6qrqfu6q_0
+      name: orthodox_front_2_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 1696
-        height: 2496
+        x: 471
+        y: 55
+        width: 780
+        height: 2347
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +131,30 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: caab9bcbcbfbbf8b0800000000000000
-      internalID: -5117285734235391316
+      spriteID: 3390d5663d8fe4660800000000000000
+      internalID: 7372103226891241779
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: orthodox_front_2_1
+      rect:
+        serializedVersion: 2
+        x: 1538
+        y: 57
+        width: 98
+        height: 107
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ba5b4ade17cd738b0800000000000000
+      internalID: -5172423265135315541
       vertices: []
       indices: 
       edges: []
@@ -148,7 +173,8 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Gemini_Generated_Image_fu6qrqfu6qrqfu6q_0: -5117285734235391316
+      orthodox_front_2_0: 7372103226891241779
+      orthodox_front_2_1: -5172423265135315541
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

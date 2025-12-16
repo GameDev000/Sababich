@@ -8,8 +8,11 @@ public class Customer : MonoBehaviour
     [SerializeField] private Transform iconsParent;
     [SerializeField] private GameObject iconPrefab;
     [SerializeField] private List<IngredientIconInfo> ingredientIcons;
+    [SerializeField] private CustomerMoodTimer_levels moodTimer;
+    public CustomerMoodTimer_levels MoodTimer => moodTimer;
 
     public CustomerType Data { get; private set; }
+    public bool IsLeaving { get; private set; }
 
     private Dictionary<string, IngredientIconInfo> iconLookup;
 
@@ -33,6 +36,22 @@ public class Customer : MonoBehaviour
             spriteRenderer.sprite = data.sprite;
 
         SetupOrderBubble();
+
+        if (moodTimer != null && data != null)
+        {
+            if (data.happyFace == null)
+                Debug.LogWarning($"CustomerType '{data.name}' has no happyFace assigned!");
+
+            if (data.angryFaces == null || data.angryFaces.Length == 0)
+                Debug.LogWarning($"CustomerType '{data.name}' has no angryFaces assigned!");
+
+        moodTimer.Configure(data.happyFace, data.angryFaces);
+        }
+    }
+
+    public void MarkLeaving()
+    {
+        IsLeaving = true;
     }
 
     private void SetupOrderBubble()
