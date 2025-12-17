@@ -1,10 +1,16 @@
 fileFormatVersion: 2
-guid: ee37dcb9fb17cd74f933f764f468db68
+guid: 795692845c6e2ab44a73bea2b11726f6
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 5013553510095604821
-    second: sink3_0
+      213: 5634026908348037240
+    second: dirt_0
+  - first:
+      213: 4599323450485179080
+    second: dirt_1
+  - first:
+      213: 8148967778456589955
+    second: dirt_2
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -51,7 +57,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 550
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -113,13 +119,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: sink3_0
+      name: dirt_0
       rect:
         serializedVersion: 2
         x: 2
-        y: 0
-        width: 2782
-        height: 1511
+        y: 541
+        width: 94
+        height: 91
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +134,52 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 55c49afba58b39540800000000000000
-      internalID: 5013553510095604821
+      spriteID: 878b31f6f95103e40800000000000000
+      internalID: 5634026908348037240
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dirt_1
+      rect:
+        serializedVersion: 2
+        x: 143
+        y: 4
+        width: 1438
+        height: 1504
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8c20b495f4414df30800000000000000
+      internalID: 4599323450485179080
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dirt_2
+      rect:
+        serializedVersion: 2
+        x: 1225
+        y: 1
+        width: 1399
+        height: 1408
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3865209f403f61170800000000000000
+      internalID: 8148967778456589955
       vertices: []
       indices: 
       edges: []
@@ -148,7 +198,9 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      sink3_0: 5013553510095604821
+      dirt_0: 5634026908348037240
+      dirt_1: 4599323450485179080
+      dirt_2: 8148967778456589955
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
