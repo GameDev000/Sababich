@@ -8,9 +8,9 @@ public class EndOfLevelUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI coinsText;
 
     [Header("Message")]
-   // [SerializeField] private bool isSuccess = true;
-    [TextArea] [SerializeField] private string successMessage = "כל הכבוד! עמדת במשימה היעד הבא - יפן!";
-    [TextArea] [SerializeField] private string failMessage = "לא נורא.. נסה שוב";
+    // [SerializeField] private bool isSuccess = true;
+    [TextArea][SerializeField] private string successMessage = "כל הכבוד! עמדת במשימה היעד הבא - יפן!";
+    [TextArea][SerializeField] private string failMessage = "לא נורא.. נסה שוב";
 
     private void Start()
     {

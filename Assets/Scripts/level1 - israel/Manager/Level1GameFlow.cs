@@ -44,20 +44,20 @@ public class Level1GameFlow : MonoBehaviour
         SetTrayEggplantsClickable(true);
     }
 
-public void OnIngredientClickedFromItem(Item item, string ingredientName)
-{
-    string lower = ingredientName.ToLowerInvariant();
-
-    if (lower == "eggplantrow")
+    public void OnIngredientClickedFromItem(Item item, string ingredientName)
     {
-        if (fryZone != null && !fryZone.IsFrying)
-            fryZone.StartFry();
-        return;
-    }
+        string lower = ingredientName.ToLowerInvariant();
 
-    if (lower == "eggplant" && trayState != null)
-        trayState.ConsumeOne();
-}
+        if (lower == "eggplantrow")
+        {
+            if (fryZone != null && !fryZone.IsFrying)
+                fryZone.StartFry();
+            return;
+        }
+
+        if (lower == "eggplant" && trayState != null)
+            trayState.ConsumeOne();
+    }
 
 
 }

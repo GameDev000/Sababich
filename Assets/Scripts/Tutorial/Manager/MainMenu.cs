@@ -26,7 +26,7 @@ public class MainMenu : MonoBehaviour
 
     public void OnEndLevelOne()
     {
-        if(LevelOneState.IsSuccess)
+        if (LevelOneState.IsSuccess)
             SceneManager.LoadScene("level2 - china");
         else
             SceneManager.LoadScene("level1 - israel");

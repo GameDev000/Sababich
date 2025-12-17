@@ -45,7 +45,7 @@ public class Customer : MonoBehaviour
             if (data.angryFaces == null || data.angryFaces.Length == 0)
                 Debug.LogWarning($"CustomerType '{data.name}' has no angryFaces assigned!");
 
-        moodTimer.Configure(data.happyFace, data.angryFaces);
+            moodTimer.Configure(data.happyFace, data.angryFaces);
         }
     }
 

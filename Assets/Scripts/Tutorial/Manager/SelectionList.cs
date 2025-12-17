@@ -69,13 +69,13 @@ public class SelectionList : MonoBehaviour
     {
         switch (ingredient.ToLower())
         {
-            case "pitta":     return "פיתה";
-            case "salad":     return "סלט";
-            case "egg":       return "ביצה";
-            case "tahini":    return "טחינה";
-            case "amba":      return "עמבה";
-            case "eggplant":  return "חציל";
-            default:          return ingredient;
+            case "pitta": return "פיתה";
+            case "salad": return "סלט";
+            case "egg": return "ביצה";
+            case "tahini": return "טחינה";
+            case "amba": return "עמבה";
+            case "eggplant": return "חציל";
+            default: return ingredient;
         }
     }
 

@@ -6,7 +6,7 @@ public class ArrowMoveCamera : MonoBehaviour
     [SerializeField] private float moveSpeed = 6f;
 
     private Camera cam;
-    
+
     private bool moving;
 
     private void Start()
