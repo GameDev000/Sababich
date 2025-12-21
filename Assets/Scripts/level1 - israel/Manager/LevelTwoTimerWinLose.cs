@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class LevelTimerWinLose : MonoBehaviour
+public class LevelTwoTimerWinLose : MonoBehaviour
 {
     [Header("Timer")]
     [SerializeField] private float levelDurationSeconds = 90f;
@@ -14,7 +14,7 @@ public class LevelTimerWinLose : MonoBehaviour
     [SerializeField] private int coinsTarget = 150;
 
     [Header("End Scene")]
-    [SerializeField] private string endSceneName = "Level1 - endScene";
+    [SerializeField] private string endSceneName = "Level2 - endScene";
 
 
     [Header("Coins Source")]
@@ -69,7 +69,8 @@ public class LevelTimerWinLose : MonoBehaviour
     {
         int coins = (playerCoins != null) ? playerCoins.GetCurrentMoney() : 0;
 
-        LevelOneState.IsSuccess = coins >= coinsTarget;
+        LevelTwoState.IsSuccess = coins >= coinsTarget;
+        Debug.Log("Level Two Success: " + LevelTwoState.IsSuccess);
         
         Time.timeScale = 1f;
         SceneManager.LoadScene(endSceneName);

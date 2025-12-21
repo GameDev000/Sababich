@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class EndOfLevelUI : MonoBehaviour
 {
@@ -14,10 +15,20 @@ public class EndOfLevelUI : MonoBehaviour
 
     private void Start()
     {
+        Scene currentScene = SceneManager.GetActiveScene();
+
         int coins = (ScoreManager.Instance != null) ? ScoreManager.Instance.GetCurrentMoney() : 0;
 
         if (titleText != null)
-            titleText.text = LevelOneState.IsSuccess ? successMessage : failMessage;
+        {
+            if (currentScene.name == "Level1 - endScene")
+                titleText.text = LevelOneState.IsSuccess ? successMessage : failMessage;
+            else if (currentScene.name == "Level2 - endScene")
+                titleText.text = LevelTwoState.IsSuccess ? successMessage : failMessage;
+     
+
+
+        }
 
         if (coinsText != null)
             coinsText.text = $"Coins: {coins}";
