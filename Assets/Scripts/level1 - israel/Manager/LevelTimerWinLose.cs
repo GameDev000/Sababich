@@ -70,7 +70,6 @@ public class LevelTimerWinLose : MonoBehaviour
         int coins = (playerCoins != null) ? playerCoins.GetCurrentMoney() : 0;
 
         LevelOneState.IsSuccess = coins >= coinsTarget;
-        
         Time.timeScale = 1f;
         SceneManager.LoadScene(endSceneName);
     }
