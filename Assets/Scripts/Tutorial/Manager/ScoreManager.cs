@@ -1,9 +1,8 @@
-
-// /// <summary>
-// /// Manages the player's score (money) and updates the UI accordingly.
-// /// </summary>
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
+// Manages the player's score (money) and updates the UI accordingly.
 
 public class ScoreManager : MonoBehaviour
 {
@@ -27,14 +26,64 @@ public class ScoreManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
+
         CurrentMoney = startMoney;
+        UpdateScoreUI();
     }
 
-    // private void Start()
-    // {
-    //    // CurrentMoney = startMoney;
-    //     UpdateScoreUI();
-    // }
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // reconnect UI text in the new scene
+        ScoreText = FindScoreTextInScene();
+
+        // reset only on GAMEPLAY level scenes (not end scenes)
+        if (IsGameplayLevelScene(scene.name))
+            CurrentMoney = startMoney;
+
+        UpdateScoreUI();
+    }
+
+    private bool IsGameplayLevelScene(string sceneName)
+    {
+        if (string.IsNullOrEmpty(sceneName))
+            return false;
+
+        string s = sceneName.Trim().ToLowerInvariant();
+
+        // must start with "level"
+        if (!s.StartsWith("level"))
+            return false;
+
+        // do NOT reset on end scenes
+        if (s.Contains("endscene") || s.Contains("end scene"))
+            return false;
+
+        return true;
+    }
+
+    private TextMeshProUGUI FindScoreTextInScene()
+    {
+        var allTexts = FindObjectsOfType<TextMeshProUGUI>(true);
+
+        foreach (var t in allTexts)
+        {
+            string n = t.name.ToLowerInvariant();
+            if (n.Contains("coin") || n.Contains("score"))
+                return t;
+        }
+
+        return allTexts.Length > 0 ? allTexts[0] : null;
+    }
 
     public void AddMoney(int amount)
     {
@@ -42,13 +91,9 @@ public class ScoreManager : MonoBehaviour
         UpdateScoreUI();
 
         if (coinSparkles != null)
-        {
             coinSparkles.Emit(30);
-        }
         else
-        {
             Debug.LogWarning("coinSparkles is not assigned on ScoreManager!");
-        }
     }
 
     private void UpdateScoreUI()
@@ -57,10 +102,7 @@ public class ScoreManager : MonoBehaviour
             ScoreText.text = "Coins: " + CurrentMoney;
     }
 
-    public int GetCurrentMoney()
-    {
-        return CurrentMoney;
-    }
+    public int GetCurrentMoney() => CurrentMoney;
 
     public void ResetMoney()
     {

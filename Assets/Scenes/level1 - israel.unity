@@ -454,8 +454,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecbdbe49ee2eaaf4284cf36ee0f4fec2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EggplantTray
-  trayRenderer: {fileID: 29336332}
-  fullTraySprite: {fileID: 21300000, guid: fd484fb47d7e96c45b98ba5748048593, type: 3}
+  trayType: 0
   trayState: {fileID: 29336336}
 --- !u!212 &29336332
 SpriteRenderer:
@@ -604,10 +603,9 @@ MonoBehaviour:
   trayRenderer: {fileID: 29336332}
   fullSprite: {fileID: 21300000, guid: fd484fb47d7e96c45b98ba5748048593, type: 3}
   midSprite: {fileID: 21300000, guid: 9a08d14782994eb4da34f4fb1b644415, type: 3}
-  emptySprite: {fileID: 21300000, guid: 4d9323ae8b16d424f9ef4cae8db4cbd7, type: 3}
+  lowSprite: {fileID: 21300000, guid: 4d9323ae8b16d424f9ef4cae8db4cbd7, type: 3}
   usesPerStage: 2
-  trayEggplantItems:
-  - {fileID: 29336333}
+  trayItems: []
 --- !u!1 &70542068
 GameObject:
   m_ObjectHideFlags: 0
@@ -1348,7 +1346,7 @@ GameObject:
   - component: {fileID: 295093908}
   - component: {fileID: 295093907}
   m_Layer: 0
-  m_Name: ItemsLevel1
+  m_Name: ItemsLevel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2783,6 +2781,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fa8d00a30836965448ebdeeffdac87ed, type: 3}
+--- !u!1 &916341824 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1608664731481350, guid: fa8d00a30836965448ebdeeffdac87ed, type: 3}
+  m_PrefabInstance: {fileID: 916341823}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &916762010
 GameObject:
   m_ObjectHideFlags: 0
@@ -3016,11 +3019,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1155163350}
   m_CullTransparentMesh: 1
---- !u!1 &1235463533 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1608664731481350, guid: fa8d00a30836965448ebdeeffdac87ed, type: 3}
-  m_PrefabInstance: {fileID: 916341823}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1235463534 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4561966467305094, guid: fa8d00a30836965448ebdeeffdac87ed, type: 3}
@@ -3204,7 +3202,7 @@ GameObject:
   - component: {fileID: 1335267674}
   - component: {fileID: 1335267673}
   m_Layer: 0
-  m_Name: Level1GameFlow
+  m_Name: LevelGameFlow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3223,9 +3221,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   fryZone: {fileID: 1748255140}
+  eggplantFryer: {fileID: 0}
+  chipsFryer: {fileID: 0}
   trayEggplantItems:
   - {fileID: 29336333}
-  trayState: {fileID: 29336336}
+  eggplantTrayState: {fileID: 29336336}
+  chipsTrayState: {fileID: 0}
 --- !u!4 &1335267674
 Transform:
   m_ObjectHideFlags: 0
@@ -3905,12 +3906,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18fdfe0a0ed6df247b0605c95aeb5fa4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  currentType: 0
+  collectByClickOnThisObject: 1
   overlayRenderer: {fileID: 1748255141}
-  rawEggplantSprite: {fileID: 21300000, guid: b89e4a121e757834caeb8964ab11439e, type: 3}
-  friedEggplantSprite: {fileID: 21300000, guid: b84926c4486e6384b9cbbb4a0781be6b, type: 3}
+  fryingSprite: {fileID: 0}
+  readySprite: {fileID: 0}
   fryTimeSeconds: 5
   eggplantTray: {fileID: 29336331}
-  timer: 0
+  chipsTray: {fileID: 0}
 --- !u!212 &1748255141
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -4235,9 +4238,11 @@ MonoBehaviour:
   eggplantLayer: {fileID: 136385255}
   eggLayer: {fileID: 1889214889}
   saladLayer: {fileID: 981546837}
+  chipsLayer: {fileID: 0}
   eggplantSprite: {fileID: 21300000, guid: 9ca5e7a12881521498392f71c0fcc06d, type: 3}
   eggSprite: {fileID: 21300000, guid: 875e564d2b0ab374ca89fcdc2212e1cb, type: 3}
   saladSprite: {fileID: 21300000, guid: a618670da1d854245b9e285463d56619, type: 3}
+  chipsSprite: {fileID: 0}
 --- !u!212 &1889214889 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 8896958299370979809, guid: de4c8b1251d1f8442be6fd1c2ee07a11, type: 3}
@@ -4902,7 +4907,7 @@ PrefabInstance:
     - target: {fileID: 4173742809619845330, guid: 4c0914c7c8f14894696d4b40bed48725, type: 3}
       propertyPath: orderBubbleRoot
       value: 
-      objectReference: {fileID: 1235463533}
+      objectReference: {fileID: 916341824}
     - target: {fileID: 4173742809619845330, guid: 4c0914c7c8f14894696d4b40bed48725, type: 3}
       propertyPath: ingredientIcons.Array.size
       value: 6

@@ -71,6 +71,8 @@ public class SelectionList : MonoBehaviour
         {
             case "pitta": return "פיתה";
             case "salad": return "סלט";
+            case "soy": return "סויה";
+            case "chips": return "ציפס";
             case "egg": return "ביצה";
             case "tahini": return "טחינה";
             case "amba": return "עמבה";

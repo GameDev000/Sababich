@@ -100,6 +100,7 @@ public class CustomerManager : MonoBehaviour
                 currentCustomer.MoodTimer.CustomerServed();
 
             SelectionList.Instance.ClearIngredients();
+            StartLeaveSequence();
             return;
         }
 

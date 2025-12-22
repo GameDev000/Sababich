@@ -1,21 +1,23 @@
+//Animation of the bottles
 using System.Collections;
 using UnityEngine;
 
 public class SauceBottleWobble : MonoBehaviour
 {
     [Header("Tilt settings")]
-    [SerializeField] private float tiltAngle = 20f;
-    [SerializeField] private float wobbleDuration = 0.15f;
-    [SerializeField] private int wobbleCycles = 2;
+    [SerializeField] private float tiltAngle = 20f; //angle degrees
+    [SerializeField] private float wobbleDuration = 0.15f; //Time between any 2 angles
+    [SerializeField] private int wobbleCycles = 2; //repetition
 
     private bool isWobbling = false;
-    private Quaternion initialRotation;
+    private Quaternion initialRotation; //original state
 
     private void Awake()
     {
         initialRotation = transform.rotation;
     }
 
+    //Shake called from ItemScript() 
     public void Shake()
     {
         if (!isWobbling)
@@ -46,7 +48,7 @@ public class SauceBottleWobble : MonoBehaviour
         while (t < time)
         {
             t += Time.deltaTime;
-            float lerp = t / time;
+            float lerp = t / time; //part from 100% rotation
             transform.rotation = Quaternion.Lerp(from, to, lerp);
             yield return null;
         }

@@ -15,7 +15,7 @@ public class Item : MonoBehaviour
         {
             string lower = ingredientName.ToLower();
 
-            if (lower != "eggplantrow" && lower != "fryzone")
+            if (lower != "eggplantrow" && lower != "fryzone" && lower != "potatoes")//potatoes for level3
             {
                 bool added = SelectionList.Instance.TryAddIngredient(ingredientName);
 
@@ -31,17 +31,21 @@ public class Item : MonoBehaviour
             Debug.LogWarning("SelectionList.Instance is null!");
         }
 
+        //Bottle animation
         var bottlePhysics = GetComponent<SauceBottleWobble>();
         if (bottlePhysics != null)
-            bottlePhysics.Shake();
+            bottlePhysics.Shake(); 
 
+        //Update Tutorial
         if (TutorialManager.Instance != null)
             TutorialManager.Instance.OnIngredientClicked(this, ingredientName);
 
-        if (Level1GameFlow.Instance != null)
-            Level1GameFlow.Instance.OnIngredientClickedFromItem(this, ingredientName);
+        //Update GameFlow
+        if (LevelGameFlow.Instance != null)
+            LevelGameFlow.Instance.OnIngredientClickedFromItem(this, ingredientName);
     }
 
+    //Control which components can be added
     public void SetClickable(bool value)
     {
         isClickable = value;

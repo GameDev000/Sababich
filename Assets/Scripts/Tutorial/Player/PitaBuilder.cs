@@ -1,4 +1,3 @@
-
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -19,10 +18,16 @@ public class PitaBuilder : MonoBehaviour
     [SerializeField] private SpriteRenderer eggLayer;
     [SerializeField] private SpriteRenderer saladLayer;
 
+    [SerializeField] private SpriteRenderer chipsLayer;
+    [SerializeField] private SpriteRenderer soyLayer;
+
     [Header("Inner ingredient sprites")]
     [SerializeField] private Sprite eggplantSprite;
     [SerializeField] private Sprite eggSprite;
     [SerializeField] private Sprite saladSprite;
+
+    [SerializeField] private Sprite chipsSprite;
+    [SerializeField] private Sprite soySprite;
 
     private void Start()
     {
@@ -46,7 +51,7 @@ public class PitaBuilder : MonoBehaviour
         {
             string ing = rawIng.ToLower();
 
-            if (ing == "pitta" || ing == "pita" || ing == "פיתה")
+            if (ing == "pitta")
             {
                 hasPita = true;
                 continue;
@@ -67,6 +72,16 @@ public class PitaBuilder : MonoBehaviour
                 case "salad":
                 case "סלט":
                     EnableLayer(saladLayer, saladSprite);
+                    break;
+
+                case "soy":
+                case "סויה":
+                    EnableLayer(soyLayer, soySprite);
+                    break;    
+
+                case "chips":
+                case "ציפס":
+                    EnableLayer(chipsLayer, chipsSprite);
                     break;
 
                 case "tahini":
@@ -101,6 +116,9 @@ public class PitaBuilder : MonoBehaviour
         if (eggplantLayer != null) eggplantLayer.enabled = false;
         if (eggLayer != null) eggLayer.enabled = false;
         if (saladLayer != null) saladLayer.enabled = false;
+
+        if (chipsLayer != null) chipsLayer.enabled = false;
+        if (soyLayer != null) soyLayer.enabled = false;
     }
 
     private void EnableLayer(SpriteRenderer renderer, Sprite sprite)

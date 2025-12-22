@@ -1,30 +1,28 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-/// <summary>
-/// Updates the frying timer UI based on the frying progress in the FryZoneEggplant.
-/// </summary>
+//Shows and updates the timer image, based on the frying progress of a FryZone
 public class FryTimerUI : MonoBehaviour
 {
-    [SerializeField] private FryZoneEggplant fryZone; // Reference to the FryZoneEggplant component
-    [SerializeField] private Image timerImage; // Reference to the UI Image component representing the timer
+    //frying zone of eggplant or chips
+    [SerializeField] private FryZoneIngredient fryZone;
+    //The UI Image of timer
+    [SerializeField] private Image timerImage;
 
     private void Start()
     {
-
         if (timerImage == null)
-            timerImage = GetComponent<Image>(); // Get the Image component if not assigned
-
+            timerImage = GetComponent<Image>();
 
         if (timerImage != null)
         {
-            timerImage.enabled = false; // Initially hide the timer image
-            timerImage.fillAmount = 1f; // Set the fill amount to full
+            timerImage.enabled = false; //Hide timer at game start
+            timerImage.fillAmount = 1f; //Full circle
         }
     }
 
     private void Update()
-    {   // Update the timer UI based on the frying progress
+    {
         if (fryZone == null || !fryZone.IsFrying)
         {
             if (timerImage != null && timerImage.enabled)
@@ -32,13 +30,13 @@ public class FryTimerUI : MonoBehaviour
 
             return;
         }
-        // Update the timer fill amount based on frying progress
+
         if (timerImage != null)
         {
             if (!timerImage.enabled)
                 timerImage.enabled = true;
 
-            timerImage.fillAmount = 1f - fryZone.FryProgress;// Fill amount decreases as frying progresses
+            timerImage.fillAmount = 1f - fryZone.FryProgress;
         }
     }
 }

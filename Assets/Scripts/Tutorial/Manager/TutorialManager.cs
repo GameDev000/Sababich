@@ -1,4 +1,3 @@
-
 using UnityEngine.SceneManagement;
 using UnityEngine;
 
@@ -38,7 +37,7 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] private GameObject arrowEggplant; // Arrow indicator for guiding the player to the eggplant first and then to other items
 
     [Header("Fry Zone")]
-    [SerializeField] private FryZoneEggplant fryZoneEggplant; // Reference to the fry zone for eggplant
+    [SerializeField] private FryZoneIngredient fryZoneIngredient; // Reference to the fry zone for eggplant
 
     [Header("Customer")]
     [SerializeField] private Transform customerTarget; // Target position for the customer
@@ -112,9 +111,9 @@ public class TutorialManager : MonoBehaviour
 
         ShowArrow(false);
 
-        if (fryZoneEggplant != null)
+        if (fryZoneIngredient != null)
         {
-            fryZoneEggplant.StartFry(); // Start frying the eggplant
+            fryZoneIngredient.StartFry(); // Start frying the eggplant
             SetGamePhase(GamePhase.FryingEggplant); // Update game phase to frying eggplant
         }
     }
@@ -124,7 +123,7 @@ public class TutorialManager : MonoBehaviour
     /// </summary>
     /// <param name="fryZone">The fry zone where the eggplant was fried.</param>
     /// </summary>
-    public void OnEggplantFried(FryZoneEggplant fryZone)
+    public void OnEggplantFried(FryZoneIngredient fryZone)
     {
         Debug.Log("[TutorialManager] Eggplant is fried - show arrow on pan");
         if (fryZone != null)
@@ -353,4 +352,13 @@ public class TutorialManager : MonoBehaviour
         }
     }
 
+    public void OnChipsFried(FryZoneIngredient zone)
+    {
+        // Tutorial focuses on eggplant. Keep empty.
+    }
+
+    public void OnChipsTrayFull()
+    {
+        // Keep empty (or call OnEggplantTrayFull() if you want chips to advance tutorial).
+    }
 }
