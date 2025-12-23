@@ -18,7 +18,7 @@ public class LevelThreeTimerWinLose : MonoBehaviour
 
 
     [Header("Coins Source")]
-    [SerializeField] private ScoreManager playerCoins;  
+    [SerializeField] private ScoreManager playerCoins;
 
     private float timeLeft;
     private bool finished;
@@ -65,7 +65,7 @@ public class LevelThreeTimerWinLose : MonoBehaviour
         timerText.text = $"{minutes:00}:{seconds:00}";
     }
 
-        private void EndLevel()
+    private void EndLevel()
     {
         int coins = (ScoreManager.Instance != null) ? ScoreManager.Instance.GetCurrentMoney() : 0;
 

@@ -66,8 +66,7 @@ public class FriedTrayState : MonoBehaviour
             trayRenderer.sprite = lowSprite;
         }
         else
-        {
-            
+        {  
             SetTrayItemsClickable(false);
             trayRenderer.sprite = null;
             trayRenderer.enabled = false; // show only background

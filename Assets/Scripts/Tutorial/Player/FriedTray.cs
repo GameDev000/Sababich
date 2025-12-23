@@ -20,7 +20,8 @@ public class FriedTray : MonoBehaviour
         // Tutorial hooks (keep compatibility)
         if (TutorialManager.Instance != null)
         {
-            if (trayType == TrayType.Eggplant){
+            if (trayType == TrayType.Eggplant)
+            {
                 TutorialManager.Instance.OnEggplantTrayFull();
             }
             else
@@ -35,7 +36,6 @@ public class FriedTray : MonoBehaviour
             {
                 LevelGameFlow.Instance.OnTrayFilled();
             }
-                
             else
             {
                 LevelGameFlow.Instance.OnChipsTrayFilled(); // optional (see below)
