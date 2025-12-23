@@ -31,7 +31,6 @@ public class LevelTwoTimerWinLose : MonoBehaviour
         {
             playerCoins = ScoreManager.Instance != null ? ScoreManager.Instance : FindObjectOfType<ScoreManager>();
         }
-        
         UpdateTimerUI(timeLeft);
     }
 
