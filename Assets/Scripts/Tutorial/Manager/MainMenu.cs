@@ -38,4 +38,11 @@ public class MainMenu : MonoBehaviour
         else
             SceneManager.LoadScene("level2 - china");
     }
+    public void OnEndLevelThree()
+    {
+        if (LevelThreeState.IsSuccess)
+            SceneManager.LoadScene("MainMenu");
+        else
+            SceneManager.LoadScene("level3 - USA");
+    }
 }

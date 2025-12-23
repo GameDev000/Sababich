@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class LevelTwoTimerWinLose : MonoBehaviour
+public class LevelThreeTimerWinLose : MonoBehaviour
 {
     [Header("Timer")]
     [SerializeField] private float levelDurationSeconds = 90f;
@@ -11,14 +11,14 @@ public class LevelTwoTimerWinLose : MonoBehaviour
     [SerializeField] private TextMeshProUGUI timerText;
 
     [Header("Win Condition")]
-    [SerializeField] private int coinsTarget = 10;
+    [SerializeField] private int coinsTarget = 150;
 
     [Header("End Scene")]
-    [SerializeField] private string endSceneName = "Level2 - endScene";
+    [SerializeField] private string endSceneName = "Level3 - endScene";
 
 
     [Header("Coins Source")]
-    [SerializeField] private ScoreManager playerCoins;
+    [SerializeField] private ScoreManager playerCoins;  
 
     private float timeLeft;
     private bool finished;
@@ -29,7 +29,8 @@ public class LevelTwoTimerWinLose : MonoBehaviour
 
         if (playerCoins == null)
             playerCoins = ScoreManager.Instance != null
-                ? ScoreManager.Instance: FindObjectOfType<ScoreManager>();
+                ? ScoreManager.Instance
+                : FindObjectOfType<ScoreManager>();
 
         UpdateTimerUI(timeLeft);
     }
@@ -63,16 +64,15 @@ public class LevelTwoTimerWinLose : MonoBehaviour
 
         timerText.text = $"{minutes:00}:{seconds:00}";
     }
-    private void EndLevel()
+
+        private void EndLevel()
     {
         int coins = (ScoreManager.Instance != null) ? ScoreManager.Instance.GetCurrentMoney() : 0;
 
-        LevelTwoState.IsSuccess = coins >= coinsTarget;
-
-        Debug.Log($"[Level2 End] coins={coins} target={coinsTarget} success={LevelTwoState.IsSuccess}");
+        LevelThreeState.IsSuccess = coins >= coinsTarget;
+        Debug.Log($"[Level3 End] coins={coins} target={coinsTarget} success={LevelThreeState.IsSuccess}");
 
         Time.timeScale = 1f;
         SceneManager.LoadScene(endSceneName);
     }
-
 }

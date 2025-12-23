@@ -5,6 +5,7 @@ public class Item : MonoBehaviour
     [SerializeField] private string ingredientName = "pitta";
     private bool isClickable = true;
 
+
     public void OnClick()
     {
         if (!isClickable) return;
@@ -45,9 +46,10 @@ public class Item : MonoBehaviour
             LevelGameFlow.Instance.OnIngredientClickedFromItem(this, ingredientName);
     }
 
-    //Control which components can be added
     public void SetClickable(bool value)
     {
         isClickable = value;
     }
+
+
 }

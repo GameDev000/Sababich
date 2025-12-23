@@ -1682,7 +1682,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: -36, y: -235}
+  m_AnchoredPosition: {x: -35.999878, y: -235}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &461094691
@@ -1999,9 +1999,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db3624b684191cd48a06e9c2a15af6c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  levelDurationSeconds: 90
+  levelDurationSeconds: 20
   timerText: {fileID: 1458113649}
-  coinsTarget: 150
+  coinsTarget: 10
   endSceneName: Level1 - endScene
   playerCoins: {fileID: 1900023740}
 --- !u!4 &520318746
@@ -3476,6 +3476,10 @@ PrefabInstance:
     - target: {fileID: 4529711906656957885, guid: 6b08bc250a77d5944b63945313d63ca5, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -74
+      objectReference: {fileID: 0}
+    - target: {fileID: 4598039598139189808, guid: 6b08bc250a77d5944b63945313d63ca5, type: 3}
+      propertyPath: m_TagString
+      value: ScoreText
       objectReference: {fileID: 0}
     - target: {fileID: 7789714532364963685, guid: 6b08bc250a77d5944b63945313d63ca5, type: 3}
       propertyPath: m_Name

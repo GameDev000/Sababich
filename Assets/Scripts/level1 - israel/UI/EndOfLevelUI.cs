@@ -25,6 +25,8 @@ public class EndOfLevelUI : MonoBehaviour
                 titleText.text = LevelOneState.IsSuccess ? successMessage : failMessage;
             else if (currentScene.name == "Level2 - endScene")
                 titleText.text = LevelTwoState.IsSuccess ? successMessage : failMessage;
+            else if (currentScene.name == "Level3 - endScene")
+                titleText.text = LevelThreeState.IsSuccess ? successMessage : failMessage;
 
 
         }

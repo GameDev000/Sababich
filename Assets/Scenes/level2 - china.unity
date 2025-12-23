@@ -603,7 +603,7 @@ MonoBehaviour:
   trayRenderer: {fileID: 29336332}
   fullSprite: {fileID: -7931967228749750829, guid: a19d142393068fa45bccaf8dd3bb7d26, type: 3}
   midSprite: {fileID: 7994181803641114639, guid: fc55eb588f1b56948a7645cec8032bb7, type: 3}
-  lowSprite: {fileID: 0}
+  lowSprite: {fileID: 6505158125901152159, guid: 3fbc20e4817b0384fae850a0b85e3985, type: 3}
   usesPerStage: 2
   trayItems: []
 --- !u!1 &70542068
@@ -2044,9 +2044,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a0bee3fc725ffa4da5802ca07ab8439, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Scripts::LevelTwoTimerWinLose
-  levelDurationSeconds: 120
+  levelDurationSeconds: 20
   timerText: {fileID: 656340742}
-  coinsTarget: 250
+  coinsTarget: 10
   endSceneName: Level2 - endScene
   playerCoins: {fileID: 559278372}
 --- !u!1 &792457411 stripped
@@ -3028,6 +3028,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -131.80005
       objectReference: {fileID: 0}
+    - target: {fileID: 4598039598139189808, guid: 6b08bc250a77d5944b63945313d63ca5, type: 3}
+      propertyPath: m_TagString
+      value: ScoreText
+      objectReference: {fileID: 0}
     - target: {fileID: 7789714532364963685, guid: 6b08bc250a77d5944b63945313d63ca5, type: 3}
       propertyPath: m_Name
       value: Score
@@ -3724,7 +3728,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SelectionList
   selectedText: {fileID: 0}
-  pitaBuilder: {fileID: 0}
+  pitaBuilder: {fileID: 72751113}
 --- !u!114 &1770097435
 MonoBehaviour:
   m_ObjectHideFlags: 0

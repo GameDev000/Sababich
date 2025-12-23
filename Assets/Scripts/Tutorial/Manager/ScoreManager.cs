@@ -77,12 +77,11 @@ public class ScoreManager : MonoBehaviour
 
         foreach (var t in allTexts)
         {
-            string n = t.name.ToLowerInvariant();
-            if (n.Contains("coin") || n.Contains("score"))
+            if (t.CompareTag("ScoreText"))
                 return t;
         }
 
-        return allTexts.Length > 0 ? allTexts[0] : null;
+        return null;
     }
 
     public void AddMoney(int amount)

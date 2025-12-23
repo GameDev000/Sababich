@@ -879,6 +879,7 @@ GameObject:
   - component: {fileID: 316060279}
   - component: {fileID: 316060278}
   - component: {fileID: 316060277}
+  - component: {fileID: 316060281}
   - component: {fileID: 316060280}
   m_Layer: 0
   m_Name: Main Camera
@@ -1005,6 +1006,18 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!114 &316060281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 316060276}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9cc3420463dc0a48b2688d4a8e1b080, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Scripts::Letterbox16by9
 --- !u!1 &325254034
 GameObject:
   m_ObjectHideFlags: 0
@@ -1068,7 +1081,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_Sprite: {fileID: 7675738404339372604, guid: 6ab5d4a99bdbb1c40bc2157b4c25b461, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1109,6 +1122,7 @@ GameObject:
   m_Component:
   - component: {fileID: 350055517}
   - component: {fileID: 350055516}
+  - component: {fileID: 350055518}
   m_Layer: 0
   m_Name: LevelEndManager
   m_TagString: Untagged
@@ -1123,15 +1137,15 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 350055515}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: db3624b684191cd48a06e9c2a15af6c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  levelDurationSeconds: 90
+  levelDurationSeconds: 20
   timerText: {fileID: 259729609}
-  coinsTarget: 150
-  endSceneName: Level1 - endScene
+  coinsTarget: 10
+  endSceneName: Level3 - endScene
   playerCoins: {fileID: 6126343218938973799}
 --- !u!4 &350055517
 Transform:
@@ -1148,6 +1162,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &350055518
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 350055515}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c78ac9ed8425cb841b38e845d7d86287, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Scripts::LevelThreeTimerWinLose
+  levelDurationSeconds: 20
+  timerText: {fileID: 259729609}
+  coinsTarget: 10
+  endSceneName: Level3 - endScene
+  playerCoins: {fileID: 6126343218938973799}
 --- !u!1001 &350299350
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1931,11 +1962,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4561966467305094, guid: fa8d00a30836965448ebdeeffdac87ed, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -5.05
+      value: -2.26
       objectReference: {fileID: 0}
     - target: {fileID: 4561966467305094, guid: fa8d00a30836965448ebdeeffdac87ed, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 6.71
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4561966467305094, guid: fa8d00a30836965448ebdeeffdac87ed, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2821,10 +2852,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 3.1666667
-  m_Height: 10.048278
+  m_Radius: 2.3144796
+  m_Height: 8.1649885
   m_Direction: 1
-  m_Center: {x: 0, y: 1.6258616, z: 0}
+  m_Center: {x: 0.35700575, y: 2.5675035, z: 0}
 --- !u!114 &1080409499
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4192,9 +4223,9 @@ RectTransform:
   - {fileID: 259729608}
   m_Father: {fileID: 511129938}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 20, y: -14.104996}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 1166.8, y: 194.13}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1803789058
@@ -4267,7 +4298,6 @@ RectTransform:
   - {fileID: 1565041611081197905}
   - {fileID: 4529711906165247217}
   - {fileID: 8665928772547603356}
-  - {fileID: 8220566009105857266}
   - {fileID: 511129938}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4949,7 +4979,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1419890952094614465, guid: 4c0914c7c8f14894696d4b40bed48725, type: 3}
       propertyPath: m_WasSpriteAssigned
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4173742809619845330, guid: 4c0914c7c8f14894696d4b40bed48725, type: 3}
       propertyPath: moodTimer
@@ -5457,7 +5487,7 @@ GameObject:
   - component: {fileID: 3921738935599743243}
   m_Layer: 0
   m_Name: ScoreText
-  m_TagString: Untagged
+  m_TagString: ScoreText
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10376,7 +10406,7 @@ Transform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1861039422}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!224 &8665928772547603356
 RectTransform:
@@ -10435,3 +10465,4 @@ SceneRoots:
   - {fileID: 1559742144}
   - {fileID: 1861039422}
   - {fileID: 350055517}
+  - {fileID: 8220566009105857266}
