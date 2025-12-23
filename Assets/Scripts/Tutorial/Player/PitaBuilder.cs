@@ -78,7 +78,6 @@ public class PitaBuilder : MonoBehaviour
                 case "סויה":
                     EnableLayer(soyLayer, soySprite);
                     break;
-                
                 case "chips":
                 case "ציפס":
                     EnableLayer(chipsLayer, chipsSprite);
