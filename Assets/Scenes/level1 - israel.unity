@@ -3909,8 +3909,8 @@ MonoBehaviour:
   currentType: 0
   collectByClickOnThisObject: 1
   overlayRenderer: {fileID: 1748255141}
-  fryingSprite: {fileID: 0}
-  readySprite: {fileID: 0}
+  fryingSprite: {fileID: 5327227921415917561, guid: f79b72f1cfa4f7e418843dc3aa93ea48, type: 3}
+  readySprite: {fileID: 7029942612502575384, guid: bd4f7b2430a667c4592a22d4f691b3df, type: 3}
   fryTimeSeconds: 5
   eggplantTray: {fileID: 29336331}
   chipsTray: {fileID: 0}
@@ -4239,10 +4239,12 @@ MonoBehaviour:
   eggLayer: {fileID: 1889214889}
   saladLayer: {fileID: 981546837}
   chipsLayer: {fileID: 0}
+  soyLayer: {fileID: 0}
   eggplantSprite: {fileID: 21300000, guid: 9ca5e7a12881521498392f71c0fcc06d, type: 3}
   eggSprite: {fileID: 21300000, guid: 875e564d2b0ab374ca89fcdc2212e1cb, type: 3}
   saladSprite: {fileID: 21300000, guid: a618670da1d854245b9e285463d56619, type: 3}
   chipsSprite: {fileID: 0}
+  soySprite: {fileID: 0}
 --- !u!212 &1889214889 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 8896958299370979809, guid: de4c8b1251d1f8442be6fd1c2ee07a11, type: 3}

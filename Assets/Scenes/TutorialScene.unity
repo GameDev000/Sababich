@@ -145,9 +145,13 @@ MonoBehaviour:
   eggplantLayer: {fileID: 570704640}
   eggLayer: {fileID: 2047297250}
   saladLayer: {fileID: 1696147604}
+  chipsLayer: {fileID: 0}
+  soyLayer: {fileID: 0}
   eggplantSprite: {fileID: 21300000, guid: 9ca5e7a12881521498392f71c0fcc06d, type: 3}
   eggSprite: {fileID: 21300000, guid: 875e564d2b0ab374ca89fcdc2212e1cb, type: 3}
   saladSprite: {fileID: 21300000, guid: a618670da1d854245b9e285463d56619, type: 3}
+  chipsSprite: {fileID: 0}
+  soySprite: {fileID: 0}
 --- !u!1001 &47190396
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -903,12 +907,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18fdfe0a0ed6df247b0605c95aeb5fa4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  currentType: 0
+  collectByClickOnThisObject: 1
   overlayRenderer: {fileID: 239105897}
-  rawEggplantSprite: {fileID: 21300000, guid: b89e4a121e757834caeb8964ab11439e, type: 3}
-  friedEggplantSprite: {fileID: 21300000, guid: b84926c4486e6384b9cbbb4a0781be6b, type: 3}
+  fryingSprite: {fileID: 5327227921415917561, guid: f79b72f1cfa4f7e418843dc3aa93ea48, type: 3}
+  readySprite: {fileID: 7029942612502575384, guid: bd4f7b2430a667c4592a22d4f691b3df, type: 3}
   fryTimeSeconds: 5
   eggplantTray: {fileID: 1462907247}
-  timer: 0
+  chipsTray: {fileID: 0}
 --- !u!1001 &242609445
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2439,7 +2445,7 @@ MonoBehaviour:
   - {fileID: 209505836}
   - {fileID: 428267160}
   arrowEggplant: {fileID: 1303502276}
-  fryZoneEggplant: {fileID: 239105899}
+  fryZoneIngredient: {fileID: 239105899}
   customerTarget: {fileID: 118900258}
   customerRenderer: {fileID: 118900257}
   customerSprites:
@@ -2968,6 +2974,7 @@ GameObject:
   - component: {fileID: 1462907244}
   - component: {fileID: 1462907246}
   - component: {fileID: 1462907247}
+  - component: {fileID: 1462907248}
   m_Layer: 0
   m_Name: eggplant
   m_TagString: Untagged
@@ -3119,9 +3126,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecbdbe49ee2eaaf4284cf36ee0f4fec2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EggplantTray
+  trayType: 0
+  trayState: {fileID: 1462907248}
+--- !u!114 &1462907248
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1462907242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afa9398553b51b24995e59575ca7369b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Scripts::FriedTrayState
   trayRenderer: {fileID: 1462907244}
-  fullTraySprite: {fileID: 21300000, guid: fd484fb47d7e96c45b98ba5748048593, type: 3}
-  trayState: {fileID: 0}
+  fullSprite: {fileID: -7931967228749750829, guid: a19d142393068fa45bccaf8dd3bb7d26, type: 3}
+  midSprite: {fileID: 7994181803641114639, guid: fc55eb588f1b56948a7645cec8032bb7, type: 3}
+  lowSprite: {fileID: 6505158125901152159, guid: 3fbc20e4817b0384fae850a0b85e3985, type: 3}
+  usesPerStage: 2
+  trayItems: []
 --- !u!1 &1497615209
 GameObject:
   m_ObjectHideFlags: 0
