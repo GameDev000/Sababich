@@ -31,15 +31,20 @@ public class Item : MonoBehaviour
         {
             Debug.LogWarning("SelectionList.Instance is null!");
         }
-
         //Bottle animation
         var bottlePhysics = GetComponent<SauceBottleWobble>();
         if (bottlePhysics != null)
-            bottlePhysics.Shake(); 
+        {
+            bottlePhysics.Shake();
+
+        }
 
         //Update Tutorial
         if (TutorialManager.Instance != null)
+        {
             TutorialManager.Instance.OnIngredientClicked(this, ingredientName);
+
+        }
 
         //Update GameFlow
         if (LevelGameFlow.Instance != null)
