@@ -2044,9 +2044,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a0bee3fc725ffa4da5802ca07ab8439, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Scripts::LevelTwoTimerWinLose
-  levelDurationSeconds: 20
+  levelDurationSeconds: 120
   timerText: {fileID: 656340742}
-  coinsTarget: 10
+  coinsTarget: 220
   endSceneName: Level2 - endScene
   playerCoins: {fileID: 559278372}
 --- !u!1 &792457411 stripped

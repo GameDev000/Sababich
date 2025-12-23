@@ -1142,9 +1142,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db3624b684191cd48a06e9c2a15af6c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  levelDurationSeconds: 20
+  levelDurationSeconds: 150
   timerText: {fileID: 259729609}
-  coinsTarget: 10
+  coinsTarget: 300
   endSceneName: Level3 - endScene
   playerCoins: {fileID: 6126343218938973799}
 --- !u!4 &350055517
