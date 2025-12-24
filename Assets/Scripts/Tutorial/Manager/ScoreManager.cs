@@ -98,7 +98,7 @@ public class ScoreManager : MonoBehaviour
     private void UpdateScoreUI()
     {
         if (ScoreText != null)
-            ScoreText.text = "Coins: " + CurrentMoney;
+            ScoreText.text ="" + CurrentMoney;
     }
 
     public int GetCurrentMoney() => CurrentMoney;
