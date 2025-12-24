@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 778488006d159b04597bc2eff55fdeb6
+guid: 1444700c6ef4b7647b1f01d1ff9da676
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 602488411955993517
-    second: cop_front_3_0
+      213: -1646949645739372536
+    second: TwoChineseWithViolin_0_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -51,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 50
+  spritePixelsToUnits: 15
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: cop_front_3_0
+      name: TwoChineseWithViolin_0_0
       rect:
         serializedVersion: 2
-        x: 556
+        x: 0
         y: 0
-        width: 348
-        height: 697
+        width: 160
+        height: 241
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: dab1defb4087c5800800000000000000
-      internalID: 602488411955993517
+      spriteID: 800dfbae50cd429e0800000000000000
+      internalID: -1646949645739372536
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      cop_front_3_0: 602488411955993517
+      TwoChineseWithViolin_0_0: -1646949645739372536
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
