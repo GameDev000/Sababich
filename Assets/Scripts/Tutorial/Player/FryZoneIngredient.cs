@@ -1,44 +1,43 @@
 using UnityEngine;
 
-/// <summary>
-/// One frying machine that can fry different ingredient types (Eggplant / Chips).
-/// No base class required.
-/// </summary>
+// One frying machine that can fry different ingredient types (Eggplant / Chips).
+
 public class FryZoneIngredient : MonoBehaviour
 {
     public enum FryType { Eggplant, Chips }
     private enum FryState { Empty, Frying, Ready }
 
     [Header("Type")]
-    [SerializeField] private FryType currentType = FryType.Eggplant; // default for old levels
+    [SerializeField] private FryType currentType = FryType.Eggplant; // default for 0-2 levels
 
-    // NEW: controls whether clicking this object collects the fried item (keeps old levels working)
+    // Controls whether clicking this object collects the fried item (level3-> the emojy true)
     [Header("Collect Settings")]
     [SerializeField] private bool collectByClickOnThisObject = true;
 
     [Header("Visual (optional)")]
-    [SerializeField] private SpriteRenderer overlayRenderer; // can be null if you don't want overlay
-    [SerializeField] private Sprite fryingSprite;            // optional
-    [SerializeField] private Sprite readySprite;             // optional
+    [SerializeField] private SpriteRenderer overlayRenderer; // can be null if you don't want Visual frying
+    [SerializeField] private Sprite fryingSprite;            // Optional for level3
+    [SerializeField] private Sprite readySprite;             // Optional for level3
 
     [Header("Timing")]
     [SerializeField] private float fryTimeSeconds = 5f;
 
     [Header("Output trays")]
     [SerializeField] private FriedTray eggplantTray;
-    [SerializeField] private FriedTray chipsTray;
+    [SerializeField] private FriedTray chipsTray; 
 
     private FryState state = FryState.Empty;
     private float timer = 0f;
 
+    //Indications for the frying process
     public FryType CurrentType => currentType;
     public bool IsFrying => state == FryState.Frying;
     public bool IsReady => state == FryState.Ready;
 
     public float FryProgress =>
         (state == FryState.Frying && fryTimeSeconds > 0f)
-            ? Mathf.Clamp01(timer / fryTimeSeconds)
-            : (state == FryState.Ready ? 1f : 0f);
+            ? Mathf.Clamp01(timer / fryTimeSeconds) // Frying percentage of the entire process
+            : (state == FryState.Ready ? 1f : 0f); //1->100%, 0->not start
 
     private void Start()
     {
@@ -48,7 +47,7 @@ public class FryZoneIngredient : MonoBehaviour
     private void Update()
     {
         if (state != FryState.Frying) return;
-
+        // Frying process update
         timer += Time.deltaTime;
         if (timer >= fryTimeSeconds)
         {
@@ -57,13 +56,14 @@ public class FryZoneIngredient : MonoBehaviour
         }
     }
 
-    public void SetType(FryType type)
+    public void SetType(FryType type)////////////////////////////////////////////
     {
         // Optional: block changing while frying
         // if (IsFrying) return;
         currentType = type;
     }
 
+    // Called on LevelGameFlow
     public void StartFry()
     {
         if (state != FryState.Empty) return;

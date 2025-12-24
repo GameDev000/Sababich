@@ -1,11 +1,12 @@
 using UnityEngine;
 
+// Represents a fried food tray that receives items from the fryer, updates its visual state, and notifies the tutorial and game flow when it is filled
 public class FriedTray : MonoBehaviour
 {
     public enum TrayType { Eggplant, Chips }
 
     [Header("Type")]
-    [SerializeField] private TrayType trayType = TrayType.Eggplant;
+    [SerializeField] private TrayType trayType = TrayType.Eggplant; //Default-> Eggplant
 
     [Header("State")]
     [SerializeField] private FriedTrayState trayState;
@@ -17,7 +18,7 @@ public class FriedTray : MonoBehaviour
         if (trayState != null)
             trayState.Refill();
 
-        // Tutorial hooks (keep compatibility)
+        // Update Tutorial
         if (TutorialManager.Instance != null)
         {
             if (trayType == TrayType.Eggplant)
@@ -26,10 +27,10 @@ public class FriedTray : MonoBehaviour
             }
             else
             {
-                TutorialManager.Instance.OnChipsTrayFull(); // you add this method (see below)
+                TutorialManager.Instance.OnChipsTrayFull(); 
             }
         }
-        // Optional: if you want GameFlow notification per type (recommended)
+        // Update LevelGameFlow
         if (LevelGameFlow.Instance != null)
         {
             if (trayType == TrayType.Eggplant)
@@ -38,7 +39,7 @@ public class FriedTray : MonoBehaviour
             }
             else
             {
-                LevelGameFlow.Instance.OnChipsTrayFilled(); // optional (see below)
+                LevelGameFlow.Instance.OnChipsTrayFilled(); 
             }
         }
     }

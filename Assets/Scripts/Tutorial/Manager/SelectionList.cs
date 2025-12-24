@@ -11,6 +11,10 @@ public class SelectionList : MonoBehaviour
     [SerializeField] private TextMeshProUGUI selectedText;
     [SerializeField] private PitaBuilder pitaBuilder;
 
+    //Reference to FriedTrayState
+    [SerializeField] private FriedTrayState eggplantTrayState;
+    [SerializeField] private FriedTrayState chipsTrayState;
+
     private readonly List<string> selectedIngredients = new List<string>();
 
     private void Awake()
@@ -35,6 +39,18 @@ public class SelectionList : MonoBehaviour
         if (selectedIngredients.Count == 0 && lower != "pitta")
         {
             Debug.Log("First ingredient must be Pitta.");
+            return false;
+        }
+
+        if (lower == "eggplant" && eggplantTrayState != null && eggplantTrayState.IsEmpty) // Prevent adding when eggplantTrayState.IsEmpty
+        {
+            Debug.Log("Eggplant tray is empty.");
+            return false;
+        }
+
+        if (lower == "chips" && chipsTrayState != null && chipsTrayState.IsEmpty) // Prevent adding when chipsTrayState.IsEmpty
+        {
+            Debug.Log("Chips tray is empty.");
             return false;
         }
 

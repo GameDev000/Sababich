@@ -1,24 +1,25 @@
 using UnityEngine;
 
+//Manages the overall level flow by coordinating frying machines, tray states, and item interactions across different level setups.
 public class LevelGameFlow : MonoBehaviour
 {
-    public static LevelGameFlow Instance { get; private set; }
+    public static LevelGameFlow Instance { get; private set; } // This line defines a Singleton instance that provides global access to the level’s gameManager logic
 
-    [Header("Frying Machine (legacy - old levels)")]
-    [SerializeField] private FryZoneIngredient fryZone; // old single machine reference
+    [Header("Frying Machine (0-2 levels)")]
+    [SerializeField] private FryZoneIngredient fryZone; // Single machine reference
 
     [Header("Level 3: Separate fryers (assign Emoji_Eggplant / Emoji_Chips)")]
-    [SerializeField] private FryZoneIngredient eggplantFryer;
-    [SerializeField] private FryZoneIngredient chipsFryer;
+    [SerializeField] private FryZoneIngredient eggplantFryer; // Eggplant machine reference
+    [SerializeField] private FryZoneIngredient chipsFryer;  // Chips machine reference
 
-    [Header("Tray Clickables (Eggplant pieces on tray)")]
-    [SerializeField] private Item[] trayEggplantItems;
+    [Header("Tray Clickables")]
+    [SerializeField] private Item[] trayEggplantItems; // For case that we want click on specific eggplant (there is currently one collider)
 
     [Header("Tray States (optional per level)")]
     [SerializeField] private FriedTrayState eggplantTrayState;
     [SerializeField] private FriedTrayState chipsTrayState;
 
-    private bool trayReady = false;
+    private bool trayReady = false; // Tray usage indication
 
     private void Awake()
     {
@@ -42,7 +43,7 @@ public class LevelGameFlow : MonoBehaviour
             if (item != null) item.SetClickable(value);
     }
 
-    //Backwards compatibility (tutorial/old scripts expect these)
+    //Both methods signal that a tray is ready and enable item interaction, called on FriedTray
     public void OnTrayFilled()
     {
         trayReady = true;
@@ -54,9 +55,9 @@ public class LevelGameFlow : MonoBehaviour
         OnTrayFilled();
     }
 
+    //The get method allows access to machine/machines according to level
     private FryZoneIngredient GetEggplantFryer()
     {
-        // If level3 fryers are assigned, use them; otherwise fall back to legacy single machine.
         return eggplantFryer != null ? eggplantFryer : fryZone;
     }
 
@@ -65,6 +66,7 @@ public class LevelGameFlow : MonoBehaviour
         return chipsFryer != null ? chipsFryer : fryZone;
     }
 
+    //Called on ItemScrips
     public void OnIngredientClickedFromItem(Item item, string ingredientName)
     {
         string lower = ingredientName.ToLowerInvariant();
