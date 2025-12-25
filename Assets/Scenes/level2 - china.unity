@@ -2198,7 +2198,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::LevelTwoTimerWinLose
   levelDurationSeconds: 120
   timerText: {fileID: 656340742}
-  coinsTarget: 220
+  coinsTarget: 210
   endSceneName: Level2 - endScene
   playerCoins: {fileID: 559278372}
 --- !u!1 &748408078
