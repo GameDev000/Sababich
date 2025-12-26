@@ -8141,7 +8141,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: -62.99997, y: -675}
+  m_AnchoredPosition: {x: -63, y: -675}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1294909020
@@ -9388,7 +9388,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SelectionList
   selectedText: {fileID: 0}
   pitaBuilder: {fileID: 72751113}
-  eggplantTrayState: {fileID: 0}
+  eggplantTrayState: {fileID: 29336336}
   chipsTrayState: {fileID: 0}
 --- !u!114 &1770097435
 MonoBehaviour:

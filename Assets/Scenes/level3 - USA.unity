@@ -4028,7 +4028,7 @@ MonoBehaviour:
   overlayRenderer: {fileID: 0}
   fryingSprite: {fileID: 0}
   readySprite: {fileID: 0}
-  fryTimeSeconds: 5
+  fryTimeSeconds: 3
   eggplantTray: {fileID: 0}
   chipsTray: {fileID: 1788359167}
 --- !u!1 &1352756599
@@ -5443,7 +5443,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: -35.99994, y: -235}
+  m_AnchoredPosition: {x: -36, y: -235}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1825036832

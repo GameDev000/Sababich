@@ -690,11 +690,11 @@ PlayerSettings:
   captureStartupLogs: {}
   activeInputHandler: 2
   windowsGamepadBackendHint: 0
-  cloudProjectId: 6a49ed85-b52f-441d-9141-854df6b82428
+  cloudProjectId: 35da4438-78cb-4c10-a72a-984418a8a547
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: Sababich_CoreLoop
-  organizationId: itamarbabai98
+  projectName: Sababich
+  organizationId: vanunuraz
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}
