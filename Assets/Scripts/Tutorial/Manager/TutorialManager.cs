@@ -10,6 +10,8 @@ public class TutorialManager : MonoBehaviour
     {
         FryEggplant,
         BuildSandwich,
+        GoWashInKitchen,
+        ReturnToStand,
         Done
     }
 
@@ -54,6 +56,21 @@ public class TutorialManager : MonoBehaviour
     [Header("Customer Logic")]
     [SerializeField] private CustomerMoodTimer customerLogic; // Reference to the CustomerMoodTimer for managing customer behavior
 
+
+    [Header("Dirt Tutorial")]
+    [SerializeField] private GameObject dirtOverlay;
+    [SerializeField] private Transform kitchenArrowTarget;
+    [SerializeField] private float kitchenArrowYOffset = 2f;
+    [SerializeField] private bool lockGameplayWhileDirty = true;
+    [Header("Dirt Tutorial Targets")]
+    [SerializeField] private Transform faucetTarget;
+    [SerializeField] private float faucetArrowYOffset = 2f;
+    [SerializeField] private Transform backArrowTarget;
+    [SerializeField] private float backArrowYOffset = 2f;
+
+    private int savedBuildStep = 0;
+    private bool hasSavedBuildStep = false;
+    private TutorialPhase savedPhase = TutorialPhase.BuildSandwich;
 
     private void Awake()
     {
@@ -361,4 +378,90 @@ public class TutorialManager : MonoBehaviour
     {
         // Keep empty (or call OnEggplantTrayFull() if you want chips to advance tutorial).
     }
+
+    public void TriggerDirtTutorial()
+    {
+        if (phase == TutorialPhase.GoWashInKitchen) return;
+
+        if (phase == TutorialPhase.BuildSandwich)
+        {
+            savedPhase = phase;
+            savedBuildStep = buildStep;
+            hasSavedBuildStep = true;
+        }
+
+        phase = TutorialPhase.GoWashInKitchen;
+
+        if (lockGameplayWhileDirty)
+        {
+            if (eggplantItem != null) eggplantItem.SetClickable(false);
+            SetAllOtherItemsClickable(false);
+        }
+        ShowArrowAbove(kitchenArrowTarget, kitchenArrowYOffset);
+
+        SetGamePhase(GamePhase.GoWashInKitchen);
+    }
+
+
+    public void OnArrowClicked(ArrowMoveCamera arrow)
+    {
+
+        if (phase == TutorialPhase.GoWashInKitchen)
+        {
+            if (arrow.Type != ArrowMoveCamera.ArrowType.ToKitchen) return;
+
+            SetGamePhase(GamePhase.WashHands);
+            ShowArrowAbove(faucetTarget, faucetArrowYOffset);
+            return;
+        }
+
+        if (phase == TutorialPhase.ReturnToStand)
+        {
+            if (arrow.Type != ArrowMoveCamera.ArrowType.ToMain) return;
+
+            ResumeBuildAfterCleaning();
+            return;
+        }
+    }
+
+    public void OnHandsWashed()
+    {
+        if (phase != TutorialPhase.GoWashInKitchen) return;
+        phase = TutorialPhase.ReturnToStand;
+        
+        ShowArrowAbove(backArrowTarget, backArrowYOffset);
+        SetGamePhase(GamePhase.GoBackToStand);
+
+    }
+
+    private void ResumeBuildAfterCleaning()
+    {
+        phase = TutorialPhase.BuildSandwich;
+
+        if (hasSavedBuildStep)
+            buildStep = savedBuildStep;
+
+        if (lockGameplayWhileDirty)
+        {
+            SetAllOtherItemsClickable(false);
+
+            if (otherItems != null &&
+                buildStep < otherItems.Length &&
+                otherItems[buildStep] != null)
+            {
+                otherItems[buildStep].SetClickable(true);
+                ShowArrowAbove(otherItems[buildStep].transform, 2f);
+            }
+            else
+            {
+                ShowArrow(false);
+            }
+        }
+
+        SetGamePhase(GamePhase.AssembleDish);
+    }
+
+
+
+
 }

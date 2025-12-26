@@ -1931,7 +1931,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 557fb1b5f0f4be545b9f5c533435bdd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Scripts::CustomerManager
-  speed: 7
+  speed: 6
   customerPrefab: {fileID: 1815610952}
   spawnPoint: {fileID: 1477147590}
   standPoint: {fileID: 916762011}
@@ -2220,6 +2220,8 @@ MonoBehaviour:
   mirrorRenderer: {fileID: 1114869949}
   mirrorCleanSprite: {fileID: 21300000, guid: 1a75f306bc5226c4eb8e144262b34f9b, type: 3}
   mirrorDirtySprite: {fileID: 21300000, guid: 42b282ba8f17d254c95b0e346c763567, type: 3}
+  triggerTutorialOnDirty: 1
+  tutorialOverride: {fileID: 0}
 --- !u!1 &641353721
 GameObject:
   m_ObjectHideFlags: 0
@@ -2450,6 +2452,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::ArrowMoveCamera
   targetPoint: {fileID: 1103807289}
   moveSpeed: 6
+  tutorial: {fileID: 0}
+  arrowType: 0
 --- !u!212 &644678511
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -4873,6 +4877,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::ArrowMoveCamera
   targetPoint: {fileID: 1928974807}
   moveSpeed: 6
+  tutorial: {fileID: 0}
+  arrowType: 0
 --- !u!1 &2079683473
 GameObject:
   m_ObjectHideFlags: 0

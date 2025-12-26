@@ -16,6 +16,12 @@ public class DirtStateManager : MonoBehaviour
     [SerializeField] private Sprite mirrorCleanSprite;
     [SerializeField] private Sprite mirrorDirtySprite;
 
+    
+    [Header("Tutorial Hook (optional)")]
+    [SerializeField] private bool triggerTutorialOnDirty = true;
+    [SerializeField] private TutorialManager tutorialOverride;
+     private bool tutorialTriggeredThisDirty = false;
+    
     private int clickCount;
     public bool IsDirty { get; private set; }
 
@@ -40,6 +46,7 @@ public class DirtStateManager : MonoBehaviour
         {
             IsDirty = true;
             ApplyVisuals();
+            TryTriggerTutorialDirtyStep();
         }
     }
 
@@ -47,6 +54,8 @@ public class DirtStateManager : MonoBehaviour
     {
         IsDirty = false;
         clickCount = 0;
+        tutorialTriggeredThisDirty = false;
+
         ApplyVisuals();
     }
 
@@ -57,5 +66,17 @@ public class DirtStateManager : MonoBehaviour
 
         if (mirrorRenderer != null)
             mirrorRenderer.sprite = IsDirty ? mirrorDirtySprite : mirrorCleanSprite;
+    }
+
+     private void TryTriggerTutorialDirtyStep()
+    {
+        if (!triggerTutorialOnDirty) return;
+        if (tutorialTriggeredThisDirty) return;
+
+        TutorialManager tuto = tutorialOverride != null ? tutorialOverride : TutorialManager.Instance;
+        if (tuto == null) return;
+
+        tutorialTriggeredThisDirty = true;
+        tuto.TriggerDirtTutorial();
     }
 }
