@@ -49,6 +49,19 @@ public class GameFlowManager : MonoBehaviour
                 uiInstructions.SetInstructions("הלקוח סיים. התכונן ללקוח הבא וחזור על התהליך.");
                 //uiInstructions.SetInstructions("The customer is done. Prepare for the next customer and repeat the process.");
                 break;
+
+            case GamePhase.GoWashInKitchen:
+                uiInstructions.SetInstructions("אופס… התלכלכנו! לחץ על החץ למטבח כדי לשטוף.");
+                break;
+
+            case GamePhase.WashHands:
+                uiInstructions.SetInstructions("לחץ על הברז כדי להתנקות.");
+                break;
+
+            case GamePhase.GoBackToStand:
+                uiInstructions.SetInstructions("מעולה! עכשיו לחץ על החץ כדי להמשיך לבנות את הכריך.");
+                break;
+
         }
     }
 

@@ -5,6 +5,13 @@ public class ArrowMoveCamera : MonoBehaviour
     [SerializeField] private Transform targetPoint;
     [SerializeField] private float moveSpeed = 6f;
 
+    [SerializeField] private TutorialManager tutorial;
+
+    public enum ArrowType { ToKitchen, ToMain }
+
+    [SerializeField] private ArrowType arrowType;
+    public ArrowType Type => arrowType;
+
     private Camera cam;
 
     private bool moving;
@@ -12,12 +19,18 @@ public class ArrowMoveCamera : MonoBehaviour
     private void Start()
     {
         cam = Camera.main;
+        if (tutorial == null)
+            tutorial = TutorialManager.Instance;
     }
 
     private void OnMouseDown()
     {
-        if (targetPoint != null)
-            moving = true;
+        if (targetPoint == null) return;
+
+        if (tutorial != null)
+            tutorial.OnArrowClicked(this);
+
+        moving = true;
     }
 
     private void Update()
@@ -47,4 +60,5 @@ public class ArrowMoveCamera : MonoBehaviour
             moving = false;
         }
     }
+    
 }
