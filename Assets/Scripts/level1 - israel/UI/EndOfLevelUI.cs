@@ -10,8 +10,8 @@ public class EndOfLevelUI : MonoBehaviour
 
     [Header("Message")]
     // [SerializeField] private bool isSuccess = true;
-    [TextArea][SerializeField] private string successMessage = "כל הכבוד! עמדת במשימה היעד הבא - יפן!";
-    [TextArea][SerializeField] private string failMessage = "לא נורא.. נסה שוב";
+    [SerializeField] private string successMessage = "כל הכבוד! עמדת במשימה היעד הבא - יפן!";
+    [SerializeField] private string failMessage = "לא נורא.. נסה שוב";
 
     private void Start()
     {
