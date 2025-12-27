@@ -31,7 +31,7 @@ public class MuteButton : MonoBehaviour
     {
         if (MusicPlayer.Instance != null)
         {
-            if (MusicPlayer.Instance.audioSource.mute)
+            if (MusicPlayer.Instance.IsMuted)
             {
                 buttonImage.sprite = muteSprite;
             }
