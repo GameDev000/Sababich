@@ -60,5 +60,5 @@ public class ArrowMoveCamera : MonoBehaviour
             moving = false;
         }
     }
-    
+
 }

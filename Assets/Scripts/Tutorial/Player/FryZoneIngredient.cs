@@ -24,7 +24,7 @@ public class FryZoneIngredient : MonoBehaviour
 
     [Header("Output trays")]
     [SerializeField] private FriedTray eggplantTray;
-    [SerializeField] private FriedTray chipsTray; 
+    [SerializeField] private FriedTray chipsTray;
 
     private FryState state = FryState.Empty;
     private float timer = 0f;

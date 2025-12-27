@@ -8,7 +8,7 @@ public class FriedTrayState : MonoBehaviour
 
     [SerializeField] private Sprite fullSprite;
     [SerializeField] private Sprite midSprite;
-    [SerializeField] private Sprite lowSprite;   
+    [SerializeField] private Sprite lowSprite;
 
     [SerializeField] private int usesPerStage = 2;
     [SerializeField] private Item[] trayItems;   // For case that we want click on specific eggplant (there is currently one collider)
@@ -46,12 +46,12 @@ public class FriedTrayState : MonoBehaviour
             stage++;
             ApplyStage();
         }
-}
+    }
 
     private void ApplyStage()
     {
         if (trayRenderer == null) return;
-        
+
         // Sprites will be displayed when there is a sprite render, stage 0-2
         if (stage == 0)
         {
@@ -70,9 +70,9 @@ public class FriedTrayState : MonoBehaviour
         }
         else //Stage >= 3 -> empty
         {
-        trayRenderer.sprite = null;
-        trayRenderer.enabled = false;
-        SetTrayItemsClickable(false);
+            trayRenderer.sprite = null;
+            trayRenderer.enabled = false;
+            SetTrayItemsClickable(false);
         }
     }
 

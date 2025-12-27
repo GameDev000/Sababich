@@ -428,7 +428,7 @@ public class TutorialManager : MonoBehaviour
     {
         if (phase != TutorialPhase.GoWashInKitchen) return;
         phase = TutorialPhase.ReturnToStand;
-        
+
         ShowArrowAbove(backArrowTarget, backArrowYOffset);
         SetGamePhase(GamePhase.GoBackToStand);
 

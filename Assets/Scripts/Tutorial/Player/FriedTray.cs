@@ -27,7 +27,7 @@ public class FriedTray : MonoBehaviour
             }
             else
             {
-                TutorialManager.Instance.OnChipsTrayFull(); 
+                TutorialManager.Instance.OnChipsTrayFull();
             }
         }
         // Update LevelGameFlow
@@ -39,7 +39,7 @@ public class FriedTray : MonoBehaviour
             }
             else
             {
-                LevelGameFlow.Instance.OnChipsTrayFilled(); 
+                LevelGameFlow.Instance.OnChipsTrayFilled();
             }
         }
     }

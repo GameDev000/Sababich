@@ -6,7 +6,7 @@ public class FaucetCleansDirt : MonoBehaviour
     {
         if (DirtStateManager.Instance != null)
             DirtStateManager.Instance.Clean();
-            TutorialManager.Instance?.OnHandsWashed();
+        TutorialManager.Instance?.OnHandsWashed();
 
     }
 }

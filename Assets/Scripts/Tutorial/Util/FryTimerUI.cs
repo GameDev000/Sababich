@@ -20,7 +20,7 @@ public class FryTimerUI : MonoBehaviour
             timerImage.fillAmount = 1f; // Full circle
         }
     }
-    
+
     // Every frame, the clock on the screen updates according to the frying status of FryZone.
     private void Update()
     {

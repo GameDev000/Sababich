@@ -16,10 +16,12 @@ using CloudSaveItem = Unity.Services.CloudSave.Models.Item;
 /*
  * This class manages loading and saving key-value pairs in the CloudSaveService.
  */
-public class DatabaseManager  {
+public class DatabaseManager
+{
     // Sample code from https://docs.unity.com/ugs/manual/cloud-save/manual/tutorials/unity-sdk
 
-    public static async Task<Dictionary<string, string>> SaveData(params (string key, object value)[] kwargs) {
+    public static async Task<Dictionary<string, string>> SaveData(params (string key, object value)[] kwargs)
+    {
         // Idea from  here: https://stackoverflow.com/a/77002085/827927
         Dictionary<string, object> playerData = kwargs.ToDictionary(x => x.key, x => x.value);
         var result = await CloudSaveService.Instance.Data.Player.SaveAsync(playerData);
@@ -27,8 +29,9 @@ public class DatabaseManager  {
         return result;
     }
 
-    public static async Task<Dictionary<string, CloudSaveItem>> LoadData(params string[] args) {
-        Debug.Log($"LoadData {string.Join(',',args)}");
+    public static async Task<Dictionary<string, CloudSaveItem>> LoadData(params string[] args)
+    {
+        Debug.Log($"LoadData {string.Join(',', args)}");
         HashSet<string> keys = new HashSet<string>(args);
 
         // CloudSave returns: Dictionary<string, Unity.Services.CloudSave.Models.Item>
