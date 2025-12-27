@@ -65,7 +65,7 @@ public class MusicPlayer : MonoBehaviour
         Track t = FindTrack(id);
         if (t == null || t.clip == null) return;
 
-        if (audioSource.clip == t.clip) 
+        if (audioSource.clip == t.clip)
         {
             PlayerPrefs.SetString(PREF_TRACK, id);
             PlayerPrefs.Save();
