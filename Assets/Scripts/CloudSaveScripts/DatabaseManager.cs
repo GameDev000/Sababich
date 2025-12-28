@@ -22,6 +22,13 @@ public class DatabaseManager
 
     public static async Task<Dictionary<string, string>> SaveData(params (string key, object value)[] kwargs)
     {
+        // Don't touch services before initialization
+        if (UnityServices.State != ServicesInitializationState.Initialized)
+        {
+            Debug.LogWarning("[DatabaseManager] SaveData blocked: services not initialized.");
+            return new Dictionary<string, string>();
+        }
+
         // Cloud Save requires signed-in player (avoids: Player ID is missing)
         if (!AuthenticationService.Instance.IsSignedIn)
         {
@@ -39,6 +46,13 @@ public class DatabaseManager
 
     public static async Task<Dictionary<string, CloudSaveItem>> LoadData(params string[] args)
     {
+        // Don't touch services before initialization
+        if (UnityServices.State != ServicesInitializationState.Initialized)
+        {
+            Debug.LogWarning("[DatabaseManager] LoadData blocked: services not initialized.");
+            return new Dictionary<string, CloudSaveItem>();
+        }
+
         // Cloud Save requires signed-in player (avoids: Player ID is missing)
         if (!AuthenticationService.Instance.IsSignedIn)
         {

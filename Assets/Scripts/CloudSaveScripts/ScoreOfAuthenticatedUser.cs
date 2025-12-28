@@ -72,6 +72,9 @@ public class ScoreOfAuthenticatedUser : MonoBehaviour
 
     [SerializeField] private CloudProgressTracker progressTracker;
 
+    // Optional reference Inspector to sync Level states from cloud after login
+    [SerializeField] private CloudStateSync cloudStateSync;
+
     void Awake()
     {
         Debug.Log("ScoreOfAuthenticatedUser Awake");
@@ -118,13 +121,26 @@ public class ScoreOfAuthenticatedUser : MonoBehaviour
         // but password is not used (it is fixed in code).
         if (passwordInputField != null) passwordInputField.readOnly = true;
 
+        // Sync passed flags (LevelOneState/Two/Three) BEFORE reading resumeScene
+        if (cloudStateSync == null)
+            cloudStateSync = FindObjectOfType<CloudStateSync>();
+
+        if (cloudStateSync != null)
+        {
+            await cloudStateSync.SyncStatesFromCloud();
+        }
+        else
+        {
+            Debug.LogWarning("[ScoreOfAuthenticatedUser] CloudStateSync not found -> keeping local Level states.");
+        }
+
         var data = await DatabaseManager.LoadData("resumeScene");
 
         // Read resumeScene safely (default is empty string)
         resumeScene = DatabaseManager.ReadString(data, "resumeScene", "");
 
         // Now we know if user is NEW or EXISTING -> set the Continue button text ONCE (no flash)
-        bool isNewUser = string.IsNullOrEmpty(resumeScene); 
+        bool isNewUser = string.IsNullOrEmpty(resumeScene);
 
         if (continueButtonText != null)
         {

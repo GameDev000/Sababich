@@ -316,7 +316,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1893414865}
         m_TargetAssemblyTypeName: MainMenu, Scripts
-        m_MethodName: PhaseOneButtonClicked
+        m_MethodName: OnPlayButtonClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -903,7 +903,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1893414865}
-        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
+        m_TargetAssemblyTypeName: MainMenu, Scripts
         m_MethodName: OnTutorialButtonClicked
         m_Mode: 1
         m_Arguments:

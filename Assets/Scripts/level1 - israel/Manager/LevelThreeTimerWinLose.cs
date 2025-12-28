@@ -1,37 +1,41 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Unity.Services.Core;
+using Unity.Services.Authentication;
 
 public class LevelThreeTimerWinLose : MonoBehaviour
 {
     [Header("Timer")]
-    [SerializeField] private float levelDurationSeconds = 90f;
+    [SerializeField] private float levelDurationSeconds = 150f;
 
     [Header("Timer UI")]
     [SerializeField] private TextMeshProUGUI timerText;
 
     [Header("Win Condition")]
-    [SerializeField] private int coinsTarget = 150;
+    [SerializeField] private int coinsTarget = 300;
 
     [Header("End Scene")]
     [SerializeField] private string endSceneName = "Level3 - endScene";
 
-
-    [Header("Coins Source")]
-    [SerializeField] private ScoreManager playerCoins;
+    // [Header("Coins Source")]
+    // [SerializeField] private ScoreManager playerCoins;
 
     private float timeLeft;
     private bool finished;
+
+    // Save only once when reaching target
+    private bool timeSaved = false;
+
+    // Freeze the exact timeLeft at the first moment target is reached
+    private float frozenTimeLeft = -1f;
 
     private void Start()
     {
         timeLeft = levelDurationSeconds;
 
-        if (playerCoins == null)
-            playerCoins = ScoreManager.Instance != null
-                ? ScoreManager.Instance
-                : FindObjectOfType<ScoreManager>();
-
+        // Do NOT cache coins manager from FindObjectOfType; duplicates can exist across scenes.
+        // We rely only on ScoreManager.Instance.
         UpdateTimerUI(timeLeft);
     }
 
@@ -40,6 +44,9 @@ public class LevelThreeTimerWinLose : MonoBehaviour
         if (finished) return;
 
         timeLeft -= Time.deltaTime;
+
+        // Fallback polling
+        TryFreezeTimeWhenReachedTarget();
 
         if (timeLeft <= 0f)
         {
@@ -54,6 +61,89 @@ public class LevelThreeTimerWinLose : MonoBehaviour
         UpdateTimerUI(timeLeft);
     }
 
+    // Called from ScoreManager.AddMoney
+    public void NotifyMoneyChanged(int newMoney)
+    {
+        FreezeTimeIfNeeded(newMoney);
+    }
+
+    private void TryFreezeTimeWhenReachedTarget()
+    {
+        // Always read money from ScoreManager.Instance
+        int moneyNow = (ScoreManager.Instance != null) ? ScoreManager.Instance.CurrentMoney : 0;
+        FreezeTimeIfNeeded(moneyNow);
+    }
+
+    // Freeze once, compute once, save once
+    private void FreezeTimeIfNeeded(int moneyNow)
+    {
+        if (timeSaved) return;
+
+        if (moneyNow >= coinsTarget)
+        {
+            if (frozenTimeLeft < 0f)
+                frozenTimeLeft = timeLeft;
+
+            SaveLevel3TimeOnce();
+        }
+    }
+
+    // Saves level3_timeSeconds once
+    private void SaveLevel3TimeOnce()
+    {
+        if (timeSaved) return;
+        timeSaved = true;
+
+        // Stable time even if save happens later
+        float safeFrozen = (frozenTimeLeft < 0f) ? timeLeft : frozenTimeLeft;
+        int timeToTargetSeconds = Mathf.RoundToInt(levelDurationSeconds - safeFrozen);
+
+        if (UnityServices.State == ServicesInitializationState.Initialized &&
+            AuthenticationService.Instance.IsSignedIn)
+        {
+            _ = DatabaseManager.SaveData(("level3_timeSeconds", timeToTargetSeconds));
+            Debug.Log($"[Level3] Saved timeSeconds={timeToTargetSeconds}");
+        }
+        else
+        {
+            Debug.LogWarning("[Level3] Could not save time (services not ready or not signed in).");
+        }
+    }
+
+    private void EndLevel()
+    {
+        // Always read coins from ScoreManager.Instance
+        int coinsEnd = (ScoreManager.Instance != null) ? ScoreManager.Instance.CurrentMoney : 0;
+        Debug.Log($"[Level3] coinsEnd={coinsEnd}");
+
+        // Fallback save
+        if (!timeSaved && coinsEnd >= coinsTarget)
+        {
+            if (frozenTimeLeft < 0f) frozenTimeLeft = timeLeft;
+            SaveLevel3TimeOnce();
+        }
+
+        // Save coins at end
+        if (UnityServices.State == ServicesInitializationState.Initialized &&
+            AuthenticationService.Instance.IsSignedIn)
+        {
+            _ = DatabaseManager.SaveData(("level3_coins", coinsEnd));
+        }
+
+        bool success = coinsEnd >= coinsTarget;
+        LevelThreeState.IsSuccess = success;
+
+        // Save passed flag for level 3 (used after relogin / resume)
+        if (UnityServices.State == ServicesInitializationState.Initialized &&
+            AuthenticationService.Instance.IsSignedIn)
+        {
+            _ = DatabaseManager.SaveData(("level3_passed", success ? 1 : 0));
+        }
+
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(endSceneName);
+    }
+
     private void UpdateTimerUI(float secondsLeft)
     {
         if (timerText == null) return;
@@ -63,16 +153,5 @@ public class LevelThreeTimerWinLose : MonoBehaviour
         int seconds = totalSeconds % 60;
 
         timerText.text = $"{minutes:00}:{seconds:00}";
-    }
-
-    private void EndLevel()
-    {
-        int coins = (ScoreManager.Instance != null) ? ScoreManager.Instance.GetCurrentMoney() : 0;
-
-        LevelThreeState.IsSuccess = coins >= coinsTarget;
-        Debug.Log($"[Level3 End] coins={coins} target={coinsTarget} success={LevelThreeState.IsSuccess}");
-
-        Time.timeScale = 1f;
-        SceneManager.LoadScene(endSceneName);
     }
 }

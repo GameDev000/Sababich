@@ -10,15 +10,17 @@ public class MainMenu : MonoBehaviour
     {
         SceneManager.LoadScene("TutorialScene"); // Load the tutorial scene
     }
+
     public void OnPlayButtonClicked()
     {
-        Debug.Log("Play button clicked - gameplay scene not implemented yet.");
-        // SceneManager.LoadScene("GameScene"); //Will load the gameplay scene when implemented
+        SceneManager.LoadScene("level1 - israel");
     }
+
     public void OnBackToMainButtonClicked()
     {
         SceneManager.LoadScene("MainMenu"); // Load the main menu scene
     }
+
     public void PhaseOneButtonClicked()
     {
         SceneManager.LoadScene("level1 - israel"); // Load the main menu scene
@@ -31,6 +33,7 @@ public class MainMenu : MonoBehaviour
         else
             SceneManager.LoadScene("level1 - israel");
     }
+
     public void OnEndLevelTwo()
     {
         if (LevelTwoState.IsSuccess)
@@ -38,6 +41,7 @@ public class MainMenu : MonoBehaviour
         else
             SceneManager.LoadScene("level2 - china");
     }
+
     public void OnEndLevelThree()
     {
         if (LevelThreeState.IsSuccess)

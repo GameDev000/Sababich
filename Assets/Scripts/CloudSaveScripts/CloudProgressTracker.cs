@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Unity.Services.Authentication; // only save after sign-in
+using Unity.Services.Core;
 
 /*
  * Saves the CURRENT scene name to Cloud Save whenever a scene is loaded.
@@ -20,6 +21,13 @@ public class CloudProgressTracker : MonoBehaviour
 
     private async void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        // Prevent touching AuthenticationService before UnityServices is initialized
+        if (UnityServices.State != ServicesInitializationState.Initialized)
+        {
+            Debug.Log("[CloudProgressTracker] Services not initialized yet -> skipping save.");
+            return;
+        }
+
         //  Prevent Cloud Save calls before authentication (avoids: Player ID is missing)
         if (!AuthenticationService.Instance.IsSignedIn)
         {
@@ -40,6 +48,13 @@ public class CloudProgressTracker : MonoBehaviour
     // Call this ONLY when the player finished level 3 successfully.
     public async void MarkGameCompleted()
     {
+        // Prevent touching AuthenticationService before UnityServices is initialized
+        if (UnityServices.State != ServicesInitializationState.Initialized)
+        {
+            Debug.Log("[CloudProgressTracker] Services not initialized yet -> cannot mark completed.");
+            return;
+        }
+
         // Prevent Cloud Save calls before authentication (extra safety)
         if (!AuthenticationService.Instance.IsSignedIn)
         {

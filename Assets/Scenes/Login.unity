@@ -1537,6 +1537,7 @@ GameObject:
   - component: {fileID: 1107756959}
   - component: {fileID: 1107756958}
   - component: {fileID: 1107756961}
+  - component: {fileID: 1107756962}
   m_Layer: 0
   m_Name: CloudServices
   m_TagString: Untagged
@@ -1595,6 +1596,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b89015075fa50441ab6a59e1d836b55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CloudProgressTracker
+--- !u!114 &1107756962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1107756957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cb89f323e7816045b0217669fa83481, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Scripts::CloudStateSync
 --- !u!1 &1116581128
 GameObject:
   m_ObjectHideFlags: 0
@@ -1629,8 +1642,8 @@ MonoBehaviour:
   statusField: {fileID: 2093590166}
   signInPanel: {fileID: 1223844347}
   gamePanel: {fileID: 1240895632}
-  textField: {fileID: 0}
-  continueButton: {fileID: 0}
+  textField: {fileID: 2093590166}
+  continueButton: {fileID: 1693774418}
   continueButtonText: {fileID: 762424778}
   authManager: {fileID: 1107756959}
   mainMenuSceneName: MainMenu

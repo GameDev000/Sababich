@@ -89,6 +89,16 @@ public class ScoreManager : MonoBehaviour
         CurrentMoney += amount;
         UpdateScoreUI();
 
+        // Notify active level timers so they can freeze timeLeft the first moment target is reached.
+        var l1 = FindObjectOfType<LevelTimerWinLose>();
+        if (l1 != null) l1.NotifyMoneyChanged(CurrentMoney);
+
+        var l2 = FindObjectOfType<LevelTwoTimerWinLose>();
+        if (l2 != null) l2.NotifyMoneyChanged(CurrentMoney);
+
+        var l3 = FindObjectOfType<LevelThreeTimerWinLose>();
+        if (l3 != null) l3.NotifyMoneyChanged(CurrentMoney);
+
         if (coinSparkles != null)
             coinSparkles.Emit(30);
         else
