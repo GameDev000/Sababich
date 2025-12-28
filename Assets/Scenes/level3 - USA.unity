@@ -4396,8 +4396,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SelectionList
   selectedText: {fileID: 0}
   pitaBuilder: {fileID: 350299356}
-  eggplantTrayState: {fileID: 0}
-  chipsTrayState: {fileID: 0}
+  eggplantTrayState: {fileID: 407841700}
+  chipsTrayState: {fileID: 1788359166}
 --- !u!114 &1559742142
 MonoBehaviour:
   m_ObjectHideFlags: 0
