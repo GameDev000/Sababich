@@ -1245,7 +1245,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: "\u05D1\u05E8\u05D5\u05DA \u05E9\u05D5\u05D1\u05DA,\n\u05D4\u05DE\u05E9\u05DA
+    \u05DE\u05D4\u05DE\u05E7\u05D5\u05DD \u05E9\u05E2\u05E6\u05E8\u05EA"
   m_isRightToLeft: 1
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1617,7 +1618,6 @@ MonoBehaviour:
   signInPanel: {fileID: 1223844347}
   gamePanel: {fileID: 1240895632}
   textField: {fileID: 0}
-  continueButton: {fileID: 0}
   continueButtonText: {fileID: 762424778}
   authManager: {fileID: 1107756959}
   mainMenuSceneName: MainMenu
@@ -2367,7 +2367,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.92549026, g: 0.69803923, b: 0.5686275, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

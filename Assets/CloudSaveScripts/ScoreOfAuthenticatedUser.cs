@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Threading.Tasks;
 using Unity.Services.CloudSave.Models;   // Item + GetAs extensions
 using UnityEngine.SceneManagement;       // SceneManager (resume to saved scene)
+using UnityEngine.UI;                    // for Button
 
 /*
  * This script is the BRIDGE between:
@@ -42,7 +43,8 @@ public class ScoreOfAuthenticatedUser : MonoBehaviour
     // Debug text to show loaded data / "resuming..." message
     [SerializeField] private TextMeshProUGUI textField;
 
-    // The text component INSIDE the Continue button (label)
+    // Continue button + its TMP text (to prevent "flash" of wrong text before async load finishes)
+    [SerializeField] private Button continueButton;
     [SerializeField] private TextMeshProUGUI continueButtonText;
 
     /* ================= AUTHENTICATION ================= */
@@ -94,8 +96,9 @@ public class ScoreOfAuthenticatedUser : MonoBehaviour
         // clear previous status text at start
         if (statusField != null) statusField.text = "";
 
-        // Default Continue button label (in case gamePanel is opened later)
-        if (continueButtonText != null) continueButtonText.text = "המשך";
+        // Prevent "flash" of default Continue button text before async cloud load finishes
+        if (continueButton != null) continueButton.interactable = false; // not clickable until we know what to show
+        if (continueButtonText != null) continueButtonText.text = "";     // optional: remove Inspector default text
     }
 
     /* ===================================================
@@ -117,11 +120,24 @@ public class ScoreOfAuthenticatedUser : MonoBehaviour
 
         var data = await DatabaseManager.LoadData("resumeScene");
 
-        // Detect if this user already has resumeScene key in the cloud (existing user)
-        bool hasResumeKey = (data != null && data.ContainsKey("resumeScene"));
-
         // Read resumeScene safely (default is empty string)
         resumeScene = DatabaseManager.ReadString(data, "resumeScene", "");
+
+        // Now we know if user is NEW or EXISTING -> set the Continue button text ONCE (no flash)
+        bool isNewUser = string.IsNullOrEmpty(resumeScene); 
+
+        if (continueButtonText != null)
+        {
+            continueButtonText.text = isNewUser
+                ? "נמשיך"
+                : "ברוך שובך,\nנמשיך מהמקום שעצרת";
+        }
+
+        //  Enable the Continue button only after the text is correct
+        if (continueButton != null)
+        {
+            continueButton.interactable = true;
+        }
 
         UpdateUI();
 
@@ -153,19 +169,9 @@ public class ScoreOfAuthenticatedUser : MonoBehaviour
 
             // If player has no saved progress OR saved progress points to MainMenu -> MainMenu.
             if (string.IsNullOrEmpty(resumeScene) || resumeScene == mainMenuSceneName)
-                statusField.text = "Ready. Click Continue...";
+                statusField.text = "Welcome! Click Continue to go to the main menu...";
             else
-                statusField.text = "Ready. Click Continue...";
-        }
-
-        // Button label rule:
-        // New user (no resumeScene key yet) -> "המשך"
-        // Existing user (resumeScene key exists) -> "ברוך שובך, המשך מהמקום שעצרת"
-        if (continueButtonText != null)
-        {
-            continueButtonText.text = hasResumeKey
-                ? "ברוך שובך, המשך מהמקום שעצרת"
-                : "המשך";
+                statusField.text = "Welcome back! Click Continue to resume where you stopped...";
         }
     }
 
