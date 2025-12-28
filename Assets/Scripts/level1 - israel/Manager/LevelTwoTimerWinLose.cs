@@ -20,7 +20,6 @@ public class LevelTwoTimerWinLose : MonoBehaviour
 
     // [Header("Coins Source")]
     // [SerializeField] private ScoreManager playerCoins;
-    
     private float timeLeft;
     private bool finished;
 
