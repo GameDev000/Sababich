@@ -18,10 +18,9 @@ public class LevelTwoTimerWinLose : MonoBehaviour
     [Header("End Scene")]
     [SerializeField] private string endSceneName = "Level2 - endScene";
 
-    
     // [Header("Coins Source")]
     // [SerializeField] private ScoreManager playerCoins;
-
+    
     private float timeLeft;
     private bool finished;
 
