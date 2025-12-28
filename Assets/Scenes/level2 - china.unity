@@ -9620,7 +9620,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SelectionList
   selectedText: {fileID: 0}
   pitaBuilder: {fileID: 72751113}
-  eggplantTrayState: {fileID: 0}
+  eggplantTrayState: {fileID: 29336336}
   chipsTrayState: {fileID: 0}
 --- !u!114 &1770097435
 MonoBehaviour:

@@ -22,8 +22,16 @@ public class DatabaseManager
 
     public static async Task<Dictionary<string, string>> SaveData(params (string key, object value)[] kwargs)
     {
+        // Cloud Save requires signed-in player (avoids: Player ID is missing)
+        if (!AuthenticationService.Instance.IsSignedIn)
+        {
+            Debug.LogWarning("[DatabaseManager] SaveData blocked: player not signed in.");
+            return new Dictionary<string, string>(); // return empty result instead of throwing
+        }
+
         // Idea from  here: https://stackoverflow.com/a/77002085/827927
         Dictionary<string, object> playerData = kwargs.ToDictionary(x => x.key, x => x.value);
+
         var result = await CloudSaveService.Instance.Data.Player.SaveAsync(playerData);
         Debug.Log($"Saved data {string.Join(',', playerData)}. result={string.Join(',', result)}");
         return result;
@@ -31,6 +39,13 @@ public class DatabaseManager
 
     public static async Task<Dictionary<string, CloudSaveItem>> LoadData(params string[] args)
     {
+        // Cloud Save requires signed-in player (avoids: Player ID is missing)
+        if (!AuthenticationService.Instance.IsSignedIn)
+        {
+            Debug.LogWarning("[DatabaseManager] LoadData blocked: player not signed in.");
+            return new Dictionary<string, CloudSaveItem>(); // return empty data instead of throwing
+        }
+
         Debug.Log($"LoadData {string.Join(',', args)}");
         HashSet<string> keys = new HashSet<string>(args);
 

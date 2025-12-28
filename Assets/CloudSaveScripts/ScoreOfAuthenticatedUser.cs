@@ -18,13 +18,7 @@ using UnityEngine.SceneManagement;       // SceneManager (resume to saved scene)
  *   so after login we can continue from the same place:
  *   Tutorial / Level1 / Level2 / Level3 / their EndScenes (lose screens).
  * - If resumeScene is empty OR the player already finished everything -> go to MainMenu.
- *
- * IMPORTANT CHANGE (focus):
- * - We do NOT auto-load the resume scene inside Initialize().
- * - Instead, after login we show a "Welcome back" screen (gamePanel)
- *   and wait for the player to press a Continue button.
- *   (This matches your requirement: show a message + "pause" before resuming.)
- */
+ * */
 public class ScoreOfAuthenticatedUser : MonoBehaviour
 {
     /* ================= UI REFERENCES ================= */
@@ -48,6 +42,9 @@ public class ScoreOfAuthenticatedUser : MonoBehaviour
     // Debug text to show loaded data / "resuming..." message
     [SerializeField] private TextMeshProUGUI textField;
 
+    // The text component INSIDE the Continue button (label)
+    [SerializeField] private TextMeshProUGUI continueButtonText;
+
     /* ================= AUTHENTICATION ================= */
 
     // It handles UnityServices.InitializeAsync + login/register
@@ -60,10 +57,6 @@ public class ScoreOfAuthenticatedUser : MonoBehaviour
     // Key in CloudSave: "resumeScene"
     private string resumeScene = "";
 
-    // FUTURE OPTION:
-    // We may also save player's money/coins later.
-    // private int money = 0;
-
     // Assignment requirement: username-only login.
     // We keep a fixed password inside the code (same for all users).
     private const string FIXED_PASSWORD = "SababichFixedPassword2025!";
@@ -75,10 +68,34 @@ public class ScoreOfAuthenticatedUser : MonoBehaviour
     // Safety: do not allow saving "Login" as resume
     private const string LOGIN_SCENE_NAME = "Login";
 
+    [SerializeField] private CloudProgressTracker progressTracker;
+
     void Awake()
     {
         Debug.Log("ScoreOfAuthenticatedUser Awake");
         // Authentication initialization happens inside AuthenticationManagerWithPassword.Awake()
+
+        //  Ensure tracker doesn't try to save before sign-in (extra safety)
+        if (progressTracker != null)
+            progressTracker.enabled = false;
+    }
+
+    void Start()
+    {
+        // On Play (before any login/register), we MUST show ONLY the sign-in panel.
+        // This prevents the "Welcome back" (gamePanel) from appearing before authentication.
+        if (signInPanel != null) signInPanel.SetActive(true);
+        if (gamePanel != null) gamePanel.SetActive(false);
+
+        // Make sure inputs are editable at the start
+        if (usernameInputField != null) usernameInputField.readOnly = false;
+        if (passwordInputField != null) passwordInputField.readOnly = false;
+
+        // clear previous status text at start
+        if (statusField != null) statusField.text = "";
+
+        // Default Continue button label (in case gamePanel is opened later)
+        if (continueButtonText != null) continueButtonText.text = "המשך";
     }
 
     /* ===================================================
@@ -98,26 +115,36 @@ public class ScoreOfAuthenticatedUser : MonoBehaviour
         // but password is not used (it is fixed in code).
         if (passwordInputField != null) passwordInputField.readOnly = true;
 
-        /* ========== CLOUD LOAD ========== */
-        // This is where we DEFINE what we load from the cloud
         var data = await DatabaseManager.LoadData("resumeScene");
+
+        // Detect if this user already has resumeScene key in the cloud (existing user)
+        bool hasResumeKey = (data != null && data.ContainsKey("resumeScene"));
 
         // Read resumeScene safely (default is empty string)
         resumeScene = DatabaseManager.ReadString(data, "resumeScene", "");
 
         UpdateUI();
 
-        // Optional: save username for debugging (as lecturer did)
         if (usernameInputField != null)
             await DatabaseManager.SaveData(("username", usernameInputField.text));
 
         enabled = true;
 
-        /* ========== RESUME GAME FLOW ========== */
-        // IMPORTANT:
+        // Now that we are signed in, enable the tracker so it can save scene changes.
+        if (progressTracker == null)
+            progressTracker = FindObjectOfType<CloudProgressTracker>(); // fallback
+
+        if (progressTracker != null)
+        {
+            progressTracker.EnableAfterSignIn();
+        }
+        else
+        {
+            Debug.LogWarning("ScoreOfAuthenticatedUser: CloudProgressTracker not found. Scene progress won't be auto-saved.");
+        }
+
         // We do NOT load the scene automatically here.
         // We wait for the player to click the Continue button.
-        //
         // In the Inspector, connect the Continue button OnClick() to:
         // ScoreOfAuthenticatedUser -> ContinueFromSavedProgress()
         if (statusField != null)
@@ -126,9 +153,19 @@ public class ScoreOfAuthenticatedUser : MonoBehaviour
 
             // If player has no saved progress OR saved progress points to MainMenu -> MainMenu.
             if (string.IsNullOrEmpty(resumeScene) || resumeScene == mainMenuSceneName)
-                statusField.text = "Welcome! Click Continue to go to the main menu...";
+                statusField.text = "Ready. Click Continue...";
             else
-                statusField.text = "Welcome back! Click Continue to resume where you stopped...";
+                statusField.text = "Ready. Click Continue...";
+        }
+
+        // Button label rule:
+        // New user (no resumeScene key yet) -> "המשך"
+        // Existing user (resumeScene key exists) -> "ברוך שובך, המשך מהמקום שעצרת"
+        if (continueButtonText != null)
+        {
+            continueButtonText.text = hasResumeKey
+                ? "ברוך שובך, המשך מהמקום שעצרת"
+                : "המשך";
         }
     }
 
@@ -166,6 +203,7 @@ public class ScoreOfAuthenticatedUser : MonoBehaviour
         /* ========== AUTHENTICATION SUCCESS ========== */
         if (message.ToLower().Contains("success"))
         {
+            // Only proceed if actually signed in
             if (AuthenticationService.Instance.IsSignedIn)
             {
                 Initialize();
@@ -197,6 +235,15 @@ public class ScoreOfAuthenticatedUser : MonoBehaviour
     public void ContinueFromSavedProgress()
     {
         if (!enabled) return;
+
+        // Prevent continuing if user somehow isn't signed in yet
+        if (!AuthenticationService.Instance.IsSignedIn)
+        {
+            if (statusField != null) statusField.text = "Please sign in first...";
+            Debug.LogWarning("ContinueFromSavedProgress: not signed in yet.");
+            return;
+        }
+
         GoToResumeOrMainMenu();
     }
 
@@ -209,6 +256,13 @@ public class ScoreOfAuthenticatedUser : MonoBehaviour
     public async void SaveResumeScene(string sceneName)
     {
         if (!enabled) return;
+
+        // Prevent Cloud Save calls before authentication
+        if (!AuthenticationService.Instance.IsSignedIn)
+        {
+            Debug.LogWarning("SaveResumeScene: not signed in -> ignoring.");
+            return;
+        }
 
         if (string.IsNullOrEmpty(sceneName))
         {
@@ -228,18 +282,20 @@ public class ScoreOfAuthenticatedUser : MonoBehaviour
         /* ========== CLOUD SAVE ========== */
         // This is where we DEFINE what is saved to the cloud
         await DatabaseManager.SaveData(("resumeScene", resumeScene));
-
-        // FUTURE OPTION:
-        // We may also save money later (not required at this stage).
-        // await DatabaseManager.SaveData(("money", money));
     }
 
-    // OPTIONAL utility:
     // Call this when the player finished ALL levels (e.g., finished Level3 successfully),
     // so next login will go directly to MainMenu.
     public async void ClearResumeToMainMenu()
     {
         if (!enabled) return;
+
+        // Prevent Cloud Save calls before authentication
+        if (!AuthenticationService.Instance.IsSignedIn)
+        {
+            Debug.LogWarning("ClearResumeToMainMenu: not signed in -> ignoring.");
+            return;
+        }
 
         resumeScene = mainMenuSceneName;
 

@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Login.unity
+    guid: 3bf55f03c1cd41d4782b77324d128e55
+  - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: b0fe968c76738ef4b9bd618365b43347
   - enabled: 1
@@ -22,7 +25,7 @@ EditorBuildSettings:
     guid: 8072a9547d99f894fa052726a1fe8982
   - enabled: 1
     path: Assets/Scenes/level2 - china.unity
-    guid: 1b7eae38fc79ef847a3add63f7f1843f
+    guid: 7446a5e64ea88314d9106b1e3c8e232a
   - enabled: 1
     path: Assets/Scenes/Level2 - endScene.unity
     guid: 4db49e39abef2484a9014dfc1e51693c
