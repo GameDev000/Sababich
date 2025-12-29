@@ -67,6 +67,10 @@
         שלב 3 עד החסרת 2 רכיבים
     </li>
 </ul>
+![קובץ ניתוח מידת האתגר](challenge.png)
+  <p align="center">
+      <img src="geogusser.png" alt="GeoGuessr" width="400">
+    </p>
 
 <hr>
 
