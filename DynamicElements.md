@@ -69,7 +69,7 @@
 </ul>
 ![קובץ ניתוח מידת האתגר](challenge.png)
   <p align="center">
-      <img src="geogusser.png" alt="GeoGuessr" width="400">
+      <img src="challenge.png" alt="challenge" width="800">
     </p>
 
 <hr>
