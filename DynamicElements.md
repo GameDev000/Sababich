@@ -67,7 +67,6 @@
         שלב 3 עד החסרת 2 רכיבים
     </li>
 </ul>
-![קובץ ניתוח מידת האתגר](challenge.png)
   <p align="center">
       <img src="challenge.png" alt="challenge" width="800">
     </p>
