@@ -71,6 +71,7 @@
   <p align="center">
       <img src="challenge.png" alt="challenge" width="800">
     </p>
+    <a href="https://github.com/GameDev000/Sababich/blob/main/%D7%90%D7%AA%D7%92%D7%A8.xlsx">קישור לקובץ</a>
 
 <hr>
 
