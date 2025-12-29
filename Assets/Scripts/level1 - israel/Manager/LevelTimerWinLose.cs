@@ -18,8 +18,9 @@ public class LevelTimerWinLose : MonoBehaviour
     [Header("End Scene")]
     [SerializeField] private string endSceneName = "Level1 - endScene";
 
-    [Header("Coins Source")]
-    [SerializeField] private ScoreManager playerCoins;
+    // CHANGE: Removed serialized coin source reference - always use ScoreManager.Instance as single source of truth
+    // [Header("Coins Source")]
+    // [SerializeField] private ScoreManager playerCoins;
 
     private float timeLeft;
     private bool finished;
@@ -35,11 +36,8 @@ public class LevelTimerWinLose : MonoBehaviour
     {
         timeLeft = levelDurationSeconds;
 
-        if (playerCoins == null)
-            playerCoins = ScoreManager.Instance != null
-                ? ScoreManager.Instance
-                : FindObjectOfType<ScoreManager>();
-
+        // CHANGE: Do NOT cache coins manager from FindObjectOfType; duplicates can exist across scenes.
+        // We rely only on ScoreManager.Instance.
         UpdateTimerUI(timeLeft);
     }
 
@@ -74,8 +72,9 @@ public class LevelTimerWinLose : MonoBehaviour
     // In case money is modified elsewhere
     private void TryFreezeTimeWhenReachedTarget()
     {
-        if (playerCoins == null) return;
-        FreezeTimeIfNeeded(playerCoins.GetCurrentMoney());
+        // CHANGE: Always read money from ScoreManager.Instance
+        int moneyNow = (ScoreManager.Instance != null) ? ScoreManager.Instance.CurrentMoney : 0;
+        FreezeTimeIfNeeded(moneyNow);
     }
 
     // Freeze once, compute once, save once
@@ -117,7 +116,8 @@ public class LevelTimerWinLose : MonoBehaviour
 
     private void EndLevel()
     {
-        int coinsEnd = (playerCoins != null) ? playerCoins.GetCurrentMoney() : 0;
+        // CHANGE: Always read coins from ScoreManager.Instance
+        int coinsEnd = (ScoreManager.Instance != null) ? ScoreManager.Instance.CurrentMoney : 0;
 
         // If reached target but time not saved yet, freeze+save now (still stable)
         if (!timeSaved && coinsEnd >= coinsTarget)
@@ -131,7 +131,6 @@ public class LevelTimerWinLose : MonoBehaviour
 
         bool success = coinsEnd >= coinsTarget;
         LevelOneState.IsSuccess = success;
-
         // Save passed flag for level 1 (used after relogin / resume)
         if (UnityServices.State == ServicesInitializationState.Initialized &&
             AuthenticationService.Instance.IsSignedIn)
