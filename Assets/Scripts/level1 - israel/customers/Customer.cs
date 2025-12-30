@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Represents a customer in the game, managing their appearance, order, and mood.
+/// </summary>
 public class Customer : MonoBehaviour
 {
     [SerializeField] private SpriteRenderer spriteRenderer;
@@ -14,7 +17,7 @@ public class Customer : MonoBehaviour
     public CustomerType Data { get; private set; }
     public bool IsLeaving { get; private set; }
 
-    private Dictionary<string, IngredientIconInfo> iconLookup;
+    private Dictionary<string, IngredientIconInfo> iconLookup; // For quick lookup of ingredient icons by ID
 
     private void Awake()
     {
@@ -28,6 +31,10 @@ public class Customer : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Initializes the customer with the provided data.
+    /// </summary>
+    /// <param name="data"></param>
     public void Init(CustomerType data)
     {
         Data = data;
@@ -35,7 +42,7 @@ public class Customer : MonoBehaviour
         if (spriteRenderer != null && data != null && data.sprite != null)
             spriteRenderer.sprite = data.sprite;
 
-        SetupOrderBubble();
+        SetupOrderBubble(); // Setup the order bubble with icons
 
         if (moodTimer != null && data != null)
         {
@@ -45,29 +52,33 @@ public class Customer : MonoBehaviour
             if (data.angryFaces == null || data.angryFaces.Length == 0)
                 Debug.LogWarning($"CustomerType '{data.name}' has no angryFaces assigned!");
 
-            moodTimer.Configure(data.happyFace, data.angryFaces);
+            moodTimer.Configure(data.happyFace, data.angryFaces); // Configure mood timer with faces
         }
     }
 
     public void MarkLeaving()
     {
-        IsLeaving = true;
+        IsLeaving = true; // Prevent further interactions
     }
 
+    /// <summary>
+    /// Sets up the order bubble by instantiating ingredient icons based on the customer's order.
+    /// </summary>
     private void SetupOrderBubble()
     {
         if (orderBubbleRoot == null || iconsParent == null || iconPrefab == null || Data == null)
             return;
 
-        orderBubbleRoot.SetActive(true);
+        orderBubbleRoot.SetActive(true); // Show the order bubble
 
-        for (int i = iconsParent.childCount - 1; i >= 0; i--)
-            Destroy(iconsParent.GetChild(i).gameObject);
+        for (int i = iconsParent.childCount - 1; i >= 0; i--) // Clear existing icons
+            Destroy(iconsParent.GetChild(i).gameObject); // Destroy existing icons
 
-        var ingredients = Data.requiredIngredients;
+        var ingredients = Data.requiredIngredients; // Get required ingredients
         if (ingredients == null || ingredients.Count == 0)
             return;
 
+        // Instantiate icons for each required ingredient
         foreach (var ing in ingredients)
         {
             var id = ing.ToLower();
@@ -83,7 +94,11 @@ public class Customer : MonoBehaviour
                 sr.sprite = info.sprite;
         }
     }
-
+/// <summary>
+/// Checks if the provided list of ingredients matches the customer's order.
+/// </summary>
+/// <param name="ingredients"></param>
+/// <returns></returns>
     public bool IsOrderCorrect(List<string> ingredients)
     {
         if (Data == null || Data.requiredIngredients == null)
@@ -102,7 +117,7 @@ public class Customer : MonoBehaviour
     public void HideOrderBubble()
     {
         if (orderBubbleRoot != null)
-            orderBubbleRoot.SetActive(false);
+            orderBubbleRoot.SetActive(false); // Hide the order bubble
     }
 }
 

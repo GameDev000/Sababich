@@ -1,5 +1,7 @@
 using UnityEngine;
-
+/// <summary>
+/// Adjusts the camera viewport to maintain a 16:9 aspect ratio with letterboxing.
+/// </summary>
 [RequireComponent(typeof(Camera))]
 public class Letterbox16by9 : MonoBehaviour
 {

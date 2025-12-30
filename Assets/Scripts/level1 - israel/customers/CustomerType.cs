@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
-
+/// <summary>
+/// Defines the data structure for a customer type, including their appearance and order requirements.
+/// </summary>
 [System.Serializable]
 public class CustomerType
 {
