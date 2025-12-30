@@ -129,7 +129,7 @@ public class SelectionList : MonoBehaviour
 
         return true;
     }
-   
+
     public List<string> GetSelectedIngredients()
     {
         return new List<string>(selectedIngredients);

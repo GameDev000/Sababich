@@ -24,7 +24,6 @@ public class FriedTrayState : MonoBehaviour
     private void Awake()
     {
         ApplyStage();                 // start empty, no overlay
-        SetTrayItemsClickable(false); // cannot click at game start
     }
 
     public void Refill()
@@ -32,7 +31,6 @@ public class FriedTrayState : MonoBehaviour
         stage = 0;
         usesLeft = usesPerStage;
         ApplyStage(); // Go to if (stage == 0)
-        SetTrayItemsClickable(true);
     }
 
     //Called on LevelGameFlow and update stage
@@ -74,7 +72,6 @@ public class FriedTrayState : MonoBehaviour
         {
             trayRenderer.sprite = null;
             trayRenderer.enabled = false;
-            SetTrayItemsClickable(false);
         }
     }
 

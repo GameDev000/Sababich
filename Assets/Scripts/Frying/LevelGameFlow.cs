@@ -31,11 +31,6 @@ public class LevelGameFlow : MonoBehaviour
         Instance = this;
     }
 
-    private void Start()
-    {
-        SetTrayEggplantsClickable(false);
-    }
-
     // private void SetTrayEggplantsClickable(bool value)
     // {
     //     if (trayEggplantItems == null) return;
@@ -47,7 +42,6 @@ public class LevelGameFlow : MonoBehaviour
     public void OnTrayFilled()
     {
         trayReady = true;
-        SetTrayEggplantsClickable(true);
     }
 
     public void OnChipsTrayFilled()
