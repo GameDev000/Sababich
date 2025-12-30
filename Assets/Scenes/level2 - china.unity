@@ -1030,7 +1030,7 @@ PrefabInstance:
     - target: {fileID: 8833144166857817442, guid: 77e99cc807d46164b9d24e717102995f, type: 3}
       propertyPath: fryZone
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1748255140}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2122,7 +2122,6 @@ MonoBehaviour:
   timerText: {fileID: 1728807362}
   coinsTarget: 210
   endSceneName: Level2 - endScene
-  playerCoins: {fileID: 559278372}
 --- !u!1 &748408078
 GameObject:
   m_ObjectHideFlags: 0
@@ -7960,7 +7959,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u05DE\u05D8\u05E8\u05D4: 022 \u05DE\u05D8\u05D1\u05E2\u05D5\u05EA!"
+  m_text: "\u05DE\u05D8\u05E8\u05D4: 012 \u05DE\u05D8\u05D1\u05E2\u05D5\u05EA!"
   m_isRightToLeft: 1
   m_fontAsset: {fileID: 11400000, guid: 8a89fa14b10d46a99122fd4f73fca9a2, type: 2}
   m_sharedMaterial: {fileID: 2140474, guid: 8a89fa14b10d46a99122fd4f73fca9a2, type: 2}

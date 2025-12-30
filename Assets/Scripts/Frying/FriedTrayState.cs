@@ -1,6 +1,8 @@
 using UnityEngine;
 
-// Manages the fried tray state by updating its visual stages and controlling item availability based on remaining uses.
+/// <summary>
+/// Manages the fried tray state by updating its visual stages and controlling item availability based on remaining uses.
+/// </summary>
 public class FriedTrayState : MonoBehaviour
 {
     //Sprite is the image, SpriteRenderer is the component that displays it in the scene
