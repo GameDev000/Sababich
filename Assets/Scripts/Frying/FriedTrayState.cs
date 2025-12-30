@@ -11,7 +11,7 @@ public class FriedTrayState : MonoBehaviour
     [SerializeField] private Sprite lowSprite;
 
     [SerializeField] private int usesPerStage = 2;
-    [SerializeField] private Item[] trayItems;   // For case that we want click on specific eggplant (there is currently one collider)
+    //[SerializeField] private Item[] trayItems;   // For case that we want click on specific eggplant (there is currently one collider)
 
     // 0 = full, 1 = mid, 2 = low, 3 = empty (no overlay)
     private int stage = 3;
@@ -76,12 +76,12 @@ public class FriedTrayState : MonoBehaviour
         }
     }
 
-    //Help function for validation
-    private void SetTrayItemsClickable(bool value)
-    {
-        if (trayItems == null) return;
+    // //Help function for validation
+    // private void SetTrayItemsClickable(bool value)
+    // {
+    //     if (trayItems == null) return;
 
-        foreach (var it in trayItems)
-            if (it != null) it.SetClickable(value);
-    }
+    //     foreach (var it in trayItems)
+    //         if (it != null) it.SetClickable(value);
+    // }
 }

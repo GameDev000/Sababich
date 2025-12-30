@@ -12,8 +12,8 @@ public class LevelGameFlow : MonoBehaviour
     [SerializeField] private FryZoneIngredient eggplantFryer; // Eggplant machine reference
     [SerializeField] private FryZoneIngredient chipsFryer;  // Chips machine reference
 
-    [Header("Tray Clickables")]
-    [SerializeField] private Item[] trayEggplantItems; // For case that we want click on specific eggplant (there is currently one collider)
+    // [Header("Tray Clickables")]
+    // [SerializeField] private Item[] trayEggplantItems; // For case that we want click on specific eggplant (there is currently one collider)
 
     [Header("Tray States (optional per level)")]
     [SerializeField] private FriedTrayState eggplantTrayState;
@@ -36,12 +36,12 @@ public class LevelGameFlow : MonoBehaviour
         SetTrayEggplantsClickable(false);
     }
 
-    private void SetTrayEggplantsClickable(bool value)
-    {
-        if (trayEggplantItems == null) return;
-        foreach (var item in trayEggplantItems)
-            if (item != null) item.SetClickable(value);
-    }
+    // private void SetTrayEggplantsClickable(bool value)
+    // {
+    //     if (trayEggplantItems == null) return;
+    //     foreach (var item in trayEggplantItems)
+    //         if (item != null) item.SetClickable(value);
+    // }
 
     //Both methods signal that a tray is ready and enable item interaction, called on FriedTray
     public void OnTrayFilled()

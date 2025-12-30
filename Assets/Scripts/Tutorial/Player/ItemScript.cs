@@ -51,7 +51,7 @@ public class Item : MonoBehaviour
             LevelGameFlow.Instance.OnIngredientClickedFromItem(this, ingredientName);
     }
 
-    public void SetClickable(bool value)///////////////////////
+    public void SetClickable(bool value)
     {
         isClickable = value;
     }

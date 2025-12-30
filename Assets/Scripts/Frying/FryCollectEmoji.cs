@@ -1,5 +1,5 @@
 using UnityEngine;
-
+// For level3 - eggplant&chips at the same time
 public class FryCollectEmoji : MonoBehaviour
 {
     [SerializeField] private FryZoneIngredient targetFryer; // Connect the emoji in the inspector
