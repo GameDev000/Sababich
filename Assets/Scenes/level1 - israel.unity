@@ -3103,8 +3103,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 1657.33, y: 924}
-  m_SizeDelta: {x: 845.66, y: 194.13}
+  m_AnchoredPosition: {x: 1586.2498, y: 924}
+  m_SizeDelta: {x: 1106.93, y: 194.13}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1176971609
 MonoBehaviour:
@@ -3790,7 +3790,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8665928771036648144, guid: 6b08bc250a77d5944b63945313d63ca5, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 1581
+      value: 1531
       objectReference: {fileID: 0}
     - target: {fileID: 8665928771036648144, guid: 6b08bc250a77d5944b63945313d63ca5, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -3825,6 +3825,7 @@ GameObject:
   - component: {fileID: 1458113647}
   - component: {fileID: 1458113648}
   - component: {fileID: 1458113649}
+  - component: {fileID: 1458113650}
   m_Layer: 5
   m_Name: TimerText
   m_TagString: Untagged
@@ -3906,8 +3907,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 100
-  m_fontSizeBase: 100
+  m_fontSize: 110
+  m_fontSizeBase: 110
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -3950,6 +3951,21 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &1458113650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1458113646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4e0d9ccee5f4950be8979268c9014e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TMPro.Examples.VertexShakeB
+  AngleMultiplier: 1
+  SpeedMultiplier: 1
+  CurveScale: 1
 --- !u!198 &1476729722 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 5488726853285895005, guid: 6b08bc250a77d5944b63945313d63ca5, type: 3}
@@ -4560,6 +4576,7 @@ MonoBehaviour:
   ScoreText: {fileID: 908680347}
   startMoney: 0
   coinSparkles: {fileID: 1476729722}
+  target: 150
 --- !u!4 &1900023741
 Transform:
   m_ObjectHideFlags: 0
@@ -4653,7 +4670,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &1979700798
 SpriteRenderer:
   m_ObjectHideFlags: 0

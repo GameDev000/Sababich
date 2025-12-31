@@ -14,6 +14,9 @@ public class ScoreManager : MonoBehaviour
     [Header("Visual FX")]
     [SerializeField] private ParticleSystem coinSparkles;
 
+    [SerializeField] private int target = 150;
+
+
     public int CurrentMoney { get; private set; }
 
     private void Awake()
@@ -108,7 +111,7 @@ public class ScoreManager : MonoBehaviour
     private void UpdateScoreUI()
     {
         if (ScoreText != null)
-            ScoreText.text = "" + CurrentMoney;
+            ScoreText.text = "" + CurrentMoney + "/" + target;
     }
 
     public int GetCurrentMoney() => CurrentMoney;

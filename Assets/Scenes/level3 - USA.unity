@@ -153,8 +153,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 1657.33, y: 924}
-  m_SizeDelta: {x: 845.66, y: 194.13}
+  m_AnchoredPosition: {x: 1570.08, y: 924}
+  m_SizeDelta: {x: 1166.28, y: 210.41}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &73499199
 MonoBehaviour:
@@ -2536,6 +2536,7 @@ GameObject:
   - component: {fileID: 905153751}
   - component: {fileID: 905153753}
   - component: {fileID: 905153752}
+  - component: {fileID: 905153754}
   m_Layer: 5
   m_Name: TimerText
   m_TagString: Untagged
@@ -2609,8 +2610,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 100
-  m_fontSizeBase: 100
+  m_fontSize: 110
+  m_fontSizeBase: 110
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -2661,6 +2662,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 905153750}
   m_CullTransparentMesh: 1
+--- !u!114 &905153754
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 905153750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4e0d9ccee5f4950be8979268c9014e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TMPro.Examples.VertexShakeB
+  AngleMultiplier: 1
+  SpeedMultiplier: 1
+  CurveScale: 1
 --- !u!1 &1023514392
 GameObject:
   m_ObjectHideFlags: 0
@@ -3879,7 +3895,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8665928771036648144, guid: 6b08bc250a77d5944b63945313d63ca5, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 1581
+      value: 1521
       objectReference: {fileID: 0}
     - target: {fileID: 8665928771036648144, guid: 6b08bc250a77d5944b63945313d63ca5, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -6964,6 +6980,7 @@ MonoBehaviour:
   ScoreText: {fileID: 1198266173}
   startMoney: 0
   coinSparkles: {fileID: 1198266174}
+  target: 150
 --- !u!4 &8220566009105857266
 Transform:
   m_ObjectHideFlags: 0
