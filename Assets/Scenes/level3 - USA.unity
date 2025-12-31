@@ -357,8 +357,6 @@ MonoBehaviour:
   fryZone: {fileID: 0}
   eggplantFryer: {fileID: 881219679}
   chipsFryer: {fileID: 1292984848}
-  trayEggplantItems:
-  - {fileID: 0}
   eggplantTrayState: {fileID: 407841700}
   chipsTrayState: {fileID: 1788359166}
 --- !u!4 &154829245
@@ -846,7 +844,6 @@ MonoBehaviour:
   timerText: {fileID: 905153752}
   coinsTarget: 300
   endSceneName: Level3 - endScene
-  playerCoins: {fileID: 6126343218938973799}
 --- !u!1001 &350299350
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -975,7 +972,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4405f91253697449b45337d48ff5105, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  backPita: {fileID: 0}
   frontPita: {fileID: 350299355}
   frontDefault: {fileID: 21300000, guid: a809dd726cbeff0499109c516485dbe5, type: 3}
   frontTahini: {fileID: 21300000, guid: 9a3fb0f98afc44d42829d16d47c14fb3, type: 3}
@@ -1224,7 +1220,6 @@ MonoBehaviour:
   midSprite: {fileID: 21300000, guid: 9a08d14782994eb4da34f4fb1b644415, type: 3}
   lowSprite: {fileID: 21300000, guid: 4d9323ae8b16d424f9ef4cae8db4cbd7, type: 3}
   usesPerStage: 2
-  trayItems: []
 --- !u!114 &407841701
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3531,7 +3526,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 20
-  m_Sprite: {fileID: 21300000, guid: 15ab33071ffa15c498bf7c97018080fd, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 609fad4f33a5ebc438da6430d62617a7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -5362,7 +5357,6 @@ MonoBehaviour:
   midSprite: {fileID: -6852207816007239522, guid: b41843e283527464295677f6c4dbd9ff, type: 3}
   lowSprite: {fileID: -1531213990417690431, guid: 76296a23e940e4c498e3d6faf419fd4d, type: 3}
   usesPerStage: 1
-  trayItems: []
 --- !u!114 &1788359167
 MonoBehaviour:
   m_ObjectHideFlags: 0
