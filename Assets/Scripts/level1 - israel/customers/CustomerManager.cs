@@ -101,7 +101,7 @@ public class CustomerManager : MonoBehaviour
             }
 
             float first = (firstSpawnDelays != null && i < firstSpawnDelays.Count) ? firstSpawnDelays[i] : defaultFirstSpawnDelay;
-            float resp  = (respawnDelays != null && i < respawnDelays.Count) ? respawnDelays[i] : defaultRespawnDelay;
+            float resp = (respawnDelays != null && i < respawnDelays.Count) ? respawnDelays[i] : defaultRespawnDelay;
 
             slots.Add(new SlotState
             {

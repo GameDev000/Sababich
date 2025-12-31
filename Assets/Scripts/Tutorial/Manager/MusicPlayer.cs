@@ -56,7 +56,7 @@ public class MusicPlayer : MonoBehaviour
         audioSource.mute = !audioSource.mute;
         PlayerPrefs.SetInt(PREF_MUTED, audioSource.mute ? 1 : 0);
         PlayerPrefs.Save();
-         if (!audioSource.mute && audioSource.clip != null && !audioSource.isPlaying)
+        if (!audioSource.mute && audioSource.clip != null && !audioSource.isPlaying)
             audioSource.Play();
     }
 
@@ -82,7 +82,7 @@ public class MusicPlayer : MonoBehaviour
     }
 
 
-    
+
 
     public string GetCurrentTrackId()
     {
