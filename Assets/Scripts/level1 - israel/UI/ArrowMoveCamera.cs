@@ -45,14 +45,14 @@ public class ArrowMoveCamera : MonoBehaviour
 
         // Smoothly move the camera towards the target point
         cam.transform.position = Vector3.Lerp(
-            cam.transform.position,new Vector3(targetPoint.position.x,targetPoint.position.y,
-            cam.transform.position.z),moveSpeed * Time.deltaTime
+            cam.transform.position, new Vector3(targetPoint.position.x, targetPoint.position.y,
+            cam.transform.position.z), moveSpeed * Time.deltaTime
         );
         // Check if the camera is close enough to the target point
         if (Vector2.Distance(cam.transform.position,
             new Vector2(targetPoint.position.x, targetPoint.position.y)) < 0.05f)
         {
-            cam.transform.position = new Vector3(targetPoint.position.x,targetPoint.position.y,
+            cam.transform.position = new Vector3(targetPoint.position.x, targetPoint.position.y,
                 cam.transform.position.z); // Snap to target position
             moving = false; // Stop moving
         }

@@ -94,11 +94,11 @@ public class Customer : MonoBehaviour
                 sr.sprite = info.sprite;
         }
     }
-/// <summary>
-/// Checks if the provided list of ingredients matches the customer's order.
-/// </summary>
-/// <param name="ingredients"></param>
-/// <returns></returns>
+    /// <summary>
+    /// Checks if the provided list of ingredients matches the customer's order.
+    /// </summary>
+    /// <param name="ingredients"></param>
+    /// <returns></returns>
     public bool IsOrderCorrect(List<string> ingredients)
     {
         if (Data == null || Data.requiredIngredients == null)
