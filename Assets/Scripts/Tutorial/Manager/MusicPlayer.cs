@@ -56,7 +56,11 @@ public class MusicPlayer : MonoBehaviour
         audioSource.mute = !audioSource.mute;
         PlayerPrefs.SetInt(PREF_MUTED, audioSource.mute ? 1 : 0);
         PlayerPrefs.Save();
+         if (!audioSource.mute && audioSource.clip != null && !audioSource.isPlaying)
+            audioSource.Play();
     }
+
+
 
     public void SetTrack(string id, bool playImmediately = true)
     {
@@ -65,22 +69,20 @@ public class MusicPlayer : MonoBehaviour
         Track t = FindTrack(id);
         if (t == null || t.clip == null) return;
 
-        if (audioSource.clip == t.clip)
-        {
-            PlayerPrefs.SetString(PREF_TRACK, id);
-            PlayerPrefs.Save();
-            return;
-        }
-
-        audioSource.clip = t.clip;
         audioSource.loop = true;
 
-        if (playImmediately && !audioSource.mute)
+        if (audioSource.clip != t.clip)
+            audioSource.clip = t.clip;
+
+        if (playImmediately && !audioSource.mute && !audioSource.isPlaying)
             audioSource.Play();
 
         PlayerPrefs.SetString(PREF_TRACK, id);
         PlayerPrefs.Save();
     }
+
+
+    
 
     public string GetCurrentTrackId()
     {
