@@ -1502,19 +1502,19 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: 2d6cd688e9705774da2aa9ea1f3639a7, type: 3}
     - target: {fileID: 212506949255695782, guid: fa8d00a30836965448ebdeeffdac87ed, type: 3}
       propertyPath: m_Color.a
-      value: 0.78431374
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 212506949255695782, guid: fa8d00a30836965448ebdeeffdac87ed, type: 3}
       propertyPath: m_Color.b
-      value: 0.29411766
+      value: 0.8156863
       objectReference: {fileID: 0}
     - target: {fileID: 212506949255695782, guid: fa8d00a30836965448ebdeeffdac87ed, type: 3}
       propertyPath: m_Color.g
-      value: 0.3529412
+      value: 0.99215686
       objectReference: {fileID: 0}
     - target: {fileID: 212506949255695782, guid: fa8d00a30836965448ebdeeffdac87ed, type: 3}
       propertyPath: m_Color.r
-      value: 0.37254903
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 212506949255695782, guid: fa8d00a30836965448ebdeeffdac87ed, type: 3}
       propertyPath: m_SortingOrder
@@ -1523,7 +1523,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1608664731481350, guid: fa8d00a30836965448ebdeeffdac87ed, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1373575007}
   m_SourcePrefab: {fileID: 100100000, guid: fa8d00a30836965448ebdeeffdac87ed, type: 3}
 --- !u!1 &588483769
 GameObject:
@@ -4288,6 +4291,21 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1608664731481350, guid: fa8d00a30836965448ebdeeffdac87ed, type: 3}
   m_PrefabInstance: {fileID: 532257266}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1373575007
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1373575005}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Outline
+  m_EffectColor: {r: 0.37254903, g: 0.3529412, b: 0.29411766, a: 0.78431374}
+  m_EffectDistance: {x: 4, y: -4}
+  m_UseGraphicAlpha: 1
 --- !u!1 &1437525825
 GameObject:
   m_ObjectHideFlags: 0
@@ -6980,7 +6998,7 @@ MonoBehaviour:
   ScoreText: {fileID: 1198266173}
   startMoney: 0
   coinSparkles: {fileID: 1198266174}
-  target: 150
+  target: 300
 --- !u!4 &8220566009105857266
 Transform:
   m_ObjectHideFlags: 0
