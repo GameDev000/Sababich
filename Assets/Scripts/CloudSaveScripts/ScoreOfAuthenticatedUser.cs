@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 using Unity.Services.CloudSave.Models;   // Item + GetAs extensions
 using UnityEngine.SceneManagement;       // SceneManager (resume to saved scene)
 using UnityEngine.UI;                    // for Button
+using UnityEngine.SceneManagement;
+
+
 
 /*
  * This script is the BRIDGE between:
@@ -74,6 +77,10 @@ public class ScoreOfAuthenticatedUser : MonoBehaviour
 
     // Optional reference Inspector to sync Level states from cloud after login
     [SerializeField] private CloudStateSync cloudStateSync;
+
+    // Name of Intro Video scene
+    [SerializeField] private string introVideoSceneName = "IntroVideoScene";
+
 
     void Awake()
     {
@@ -223,18 +230,30 @@ public class ScoreOfAuthenticatedUser : MonoBehaviour
         if (statusField != null) statusField.text = message;
 
         /* ========== AUTHENTICATION SUCCESS ========== */
+        // if (message.ToLower().Contains("success"))
+        // {
+        //     // Only proceed if actually signed in
+        //     if (AuthenticationService.Instance.IsSignedIn)
+        //     {
+        //         Initialize();
+        //     }
+        //     else
+        //     {
+        //         AuthenticationService.Instance.SignedIn += Initialize;
+        //     }
+        // }
         if (message.ToLower().Contains("success"))
         {
-            // Only proceed if actually signed in
             if (AuthenticationService.Instance.IsSignedIn)
             {
-                Initialize();
+                HandlePostAuth(type);
             }
             else
             {
-                AuthenticationService.Instance.SignedIn += Initialize;
+                AuthenticationService.Instance.SignedIn += () => HandlePostAuth(type);
             }
         }
+
     }
 
     // Connected to UI buttons
@@ -367,4 +386,18 @@ public class ScoreOfAuthenticatedUser : MonoBehaviour
             textField.text = $"Resume Scene: {shown}";
         }
     }
+
+    void HandlePostAuth(ButtonType type)
+    {
+        // Register → play intro video
+        if (type == ButtonType.REGISTER)
+        {
+            SceneManager.LoadScene(introVideoSceneName);
+            return;
+        }
+
+        // Login → skip intro, continue normally
+        Initialize();
+    }
+
 }
