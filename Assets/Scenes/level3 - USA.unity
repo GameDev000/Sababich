@@ -319,7 +319,7 @@ Transform:
   m_GameObject: {fileID: 147048394}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -7.87, y: 0.11377001, z: 0}
+  m_LocalPosition: {x: -7.83, y: 0.31, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2059,8 +2059,18 @@ MonoBehaviour:
   speed: 6
   customerPrefab: {fileID: 1080409495}
   spawnPoint: {fileID: 147048395}
-  standPoint: {fileID: 2097713066}
   exitPoint: {fileID: 871768374}
+  standPoints:
+  - {fileID: 2097713066}
+  - {fileID: 1023514393}
+  - {fileID: 1711517898}
+  firstSpawnDelays:
+  - 0
+  - 5
+  - 10
+  respawnDelays: []
+  defaultFirstSpawnDelay: 0
+  defaultRespawnDelay: 0
   customerTypes:
   - name: full1
     sprite: {fileID: 21300000, guid: a8ade122ac11c2d4fbd212c963bd8b2e, type: 3}
@@ -2651,6 +2661,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 905153750}
   m_CullTransparentMesh: 1
+--- !u!1 &1023514392
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1023514393}
+  m_Layer: 0
+  m_Name: StandSpot_2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1023514393
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1023514392}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -1.55, y: 0.11377001, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1455689657}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1031642987
 GameObject:
   m_ObjectHideFlags: 0
@@ -4520,6 +4561,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2097713066}
+  - {fileID: 1023514393}
+  - {fileID: 1711517898}
   - {fileID: 147048395}
   - {fileID: 871768374}
   m_Father: {fileID: 0}
@@ -4741,7 +4784,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 10
+  m_SortingOrder: 11
   m_Sprite: {fileID: 21300000, guid: efc3200bf73765f4eae67de511d9f712, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -5069,6 +5112,37 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1711517897
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1711517898}
+  m_Layer: 0
+  m_Name: StandSpot_3
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1711517898
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1711517897}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 4.19, y: 0.11377001, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1455689657}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1743350575
 PrefabInstance:
@@ -6044,6 +6118,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: DialMinutesSeconds
       objectReference: {fileID: 0}
+    - target: {fileID: 1129712692184609373, guid: 77e99cc807d46164b9d24e717102995f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8008752969970331801, guid: 77e99cc807d46164b9d24e717102995f, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -6464,7 +6542,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2097713066}
   m_Layer: 0
-  m_Name: StandSpot
+  m_Name: StandSpot_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6503,11 +6581,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 855442832858710653, guid: 4c0914c7c8f14894696d4b40bed48725, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -11.3589
+      value: -11.51
       objectReference: {fileID: 0}
     - target: {fileID: 855442832858710653, guid: 4c0914c7c8f14894696d4b40bed48725, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.4414
+      value: 4.12
       objectReference: {fileID: 0}
     - target: {fileID: 855442832858710653, guid: 4c0914c7c8f14894696d4b40bed48725, type: 3}
       propertyPath: m_LocalPosition.z

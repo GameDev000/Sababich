@@ -1933,8 +1933,15 @@ MonoBehaviour:
   speed: 6
   customerPrefab: {fileID: 1815610952}
   spawnPoint: {fileID: 1477147590}
-  standPoint: {fileID: 916762011}
   exitPoint: {fileID: 1901759619}
+  standPoints:
+  - {fileID: 916762011}
+  firstSpawnDelays:
+  - 0
+  respawnDelays:
+  - 0
+  defaultFirstSpawnDelay: 0
+  defaultRespawnDelay: 0
   customerTypes:
   - name: full1
     sprite: {fileID: 21300000, guid: ef64289f5a4014343a14dbe0a44662e0, type: 3}
@@ -4785,7 +4792,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 10
+  m_SortingOrder: 11
   m_Sprite: {fileID: 21300000, guid: efc3200bf73765f4eae67de511d9f712, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

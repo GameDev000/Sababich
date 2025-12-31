@@ -1168,6 +1168,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 916762011}
+  - {fileID: 798477680}
   - {fileID: 1477147590}
   - {fileID: 1901759619}
   m_Father: {fileID: 0}
@@ -1204,8 +1205,16 @@ MonoBehaviour:
   speed: 6
   customerPrefab: {fileID: 1815610952}
   spawnPoint: {fileID: 1477147590}
-  standPoint: {fileID: 916762011}
   exitPoint: {fileID: 1901759619}
+  standPoints:
+  - {fileID: 916762011}
+  - {fileID: 798477680}
+  firstSpawnDelays:
+  - 0
+  - 5
+  respawnDelays: []
+  defaultFirstSpawnDelay: 0
+  defaultRespawnDelay: 0
   customerTypes:
   - name: full1
     sprite: {fileID: -5731352522195872741, guid: 56ae42582d73fc7469b85bb7ff5deb45, type: 3}
@@ -7081,6 +7090,37 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &798477679
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 798477680}
+  m_Layer: 0
+  m_Name: StandSpot_2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &798477680
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 798477679}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.92, y: 0.11377001, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 479798256}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &853540891
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7353,7 +7393,7 @@ GameObject:
   m_Component:
   - component: {fileID: 916762011}
   m_Layer: 0
-  m_Name: StandSpot
+  m_Name: StandSpot_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7368,7 +7408,7 @@ Transform:
   m_GameObject: {fileID: 916762010}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.25868, y: 0.11377001, z: 0}
+  m_LocalPosition: {x: 3.29, y: 0.11377001, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7492,7 +7532,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 1657.33, y: 924}
+  m_AnchoredPosition: {x: 1657.3301, y: 924}
   m_SizeDelta: {x: 845.66, y: 194.13}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1241211821
@@ -9926,7 +9966,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 10
+  m_SortingOrder: 11
   m_Sprite: {fileID: 21300000, guid: efc3200bf73765f4eae67de511d9f712, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
