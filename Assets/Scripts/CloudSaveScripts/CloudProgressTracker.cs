@@ -1,72 +1,82 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Unity.Services.Authentication; // only save after sign-in
-using Unity.Services.Core;
+using Unity.Services.Authentication; // Check if player is signed in
+using Unity.Services.Core;          // Check if Unity Services finished initializing
 
-/*
- * Saves the CURRENT scene name to Cloud Save whenever a scene is loaded.
- * This guarantees we can resume into endScenes / mid-level scenes exactly as required.
- */
+/// <summary>
+/// Saves the name of the CURRENT scene to the cloud.
+/// This lets the game "resume" from the last scene the player reached.
+/// </summary>
 public class CloudProgressTracker : MonoBehaviour
 {
+    // When this script becomes active, start listening to scene-load events.
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
+    // When this script becomes inactive, stop listening (prevents double calls / memory leaks).
     private void OnDisable()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
+    // Unity calls this automatically every time a new scene finishes loading.
     private async void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // Prevent touching AuthenticationService before UnityServices is initialized
+        // 1) Safety: don't use cloud/auth systems before Unity Services is ready.
         if (UnityServices.State != ServicesInitializationState.Initialized)
         {
-            Debug.Log("[CloudProgressTracker] Services not initialized yet -> skipping save.");
+            Debug.Log("[CloudProgressTracker] Unity Services not ready yet -> not saving.");
             return;
         }
 
-        //  Prevent Cloud Save calls before authentication (avoids: Player ID is missing)
+        // 2) Safety: Cloud Save works only after the player is signed in.
+        // Otherwise we get errors like "Player user is missing".
         if (!AuthenticationService.Instance.IsSignedIn)
         {
-            Debug.Log("[CloudProgressTracker] Not signed in yet -> skipping save.");
+            Debug.Log("[CloudProgressTracker] Player not signed in -> not saving.");
             return;
         }
 
-        // Don't overwrite progress while on Login (otherwise you'll always resume to Login)
-        if (scene.name == "Login") return;
+        // 3) Important rule: never save progress while on the Login scene.
+        if (scene.name == "Login")
+            return;
 
-        // If you also don't want to overwrite when user is in MainMenu, comment out the next line.
-        // If (scene.name == "MainMenu") return;
-
+        // 4) Save the current scene name to the cloud.
+        // Key: "resumeScene"
         await DatabaseManager.SaveData(("resumeScene", scene.name));
-        Debug.Log($"[CloudProgressTracker] Saved resumeScene='{scene.name}'");
+
+        Debug.Log($"[CloudProgressTracker] Saved resumeScene = '{scene.name}'");
     }
 
-    // Call this ONLY when the player finished level 3 successfully.
+    /// <summary>
+    /// Call this ONLY when the player finishes the whole game (e.g., after level 3).
+    /// We set resumeScene to MainMenu so next time they start from the menu.
+    /// </summary>
     public async void MarkGameCompleted()
     {
-        // Prevent touching AuthenticationService before UnityServices is initialized
+        // Same safety checks as above.
         if (UnityServices.State != ServicesInitializationState.Initialized)
         {
-            Debug.Log("[CloudProgressTracker] Services not initialized yet -> cannot mark completed.");
+            Debug.Log("[CloudProgressTracker] Unity Services not ready -> cannot mark completed.");
             return;
         }
 
-        // Prevent Cloud Save calls before authentication (extra safety)
         if (!AuthenticationService.Instance.IsSignedIn)
         {
-            Debug.Log("[CloudProgressTracker] Not signed in yet -> cannot mark completed.");
+            Debug.Log("[CloudProgressTracker] Player not signed in -> cannot mark completed.");
             return;
         }
 
         await DatabaseManager.SaveData(("resumeScene", "MainMenu"));
-        Debug.Log("[CloudProgressTracker] Game completed -> resumeScene='MainMenu'");
+        Debug.Log("[CloudProgressTracker] Game completed -> resumeScene = 'MainMenu'");
     }
 
-    //  Small helper so the Login script can enable it after successful sign-in.
+    /// <summary>
+    /// Helper for your Login script:
+    /// after a successful sign-in, enable this script so it starts saving progress.
+    /// </summary>
     public void EnableAfterSignIn()
     {
         enabled = true;
