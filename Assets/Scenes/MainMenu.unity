@@ -963,7 +963,6 @@ GameObject:
   - component: {fileID: 1176003032}
   - component: {fileID: 1176003031}
   - component: {fileID: 1176003033}
-  - component: {fileID: 1176003034}
   m_Layer: 0
   m_Name: BackgroundMusic
   m_TagString: Music
@@ -1103,22 +1102,6 @@ MonoBehaviour:
   - id: jazz
     displayName: jazz
     clip: {fileID: 8300000, guid: ce63bf97f4d859f44903837f0a7ce2a4, type: 3}
---- !u!114 &1176003034
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1176003030}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65fecf36e0b37ba47a54807325a7ec73, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  musicButton: {fileID: 1383370282}
-  dropdownPanel: {fileID: 1294674681}
-  contentParent: {fileID: 1356531850}
-  buttonPrefab: {fileID: -1961880633510978241, guid: d67ebcc9df9cb96409e7594a6d188832, type: 3}
 --- !u!1 &1294674681
 GameObject:
   m_ObjectHideFlags: 0
@@ -1136,7 +1119,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1294674682
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1231,7 +1214,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -101, y: 0}
-  m_SizeDelta: {x: -1920.0001, y: 0}
+  m_SizeDelta: {x: -1920.0001, y: -395.0952}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1356531851
 MonoBehaviour:
@@ -1431,6 +1414,7 @@ GameObject:
   - component: {fileID: 1383370284}
   - component: {fileID: 1383370283}
   - component: {fileID: 1383370282}
+  - component: {fileID: 1383370285}
   m_Layer: 5
   m_Name: musicButton
   m_TagString: Untagged
@@ -1515,7 +1499,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.37254903, g: 0.3529412, b: 0.29411766, a: 0.78431374}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1540,6 +1524,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1383370280}
   m_CullTransparentMesh: 1
+--- !u!114 &1383370285
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1383370280}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65fecf36e0b37ba47a54807325a7ec73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  musicButton: {fileID: 1383370282}
+  dropdownPanel: {fileID: 1294674681}
+  contentParent: {fileID: 1356531850}
+  buttonPrefab: {fileID: -1961880633510978241, guid: d67ebcc9df9cb96409e7594a6d188832, type: 3}
+  mainMenuSceneName: MainMenu
 --- !u!1 &1752856281
 GameObject:
   m_ObjectHideFlags: 0
