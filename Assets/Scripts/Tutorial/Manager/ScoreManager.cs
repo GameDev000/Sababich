@@ -93,7 +93,7 @@ public class ScoreManager : MonoBehaviour
     public void AddMoney(int amount)
     {
         CurrentMoney += amount;
-         if (amount > 0 && soundCoins != null)
+        if (amount > 0 && soundCoins != null)
         {
             soundCoins.PlayFromSecond(coinSoundStartTime);
         }
@@ -118,7 +118,7 @@ public class ScoreManager : MonoBehaviour
     {
         target = newTarget;
         UpdateScoreUI();
-    }   
+    }
 
 
     private void UpdateScoreUI()
