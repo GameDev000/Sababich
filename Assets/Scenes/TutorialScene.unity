@@ -463,12 +463,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88e1d362bce70234c9c62772110a2ed6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  clicksToGetDirty: 5
+  clicksPerStage: 6
   dirtOverlayObject: {fileID: 1982988286}
+  dirtOverlayRenderer: {fileID: 1982988288}
+  dirtStageSprites:
+  - {fileID: 21300000, guid: 1127011c6fce0e14d8e71500c27fe03b, type: 3}
+  - {fileID: 21300000, guid: 341fa620279a9be4e9a1c427025e9083, type: 3}
+  - {fileID: 21300000, guid: 795692845c6e2ab44a73bea2b11726f6, type: 3}
+  - {fileID: 21300000, guid: 909e5cab7465c9044bc9be3422ff80ec, type: 3}
   mirrorRenderer: {fileID: 1572982148}
   mirrorCleanSprite: {fileID: 21300000, guid: 1a75f306bc5226c4eb8e144262b34f9b, type: 3}
   mirrorDirtySprite: {fileID: 21300000, guid: 42b282ba8f17d254c95b0e346c763567, type: 3}
-  triggerTutorialOnDirty: 1
+  triggerTutorialOnFirstDirtStage: 1
   tutorialOverride: {fileID: 1139197419}
 --- !u!212 &127631260
 SpriteRenderer:
@@ -1726,6 +1732,9 @@ MonoBehaviour:
   ScoreText: {fileID: 1260964395}
   startMoney: 0
   coinSparkles: {fileID: 845215883}
+  target: 150
+  soundCoins: {fileID: 0}
+  coinSoundStartTime: 2
 --- !u!4 &516804992
 Transform:
   m_ObjectHideFlags: 0

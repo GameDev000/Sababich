@@ -2075,12 +2075,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88e1d362bce70234c9c62772110a2ed6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  clicksToGetDirty: 6
+  clicksPerStage: 6
   dirtOverlayObject: {fileID: 1979700797}
+  dirtOverlayRenderer: {fileID: 1979700798}
+  dirtStageSprites:
+  - {fileID: 21300000, guid: 1127011c6fce0e14d8e71500c27fe03b, type: 3}
+  - {fileID: 21300000, guid: 341fa620279a9be4e9a1c427025e9083, type: 3}
+  - {fileID: 21300000, guid: 795692845c6e2ab44a73bea2b11726f6, type: 3}
+  - {fileID: 21300000, guid: 909e5cab7465c9044bc9be3422ff80ec, type: 3}
   mirrorRenderer: {fileID: 1114869949}
   mirrorCleanSprite: {fileID: 21300000, guid: 1a75f306bc5226c4eb8e144262b34f9b, type: 3}
   mirrorDirtySprite: {fileID: 21300000, guid: 42b282ba8f17d254c95b0e346c763567, type: 3}
-  triggerTutorialOnDirty: 1
+  triggerTutorialOnFirstDirtStage: 1
   tutorialOverride: {fileID: 0}
 --- !u!1 &641353721
 GameObject:
@@ -2492,15 +2498,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2411004102100435510, guid: 5014633618047df43ad7a0ff7e8f8edb, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.9303666
+      value: 0.5959463
       objectReference: {fileID: 0}
     - target: {fileID: 2411004102100435510, guid: 5014633618047df43ad7a0ff7e8f8edb, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.9303666
+      value: 0.5959463
       objectReference: {fileID: 0}
     - target: {fileID: 2411004102100435510, guid: 5014633618047df43ad7a0ff7e8f8edb, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.9303666
+      value: 0.5959463
       objectReference: {fileID: 0}
     - target: {fileID: 2411004102100435510, guid: 5014633618047df43ad7a0ff7e8f8edb, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2550,6 +2556,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2667152588695233217, guid: 5014633618047df43ad7a0ff7e8f8edb, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: fa59397e3e58cb64dbc8941b97f5afe6, type: 3}
+    - target: {fileID: 5020410163332546927, guid: 5014633618047df43ad7a0ff7e8f8edb, type: 3}
+      propertyPath: muteSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: fa59397e3e58cb64dbc8941b97f5afe6, type: 3}
+    - target: {fileID: 5020410163332546927, guid: 5014633618047df43ad7a0ff7e8f8edb, type: 3}
+      propertyPath: unmuteSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 53c6e1066ac52434eaf3aa5b2d4a9e43, type: 3}
     - target: {fileID: 5027448196974177844, guid: 5014633618047df43ad7a0ff7e8f8edb, type: 3}
       propertyPath: m_Name
       value: sound
@@ -3790,6 +3808,50 @@ MonoBehaviour:
   spriteRenderer: {fileID: 1815610954}
   secondsPerStage: 7
   maxAngryWait: 3
+--- !u!1 &1816342830
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1816342832}
+  - component: {fileID: 1816342831}
+  m_Layer: 0
+  m_Name: CoinsSound
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1816342831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1816342830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5a26ec5491df8949a214b94bfaad423, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+--- !u!4 &1816342832
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1816342830}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.76737, y: -0.92799, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1869520214 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4994723373011609038, guid: de4c8b1251d1f8442be6fd1c2ee07a11, type: 3}
@@ -4549,6 +4611,22 @@ PrefabInstance:
       propertyPath: fryZone
       value: 
       objectReference: {fileID: 1748255140}
+    - target: {fileID: 2313896246075670617, guid: 342c60323b8fa884d828441a9c84b770, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2313896246075670617, guid: 342c60323b8fa884d828441a9c84b770, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2313896246075670617, guid: 342c60323b8fa884d828441a9c84b770, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2313896246075670617, guid: 342c60323b8fa884d828441a9c84b770, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2812279549565941923, guid: 342c60323b8fa884d828441a9c84b770, type: 3}
       propertyPath: m_Camera
       value: 
@@ -4998,3 +5076,4 @@ SceneRoots:
   - {fileID: 1103807289}
   - {fileID: 442228389}
   - {fileID: 550514528}
+  - {fileID: 1816342832}
