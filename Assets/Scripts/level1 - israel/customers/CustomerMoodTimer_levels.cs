@@ -82,6 +82,19 @@ public class CustomerMoodTimer_levels : MonoBehaviour
     }
 
     /// <summary>
+    /// Forces the customer to show an angry face immediately (wrong order feedback),
+    /// </summary>
+    public void ShowAngryNow()
+    {
+        if (spriteRenderer == null) spriteRenderer = GetComponent<SpriteRenderer>();
+        if (angryStages == null || angryStages.Length == 0) return;
+
+        // show first angry stage
+        SetSprite(angryStages[0]);
+    }
+
+
+    /// <summary>
     /// Resets the mood timer to the initial happy state.
     /// </summary>
     public void ResetTimer()

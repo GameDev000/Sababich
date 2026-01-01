@@ -12,6 +12,8 @@ public class Customer : MonoBehaviour
     [SerializeField] private GameObject iconPrefab;
     [SerializeField] private List<IngredientIconInfo> ingredientIcons;
     [SerializeField] private CustomerMoodTimer_levels moodTimer;
+
+    private List<string> activeRequiredIngredients; // Actual customer order
     public CustomerMoodTimer_levels MoodTimer => moodTimer;
 
     public CustomerType Data { get; private set; }
@@ -33,15 +35,17 @@ public class Customer : MonoBehaviour
 
     /// <summary>
     /// Initializes the customer with the provided data.
+    /// maxMissingItems- for subtracting ingredients
     /// </summary>
     /// <param name="data"></param>
-    public void Init(CustomerType data)
+    public void Init(CustomerType data, int maxMissingItems = 0)
     {
         Data = data;
 
         if (spriteRenderer != null && data != null && data.sprite != null)
             spriteRenderer.sprite = data.sprite;
 
+        BuildActiveOrder(maxMissingItems); // For Actual customer order
         SetupOrderBubble(); // Setup the order bubble with icons
 
         if (moodTimer != null && data != null)
@@ -55,6 +59,61 @@ public class Customer : MonoBehaviour
             moodTimer.Configure(data.happyFace, data.angryFaces); // Configure mood timer with faces
         }
     }
+
+    private void BuildActiveOrder(int maxMissingItems)
+    {
+        // Initialize actual order list
+        activeRequiredIngredients = new List<string>();
+
+        if (Data == null || Data.requiredIngredients == null)
+            return;
+
+        // Copy full recipe (lowercase for consistent comparison)
+        foreach (var r in Data.requiredIngredients)
+            if (!string.IsNullOrWhiteSpace(r))
+                activeRequiredIngredients.Add(r.ToLower());
+
+        // For level 1
+        if (maxMissingItems <= 0)
+            return;
+
+        const string pitaId = "pitta";
+
+        // Ensure pita is always present
+        if (!activeRequiredIngredients.Contains(pitaId))
+            activeRequiredIngredients.Insert(0, pitaId);
+
+        // Collect indices of removable ingredients (exclude pita)
+        List<int> removableIndices = new List<int>();
+        for (int i = 0; i < activeRequiredIngredients.Count; i++)
+        {
+            if (activeRequiredIngredients[i] != pitaId)
+                removableIndices.Add(i);
+        }
+
+        // Decide how many items to remove (0..maxMissingItems)
+        int maxCanRemove = Mathf.Min(maxMissingItems, removableIndices.Count);
+        int toRemove = Random.Range(0, maxCanRemove + 1);
+
+        // Remove random distinct ingredients
+        for (int k = 0; k < toRemove; k++)
+        {
+            int pick = Random.Range(0, removableIndices.Count);
+            int idxToRemove = removableIndices[pick];
+
+            activeRequiredIngredients.RemoveAt(idxToRemove);
+
+            // Update indices after removal
+            for (int j = 0; j < removableIndices.Count; j++)
+            {
+                if (removableIndices[j] > idxToRemove)
+                    removableIndices[j]--;
+            }
+
+            removableIndices.RemoveAt(pick);
+        }
+    }
+
 
     public void MarkLeaving()
     {
@@ -74,7 +133,7 @@ public class Customer : MonoBehaviour
         for (int i = iconsParent.childCount - 1; i >= 0; i--) // Clear existing icons
             Destroy(iconsParent.GetChild(i).gameObject); // Destroy existing icons
 
-        var ingredients = Data.requiredIngredients; // Get required ingredients
+        var ingredients = activeRequiredIngredients; // Actual customer order
         if (ingredients == null || ingredients.Count == 0)
             return;
 
@@ -101,14 +160,19 @@ public class Customer : MonoBehaviour
     /// <returns></returns>
     public bool IsOrderCorrect(List<string> ingredients)
     {
-        if (Data == null || Data.requiredIngredients == null)
+        if (activeRequiredIngredients == null) return false;
+        if (ingredients == null) return false;
+
+        // normalize
+        var given = new HashSet<string>();
+        foreach (var x in ingredients)
+            given.Add(x.ToLower());
+
+        if (given.Count != activeRequiredIngredients.Count)
             return false;
 
-        if (ingredients.Count != Data.requiredIngredients.Count)
-            return false;
-
-        foreach (var req in Data.requiredIngredients)
-            if (!ingredients.Contains(req.ToLower()))
+        foreach (var req in activeRequiredIngredients)
+            if (!given.Contains(req))
                 return false;
 
         return true;

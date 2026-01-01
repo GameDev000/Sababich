@@ -153,7 +153,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 1570.0801, y: 924}
+  m_AnchoredPosition: {x: 1570.08, y: 924}
   m_SizeDelta: {x: 1166.28, y: 210.41}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &73499199
@@ -292,7 +292,6 @@ Transform:
   - {fileID: 884481075}
   - {fileID: 2000099186}
   - {fileID: 1591553241}
-  - {fileID: 1628486823}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &147048394
@@ -468,7 +467,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
   ingredientName: egg
-  eggplantToOilFx: {fileID: 0}
 --- !u!212 &175033958
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -527,164 +525,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!1 &199604656
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 199604660}
-  - component: {fileID: 199604659}
-  - component: {fileID: 199604658}
-  - component: {fileID: 199604657}
-  m_Layer: 0
-  m_Name: CoinsSound
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &199604657
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 199604656}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a7e367df0b1ba48addaff28535b2ba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  coinClip: {fileID: 8300000, guid: 1874e8f4cacf53744a2c7e2fe0a96fd1, type: 3}
-  audioSource: {fileID: 199604658}
---- !u!82 &199604658
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 199604656}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: 1874e8f4cacf53744a2c7e2fe0a96fd1, type: 3}
-  m_PlayOnAwake: 0
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 0
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
---- !u!114 &199604659
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 199604656}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f5a26ec5491df8949a214b94bfaad423, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  coinSoundSource: {fileID: 199604657}
---- !u!4 &199604660
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 199604656}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.76737, y: -0.92799, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &257079470 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4561966467305094, guid: fa8d00a30836965448ebdeeffdac87ed, type: 3}
@@ -949,18 +789,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88e1d362bce70234c9c62772110a2ed6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  clicksPerStage: 6
+  clicksToGetDirty: 6
   dirtOverlayObject: {fileID: 1174646035}
-  dirtOverlayRenderer: {fileID: 1174646036}
-  dirtStageSprites:
-  - {fileID: 21300000, guid: 1127011c6fce0e14d8e71500c27fe03b, type: 3}
-  - {fileID: 21300000, guid: 341fa620279a9be4e9a1c427025e9083, type: 3}
-  - {fileID: 21300000, guid: 795692845c6e2ab44a73bea2b11726f6, type: 3}
-  - {fileID: 21300000, guid: 909e5cab7465c9044bc9be3422ff80ec, type: 3}
   mirrorRenderer: {fileID: 403765450}
   mirrorCleanSprite: {fileID: 21300000, guid: cbf36770bf4e31040a1847b6786ecad2, type: 3}
   mirrorDirtySprite: {fileID: 21300000, guid: 7412baf6c3dc150489360cc6a28dcb89, type: 3}
-  triggerTutorialOnFirstDirtStage: 1
+  triggerTutorialOnDirty: 1
   tutorialOverride: {fileID: 0}
 --- !u!1 &339125356
 GameObject:
@@ -1081,7 +915,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c78ac9ed8425cb841b38e845d7d86287, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Scripts::LevelThreeTimerWinLose
-  levelDurationSeconds: 120
+  levelDurationSeconds: 150
   timerText: {fileID: 905153752}
   coinsTarget: 300
   endSceneName: Level3 - endScene
@@ -1488,7 +1322,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
   ingredientName: eggplant
-  eggplantToOilFx: {fileID: 0}
 --- !u!212 &407841703
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1688,11 +1521,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4561966467305094, guid: fa8d00a30836965448ebdeeffdac87ed, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.1071177
+      value: 1.4378138
       objectReference: {fileID: 0}
     - target: {fileID: 4561966467305094, guid: fa8d00a30836965448ebdeeffdac87ed, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1.054522
+      value: 1.4057052
       objectReference: {fileID: 0}
     - target: {fileID: 4561966467305094, guid: fa8d00a30836965448ebdeeffdac87ed, type: 3}
       propertyPath: m_LocalScale.z
@@ -1700,11 +1533,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4561966467305094, guid: fa8d00a30836965448ebdeeffdac87ed, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.26
+      value: -1.277
       objectReference: {fileID: 0}
     - target: {fileID: 4561966467305094, guid: fa8d00a30836965448ebdeeffdac87ed, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 8
+      value: 8.805
       objectReference: {fileID: 0}
     - target: {fileID: 4561966467305094, guid: fa8d00a30836965448ebdeeffdac87ed, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1943,7 +1776,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
   ingredientName: tahini
-  eggplantToOilFx: {fileID: 0}
 --- !u!212 &600460398
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2196,8 +2028,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u05DE\u05D8\u05E8\u05D4: 003 \u05DE\u05D8\u05D1\u05E2\u05D5\u05EA!"
   m_isRightToLeft: 1
-  m_fontAsset: {fileID: 11400000, guid: 8866ef629fc85854a9b9c90b9712a595, type: 2}
-  m_sharedMaterial: {fileID: -2741306319640557503, guid: 8866ef629fc85854a9b9c90b9712a595, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8a89fa14b10d46a99122fd4f73fca9a2, type: 2}
+  m_sharedMaterial: {fileID: 2140474, guid: 8a89fa14b10d46a99122fd4f73fca9a2, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2403,6 +2235,7 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 269c56fca0535f84a8c291f7e0a1a957, type: 3}
     - {fileID: 21300000, guid: 25f43392e10e4ef4bbadf1f6c546959b, type: 3}
   coinFlyVFX: {fileID: 2099307325}
+  maxMissingItems: 2
 --- !u!4 &824672115
 Transform:
   m_ObjectHideFlags: 0
@@ -2699,7 +2532,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Ingredient
   ingredientName: pitta
-  eggplantToOilFx: {fileID: 0}
 --- !u!212 &884481074
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2833,8 +2665,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8a89fa14b10d46a99122fd4f73fca9a2, type: 2}
+  m_sharedMaterial: {fileID: 2140474, guid: 8a89fa14b10d46a99122fd4f73fca9a2, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2922,6 +2754,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4e0d9ccee5f4950be8979268c9014e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TMPro.Examples.VertexShakeB
+  AngleMultiplier: 1
+  SpeedMultiplier: 1
+  CurveScale: 1
 --- !u!1 &1023514392
 GameObject:
   m_ObjectHideFlags: 0
@@ -4021,7 +3856,7 @@ PrefabInstance:
     - target: {fileID: 3921738937119193159, guid: 6b08bc250a77d5944b63945313d63ca5, type: 3}
       propertyPath: m_fontAsset
       value: 
-      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+      objectReference: {fileID: 11400000, guid: 8a89fa14b10d46a99122fd4f73fca9a2, type: 2}
     - target: {fileID: 3921738937119193159, guid: 6b08bc250a77d5944b63945313d63ca5, type: 3}
       propertyPath: m_fontStyle
       value: 1
@@ -4045,7 +3880,7 @@ PrefabInstance:
     - target: {fileID: 3921738937119193159, guid: 6b08bc250a77d5944b63945313d63ca5, type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+      objectReference: {fileID: 2140474, guid: 8a89fa14b10d46a99122fd4f73fca9a2, type: 2}
     - target: {fileID: 3921738937119193159, guid: 6b08bc250a77d5944b63945313d63ca5, type: 3}
       propertyPath: m_fontColor32.rgba
       value: 4279900698
@@ -4196,6 +4031,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4e0d9ccee5f4950be8979268c9014e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TMPro.Examples.VertexShakeB
+  AngleMultiplier: 1
+  SpeedMultiplier: 1
+  CurveScale: 1
 --- !u!114 &1198266173 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3921738937119193159, guid: 6b08bc250a77d5944b63945313d63ca5, type: 3}
@@ -4453,7 +4291,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
   ingredientName: salad
-  eggplantToOilFx: {fileID: 0}
 --- !u!61 &1352756602
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4688,7 +4525,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
   ingredientName: amba
-  eggplantToOilFx: {fileID: 0}
 --- !u!212 &1437525830
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -5250,7 +5086,6 @@ GameObject:
   - component: {fileID: 1591553244}
   - component: {fileID: 1591553243}
   - component: {fileID: 1591553242}
-  - component: {fileID: 1591553245}
   m_Layer: 0
   m_Name: potatoes
   m_TagString: Untagged
@@ -5390,30 +5225,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
   ingredientName: potatoes
-  eggplantToOilFx: {fileID: 1591553245}
---- !u!114 &1591553245
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1591553240}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 88a8a272e6ac2f349883d2ae54fd9338, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  spawnPoint: {fileID: 1591553241}
-  targetPoint: {fileID: 1628486823}
-  eggplantSprite: {fileID: 21300000, guid: 79f090adfce5cd94db1b47dcea1117e2, type: 3}
-  worldParent: {fileID: 98716865}
-  sortingLayerName: Default
-  sortingOrder: 50
-  duration: 0.55
-  arcOffset: {x: 1, y: 1.2}
-  spinDegrees: -540
-  startScale: 1
-  endScale: 0.25
 --- !u!1 &1615110012
 GameObject:
   m_ObjectHideFlags: 0
@@ -5444,37 +5255,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1628486822
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1628486823}
-  m_Layer: 0
-  m_Name: ninja
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1628486823
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1628486822}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -13.01, y: -2.8, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 98716865}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1711517897
 GameObject:
@@ -5826,7 +5606,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
   ingredientName: chips
-  eggplantToOilFx: {fileID: 0}
 --- !u!212 &1788359169
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -6225,15 +6004,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2411004102100435510, guid: 5014633618047df43ad7a0ff7e8f8edb, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.49875316
+      value: 1.3044784
       objectReference: {fileID: 0}
     - target: {fileID: 2411004102100435510, guid: 5014633618047df43ad7a0ff7e8f8edb, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.49875316
+      value: 1.3044784
       objectReference: {fileID: 0}
     - target: {fileID: 2411004102100435510, guid: 5014633618047df43ad7a0ff7e8f8edb, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.49875316
+      value: 1.3044784
       objectReference: {fileID: 0}
     - target: {fileID: 2411004102100435510, guid: 5014633618047df43ad7a0ff7e8f8edb, type: 3}
       propertyPath: m_LocalPosition.x
@@ -6265,11 +6044,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2411004102100435510, guid: 5014633618047df43ad7a0ff7e8f8edb, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -1788.4
+      value: -1709.3
       objectReference: {fileID: 0}
     - target: {fileID: 2411004102100435510, guid: 5014633618047df43ad7a0ff7e8f8edb, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -30.762024
+      value: 47.41101
       objectReference: {fileID: 0}
     - target: {fileID: 2411004102100435510, guid: 5014633618047df43ad7a0ff7e8f8edb, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -6286,15 +6065,7 @@ PrefabInstance:
     - target: {fileID: 2667152588695233217, guid: 5014633618047df43ad7a0ff7e8f8edb, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: fa59397e3e58cb64dbc8941b97f5afe6, type: 3}
-    - target: {fileID: 5020410163332546927, guid: 5014633618047df43ad7a0ff7e8f8edb, type: 3}
-      propertyPath: muteSprite
-      value: 
-      objectReference: {fileID: 21300000, guid: fa59397e3e58cb64dbc8941b97f5afe6, type: 3}
-    - target: {fileID: 5020410163332546927, guid: 5014633618047df43ad7a0ff7e8f8edb, type: 3}
-      propertyPath: unmuteSprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 53c6e1066ac52434eaf3aa5b2d4a9e43, type: 3}
+      objectReference: {fileID: 21300000, guid: 0098f20eafdb9174e9a3697cf1424a59, type: 3}
     - target: {fileID: 5027448196974177844, guid: 5014633618047df43ad7a0ff7e8f8edb, type: 3}
       propertyPath: m_Name
       value: sound
@@ -6344,7 +6115,6 @@ GameObject:
   - component: {fileID: 2000099189}
   - component: {fileID: 2000099188}
   - component: {fileID: 2000099187}
-  - component: {fileID: 2000099190}
   m_Layer: 0
   m_Name: eggplantrow
   m_TagString: Untagged
@@ -6484,30 +6254,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
   ingredientName: eggplantrow
-  eggplantToOilFx: {fileID: 2000099190}
---- !u!114 &2000099190
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2000099185}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 88a8a272e6ac2f349883d2ae54fd9338, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  spawnPoint: {fileID: 2000099186}
-  targetPoint: {fileID: 1628486823}
-  eggplantSprite: {fileID: 21300000, guid: b95e02b04824aec4b812b16157c1061c, type: 3}
-  worldParent: {fileID: 98716865}
-  sortingLayerName: Default
-  sortingOrder: 50
-  duration: 0.55
-  arcOffset: {x: 1, y: 1.2}
-  spinDegrees: -540
-  startScale: 1
-  endScale: 0.25
 --- !u!1001 &2007574424
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7169,6 +6915,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1080409497}
     - target: {fileID: 4173742809619845330, guid: 4c0914c7c8f14894696d4b40bed48725, type: 3}
+      propertyPath: maxMissingItems
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4173742809619845330, guid: 4c0914c7c8f14894696d4b40bed48725, type: 3}
       propertyPath: orderBubbleRoot
       value: 
       objectReference: {fileID: 1373575005}
@@ -7447,6 +7197,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8220566009105857266}
   - component: {fileID: 6126343218938973799}
+  - component: {fileID: 8220566009105857268}
+  - component: {fileID: 8220566009105857267}
   m_Layer: 0
   m_Name: ScoreManager
   m_TagString: Untagged
@@ -7470,9 +7222,10 @@ MonoBehaviour:
   startMoney: 0
   coinSparkles: {fileID: 1198266174}
   target: 300
-  soundCoins: {fileID: 199604657}
+  soundCoins: {fileID: 8220566009105857267}
   coinSoundStartTime: 3
   scoreAnimator: {fileID: 1198266175}
+  errorSounds: {fileID: 8220566009105857267}
 --- !u!4 &8220566009105857266
 Transform:
   m_ObjectHideFlags: 0
@@ -7488,6 +7241,118 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8220566009105857267
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4603447572229281386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a7e367df0b1ba48addaff28535b2ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  coinClip: {fileID: 8300000, guid: 1874e8f4cacf53744a2c7e2fe0a96fd1, type: 3}
+  negativeClip: {fileID: 8300000, guid: 3a44a6ff02ce8394aad9c3e0694cf316, type: 3}
+  audioSource: {fileID: 8220566009105857268}
+--- !u!82 &8220566009105857268
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4603447572229281386}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 8300000, guid: 1874e8f4cacf53744a2c7e2fe0a96fd1, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -7514,4 +7379,3 @@ SceneRoots:
   - {fileID: 1615110013}
   - {fileID: 1198266169}
   - {fileID: 2076348830}
-  - {fileID: 199604660}

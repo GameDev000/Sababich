@@ -42,6 +42,8 @@ public class CustomerManager : MonoBehaviour
     [Header("Visual FX - Coins Animation")]
     [SerializeField] private CoinFlyVFX coinFlyVFX; // reference to flying coins VFX
 
+    [Header("Removing ingredients")]
+    [SerializeField] private int maxMissingItems = 0; // level 2->1, level 3->2
 
     /// <summary>
     /// Holds per-slot state so we don't duplicate variables (no slot0/slot1/slot2 code).
@@ -172,7 +174,7 @@ public class CustomerManager : MonoBehaviour
 
         // Instantiate + init customer
         slot.customer = Instantiate(customerPrefab, spawnPoint.position, Quaternion.identity);
-        slot.customer.Init(chosen);
+        slot.customer.Init(chosen, maxMissingItems); // Implemented in Customer()
 
         // Register mapping (customer -> slotIndex) so clicks can route quickly
         customerToSlot[slot.customer] = slotIndex;
@@ -264,12 +266,18 @@ public class CustomerManager : MonoBehaviour
         }
 
         Debug.Log("Wrong order!");
-
+        // Negative feedback (sound + red flash)
+        if (ScoreManager.Instance != null)
+        {
+            ScoreManager.Instance.FlashPenaltyUI();
+            ScoreManager.Instance.AddMoney(-5);
+        }
         // Clear selection on wrong order
         SelectionList.Instance.ClearIngredients();
 
-        // Wrong order -> leave immediately
-        StartLeaveSequence(slotIndex);
+        // Show angry + wait + leave
+        StartCoroutine(LeaveAfterWrongFeedback(slotIndex, target, 0.4f)); // Coroutine = action that is performed not all at once
+        return;
     }
 
     /// <summary>
@@ -409,4 +417,19 @@ public class CustomerManager : MonoBehaviour
     {
         return slotIndex >= 0 && slotIndex < slots.Count;
     }
+
+    // Negative indication for serving an incorrect order
+    private IEnumerator LeaveAfterWrongFeedback(int slotIndex, Customer target, float delay)
+    {
+        if (target != null)
+            target.MarkLeaving(); // To lock the client
+
+        if (target != null && target.MoodTimer != null)
+            target.MoodTimer.ShowAngryNow();  // Called from CustomerMoodTimer_levels
+
+        yield return new WaitForSeconds(delay);
+
+        StartLeaveSequence(slotIndex);
+    }
+
 }
