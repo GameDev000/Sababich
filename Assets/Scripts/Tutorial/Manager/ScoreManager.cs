@@ -16,6 +16,8 @@ public class ScoreManager : MonoBehaviour
 
     [SerializeField] private int target = 150;
 
+    [SerializeField] private SoundCoins soundCoins;
+    [SerializeField] private float coinSoundStartTime = 2f;
 
     public int CurrentMoney { get; private set; }
 
@@ -32,6 +34,7 @@ public class ScoreManager : MonoBehaviour
 
         CurrentMoney = startMoney;
         UpdateScoreUI();
+
     }
 
     private void OnEnable()
@@ -90,6 +93,10 @@ public class ScoreManager : MonoBehaviour
     public void AddMoney(int amount)
     {
         CurrentMoney += amount;
+         if (amount > 0 && soundCoins != null)
+        {
+            soundCoins.PlayFromSecond(coinSoundStartTime);
+        }
         UpdateScoreUI();
 
         // Notify active level timers so they can freeze timeLeft the first moment target is reached.
@@ -107,6 +114,12 @@ public class ScoreManager : MonoBehaviour
         else
             Debug.LogWarning("coinSparkles is not assigned on ScoreManager!");
     }
+    public void SetTarget(int newTarget)
+    {
+        target = newTarget;
+        UpdateScoreUI();
+    }   
+
 
     private void UpdateScoreUI()
     {
