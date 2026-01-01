@@ -1700,6 +1700,164 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 446076023}
   m_CullTransparentMesh: 1
+--- !u!1 &469284985
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 469284987}
+  - component: {fileID: 469284986}
+  - component: {fileID: 469284989}
+  - component: {fileID: 469284988}
+  m_Layer: 0
+  m_Name: CoinsSound
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &469284986
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 469284985}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5a26ec5491df8949a214b94bfaad423, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  coinSoundSource: {fileID: 469284988}
+--- !u!4 &469284987
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 469284985}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.76737, y: -0.92799, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &469284988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 469284985}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a7e367df0b1ba48addaff28535b2ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  coinClip: {fileID: 8300000, guid: 1874e8f4cacf53744a2c7e2fe0a96fd1, type: 3}
+  audioSource: {fileID: 469284989}
+--- !u!82 &469284989
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 469284985}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 8300000, guid: 1874e8f4cacf53744a2c7e2fe0a96fd1, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &516804990
 GameObject:
   m_ObjectHideFlags: 0
@@ -1733,8 +1891,9 @@ MonoBehaviour:
   startMoney: 0
   coinSparkles: {fileID: 845215883}
   target: 150
-  soundCoins: {fileID: 0}
-  coinSoundStartTime: 2
+  soundCoins: {fileID: 469284988}
+  coinSoundStartTime: 3
+  scoreAnimator: {fileID: 1260964396}
 --- !u!4 &516804992
 Transform:
   m_ObjectHideFlags: 0
@@ -2062,8 +2221,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 1
-  m_fontAsset: {fileID: 11400000, guid: 8a89fa14b10d46a99122fd4f73fca9a2, type: 2}
-  m_sharedMaterial: {fileID: 2140474, guid: 8a89fa14b10d46a99122fd4f73fca9a2, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8866ef629fc85854a9b9c90b9712a595, type: 2}
+  m_sharedMaterial: {fileID: -2741306319640557503, guid: 8866ef629fc85854a9b9c90b9712a595, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3374,6 +3533,7 @@ GameObject:
   - component: {fileID: 1260964394}
   - component: {fileID: 1260964395}
   - component: {fileID: 1260964393}
+  - component: {fileID: 1260964396}
   m_Layer: 5
   m_Name: ScoreText
   m_TagString: ScoreText
@@ -3412,9 +3572,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4e0d9ccee5f4950be8979268c9014e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TMPro.Examples.VertexShakeB
-  AngleMultiplier: 1
-  SpeedMultiplier: 1
-  CurveScale: 1
 --- !u!222 &1260964394
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3445,8 +3602,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'COINS :'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8a89fa14b10d46a99122fd4f73fca9a2, type: 2}
-  m_sharedMaterial: {fileID: 2140474, guid: 8a89fa14b10d46a99122fd4f73fca9a2, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3514,6 +3671,28 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!95 &1260964396
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1260964391}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 0a7b7039b4fee36408b2ee56cd2c5a5b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1278345111
 GameObject:
   m_ObjectHideFlags: 0
@@ -4573,8 +4752,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u05D4\u05D1\u05E0\u05EA\u05D9"
   m_isRightToLeft: 1
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8866ef629fc85854a9b9c90b9712a595, type: 2}
+  m_sharedMaterial: {fileID: -2741306319640557503, guid: 8866ef629fc85854a9b9c90b9712a595, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -5689,8 +5868,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u05E4\u05E8\u05D9\u05D8\u05D9\u05DD \u05E0\u05D1\u05D7\u05E8\u05D9\u05DD:"
   m_isRightToLeft: 1
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8866ef629fc85854a9b9c90b9712a595, type: 2}
+  m_sharedMaterial: {fileID: -2741306319640557503, guid: 8866ef629fc85854a9b9c90b9712a595, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -6149,3 +6328,4 @@ SceneRoots:
   - {fileID: 1139197420}
   - {fileID: 1497615211}
   - {fileID: 242609445}
+  - {fileID: 469284987}

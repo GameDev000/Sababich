@@ -149,4 +149,13 @@ public class ScoreManager : MonoBehaviour
         scoreAnimator.Play("ScorePenaltyFlash", 0, 0f);
     }
 
+    /// <summary>
+    /// Updates the SFX sound target for coin sounds (set per scene).
+    /// </summary>
+    public void SetSoundCoins( SoundCoins newSoundCoins)
+    {
+        soundCoins = newSoundCoins;
+    }
+
+
 }
