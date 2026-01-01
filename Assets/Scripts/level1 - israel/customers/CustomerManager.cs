@@ -249,7 +249,7 @@ public class CustomerManager : MonoBehaviour
                 coinFlyVFX.PlayCoinsFromWorld(target.transform);
 
             }
-                
+
 
             // Tell THIS customer's timer he was served in time
             if (target.MoodTimer != null)

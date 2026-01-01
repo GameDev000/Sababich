@@ -13,7 +13,7 @@ public class ScoreManager : MonoBehaviour
 
     [Header("Visual FX")]
     [SerializeField] private ParticleSystem coinSparkles;
-   
+
 
     [SerializeField] private int target = 150;
 
