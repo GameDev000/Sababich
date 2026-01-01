@@ -20,7 +20,7 @@ public class ScoreManager : MonoBehaviour
     [SerializeField] private SoundCoins soundCoins;
     [SerializeField] private float coinSoundStartTime = 2f;
 
-
+    [SerializeField] private Animator scoreAnimator; // For negative indication
 
     public int CurrentMoney { get; private set; }
 
@@ -95,6 +95,9 @@ public class ScoreManager : MonoBehaviour
 
     public void AddMoney(int amount)
     {
+        if (amount < 0 && CurrentMoney + amount < 0) // Prevent coins<0
+        return;
+
         CurrentMoney += amount;
         if (amount > 0 && soundCoins != null)
         {
@@ -138,4 +141,12 @@ public class ScoreManager : MonoBehaviour
         CurrentMoney = startMoney;
         UpdateScoreUI();
     }
+
+    // For negative indication
+    public void FlashPenaltyUI()
+    {
+    if (scoreAnimator == null) return;
+    scoreAnimator.Play("ScorePenaltyFlash", 0, 0f);
+    }
+
 }
