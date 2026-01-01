@@ -3,6 +3,8 @@ using UnityEngine;
 public class Item : MonoBehaviour
 {
     [SerializeField] private string ingredientName = "pitta"; //For each click able item-> Updating his name in the Inspector
+    [SerializeField] private EggplantFlyToOilFX_World eggplantToOilFx; // optional FX for eggplantrow
+
     private bool isClickable = true; //Item availability indication at a click
 
 
@@ -15,6 +17,12 @@ public class Item : MonoBehaviour
         if (SelectionList.Instance != null)
         {
             string lower = ingredientName.ToLower();
+            if (lower == "eggplantrow" || lower == "potatoes")
+            {
+                if (eggplantToOilFx != null)
+                    eggplantToOilFx.Play();
+            }
+
 
             if (lower != "eggplantrow" && lower != "fryzone" && lower != "potatoes") //Item that are not "pitta_in_hands". potatoes for level3
             {

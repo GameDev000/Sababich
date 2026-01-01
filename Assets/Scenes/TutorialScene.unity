@@ -705,6 +705,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
   ingredientName: egg
+  eggplantToOilFx: {fileID: 0}
 --- !u!4 &193708190 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4561966467305094, guid: fa8d00a30836965448ebdeeffdac87ed, type: 3}
@@ -863,6 +864,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
   ingredientName: amba
+  eggplantToOilFx: {fileID: 0}
 --- !u!114 &209505838
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1233,6 +1235,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
   ingredientName: amba
+  eggplantToOilFx: {fileID: 0}
 --- !u!212 &313927920
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1478,6 +1481,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
   ingredientName: tahini
+  eggplantToOilFx: {fileID: 0}
 --- !u!212 &428267162
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3280,6 +3284,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
   ingredientName: salad
+  eggplantToOilFx: {fileID: 0}
 --- !u!61 &1070418112
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4541,6 +4546,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
   ingredientName: eggplant
+  eggplantToOilFx: {fileID: 0}
 --- !u!114 &1462907247
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5165,6 +5171,7 @@ GameObject:
   - component: {fileID: 1945780409}
   - component: {fileID: 1945780408}
   - component: {fileID: 1945780407}
+  - component: {fileID: 1945780410}
   m_Layer: 0
   m_Name: eggplantrow
   m_TagString: Untagged
@@ -5304,6 +5311,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
   ingredientName: eggplantrow
+  eggplantToOilFx: {fileID: 1945780410}
+--- !u!114 &1945780410
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1945780405}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88a8a272e6ac2f349883d2ae54fd9338, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  spawnPoint: {fileID: 1945780406}
+  targetPoint: {fileID: 239105896}
+  eggplantSprite: {fileID: 21300000, guid: b95e02b04824aec4b812b16157c1061c, type: 3}
+  worldParent: {fileID: 1278345112}
+  sortingLayerName: Default
+  sortingOrder: 50
+  duration: 0.55
+  arcOffset: {x: 1, y: 1.2}
+  spinDegrees: -540
+  startScale: 1
+  endScale: 0.25
 --- !u!1 &1979139501
 GameObject:
   m_ObjectHideFlags: 0
@@ -5699,6 +5730,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Ingredient
   ingredientName: pitta
+  eggplantToOilFx: {fileID: 0}
 --- !u!1 &2017752750
 GameObject:
   m_ObjectHideFlags: 0
