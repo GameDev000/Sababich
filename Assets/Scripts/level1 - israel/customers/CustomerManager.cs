@@ -39,6 +39,10 @@ public class CustomerManager : MonoBehaviour
     [Header("Customer types (Israel)")]
     [SerializeField] private List<CustomerType> customerTypes;
 
+    [Header("Visual FX - Coins Animation")]
+    [SerializeField] private CoinFlyVFX coinFlyVFX; // reference to flying coins VFX
+
+
     /// <summary>
     /// Holds per-slot state so we don't duplicate variables (no slot0/slot1/slot2 code).
     /// </summary>
@@ -240,7 +244,12 @@ public class CustomerManager : MonoBehaviour
 
             // Add reward
             if (ScoreManager.Instance != null)
+            {
                 ScoreManager.Instance.AddMoney(30);
+                coinFlyVFX.PlayCoinsFromWorld(target.transform);
+
+            }
+                
 
             // Tell THIS customer's timer he was served in time
             if (target.MoodTimer != null)

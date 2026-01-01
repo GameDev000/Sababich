@@ -13,11 +13,14 @@ public class ScoreManager : MonoBehaviour
 
     [Header("Visual FX")]
     [SerializeField] private ParticleSystem coinSparkles;
+   
 
     [SerializeField] private int target = 150;
 
     [SerializeField] private SoundCoins soundCoins;
     [SerializeField] private float coinSoundStartTime = 2f;
+
+
 
     public int CurrentMoney { get; private set; }
 
@@ -97,6 +100,7 @@ public class ScoreManager : MonoBehaviour
         {
             soundCoins.PlayFromSecond(coinSoundStartTime);
         }
+
         UpdateScoreUI();
 
         // Notify active level timers so they can freeze timeLeft the first moment target is reached.
