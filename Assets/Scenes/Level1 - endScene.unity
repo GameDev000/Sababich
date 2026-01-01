@@ -501,7 +501,8 @@ MonoBehaviour:
   successMessage: "\u05DB\u05DC \u05D4\u05DB\u05D1\u05D5\u05D3! \u05E2\u05DE\u05D3\u05EA
     \u05D1\u05DE\u05E9\u05D9\u05DE\u05D4 \u05D4\u05D9\u05E2\u05D3 \u05D4\u05D1\u05D0
     -\u05E1\u05D9\u05DF!"
-  failMessage: "\u05DC\u05D0 \u05E0\u05D5\u05E8\u05D0.. \u05E0\u05E1\u05D4 \u05E9\u05D5\u05D1"
+  failMessage: "\u05E0\u05D2\u05DE\u05E8 \u05D4\u05D6\u05DE\u05DF.. \u05D5\u05DC\u05D0
+    \u05E2\u05DE\u05D3\u05EA \u05D1\u05D9\u05E2\u05D3 \u05E0\u05E1\u05D4 \u05E9\u05E0\u05D9\u05EA"
 --- !u!4 &252420753
 Transform:
   m_ObjectHideFlags: 0
@@ -1201,7 +1202,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4281421163
-  m_fontColor: {r: 0.025157154, g: 0.022415563, b: 0.019856745, a: 1}
+  m_fontColor: {r: 0.19215688, g: 0.0627451, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -2355,7 +2356,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4281421163
-  m_fontColor: {r: 0.41960788, g: 0.3019608, b: 0.19215688, a: 1}
+  m_fontColor: {r: 0.19215688, g: 0.0627451, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
