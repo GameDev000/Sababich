@@ -96,7 +96,7 @@ public class ScoreManager : MonoBehaviour
     public void AddMoney(int amount)
     {
         if (amount < 0 && CurrentMoney + amount < 0) // Prevent coins<0
-        return;
+            return;
 
         CurrentMoney += amount;
         if (amount > 0 && soundCoins != null)
@@ -145,8 +145,8 @@ public class ScoreManager : MonoBehaviour
     // For negative indication
     public void FlashPenaltyUI()
     {
-    if (scoreAnimator == null) return;
-    scoreAnimator.Play("ScorePenaltyFlash", 0, 0f);
+        if (scoreAnimator == null) return;
+        scoreAnimator.Play("ScorePenaltyFlash", 0, 0f);
     }
 
 }

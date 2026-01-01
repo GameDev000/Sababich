@@ -72,10 +72,10 @@ public class SelectionList : MonoBehaviour
 
         if (selectedIngredients.Contains(lower)) // We will not allow double-clicking on the same component
         {
-        ScoreManager.Instance.FlashPenaltyUI();    
-        ScoreManager.Instance.AddMoney(-2);
-        Debug.Log($"Duplicate ingredient in same order: {lower} => -2");
-        return false;
+            ScoreManager.Instance.FlashPenaltyUI();
+            ScoreManager.Instance.AddMoney(-2);
+            Debug.Log($"Duplicate ingredient in same order: {lower} => -2");
+            return false;
         }
 
         // Add the ingredient and refresh UI + pita visual.
