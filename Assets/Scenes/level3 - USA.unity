@@ -1079,7 +1079,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c78ac9ed8425cb841b38e845d7d86287, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Scripts::LevelThreeTimerWinLose
-  levelDurationSeconds: 150
+  levelDurationSeconds: 120
   timerText: {fileID: 905153752}
   coinsTarget: 300
   endSceneName: Level3 - endScene
@@ -6167,15 +6167,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2411004102100435510, guid: 5014633618047df43ad7a0ff7e8f8edb, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.6693618
+      value: 0.49875316
       objectReference: {fileID: 0}
     - target: {fileID: 2411004102100435510, guid: 5014633618047df43ad7a0ff7e8f8edb, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.6693618
+      value: 0.49875316
       objectReference: {fileID: 0}
     - target: {fileID: 2411004102100435510, guid: 5014633618047df43ad7a0ff7e8f8edb, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.6693618
+      value: 0.49875316
       objectReference: {fileID: 0}
     - target: {fileID: 2411004102100435510, guid: 5014633618047df43ad7a0ff7e8f8edb, type: 3}
       propertyPath: m_LocalPosition.x
@@ -6207,11 +6207,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2411004102100435510, guid: 5014633618047df43ad7a0ff7e8f8edb, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -1771.7
+      value: -1788.4
       objectReference: {fileID: 0}
     - target: {fileID: 2411004102100435510, guid: 5014633618047df43ad7a0ff7e8f8edb, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -14.208984
+      value: -30.762024
       objectReference: {fileID: 0}
     - target: {fileID: 2411004102100435510, guid: 5014633618047df43ad7a0ff7e8f8edb, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
