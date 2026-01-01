@@ -152,7 +152,7 @@ public class ScoreManager : MonoBehaviour
     /// <summary>
     /// Updates the SFX sound target for coin sounds (set per scene).
     /// </summary>
-    public void SetSoundCoins( SoundCoins newSoundCoins)
+    public void SetSoundCoins(SoundCoins newSoundCoins)
     {
         soundCoins = newSoundCoins;
     }
