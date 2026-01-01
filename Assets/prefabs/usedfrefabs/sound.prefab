@@ -67,7 +67,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 0098f20eafdb9174e9a3697cf1424a59, type: 3}
+  m_Sprite: {fileID: 21300000, guid: fa59397e3e58cb64dbc8941b97f5afe6, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -146,5 +146,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   buttonImage: {fileID: 2667152588695233217}
-  unmuteSprite: {fileID: 21300000, guid: 50dcec502098c674ea4d2045b2b1b87e, type: 3}
-  muteSprite: {fileID: 21300000, guid: 0098f20eafdb9174e9a3697cf1424a59, type: 3}
+  unmuteSprite: {fileID: 21300000, guid: 53c6e1066ac52434eaf3aa5b2d4a9e43, type: 3}
+  muteSprite: {fileID: 21300000, guid: fa59397e3e58cb64dbc8941b97f5afe6, type: 3}

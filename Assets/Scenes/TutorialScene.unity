@@ -2376,6 +2376,18 @@ PrefabInstance:
       value: 194.04
       objectReference: {fileID: 0}
     - target: {fileID: 2411004102100435510, guid: 5014633618047df43ad7a0ff7e8f8edb, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.54038
+      objectReference: {fileID: 0}
+    - target: {fileID: 2411004102100435510, guid: 5014633618047df43ad7a0ff7e8f8edb, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.54038
+      objectReference: {fileID: 0}
+    - target: {fileID: 2411004102100435510, guid: 5014633618047df43ad7a0ff7e8f8edb, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.54038
+      objectReference: {fileID: 0}
+    - target: {fileID: 2411004102100435510, guid: 5014633618047df43ad7a0ff7e8f8edb, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -2423,6 +2435,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2667152588695233217, guid: 5014633618047df43ad7a0ff7e8f8edb, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: fa59397e3e58cb64dbc8941b97f5afe6, type: 3}
+    - target: {fileID: 5020410163332546927, guid: 5014633618047df43ad7a0ff7e8f8edb, type: 3}
+      propertyPath: muteSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: fa59397e3e58cb64dbc8941b97f5afe6, type: 3}
+    - target: {fileID: 5020410163332546927, guid: 5014633618047df43ad7a0ff7e8f8edb, type: 3}
+      propertyPath: unmuteSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 53c6e1066ac52434eaf3aa5b2d4a9e43, type: 3}
     - target: {fileID: 5027448196974177844, guid: 5014633618047df43ad7a0ff7e8f8edb, type: 3}
       propertyPath: m_Name
       value: sound
