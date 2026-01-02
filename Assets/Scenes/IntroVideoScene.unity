@@ -350,7 +350,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   videoPlayer: {fileID: 897500680}
-  fileName: Intro.mp4
+  fileName: Intro2.mp4
   skipButton: {fileID: 706517028}
   nextSceneName: MainMenu
 --- !u!328 &897500680
@@ -717,7 +717,7 @@ MonoBehaviour:
   m_text: "\u05D3\u05DC\u05D2"
   m_isRightToLeft: 1
   m_fontAsset: {fileID: 11400000, guid: 8866ef629fc85854a9b9c90b9712a595, type: 2}
-  m_sharedMaterial: {fileID: -2741306319640557503, guid: 8866ef629fc85854a9b9c90b9712a595, type: 2}
+  m_sharedMaterial: {fileID: 2140474, guid: 8866ef629fc85854a9b9c90b9712a595, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
