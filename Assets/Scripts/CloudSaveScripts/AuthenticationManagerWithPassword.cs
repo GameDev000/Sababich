@@ -69,6 +69,30 @@ public class AuthenticationManagerWithPassword : MonoBehaviour
     }
 
     /**
+    * Sign in as a guest (anonymous) user.
+    */
+    public async Task<string> LoginAnonymously()
+    {
+        try
+        {
+            // If already signed in, avoid throwing
+            if (AuthenticationService.Instance.IsSignedIn)
+                return $"Guest already signed in. Player ID: {AuthenticationService.Instance.PlayerId}";
+
+            await AuthenticationService.Instance.SignInAnonymouslyAsync();
+            return $"Guest login successful! Player ID: {AuthenticationService.Instance.PlayerId}";
+        }
+        catch (AuthenticationException ex)
+        {
+            return $"Guest login failed: {ex.Message}";
+        }
+        catch (RequestFailedException ex)
+        {
+            return $"Guest login request failed: {ex.Message}";
+        }
+    }
+
+    /**
      * Sign out the current user
      */
     public void SignOut()

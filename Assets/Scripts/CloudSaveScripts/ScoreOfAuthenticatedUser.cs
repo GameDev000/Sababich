@@ -5,9 +5,6 @@ using System.Threading.Tasks;
 using Unity.Services.CloudSave.Models;   // Item + GetAs extensions
 using UnityEngine.SceneManagement;       // SceneManager (resume to saved scene)
 using UnityEngine.UI;                    // for Button
-using UnityEngine.SceneManagement;
-
-
 
 /*
  * This script is the BRIDGE between:
@@ -22,12 +19,17 @@ using UnityEngine.SceneManagement;
  *   so after login we can continue from the same place:
  *   Tutorial / Level1 / Level2 / Level3 / their EndScenes (lose screens).
  * - If resumeScene is empty OR the player already finished everything -> go to MainMenu.
- * */
+ *
+ * === Hebrew + English username support ===
+ * - The user may type a Display Name in Hebrew/English.
+ * - Unity Authentication "username" must be ASCII, so we create/use an internal username.
+ * - We store a mapping in Cloud Save: "user_of_<displayName>" -> "<internalUsername>"
+ */
 public class ScoreOfAuthenticatedUser : MonoBehaviour
 {
     /* ================= UI REFERENCES ================= */
 
-    // Username input (shown to the player)
+    // Username input (shown to the player) - can be Hebrew/English
     [SerializeField] private TMP_InputField usernameInputField;
 
     // In this assignment we authenticate with USERNAME ONLY, so we do NOT read from this field.
@@ -81,13 +83,23 @@ public class ScoreOfAuthenticatedUser : MonoBehaviour
     // Name of Intro Video scene
     [SerializeField] private string introVideoSceneName = "IntroVideoScene";
 
+    // ================== Hebrew display name + internal username ==================
+
+    // Display name typed by the player (can be Hebrew/English). Used for UI + Cloud Save.
+    private string displayName = "";
+
+    // Internal ASCII username used for Unity Authentication.
+    private string internalUsername = "";
+
+    // If true, the player JUST registered now -> Continue button should be plain "Continue".
+    private bool justRegistered = false;
 
     void Awake()
     {
         Debug.Log("ScoreOfAuthenticatedUser Awake");
         // Authentication initialization happens inside AuthenticationManagerWithPassword.Awake()
 
-        //  Ensure tracker doesn't try to save before sign-in (extra safety)
+        // Ensure tracker doesn't try to save before sign-in (extra safety)
         if (progressTracker != null)
             progressTracker.enabled = false;
     }
@@ -109,6 +121,19 @@ public class ScoreOfAuthenticatedUser : MonoBehaviour
         // Prevent "flash" of default Continue button text before async cloud load finishes
         if (continueButton != null) continueButton.interactable = false; // not clickable until we know what to show
         if (continueButtonText != null) continueButtonText.text = "";     // optional: remove Inspector default text
+    }
+
+    // Create an ASCII-only username for Unity Authentication (Display name may be Hebrew/English)
+    private string GenerateInternalUsername()
+    {
+        return "user_" + System.Guid.NewGuid().ToString("N").Substring(0, 10);
+    }
+
+    // Cloud key used to map displayName -> internalUsername
+    private string NameMapKey(string disp)
+    {
+        // Important: use a stable prefix so keys don't collide with other data.
+        return $"user_of_{disp}";
     }
 
     /* ===================================================
@@ -141,22 +166,32 @@ public class ScoreOfAuthenticatedUser : MonoBehaviour
             Debug.LogWarning("[ScoreOfAuthenticatedUser] CloudStateSync not found -> keeping local Level states.");
         }
 
+        // Load resumeScene from cloud
         var data = await DatabaseManager.LoadData("resumeScene");
-
-        // Read resumeScene safely (default is empty string)
         resumeScene = DatabaseManager.ReadString(data, "resumeScene", "");
 
+        // Save displayName + mapping after authentication, so Hebrew login works next time.
+        // We do it here because now we are definitely signed-in and CloudSave is available.
+        if (!string.IsNullOrEmpty(displayName) && !string.IsNullOrEmpty(internalUsername))
+        {
+            await DatabaseManager.SaveData(("displayName", displayName));                  // UI/debug
+            await DatabaseManager.SaveData((NameMapKey(displayName), internalUsername));  // mapping
+        }
+
         // Now we know if user is NEW or EXISTING -> set the Continue button text ONCE (no flash)
-        bool isNewUser = string.IsNullOrEmpty(resumeScene);
+        // "new" should also happen for JUST REGISTERED users (even if resumeScene empty).
+        bool isNewUser = justRegistered || string.IsNullOrEmpty(resumeScene) || resumeScene == mainMenuSceneName;
 
         if (continueButtonText != null)
         {
+            // New user (including just registered) -> plain Continue
+            // Existing user -> "Welcome back..."
             continueButtonText.text = isNewUser
-                ? "נמשיך"
-                : "ברוך שובך,\nנמשיך מהמקום שעצרת";
+                ? "המשך"
+                : "ברוך שובך,\nהמשך מהמקום שעצרת";
         }
 
-        //  Enable the Continue button only after the text is correct
+        // Enable the Continue button only after the text is correct
         if (continueButton != null)
         {
             continueButton.interactable = true;
@@ -164,8 +199,10 @@ public class ScoreOfAuthenticatedUser : MonoBehaviour
 
         UpdateUI();
 
+        // Optional: save username for debugging (as lecturer did)
+        // save internal username (actual Unity Auth username) for debugging
         if (usernameInputField != null)
-            await DatabaseManager.SaveData(("username", usernameInputField.text));
+            await DatabaseManager.SaveData(("username", internalUsername));
 
         enabled = true;
 
@@ -190,12 +227,14 @@ public class ScoreOfAuthenticatedUser : MonoBehaviour
         {
             statusField.gameObject.SetActive(true);
 
-            // If player has no saved progress OR saved progress points to MainMenu -> MainMenu.
-            if (string.IsNullOrEmpty(resumeScene) || resumeScene == mainMenuSceneName)
+            if (isNewUser)
                 statusField.text = "Welcome! Click Continue to go to the main menu...";
             else
                 statusField.text = "Welcome back! Click Continue to resume where you stopped...";
         }
+
+        // Reset flag so future logins behave normally
+        justRegistered = false;
     }
 
     /* ===================================================
@@ -205,10 +244,11 @@ public class ScoreOfAuthenticatedUser : MonoBehaviour
 
     async Task OnButtonClicked(ButtonType type)
     {
-        string username = usernameInputField != null ? usernameInputField.text : "";
+        // Display name can be Hebrew/English
+        displayName = usernameInputField != null ? usernameInputField.text.Trim() : "";
         string password = FIXED_PASSWORD;
 
-        if (string.IsNullOrEmpty(username))
+        if (string.IsNullOrEmpty(displayName))
         {
             if (statusField != null) statusField.text = "Please enter username";
             return;
@@ -218,30 +258,37 @@ public class ScoreOfAuthenticatedUser : MonoBehaviour
 
         if (type == ButtonType.REGISTER)
         {
+            // New user -> generate an ASCII-only internal username for Unity Authentication
+            internalUsername = GenerateInternalUsername();
+            justRegistered = true;
+
             if (statusField != null) statusField.text = "Registering...";
-            message = await authManager.RegisterWithUsernameAndPassword(username, password);
+            message = await authManager.RegisterWithUsernameAndPassword(internalUsername, password);
         }
         else
         {
+            // Existing user login by Hebrew/English display name:
+            // we look up the internal username from Cloud Save mapping.
+            justRegistered = false;
+
+            if (statusField != null) statusField.text = "Looking up user...";
+
+            var lookup = await DatabaseManager.LoadData(NameMapKey(displayName));
+            internalUsername = DatabaseManager.ReadString(lookup, NameMapKey(displayName), "");
+
+            if (string.IsNullOrEmpty(internalUsername))
+            {
+                if (statusField != null) statusField.text = "User not found. Please register first.";
+                return;
+            }
+
             if (statusField != null) statusField.text = "Logging in...";
-            message = await authManager.LoginWithUsernameAndPassword(username, password);
+            message = await authManager.LoginWithUsernameAndPassword(internalUsername, password);
         }
 
         if (statusField != null) statusField.text = message;
 
         /* ========== AUTHENTICATION SUCCESS ========== */
-        // if (message.ToLower().Contains("success"))
-        // {
-        //     // Only proceed if actually signed in
-        //     if (AuthenticationService.Instance.IsSignedIn)
-        //     {
-        //         Initialize();
-        //     }
-        //     else
-        //     {
-        //         AuthenticationService.Instance.SignedIn += Initialize;
-        //     }
-        // }
         if (message.ToLower().Contains("success"))
         {
             if (AuthenticationService.Instance.IsSignedIn)
@@ -253,7 +300,32 @@ public class ScoreOfAuthenticatedUser : MonoBehaviour
                 AuthenticationService.Instance.SignedIn += () => HandlePostAuth(type);
             }
         }
+    }
 
+    // Connected to a NEW UI button: "Guest"
+    // Guest WILL be saved to cloud (anonymous auth) because it still has PlayerId.
+    public async void OnGuestButtonClicked()
+    {
+        if (statusField != null) statusField.text = "Signing in as guest...";
+
+        // Guest has no displayName typed; use a nice UI name and a stable mapping key
+        displayName = "Guest";
+        internalUsername = "guest_" + System.Guid.NewGuid().ToString("N").Substring(0, 8); // not used by anonymous auth
+        justRegistered = true; // treat guest like "new user" for button text
+        string message = await authManager.LoginAnonymously();
+        if (statusField != null) statusField.text = message;
+
+        if (message.ToLower().Contains("success"))
+        {
+            if (AuthenticationService.Instance.IsSignedIn)
+            {
+                Initialize();
+            }
+            else
+            {
+                AuthenticationService.Instance.SignedIn += Initialize;
+            }
+        }
     }
 
     // Connected to UI buttons
@@ -383,7 +455,11 @@ public class ScoreOfAuthenticatedUser : MonoBehaviour
             // Debug/UX text:
             // show what we loaded from the cloud so it's easy to verify during testing.
             string shown = string.IsNullOrEmpty(resumeScene) ? "(none -> MainMenu)" : resumeScene;
-            textField.text = $"Resume Scene: {shown}";
+
+            // Include display name for clarity while testing
+            string shownName = string.IsNullOrEmpty(displayName) ? "(no displayName)" : displayName;
+
+            textField.text = $"DisplayName: {shownName}\nResume Scene: {shown}";
         }
     }
 
@@ -399,5 +475,4 @@ public class ScoreOfAuthenticatedUser : MonoBehaviour
         // Login → skip intro, continue normally
         Initialize();
     }
-
 }
