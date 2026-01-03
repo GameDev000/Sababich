@@ -292,6 +292,7 @@ Transform:
   - {fileID: 884481075}
   - {fileID: 2000099186}
   - {fileID: 1591553241}
+  - {fileID: 1627381846}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &147048394
@@ -467,6 +468,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
   ingredientName: egg
+  eggplantToOilFx: {fileID: 0}
 --- !u!212 &175033958
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -789,12 +791,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88e1d362bce70234c9c62772110a2ed6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  clicksToGetDirty: 6
+  clicksPerStage: 6
   dirtOverlayObject: {fileID: 1174646035}
+  dirtOverlayRenderer: {fileID: 0}
+  dirtStageSprites:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   mirrorRenderer: {fileID: 403765450}
   mirrorCleanSprite: {fileID: 21300000, guid: cbf36770bf4e31040a1847b6786ecad2, type: 3}
   mirrorDirtySprite: {fileID: 21300000, guid: 7412baf6c3dc150489360cc6a28dcb89, type: 3}
-  triggerTutorialOnDirty: 1
+  triggerTutorialOnFirstDirtStage: 1
   tutorialOverride: {fileID: 0}
 --- !u!1 &339125356
 GameObject:
@@ -1322,6 +1330,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
   ingredientName: eggplant
+  eggplantToOilFx: {fileID: 0}
 --- !u!212 &407841703
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1776,6 +1785,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
   ingredientName: tahini
+  eggplantToOilFx: {fileID: 0}
 --- !u!212 &600460398
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2028,8 +2038,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u05DE\u05D8\u05E8\u05D4: 003 \u05DE\u05D8\u05D1\u05E2\u05D5\u05EA!"
   m_isRightToLeft: 1
-  m_fontAsset: {fileID: 11400000, guid: 8a89fa14b10d46a99122fd4f73fca9a2, type: 2}
-  m_sharedMaterial: {fileID: 2140474, guid: 8a89fa14b10d46a99122fd4f73fca9a2, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: ccbea80bbf18a4543939c04c8b892a8c, type: 2}
+  m_sharedMaterial: {fileID: -2367795080497754151, guid: ccbea80bbf18a4543939c04c8b892a8c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2164,6 +2174,7 @@ MonoBehaviour:
     angryFaces:
     - {fileID: 21300000, guid: 86972088847a76d4eadd8f8b4f3636b3, type: 3}
     - {fileID: 21300000, guid: 00e9ec39c39c3b343b8aeaef4b587f40, type: 3}
+    scoreIfNotServed: 0
   - name: full1_no_salad
     sprite: {fileID: 21300000, guid: a8ade122ac11c2d4fbd212c963bd8b2e, type: 3}
     requiredIngredients:
@@ -2178,6 +2189,7 @@ MonoBehaviour:
     angryFaces:
     - {fileID: 21300000, guid: 86972088847a76d4eadd8f8b4f3636b3, type: 3}
     - {fileID: 21300000, guid: 00e9ec39c39c3b343b8aeaef4b587f40, type: 3}
+    scoreIfNotServed: 0
   - name: full2
     sprite: {fileID: 21300000, guid: ab66e26b1e5c72f47b2b354c2479f250, type: 3}
     requiredIngredients:
@@ -2192,6 +2204,7 @@ MonoBehaviour:
     angryFaces:
     - {fileID: 21300000, guid: 15942946be20c8b4e9e5d52037eb2729, type: 3}
     - {fileID: 21300000, guid: 778488006d159b04597bc2eff55fdeb6, type: 3}
+    scoreIfNotServed: 0
   - name: full3
     sprite: {fileID: 21300000, guid: 9365cfdf0a6af05478f16715497a4172, type: 3}
     requiredIngredients:
@@ -2206,6 +2219,7 @@ MonoBehaviour:
     angryFaces:
     - {fileID: 21300000, guid: cf6108857dc147248a8662f89ad3c456, type: 3}
     - {fileID: 21300000, guid: ec07a93f56748df46b33407da825def6, type: 3}
+    scoreIfNotServed: 0
   - name: full4
     sprite: {fileID: 21300000, guid: 4db2ef4b3e099af40b56045c5d930d9e, type: 3}
     requiredIngredients:
@@ -2220,6 +2234,7 @@ MonoBehaviour:
     angryFaces:
     - {fileID: 21300000, guid: ef10a405a369d0340b64557b098ad3d5, type: 3}
     - {fileID: 21300000, guid: 17ca3daab5e235045bae164b643da746, type: 3}
+    scoreIfNotServed: 0
   - name: full5
     sprite: {fileID: 21300000, guid: 87aada0da78c7dc49a4ea93479d16e57, type: 3}
     requiredIngredients:
@@ -2234,6 +2249,22 @@ MonoBehaviour:
     angryFaces:
     - {fileID: 21300000, guid: 269c56fca0535f84a8c291f7e0a1a957, type: 3}
     - {fileID: 21300000, guid: 25f43392e10e4ef4bbadf1f6c546959b, type: 3}
+    scoreIfNotServed: 0
+  - name: not_ToServe_1
+    sprite: {fileID: 21300000, guid: f95b9f80c8ab2d04eb4cab7e8ab04360, type: 3}
+    requiredIngredients:
+    - pitta
+    - salad
+    - egg
+    - eggplant
+    - tahini
+    - amba
+    - chips
+    happyFace: {fileID: 21300000, guid: f95b9f80c8ab2d04eb4cab7e8ab04360, type: 3}
+    angryFaces:
+    - {fileID: 21300000, guid: d7089c3929809204296a14e14c0d13f8, type: 3}
+    - {fileID: 21300000, guid: e15d9359118053e4f9c6ec07a5dd941a, type: 3}
+    scoreIfNotServed: 1
   coinFlyVFX: {fileID: 2099307325}
   maxMissingItems: 2
 --- !u!4 &824672115
@@ -2532,6 +2563,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Ingredient
   ingredientName: pitta
+  eggplantToOilFx: {fileID: 0}
 --- !u!212 &884481074
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2665,8 +2697,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8a89fa14b10d46a99122fd4f73fca9a2, type: 2}
-  m_sharedMaterial: {fileID: 2140474, guid: 8a89fa14b10d46a99122fd4f73fca9a2, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: ccbea80bbf18a4543939c04c8b892a8c, type: 2}
+  m_sharedMaterial: {fileID: -2367795080497754151, guid: ccbea80bbf18a4543939c04c8b892a8c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2754,9 +2786,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4e0d9ccee5f4950be8979268c9014e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TMPro.Examples.VertexShakeB
-  AngleMultiplier: 1
-  SpeedMultiplier: 1
-  CurveScale: 1
 --- !u!1 &1023514392
 GameObject:
   m_ObjectHideFlags: 0
@@ -4031,9 +4060,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4e0d9ccee5f4950be8979268c9014e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TMPro.Examples.VertexShakeB
-  AngleMultiplier: 1
-  SpeedMultiplier: 1
-  CurveScale: 1
 --- !u!114 &1198266173 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3921738937119193159, guid: 6b08bc250a77d5944b63945313d63ca5, type: 3}
@@ -4291,6 +4317,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
   ingredientName: salad
+  eggplantToOilFx: {fileID: 0}
 --- !u!61 &1352756602
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4525,6 +4552,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
   ingredientName: amba
+  eggplantToOilFx: {fileID: 0}
 --- !u!212 &1437525830
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -5086,6 +5114,7 @@ GameObject:
   - component: {fileID: 1591553244}
   - component: {fileID: 1591553243}
   - component: {fileID: 1591553242}
+  - component: {fileID: 1591553245}
   m_Layer: 0
   m_Name: potatoes
   m_TagString: Untagged
@@ -5225,6 +5254,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
   ingredientName: potatoes
+  eggplantToOilFx: {fileID: 1591553245}
+--- !u!114 &1591553245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1591553240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88a8a272e6ac2f349883d2ae54fd9338, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  spawnPoint: {fileID: 1591553241}
+  targetPoint: {fileID: 1627381846}
+  eggplantSprite: {fileID: 21300000, guid: 79f090adfce5cd94db1b47dcea1117e2, type: 3}
+  worldParent: {fileID: 98716865}
+  sortingLayerName: Default
+  sortingOrder: 50
+  duration: 0.55
+  arcOffset: {x: 1, y: 1.2}
+  spinDegrees: -540
+  startScale: 1
+  endScale: 0.25
 --- !u!1 &1615110012
 GameObject:
   m_ObjectHideFlags: 0
@@ -5255,6 +5308,37 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1627381845
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1627381846}
+  m_Layer: 0
+  m_Name: ninja
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1627381846
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1627381845}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -13.04, y: -2.78, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 98716865}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1711517897
 GameObject:
@@ -5606,6 +5690,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
   ingredientName: chips
+  eggplantToOilFx: {fileID: 0}
 --- !u!212 &1788359169
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -6004,15 +6089,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2411004102100435510, guid: 5014633618047df43ad7a0ff7e8f8edb, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.3044784
+      value: 0.38922536
       objectReference: {fileID: 0}
     - target: {fileID: 2411004102100435510, guid: 5014633618047df43ad7a0ff7e8f8edb, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1.3044784
+      value: 0.38922536
       objectReference: {fileID: 0}
     - target: {fileID: 2411004102100435510, guid: 5014633618047df43ad7a0ff7e8f8edb, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.3044784
+      value: 0.38922536
       objectReference: {fileID: 0}
     - target: {fileID: 2411004102100435510, guid: 5014633618047df43ad7a0ff7e8f8edb, type: 3}
       propertyPath: m_LocalPosition.x
@@ -6044,11 +6129,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2411004102100435510, guid: 5014633618047df43ad7a0ff7e8f8edb, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -1709.3
+      value: -1817
       objectReference: {fileID: 0}
     - target: {fileID: 2411004102100435510, guid: 5014633618047df43ad7a0ff7e8f8edb, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 47.41101
+      value: -13
       objectReference: {fileID: 0}
     - target: {fileID: 2411004102100435510, guid: 5014633618047df43ad7a0ff7e8f8edb, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -6065,7 +6150,7 @@ PrefabInstance:
     - target: {fileID: 2667152588695233217, guid: 5014633618047df43ad7a0ff7e8f8edb, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 0098f20eafdb9174e9a3697cf1424a59, type: 3}
+      objectReference: {fileID: 21300000, guid: fa59397e3e58cb64dbc8941b97f5afe6, type: 3}
     - target: {fileID: 5027448196974177844, guid: 5014633618047df43ad7a0ff7e8f8edb, type: 3}
       propertyPath: m_Name
       value: sound
@@ -6115,6 +6200,7 @@ GameObject:
   - component: {fileID: 2000099189}
   - component: {fileID: 2000099188}
   - component: {fileID: 2000099187}
+  - component: {fileID: 2000099190}
   m_Layer: 0
   m_Name: eggplantrow
   m_TagString: Untagged
@@ -6254,6 +6340,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
   ingredientName: eggplantrow
+  eggplantToOilFx: {fileID: 2000099190}
+--- !u!114 &2000099190
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2000099185}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88a8a272e6ac2f349883d2ae54fd9338, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  spawnPoint: {fileID: 2000099186}
+  targetPoint: {fileID: 1627381846}
+  eggplantSprite: {fileID: 21300000, guid: b95e02b04824aec4b812b16157c1061c, type: 3}
+  worldParent: {fileID: 98716865}
+  sortingLayerName: Default
+  sortingOrder: 50
+  duration: 0.55
+  arcOffset: {x: 1, y: 1.2}
+  spinDegrees: -540
+  startScale: 1
+  endScale: 0.25
 --- !u!1001 &2007574424
 PrefabInstance:
   m_ObjectHideFlags: 0

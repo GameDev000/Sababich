@@ -13,4 +13,7 @@ public class CustomerType
     [Header("Mood Sprites")]
     public Sprite happyFace;
     public Sprite[] angryFaces;
+    [Header("Special Rules")]
+    public bool scoreIfNotServed = false;
+
 }

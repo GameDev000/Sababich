@@ -201,11 +201,28 @@ public class CustomerManager : MonoBehaviour
     /// <summary>
     /// Called when a customer's mood timer finishes (served or time-up), for a SPECIFIC slot.
     /// </summary>
+
     private void OnCustomerFinishedInSlot(int slotIndex, bool served)
     {
-        // Customer is done -> leave sequence
+        if (!IsValidSlot(slotIndex)) return;
+
+        SlotState slot = slots[slotIndex];
+        Customer c = slot.customer;
+
+        if (!served && c != null && c.Data.scoreIfNotServed)
+        {
+            Debug.Log("Special customer: NOT served → reward!");
+
+            if (ScoreManager.Instance != null)
+            {
+                ScoreManager.Instance.AddMoney(30);
+                coinFlyVFX.PlayCoinsFromWorld(c.transform);
+            }
+        }
+
         StartLeaveSequence(slotIndex);
     }
+
 
     /// <summary>
     /// Serves the customer that was clicked.
@@ -244,12 +261,26 @@ public class CustomerManager : MonoBehaviour
         {
             Debug.Log("Correct order!");
 
-            // Add reward
-            if (ScoreManager.Instance != null)
+            if (!target.Data.scoreIfNotServed)
             {
-                ScoreManager.Instance.AddMoney(30);
-                coinFlyVFX.PlayCoinsFromWorld(target.transform);
+                // Add reward
+                if (ScoreManager.Instance != null)
+                {
+                    ScoreManager.Instance.AddMoney(30);
+                    coinFlyVFX.PlayCoinsFromWorld(target.transform);
 
+                }
+            }
+            else
+            {
+                if (ScoreManager.Instance != null)
+                {
+                    ScoreManager.Instance.FlashPenaltyUI();
+                }
+                // Show angry + wait + leave
+                StartCoroutine(LeaveAfterWrongFeedback(slotIndex, target, 0.4f));
+                Debug.Log("Special customer: served but NO score.");
+                return;
             }
 
 
@@ -276,7 +307,7 @@ public class CustomerManager : MonoBehaviour
         SelectionList.Instance.ClearIngredients();
 
         // Show angry + wait + leave
-        StartCoroutine(LeaveAfterWrongFeedback(slotIndex, target, 0.4f)); // Coroutine = action that is performed not all at once
+        StartCoroutine(LeaveAfterWrongFeedback(slotIndex, target, 0.4f));
         return;
     }
 
