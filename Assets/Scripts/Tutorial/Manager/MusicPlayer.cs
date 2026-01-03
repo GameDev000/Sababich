@@ -103,4 +103,25 @@ public class MusicPlayer : MonoBehaviour
     }
     public Track[] GetTracks() => tracks;
 
+
+    public void PauseMusic()
+    {
+        if (audioSource == null) return;
+        if (audioSource.isPlaying) audioSource.Pause();
+    }
+
+    public void ResumeMusic()
+    {
+        if (audioSource == null) return;
+        if (!audioSource.mute && audioSource.clip != null && !audioSource.isPlaying)
+            audioSource.UnPause();
+    }
+
+    public void StopMusic()
+    {
+        if (audioSource == null) return;
+        audioSource.Stop();
+    }
+
+
 }

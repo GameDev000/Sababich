@@ -2263,7 +2263,6 @@ MonoBehaviour:
     happyFace: {fileID: 21300000, guid: f95b9f80c8ab2d04eb4cab7e8ab04360, type: 3}
     angryFaces:
     - {fileID: 21300000, guid: d7089c3929809204296a14e14c0d13f8, type: 3}
-    - {fileID: 21300000, guid: e15d9359118053e4f9c6ec07a5dd941a, type: 3}
     scoreIfNotServed: 1
   coinFlyVFX: {fileID: 2099307325}
   maxMissingItems: 2

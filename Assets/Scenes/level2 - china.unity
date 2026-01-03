@@ -1335,7 +1335,6 @@ MonoBehaviour:
     happyFace: {fileID: 631383137157731774, guid: 9532189d6153b0a44a26d00b91076d93, type: 3}
     angryFaces:
     - {fileID: 1416934472522487765, guid: cb5e48e43a8c9c947be973b903c28b7d, type: 3}
-    - {fileID: 5242136313942155814, guid: 204f0289b8ffe8f499ada8184c1c69d5, type: 3}
     scoreIfNotServed: 1
   - name: full4
     sprite: {fileID: 21300000, guid: ea35b0cf1a57def419f26004b8d4b1d2, type: 3}
