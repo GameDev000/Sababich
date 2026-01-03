@@ -1816,6 +1816,34 @@ MonoBehaviour:
     - {fileID: 21300000, guid: f5bda3816e8bbe0459f881a49bddac40, type: 3}
     - {fileID: 21300000, guid: 13459c98311053945b58efeb580e42fd, type: 3}
     scoreIfNotServed: 1
+  - name: full4
+    sprite: {fileID: 21300000, guid: 0205e5d61a7e24944a90b3c23d5d093a, type: 3}
+    requiredIngredients:
+    - pitta
+    - salad
+    - egg
+    - eggplant
+    - tahini
+    - amba
+    happyFace: {fileID: 21300000, guid: 0205e5d61a7e24944a90b3c23d5d093a, type: 3}
+    angryFaces:
+    - {fileID: 21300000, guid: ba64580995093874285eb1bafd0ff8b2, type: 3}
+    - {fileID: 21300000, guid: 9a9ac24f3e6eebf4aac9876fbe02ac16, type: 3}
+    scoreIfNotServed: 0
+  - name: full5
+    sprite: {fileID: 21300000, guid: 880ed80d8a5b6e6459c64401e34839cc, type: 3}
+    requiredIngredients:
+    - pitta
+    - salad
+    - egg
+    - eggplant
+    - tahini
+    - amba
+    happyFace: {fileID: 21300000, guid: 880ed80d8a5b6e6459c64401e34839cc, type: 3}
+    angryFaces:
+    - {fileID: 21300000, guid: 6c19786ea9b9dc54ba02a434ba92b3ac, type: 3}
+    - {fileID: 21300000, guid: a8675d518e7350c41b056f7eb2c4ea88, type: 3}
+    scoreIfNotServed: 0
   coinFlyVFX: {fileID: 906972935}
   maxMissingItems: 0
 --- !u!4 &485516105
