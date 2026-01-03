@@ -79,7 +79,7 @@ public class CustomerManager : MonoBehaviour
 
     private void Start()
     {
-         if (PlayerFaceStore.HasAll)
+        if (PlayerFaceStore.HasAll)
         {
             RegisterPlayerCustomer(PlayerFaceStore.Happy, PlayerFaceStore.Angry, PlayerFaceStore.Furious);
         }
