@@ -37,7 +37,7 @@ public class CustomerManager : MonoBehaviour
     [SerializeField] private float defaultRespawnDelay = 0f;
 
     [Header("Customer types (Israel)")]
-    [SerializeField] private List<CustomerType> customerTypes;
+    [SerializeField] private List<CustomerType> customerTypes = new List<CustomerType>();
 
     [Header("Visual FX - Coins Animation")]
     [SerializeField] private CoinFlyVFX coinFlyVFX; // reference to flying coins VFX
@@ -79,6 +79,10 @@ public class CustomerManager : MonoBehaviour
 
     private void Start()
     {
+         if (PlayerFaceStore.HasAll)
+        {
+            RegisterPlayerCustomer(PlayerFaceStore.Happy, PlayerFaceStore.Angry, PlayerFaceStore.Furious);
+        }
         BuildSlotsFromInspector(); // Read standPoints + delays, create slots list
         StartAllSlots();           // Spawn customers in each slot according to delays
     }
@@ -279,6 +283,7 @@ public class CustomerManager : MonoBehaviour
                 }
                 // Show angry + wait + leave
                 StartCoroutine(LeaveAfterWrongFeedback(slotIndex, target, 0.4f));
+                SelectionList.Instance.ClearIngredients();
                 Debug.Log("Special customer: served but NO score.");
                 return;
             }
@@ -462,5 +467,34 @@ public class CustomerManager : MonoBehaviour
 
         StartLeaveSequence(slotIndex);
     }
+
+    public void AddCustomerType(CustomerType type)
+    {
+        if (type == null) return;
+        if (customerTypes == null) customerTypes = new List<CustomerType>();
+
+        // avoid duplicates
+        if (!customerTypes.Contains(type))
+            customerTypes.Add(type);
+    }
+
+    public void RegisterPlayerCustomer(Sprite happy, Sprite angry, Sprite furious)
+    {
+        if (customerTypes == null || customerTypes.Count == 0)
+        {
+            Debug.LogWarning("RegisterPlayerCustomer: customerTypes is empty (no base type).");
+            return;
+        }
+
+        CustomerType baseType = customerTypes[0];
+
+        CustomerType playerType =
+            RuntimeCustomerFactory.CreateFromBase(baseType, happy, angry, furious, "player_customer");
+
+        AddCustomerType(playerType);
+    }
+
+
+
 
 }
