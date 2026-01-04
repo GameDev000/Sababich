@@ -1,5 +1,6 @@
 using UnityEngine.SceneManagement;
 using UnityEngine;
+using System.Collections;
 
 /// <summary>
 /// Manages the tutorial flow, guiding the player through frying eggplant and building a sandwich.
@@ -67,6 +68,17 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] private float faucetArrowYOffset = 2f;
     [SerializeField] private Transform backArrowTarget;
     [SerializeField] private float backArrowYOffset = 2f;
+
+    [Header("Tutorial Forbidden Customer")]
+    [SerializeField] private int forbiddenCustomerIndex = 2;
+    [SerializeField] private int rewardAmount = 30;
+    [SerializeField] private float forbiddenWaitSeconds = 5f;
+    [SerializeField] private bool currentCustomerWasServed = false;
+    private bool forbiddenFlowActive = false;
+
+    private Coroutine forbiddenRoutine;
+
+
 
     private int savedBuildStep = 0;
     private bool hasSavedBuildStep = false;
@@ -239,56 +251,109 @@ public class TutorialManager : MonoBehaviour
     /// </summary>
     public void CustomerOrderServed()
     {
+        if (forbiddenFlowActive && servedCustomers == forbiddenCustomerIndex)
+        {
+            ShowArrow(false);
+            SetGamePhase(GamePhase.ForbiddenCustomerWarning);
+            return;
+        }
+
         Debug.Log("[Tutorial] Customer served successfully");
         ShowArrow(false);
 
         if (ScoreManager.Instance != null)
-            ScoreManager.Instance.AddMoney(30); // Reward the player with money for serving the customer
-        SetGamePhase(GamePhase.NextCustomer); // Update game phase to next customer
+            ScoreManager.Instance.AddMoney(30);
+
+        if (customerLogic != null)
+            customerLogic.CustomerServed();
+
+        SetGamePhase(GamePhase.NextCustomer);
     }
+
+
 
     /// <summary>
     /// Starts a new customer round in the tutorial.
     /// </summary>
-    private void StartCustomerRound()
-    {
-        if (servedCustomers == 0) // First customer - start with frying eggplant
+       private void StartCustomerRound()
         {
-            phase = TutorialPhase.FryEggplant; // Switch to fry eggplant phase
-            buildStep = 0; // Reset build step
+            UpdateCustomerSprite();
 
-            if (eggplantItem != null)
-                eggplantItem.SetClickable(true); // Enable eggplant item
+            if (customerLogic != null)
+                customerLogic.ResetCustomer();
 
-            SetAllOtherItemsClickable(false); // Disable all other items
-            ShowArrowAbove(eggplantItem ? eggplantItem.transform : null, 2.5f); // Show arrow above eggplant item
-            SetGamePhase(GamePhase.AddRowEggplant); // Update game phase to add row eggplant
-        }
-        else
-        {
-            phase = TutorialPhase.BuildSandwich; // Switch to build sandwich phase if not the first customer
-            buildStep = 0; // Reset build step
+            currentCustomerWasServed = false;
 
-            if (eggplantItem != null)
-                eggplantItem.SetClickable(false);
-
-            SetAllOtherItemsClickable(false); // Disable all other items
-
-            // Enable the first other item for sandwich building
-            if (otherItems != null && otherItems.Length > 0 && otherItems[0] != null)
+            if (servedCustomers == forbiddenCustomerIndex)
             {
-                otherItems[0].SetClickable(true);
-                ShowArrowAbove(otherItems[0].transform, 2f); // Show arrow above the first item
+                forbiddenFlowActive = true;
+
+                if (eggplantItem != null) eggplantItem.SetClickable(false);
+                SetAllOtherItemsClickable(false);
+                ShowArrow(false);
+
+                SetGamePhase(GamePhase.ForbiddenCustomerWarning);
+
+                if (forbiddenRoutine != null) StopCoroutine(forbiddenRoutine);
+                forbiddenRoutine = StartCoroutine(ForbiddenCustomerAutoLeaveRoutine());
+                return;
             }
 
-            SetGamePhase(GamePhase.AssembleDish); // Update game phase to assemble dish
+            if (servedCustomers == 0)
+            {
+                phase = TutorialPhase.FryEggplant;
+                buildStep = 0;
+
+                if (eggplantItem != null)
+                    eggplantItem.SetClickable(true);
+
+                SetAllOtherItemsClickable(false);
+                ShowArrowAbove(eggplantItem ? eggplantItem.transform : null, 2.5f);
+                SetGamePhase(GamePhase.AddRowEggplant);
+            }
+            else
+            {
+                phase = TutorialPhase.BuildSandwich;
+                buildStep = 0;
+
+                if (eggplantItem != null)
+                    eggplantItem.SetClickable(false);
+
+                SetAllOtherItemsClickable(false);
+
+                if (otherItems != null && otherItems.Length > 0 && otherItems[0] != null)
+                {
+                    otherItems[0].SetClickable(true);
+                    ShowArrowAbove(otherItems[0].transform, 2f);
+                }
+
+                SetGamePhase(GamePhase.AssembleDish);
+            }
         }
 
-        UpdateCustomerSprite(); // Update the customer sprite based on the number of served customers
 
-        if (customerLogic != null)
-            customerLogic.ResetCustomer(); // Reset the customer logic for the new round
+    // /// <summary>
+    // /// Holds the ORIGINAL round logic exactly as before (no warning logic here).
+    // /// </summary>
+
+    private IEnumerator ForbiddenCustomerAutoLeaveRoutine()
+    {
+        yield return new WaitForSeconds(forbiddenWaitSeconds);
+
+        if (ScoreManager.Instance != null)
+        {
+            ScoreManager.Instance.AddMoney(rewardAmount);
+
+        }
+            
+        yield return new WaitForSeconds(1);
+       // yield return StartCoroutine(WalkCustomerOutRoutine());
+
+        forbiddenFlowActive = false;
+
+        OnCustomerLeftScene();
     }
+
 
 
     /// <summary>
@@ -352,22 +417,29 @@ public class TutorialManager : MonoBehaviour
     /// <summary>
     /// Called when the customer has left the scene.
     /// </summary>
+
     public void OnCustomerLeftScene()
     {
         Debug.Log("[Tutorial] Customer left scene");
 
+        if (servedCustomers == forbiddenCustomerIndex && !currentCustomerWasServed)
+        {
+            if (ScoreManager.Instance != null)
+                ScoreManager.Instance.AddMoney(rewardAmount);
+        }
+
         servedCustomers++;
-        Debug.Log("[Tutorial] Customers served in tutorial: " + servedCustomers);
 
         if (servedCustomers < tutorialCustomersCount)
         {
-            StartCustomerRound(); // Start a new customer round if there are more customers to serve
+            StartCustomerRound();
         }
         else
         {
-            SceneManager.LoadScene("TutorialEndScene"); // Load the tutorial end scene after serving all customers
+            SceneManager.LoadScene("TutorialEndScene");
         }
     }
+
 
     public void OnChipsFried(FryZoneIngredient zone)
     {
@@ -460,6 +532,12 @@ public class TutorialManager : MonoBehaviour
 
         SetGamePhase(GamePhase.AssembleDish);
     }
+
+    private void GoNextCustomerFromWarning()
+    {
+        SetGamePhase(GamePhase.NextCustomer);
+    }
+
 
 
 

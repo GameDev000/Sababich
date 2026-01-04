@@ -61,8 +61,18 @@ public class GameFlowManager : MonoBehaviour
             case GamePhase.GoBackToStand:
                 uiInstructions.SetInstructions("מעולה! עכשיו לחץ על החץ כדי להמשיך לבנות את הכריך.");
                 break;
+            case GamePhase.ForbiddenCustomerWarning:
+                uiInstructions.SetInstructions("רגע! הלקוח הנוכחי רגיש לגלוטן אסור להגיש לו מנה בכלל!");
+    break;
 
         }
     }
+
+    public void ShowTutorialMessage(string text)
+    {
+        if (uiInstructions == null) return;
+        uiInstructions.SetInstructions(text);
+    }
+
 
 }
