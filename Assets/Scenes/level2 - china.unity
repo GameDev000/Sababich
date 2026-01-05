@@ -1599,8 +1599,8 @@ MonoBehaviour:
   coinFlyVFX: {fileID: 95312388}
   maxMissingItems: 1
   baseOrderReward: 30
-  level1PenaltyPerMistake: 5
-  level2And3PenaltyPerMistake: 4
+  level1PenaltyPerMistake: 10
+  level2And3PenaltyPerMistake: 10
   levelNumber: 2
   instructionManager: {fileID: 1891575256}
   shouldRunInstructions_level2: 1
