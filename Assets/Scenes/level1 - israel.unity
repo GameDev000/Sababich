@@ -1391,8 +1391,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u05DE\u05D8\u05E8\u05D4: 051 \u05DE\u05D8\u05D1\u05E2\u05D5\u05EA!"
   m_isRightToLeft: 1
-  m_fontAsset: {fileID: 11400000, guid: ccbea80bbf18a4543939c04c8b892a8c, type: 2}
-  m_sharedMaterial: {fileID: -2367795080497754151, guid: ccbea80bbf18a4543939c04c8b892a8c, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: a451420d173700c4b8b7eb12ced14bc3, type: 2}
+  m_sharedMaterial: {fileID: 879360639341279661, guid: a451420d173700c4b8b7eb12ced14bc3, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2000,8 +2000,7 @@ MonoBehaviour:
   coinFlyVFX: {fileID: 906972935}
   maxMissingItems: 0
   baseOrderReward: 30
-  level1PenaltyPerMistake: 10
-  level2And3PenaltyPerMistake: 10
+  wrongDishPenalty: -5
   levelNumber: 1
   instructionManager: {fileID: 0}
   shouldRunInstructions_level2: 1
