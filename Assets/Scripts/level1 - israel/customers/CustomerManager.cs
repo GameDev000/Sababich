@@ -729,7 +729,7 @@ public class CustomerManager : MonoBehaviour
         {
             target.MoodTimer.ShowAngryNow(target);  // Called from CustomerMoodTimer_levels
         }
-            
+
 
         yield return new WaitForSeconds(delay);
 

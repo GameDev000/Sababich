@@ -86,13 +86,13 @@ public class CustomerMoodTimer_levels : MonoBehaviour
     /// </summary>
     public void ShowAngryNow(Customer target = null)
     {
-        if(!target.Data.scoreIfNotServed)
+        if (!target.Data.scoreIfNotServed)
         {
             if (spriteRenderer == null) spriteRenderer = GetComponent<SpriteRenderer>();
-                if (angryStages == null || angryStages.Length == 0) return;
+            if (angryStages == null || angryStages.Length == 0) return;
 
-                // show first angry stage
-                SetSprite(angryStages[0]);  
+            // show first angry stage
+            SetSprite(angryStages[0]);
         }
         else
         {
@@ -104,10 +104,10 @@ public class CustomerMoodTimer_levels : MonoBehaviour
             else
             {
                 if (angryStages == null || angryStages.Length == 0) return;
-                    SetSprite(angryStages[0]);
+                SetSprite(angryStages[0]);
             }
         }
-    
+
 
     }
 

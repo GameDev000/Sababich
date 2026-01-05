@@ -21,7 +21,7 @@ public class Customer : MonoBehaviour
 
     private Dictionary<string, IngredientIconInfo> iconLookup; // For quick lookup of ingredient icons by ID
 
-    
+
     private void Awake()
     {
         iconLookup = new Dictionary<string, IngredientIconInfo>();
