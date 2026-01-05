@@ -1849,6 +1849,9 @@ MonoBehaviour:
   level1PenaltyPerMistake: 5
   level2And3PenaltyPerMistake: 4
   levelNumber: 1
+  instructionManager: {fileID: 0}
+  shouldRunInstructions_level2: 1
+  shouldRunInstructions_level3: 1
 --- !u!4 &485516105
 Transform:
   m_ObjectHideFlags: 0
@@ -3255,6 +3258,7 @@ MonoBehaviour:
   chipsFryer: {fileID: 0}
   eggplantTrayState: {fileID: 29336336}
   chipsTrayState: {fileID: 0}
+  instructionManager: {fileID: 0}
 --- !u!4 &1335267674
 Transform:
   m_ObjectHideFlags: 0
@@ -4773,6 +4777,18 @@ PrefabInstance:
     - target: {fileID: 5685002111636968182, guid: 342c60323b8fa884d828441a9c84b770, type: 3}
       propertyPath: m_Name
       value: Score
+      objectReference: {fileID: 0}
+    - target: {fileID: 5774076340649763171, guid: 342c60323b8fa884d828441a9c84b770, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 1163.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 5774076340649763171, guid: 342c60323b8fa884d828441a9c84b770, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 1570.89
+      objectReference: {fileID: 0}
+    - target: {fileID: 6538134952314294083, guid: 342c60323b8fa884d828441a9c84b770, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 1512
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
