@@ -103,3 +103,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 177a1a8a514362b42af5e8cd3481fb2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  spriteRenderer: {fileID: 0}
+  orderBubbleRoot: {fileID: 0}
+  iconsParent: {fileID: 0}
+  iconPrefab: {fileID: 0}
+  ingredientIcons: []
+  moodTimer: {fileID: 0}

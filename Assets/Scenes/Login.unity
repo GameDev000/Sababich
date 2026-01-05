@@ -1336,8 +1336,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u05D4\u05EA\u05D7\u05D1\u05E8\u05D5\u05EA"
   m_isRightToLeft: 1
-  m_fontAsset: {fileID: 11400000, guid: ccbea80bbf18a4543939c04c8b892a8c, type: 2}
-  m_sharedMaterial: {fileID: -2367795080497754151, guid: ccbea80bbf18a4543939c04c8b892a8c, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8866ef629fc85854a9b9c90b9712a595, type: 2}
+  m_sharedMaterial: {fileID: 2140474, guid: 8866ef629fc85854a9b9c90b9712a595, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2280,9 +2280,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScoreOfAuthenticatedUser
   usernameInputField: {fileID: 1411364829}
+  passwordInputField: {fileID: 0}
   statusField: {fileID: 2093590166}
+  signInPanel: {fileID: 0}
+  gamePanel: {fileID: 0}
+  textField: {fileID: 0}
+  continueButton: {fileID: 0}
+  continueButtonText: {fileID: 0}
   authManager: {fileID: 1107756959}
   mainMenuSceneName: MainMenu
+  progressTracker: {fileID: 0}
+  cloudStateSync: {fileID: 0}
   introVideoSceneName: IntroVideoScene
 --- !u!4 &1116581130
 Transform:
@@ -3220,8 +3228,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u200B"
   m_isRightToLeft: 1
-  m_fontAsset: {fileID: 11400000, guid: ccbea80bbf18a4543939c04c8b892a8c, type: 2}
-  m_sharedMaterial: {fileID: -2367795080497754151, guid: ccbea80bbf18a4543939c04c8b892a8c, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8866ef629fc85854a9b9c90b9712a595, type: 2}
+  m_sharedMaterial: {fileID: 2140474, guid: 8866ef629fc85854a9b9c90b9712a595, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3354,7 +3362,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
