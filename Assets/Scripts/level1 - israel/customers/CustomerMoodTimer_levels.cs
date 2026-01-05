@@ -119,4 +119,9 @@ public class CustomerMoodTimer_levels : MonoBehaviour
         ResetTimer();// Start the timer
     }
 
+    public void SetRenderer(SpriteRenderer r)
+    {
+        spriteRenderer = r;
+    }
+
 }

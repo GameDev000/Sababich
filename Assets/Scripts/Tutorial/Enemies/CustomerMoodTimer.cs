@@ -101,4 +101,9 @@ public class CustomerMoodTimer : MonoBehaviour
         if (spriteRenderer != null && moodFaces != null && moodFaces.Length > 0)
             spriteRenderer.sprite = moodFaces[0]; // Reset to initial mood face
     }
+    public void SetRenderer(SpriteRenderer r)
+    {
+        spriteRenderer = r;
+    }
+
 }

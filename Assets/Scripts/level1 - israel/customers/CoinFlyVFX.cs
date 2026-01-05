@@ -25,6 +25,17 @@ public class CoinFlyVFX : MonoBehaviour
     [SerializeField] private float endPunch = 0.08f;          // Optional small punch at the end (UI feel)
     int indexreword = 5;
 
+
+    [Header("Reward Text")]
+    [SerializeField] private RectTransform rewardTextPrefab; // TMP or Image prefab (RectTransform)
+    [SerializeField] private Vector2 rewardOffsetPixels = new Vector2(0f, 50f);
+    [SerializeField] private float rewardDuration = 0.7f;
+    [SerializeField] private float rewardEndScale = 1.0f;
+    [Header("Penalty Text")]
+    [SerializeField] private RectTransform penaltyTextPrefab; // UI prefab for "-5"
+
+
+
     private Coroutine punchRoutine;
 
 
@@ -32,26 +43,27 @@ public class CoinFlyVFX : MonoBehaviour
     /// Call this when you add money.
     /// worldFrom = customer transform (world position).
     /// </summary>
-    public void PlayCoinsFromWorld(Transform worldFrom)
+    public void PlayCoinsFromWorld(Transform worldFrom, int amount = 30)
     {
         if (uiCanvas == null || targetCoinUI == null || spawnParent == null || flyingCoinPrefab == null)
         {
             Debug.LogWarning("CoinFlyVFX: Missing references in Inspector.");
             return;
         }
-
         if (worldFrom == null)
         {
             Debug.LogWarning("CoinFlyVFX: worldFrom is null.");
             return;
         }
 
-        // Spawn multiple flying coins for a nicer effect
+        if (rewardTextPrefab != null)
+            StartCoroutine(SpawnAndFlyRewardText(worldFrom.position, amount, rewardTextPrefab));
+
+        // 2) מטבעות (כמו שיש לך)
         for (int i = 0; i < coinsPerReward; i++)
-        {
             StartCoroutine(SpawnAndFlyOneCoin(worldFrom.position));
-        }
     }
+
 
     /// <summary>
     /// Spawns one coin and animates it from world position to UI target.
@@ -208,4 +220,78 @@ public class CoinFlyVFX : MonoBehaviour
         float it = 1f - t;
         return it * it * a + 2f * it * t * m + t * t * b;
     }
+
+    private IEnumerator SpawnAndFlyRewardText(Vector3 worldPos, int amount, RectTransform prefab)
+    {
+        Camera cam = uiCanvas.worldCamera != null ? uiCanvas.worldCamera : Camera.main;
+        if (cam == null) yield break;
+
+        // World -> Screen
+        Vector2 startScreen = cam.WorldToScreenPoint(worldPos);
+        startScreen += rewardOffsetPixels;
+
+        // Screen -> Local (spawnParent space)
+        if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(spawnParent, startScreen, cam, out Vector2 startLocal))
+            yield break;
+
+        // Spawn
+        RectTransform rt = Instantiate(prefab, spawnParent);
+        rt.anchoredPosition = startLocal;
+        rt.localScale = Vector3.one;
+
+        // If TMP exists - set text
+        var tmp = rt.GetComponent<TMPro.TMP_Text>();
+        if (tmp != null)
+        {
+            // amount is either +X or -X
+            tmp.text = amount > 0 ? $"+{amount}" : amount.ToString();
+        }
+
+        // Optional CanvasGroup fade
+        CanvasGroup cg = rt.GetComponent<CanvasGroup>();
+        if (cg != null) cg.alpha = 1f;
+
+        // יעד: עולה למעלה ונעלם (ל-UI feel)
+        Vector2 targetLocal = startLocal + new Vector2(0f, 120f);
+        Vector2 mid = (startLocal + targetLocal) * 0.5f + Vector2.up * 60f;
+
+        float t = 0f;
+        Vector3 startScale = Vector3.one;
+
+        while (t < rewardDuration)
+        {
+            t += Time.deltaTime;
+            float u = Mathf.Clamp01(t / rewardDuration);
+            float s = u * u * (3f - 2f * u);
+
+            rt.anchoredPosition = Bezier2(startLocal, mid, targetLocal, s);
+            rt.localScale = Vector3.Lerp(startScale, Vector3.one * rewardEndScale, s);
+
+            if (cg != null)
+                cg.alpha = Mathf.Lerp(1f, 0f, s);
+
+            yield return null;
+        }
+
+        Destroy(rt.gameObject);
+    }
+
+
+
+    /// <summary>
+    /// Call this when you REMOVE money (bad dish, mistake, etc.)
+    /// </summary>
+    public void PlayPenaltyFromWorld(Transform worldFrom, int amount = 5)
+    {
+        if (penaltyTextPrefab == null || worldFrom == null)
+            return;
+
+        StartCoroutine(SpawnAndFlyRewardText(
+            worldFrom.position,
+            -Mathf.Abs(amount),      // תמיד שלילי
+            penaltyTextPrefab
+        ));
+    }
+
+
 }
