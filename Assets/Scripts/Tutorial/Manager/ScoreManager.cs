@@ -14,7 +14,6 @@ public class ScoreManager : MonoBehaviour
     [Header("Visual FX")]
     [SerializeField] private ParticleSystem coinSparkles;
 
-
     [SerializeField] private int target = 150;
 
     [SerializeField] private SoundCoins soundCoins;
@@ -23,6 +22,7 @@ public class ScoreManager : MonoBehaviour
     // For negative indication
     [SerializeField] private Animator scoreAnimator;
     [SerializeField] private SoundCoins errorSounds;
+    [SerializeField] private CoinFlyVFX coinFlyVFX;
 
     public int CurrentMoney { get; private set; }
 
@@ -39,7 +39,6 @@ public class ScoreManager : MonoBehaviour
 
         CurrentMoney = startMoney;
         UpdateScoreUI();
-
     }
 
     private void OnEnable()
@@ -95,40 +94,44 @@ public class ScoreManager : MonoBehaviour
         return null;
     }
 
-    public void AddMoney(int amount)
+public void AddMoney(int amount)
+{
+    if (amount < 0 && CurrentMoney + amount < 0) // Prevent coins<0
+        return;
+
+    CurrentMoney += amount;
+
+    // Only when money increases
+    if (amount > 0)
     {
-        if (amount < 0 && CurrentMoney + amount < 0) // Prevent coins<0
-            return;
-
-        CurrentMoney += amount;
-        if (amount > 0 && soundCoins != null)
-        {
+        if (soundCoins != null)
             soundCoins.PlayFromSecond(coinSoundStartTime);
-        }
-
-        UpdateScoreUI();
-
-        // Notify active level timers so they can freeze timeLeft the first moment target is reached.
-        var l1 = FindObjectOfType<LevelTimerWinLose>();
-        if (l1 != null) l1.NotifyMoneyChanged(CurrentMoney);
-
-        var l2 = FindObjectOfType<LevelTwoTimerWinLose>();
-        if (l2 != null) l2.NotifyMoneyChanged(CurrentMoney);
-
-        var l3 = FindObjectOfType<LevelThreeTimerWinLose>();
-        if (l3 != null) l3.NotifyMoneyChanged(CurrentMoney);
 
         if (coinSparkles != null)
+        {
+            coinSparkles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
             coinSparkles.Emit(30);
-        else
-            Debug.LogWarning("coinSparkles is not assigned on ScoreManager!");
+        }
     }
+
+    UpdateScoreUI();
+
+    var l1 = FindObjectOfType<LevelTimerWinLose>();
+    if (l1 != null) l1.NotifyMoneyChanged(CurrentMoney);
+
+    var l2 = FindObjectOfType<LevelTwoTimerWinLose>();
+    if (l2 != null) l2.NotifyMoneyChanged(CurrentMoney);
+
+    var l3 = FindObjectOfType<LevelThreeTimerWinLose>();
+    if (l3 != null) l3.NotifyMoneyChanged(CurrentMoney);
+}
+
+
     public void SetTarget(int newTarget)
     {
         target = newTarget;
         UpdateScoreUI();
     }
-
 
     private void UpdateScoreUI()
     {
@@ -162,6 +165,4 @@ public class ScoreManager : MonoBehaviour
     {
         soundCoins = newSoundCoins;
     }
-
-
 }

@@ -1845,6 +1845,10 @@ MonoBehaviour:
     scoreIfNotServed: 0
   coinFlyVFX: {fileID: 906972935}
   maxMissingItems: 0
+  baseOrderReward: 30
+  level1PenaltyPerMistake: 5
+  level2And3PenaltyPerMistake: 4
+  levelNumber: 1
 --- !u!4 &485516105
 Transform:
   m_ObjectHideFlags: 0
@@ -3974,6 +3978,7 @@ MonoBehaviour:
   coinSoundStartTime: 3
   scoreAnimator: {fileID: 908680349}
   errorSounds: {fileID: 1900023743}
+  coinFlyVFX: {fileID: 906972935}
 --- !u!4 &1900023741
 Transform:
   m_ObjectHideFlags: 0

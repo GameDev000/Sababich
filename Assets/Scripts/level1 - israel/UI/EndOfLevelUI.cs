@@ -13,8 +13,10 @@ public class EndOfLevelUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI titleText;
     [SerializeField] private TextMeshProUGUI coinsText;
 
+    [Header("Perfect Orders")]
+    [SerializeField] private TextMeshProUGUI perfectOrdersText;
+
     [Header("Message")]
-    // [SerializeField] private bool isSuccess = true;
     [SerializeField] private string successMessage = "כל הכבוד! עמדת במשימה היעד הבא - יפן!";
     [SerializeField] private string failMessage = "לא נורא.. נסה שוב";
 
@@ -46,6 +48,9 @@ public class EndOfLevelUI : MonoBehaviour
             }
         }
 
+        // Show local perfect orders immediately
+        UpdatePerfectOrdersTextLocal(currentScene.name);
+
         Debug.Log("ScoreManager Start. Money=" + localCoins);
 
         // If localCoins is 0 (common after re-login), try cloud override.
@@ -53,6 +58,36 @@ public class EndOfLevelUI : MonoBehaviour
         {
             await TryOverrideCoinsFromCloud(currentScene.name, localCoins);
         }
+
+        // Try override perfect orders from cloud as well
+        await TryOverridePerfectOrdersFromCloud(currentScene.name);
+    }
+
+    // Local display for perfect orders stats
+    private void UpdatePerfectOrdersTextLocal(string sceneName)
+    {
+        if (perfectOrdersText == null) return;
+
+        int total = 0;
+        int perfect = 0;
+
+        if (sceneName == "Level1 - endScene")
+        {
+            total = LevelOneState.TotalServedDishes;
+            perfect = LevelOneState.PerfectServedDishes;
+        }
+        else if (sceneName == "Level2 - endScene")
+        {
+            total = LevelTwoState.TotalServedDishes;
+            perfect = LevelTwoState.PerfectServedDishes;
+        }
+        else if (sceneName == "Level3 - endScene")
+        {
+            total = LevelThreeState.TotalServedDishes;
+            perfect = LevelThreeState.PerfectServedDishes;
+        }
+
+        perfectOrdersText.text = $"הוגשו {perfect} מנות מושלמות מתוך {total}";
     }
 
     // Pull coins from cloud for the relevant level end scene and update UI.
@@ -93,5 +128,50 @@ public class EndOfLevelUI : MonoBehaviour
             coinsText.text = $"Coins: {cloudCoins}";
 
         Debug.Log($"[EndOfLevelUI] Cloud coins override: {coinsKey}={cloudCoins}");
+    }
+
+    // Pull perfect orders stats from cloud for the relevant level end scene and update UI.
+    private async Task TryOverridePerfectOrdersFromCloud(string sceneName)
+    {
+        if (perfectOrdersText == null) return;
+
+        int levelNumber = 0;
+        if (sceneName == "Level1 - endScene") levelNumber = 1;
+        else if (sceneName == "Level2 - endScene") levelNumber = 2;
+        else if (sceneName == "Level3 - endScene") levelNumber = 3;
+        else return;
+
+        if (UnityServices.State != ServicesInitializationState.Initialized)
+        {
+            Debug.Log("[EndOfLevelUI] Cloud not initialized -> keep local perfect orders.");
+            return;
+        }
+
+        if (!AuthenticationService.Instance.IsSignedIn)
+        {
+            Debug.Log("[EndOfLevelUI] Not signed in -> keep local perfect orders.");
+            return;
+        }
+
+        string totalKey = $"level{levelNumber}_totalServed";
+        string perfectKey = $"level{levelNumber}_perfectServed";
+
+        // Load
+        var totalData = await DatabaseManager.LoadData(totalKey);
+        var perfectData = await DatabaseManager.LoadData(perfectKey);
+
+        // If keys missing -> keep local
+        if (totalData == null || !totalData.ContainsKey(totalKey) ||
+            perfectData == null || !perfectData.ContainsKey(perfectKey))
+        {
+            Debug.Log($"[EndOfLevelUI] Missing cloud stats ({totalKey}/{perfectKey}) -> keep local.");
+            return;
+        }
+
+        int total = DatabaseManager.ReadInt(totalData, totalKey, 0);
+        int perfect = DatabaseManager.ReadInt(perfectData, perfectKey, 0);
+
+        perfectOrdersText.text = $"הוגשו {perfect} מנות מושלמות מתוך {total}";
+        Debug.Log($"[EndOfLevelUI] Cloud perfect orders override: perfect={perfect}, total={total}");
     }
 }

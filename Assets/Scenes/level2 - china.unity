@@ -1368,6 +1368,10 @@ MonoBehaviour:
     scoreIfNotServed: 0
   coinFlyVFX: {fileID: 95312388}
   maxMissingItems: 1
+  baseOrderReward: 30
+  level1PenaltyPerMistake: 5
+  level2And3PenaltyPerMistake: 4
+  levelNumber: 2
 --- !u!4 &485516105
 Transform:
   m_ObjectHideFlags: 0
@@ -1524,6 +1528,7 @@ MonoBehaviour:
   coinSoundStartTime: 3
   scoreAnimator: {fileID: 632864419}
   errorSounds: {fileID: 559278374}
+  coinFlyVFX: {fileID: 95312388}
 --- !u!4 &559278373
 Transform:
   m_ObjectHideFlags: 0
@@ -1802,7 +1807,7 @@ PrefabInstance:
     - target: {fileID: 3921738937119193159, guid: 6b08bc250a77d5944b63945313d63ca5, type: 3}
       propertyPath: m_fontAsset
       value: 
-      objectReference: {fileID: 11400000, guid: 8a89fa14b10d46a99122fd4f73fca9a2, type: 2}
+      objectReference: {fileID: 11400000, guid: ccbea80bbf18a4543939c04c8b892a8c, type: 2}
     - target: {fileID: 3921738937119193159, guid: 6b08bc250a77d5944b63945313d63ca5, type: 3}
       propertyPath: m_fontStyle
       value: 1
@@ -1826,7 +1831,7 @@ PrefabInstance:
     - target: {fileID: 3921738937119193159, guid: 6b08bc250a77d5944b63945313d63ca5, type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 2140474, guid: 8a89fa14b10d46a99122fd4f73fca9a2, type: 2}
+      objectReference: {fileID: -2367795080497754151, guid: ccbea80bbf18a4543939c04c8b892a8c, type: 2}
     - target: {fileID: 3921738937119193159, guid: 6b08bc250a77d5944b63945313d63ca5, type: 3}
       propertyPath: m_fontColor32.rgba
       value: 4279900698
