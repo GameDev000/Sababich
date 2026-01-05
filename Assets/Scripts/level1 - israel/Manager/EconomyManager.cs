@@ -16,12 +16,12 @@ public class EconomyManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject); 
-            LoadMoney(); 
+            DontDestroyOnLoad(gameObject);
+            LoadMoney();
         }
         else
         {
-            Destroy(gameObject); 
+            Destroy(gameObject);
         }
     }
 
@@ -29,7 +29,7 @@ public class EconomyManager : MonoBehaviour
     {
         TotalCoins += amount;
         SaveMoney();
-        
+
         OnCoinsChanged?.Invoke(TotalCoins);
         Debug.Log("Money Added! New Total: " + TotalCoins);
     }
@@ -42,6 +42,6 @@ public class EconomyManager : MonoBehaviour
 
     private void LoadMoney()
     {
-        TotalCoins = PlayerPrefs.GetInt(COINS_SAVE_KEY, 0); 
+        TotalCoins = PlayerPrefs.GetInt(COINS_SAVE_KEY, 0);
     }
 }
