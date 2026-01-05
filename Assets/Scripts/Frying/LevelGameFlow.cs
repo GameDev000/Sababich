@@ -1,3 +1,5 @@
+using Unity.Services.Authentication;
+using Unity.Services.Core;
 using UnityEngine;
 
 //Manages the overall level flow by coordinating frying machines, tray states, and item interactions across different level setups.
@@ -19,6 +21,8 @@ public class LevelGameFlow : MonoBehaviour
     [SerializeField] private FriedTrayState eggplantTrayState;
     [SerializeField] private FriedTrayState chipsTrayState;
 
+    [Header("Instructions UI")]
+    [SerializeField] private FeatureHintsSequence instructionManager;
     private bool trayReady = false; // Tray usage indication
 
     private void Awake()
@@ -31,14 +35,31 @@ public class LevelGameFlow : MonoBehaviour
         Instance = this;
     }
 
-    // private void SetTrayEggplantsClickable(bool value)
-    // {
-    //     if (trayEggplantItems == null) return;
-    //     foreach (var item in trayEggplantItems)
-    //         if (item != null) item.SetClickable(value);
-    // }
+    private void Start()
+    {
+        bool shouldRunInstructions_level2 = true;
+        bool shouldRunInstructions_level3 = true;
 
-    //Both methods signal that a tray is ready and enable item interaction, called on FriedTray
+
+        // if (UnityServices.State == ServicesInitializationState.Initialized &&
+        //     AuthenticationService.Instance.IsSignedIn)
+        // {
+        //     var data = await DatabaseManager.LoadData("resumeScene");
+        //     string resumeScene = DatabaseManager.ReadString(data, "resumeScene", "");
+
+        //     if (resumeScene == "Level2 - endScene")
+        //         shouldRunInstructions_level2 = false;
+        //     // if (resumeScene == "Level3 - endScene")
+        //     //     shouldRunInstructions_level3 = false;
+        // }
+        if (instructionManager != null && shouldRunInstructions_level2)
+            instructionManager.OnLevelStarted(2);
+
+        if (instructionManager != null && shouldRunInstructions_level3)
+            instructionManager.OnLevelStarted(3);
+    }
+
+
     public void OnTrayFilled()
     {
         trayReady = true;

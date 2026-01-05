@@ -2,8 +2,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-// Manages the player's score (money) and updates the UI accordingly.
-
+/// <summary>
+/// Singleton class that manages the player's score (money) throughout the game.
+/// </summary>
 public class ScoreManager : MonoBehaviour
 {
     public static ScoreManager Instance { get; private set; }

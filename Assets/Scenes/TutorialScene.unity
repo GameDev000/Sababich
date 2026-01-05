@@ -225,15 +225,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 212506949255695782, guid: fa8d00a30836965448ebdeeffdac87ed, type: 3}
       propertyPath: m_Color.b
-      value: 0.29411766
+      value: 0.8156863
       objectReference: {fileID: 0}
     - target: {fileID: 212506949255695782, guid: fa8d00a30836965448ebdeeffdac87ed, type: 3}
       propertyPath: m_Color.g
-      value: 0.3529412
+      value: 0.99215686
       objectReference: {fileID: 0}
     - target: {fileID: 212506949255695782, guid: fa8d00a30836965448ebdeeffdac87ed, type: 3}
       propertyPath: m_Color.r
-      value: 0.37254903
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 212506949255695782, guid: fa8d00a30836965448ebdeeffdac87ed, type: 3}
       propertyPath: m_SortingOrder
@@ -1900,6 +1900,7 @@ MonoBehaviour:
   coinSoundStartTime: 3
   scoreAnimator: {fileID: 1260964396}
   errorSounds: {fileID: 0}
+  coinFlyVFX: {fileID: 0}
 --- !u!4 &516804992
 Transform:
   m_ObjectHideFlags: 0
