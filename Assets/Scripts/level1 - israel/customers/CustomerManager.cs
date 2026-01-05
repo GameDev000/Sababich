@@ -1,6 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Unity.Services.Authentication;
+using Unity.Services.Core;
 using UnityEngine;
 
 /// <summary>
@@ -45,6 +48,13 @@ public class CustomerManager : MonoBehaviour
     [Header("Removing ingredients")]
     [SerializeField] private int maxMissingItems = 0; // level 2->1, level 3->2
 
+    [Header("Instructions UI")]
+    [SerializeField] private FeatureHintsSequence instructionManager;
+    [SerializeField] private bool shouldRunInstructions_level2 = true;
+    [SerializeField] private bool shouldRunInstructions_level3 = true;
+
+
+
     /// <summary>
     /// Holds per-slot state so we don't duplicate variables (no slot0/slot1/slot2 code).
     /// </summary>
@@ -76,7 +86,6 @@ public class CustomerManager : MonoBehaviour
         }
         Instance = this;
     }
-
     private void Start()
     {
         if (PlayerFaceStore.HasAll)
@@ -84,8 +93,32 @@ public class CustomerManager : MonoBehaviour
             RegisterPlayerCustomer(PlayerFaceStore.Happy, PlayerFaceStore.Angry, PlayerFaceStore.Furious);
         }
         BuildSlotsFromInspector(); // Read standPoints + delays, create slots list
-        StartAllSlots();           // Spawn customers in each slot according to delays
+        StartAllSlots();  
+        shouldRunInstructions_level2 = false;
+        shouldRunInstructions_level3 = false;
     }
+
+    // private async Task StartAsync()
+    // {
+    //     if (PlayerFaceStore.HasAll)
+    //     {
+    //         RegisterPlayerCustomer(PlayerFaceStore.Happy, PlayerFaceStore.Angry, PlayerFaceStore.Furious);
+    //     }
+    //     BuildSlotsFromInspector(); // Read standPoints + delays, create slots list
+    //     StartAllSlots();           // Spawn customers in each slot according to delays
+
+    //     if (UnityServices.State == ServicesInitializationState.Initialized &&
+    //     AuthenticationService.Instance.IsSignedIn)
+    //     {
+    //         var data = await DatabaseManager.LoadData("resumeScene");
+    //         string resumeScene = DatabaseManager.ReadString(data, "resumeScene", "");
+
+    //         //if (resumeScene == "Level2 - endScene")
+    //             shouldRunInstructions_level2 = false;
+    //         // if (resumeScene == "Level3 - endScene")
+    //         //     shouldRunInstructions_level3 = false;
+    //     }
+    // }
 
     /// <summary>
     /// Builds the slots list based on Inspector configuration.
@@ -200,6 +233,13 @@ public class CustomerManager : MonoBehaviour
 
         // Move to stand point
         StartMove(slotIndex, slot.customer.transform, slot.standPoint.position);
+        
+        //if (shouldRunInstructions_level2 && instructionManager != null)
+            instructionManager.OnCustomerSpawned();
+        
+        // if (shouldRunInstructions_level3 && instructionManager != null)
+        //     instructionManager.OnCustomerSpawned();
+
     }
 
     /// <summary>
