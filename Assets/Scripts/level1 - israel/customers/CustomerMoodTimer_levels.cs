@@ -11,7 +11,7 @@ public class CustomerMoodTimer_levels : MonoBehaviour
     private Sprite happySprite;
     private Sprite[] angryStages;
     [SerializeField] private SpriteRenderer spriteRenderer;// To display the customer's face
-
+    [SerializeField] private Sprite allergyFace;
     [SerializeField] private float secondsPerStage = 7f;// Time per angry stage
     [SerializeField] private float maxAngryWait = 3f;// Time to wait after last angry stage
 
@@ -84,13 +84,31 @@ public class CustomerMoodTimer_levels : MonoBehaviour
     /// <summary>
     /// Forces the customer to show an angry face immediately (wrong order feedback),
     /// </summary>
-    public void ShowAngryNow()
+    public void ShowAngryNow(Customer target = null)
     {
-        if (spriteRenderer == null) spriteRenderer = GetComponent<SpriteRenderer>();
-        if (angryStages == null || angryStages.Length == 0) return;
+        if(!target.Data.scoreIfNotServed)
+        {
+            if (spriteRenderer == null) spriteRenderer = GetComponent<SpriteRenderer>();
+                if (angryStages == null || angryStages.Length == 0) return;
 
-        // show first angry stage
-        SetSprite(angryStages[0]);
+                // show first angry stage
+                SetSprite(angryStages[0]);  
+        }
+        else
+        {
+            // Show allergy face if applicable
+            if (allergyFace != null)
+            {
+                SetSprite(allergyFace);
+            }
+            else
+            {
+                if (angryStages == null || angryStages.Length == 0) return;
+                    SetSprite(angryStages[0]);
+            }
+        }
+    
+
     }
 
 

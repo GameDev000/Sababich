@@ -726,7 +726,10 @@ public class CustomerManager : MonoBehaviour
             target.MarkLeaving(); // To lock the client
 
         if (target != null && target.MoodTimer != null)
-            target.MoodTimer.ShowAngryNow();  // Called from CustomerMoodTimer_levels
+        {
+            target.MoodTimer.ShowAngryNow(target);  // Called from CustomerMoodTimer_levels
+        }
+            
 
         yield return new WaitForSeconds(delay);
 
