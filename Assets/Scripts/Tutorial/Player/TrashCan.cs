@@ -46,9 +46,9 @@ public class TrashCan : MonoBehaviour
         if (selectionListManager != null)
         {
             Debug.Log("Pita thrown to trash!");
-            
+
             selectionListManager.ClearIngredients();
-            
+
         }
         else
         {
