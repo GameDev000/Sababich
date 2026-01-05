@@ -102,7 +102,7 @@ public class SelectionList : MonoBehaviour
     {
         if (selectedText != null)
         {
-            string result = "פריטים נבחרים:\n";
+            string result = "פריטים:\n";
             foreach (string ing in selectedIngredients)
                 result += "- " + ToHebrew(ing) + "\n";
 

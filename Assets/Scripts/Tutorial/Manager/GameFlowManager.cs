@@ -62,7 +62,7 @@ public class GameFlowManager : MonoBehaviour
                 uiInstructions.SetInstructions("עבודה טובה! \n עכשיו לחץ על החץ כדי להמשיך בעבודה.");
                 break;
             case GamePhase.ForbiddenCustomerWarning:
-                uiInstructions.SetInstructions("רגע! הלקוח הנוכחי רגיש לגלוטן אסור להגיש לו מנה בכלל!");
+                uiInstructions.SetInstructions("רגע! הלקוח הנוכחי רגיש לגלוטן \n אסור להגיש לו מנה בכלל!");
                 break;
 
         }
