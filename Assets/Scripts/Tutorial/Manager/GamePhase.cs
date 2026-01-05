@@ -7,6 +7,7 @@ public enum GamePhase
     FryingEggplant,
     AssembleDish,
     ServeCustomer,
+    ForbiddenCustomerWarning,
     NextCustomer,
     GoWashInKitchen,
     WashHands,

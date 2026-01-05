@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: f95b9f80c8ab2d04eb4cab7e8ab04360
+guid: fe3a5b55aac61814fad9508a8da21986
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 373183120355459608
-    second: not_ToServe_1_0
+      213: -815251477701637050
+    second: bord (4)_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -51,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 60
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: not_ToServe_1_0
+      name: bord (4)_0
       rect:
         serializedVersion: 2
-        x: 490
-        y: 13
-        width: 420
-        height: 731
+        x: 25
+        y: 29
+        width: 2006
+        height: 1538
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 81285fc1210dd2500800000000000000
-      internalID: 373183120355459608
+      spriteID: 64c4bf4b915afa4f0800000000000000
+      internalID: -815251477701637050
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      not_ToServe_1_0: 373183120355459608
+      bord (4)_0: -815251477701637050
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

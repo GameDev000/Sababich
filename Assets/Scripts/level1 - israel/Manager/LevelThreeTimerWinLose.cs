@@ -18,9 +18,6 @@ public class LevelThreeTimerWinLose : MonoBehaviour
     [Header("End Scene")]
     [SerializeField] private string endSceneName = "Level3 - endScene";
 
-    // [Header("Coins Source")]
-    // [SerializeField] private ScoreManager playerCoins;
-
     private float timeLeft;
     private bool finished;
 
@@ -33,9 +30,6 @@ public class LevelThreeTimerWinLose : MonoBehaviour
     private void Start()
     {
         timeLeft = levelDurationSeconds;
-
-        // Do NOT cache coins manager from FindObjectOfType; duplicates can exist across scenes.
-        // We rely only on ScoreManager.Instance.
         UpdateTimerUI(timeLeft);
     }
 
@@ -69,12 +63,10 @@ public class LevelThreeTimerWinLose : MonoBehaviour
 
     private void TryFreezeTimeWhenReachedTarget()
     {
-        // Always read money from ScoreManager.Instance
         int moneyNow = (ScoreManager.Instance != null) ? ScoreManager.Instance.CurrentMoney : 0;
         FreezeTimeIfNeeded(moneyNow);
     }
 
-    // Freeze once, compute once, save once
     private void FreezeTimeIfNeeded(int moneyNow)
     {
         if (timeSaved) return;
@@ -88,13 +80,11 @@ public class LevelThreeTimerWinLose : MonoBehaviour
         }
     }
 
-    // Saves level3_timeSeconds once
     private void SaveLevel3TimeOnce()
     {
         if (timeSaved) return;
         timeSaved = true;
 
-        // Stable time even if save happens later
         float safeFrozen = (frozenTimeLeft < 0f) ? timeLeft : frozenTimeLeft;
         int timeToTargetSeconds = Mathf.RoundToInt(levelDurationSeconds - safeFrozen);
 
@@ -112,7 +102,6 @@ public class LevelThreeTimerWinLose : MonoBehaviour
 
     private void EndLevel()
     {
-        // Always read coins from ScoreManager.Instance
         int coinsEnd = (ScoreManager.Instance != null) ? ScoreManager.Instance.CurrentMoney : 0;
         Debug.Log($"[Level3] coinsEnd={coinsEnd}");
 
@@ -132,6 +121,18 @@ public class LevelThreeTimerWinLose : MonoBehaviour
 
         bool success = coinsEnd >= coinsTarget;
         LevelThreeState.IsSuccess = success;
+
+        // Save perfect/total served dishes for Level 3 end screen
+        int totalServed = LevelThreeState.TotalServedDishes;
+        int perfectServed = LevelThreeState.PerfectServedDishes;
+
+        // Save these stats to cloud
+        if (UnityServices.State == ServicesInitializationState.Initialized &&
+            AuthenticationService.Instance.IsSignedIn)
+        {
+            _ = DatabaseManager.SaveData(("level3_totalServed", totalServed));
+            _ = DatabaseManager.SaveData(("level3_perfectServed", perfectServed));
+        }
 
         // Save passed flag for level 3 (used after relogin / resume)
         if (UnityServices.State == ServicesInitializationState.Initialized &&

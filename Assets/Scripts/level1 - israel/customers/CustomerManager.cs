@@ -1,6 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Unity.Services.Authentication;
+using Unity.Services.Core;
 using UnityEngine;
 
 /// <summary>
@@ -40,10 +43,29 @@ public class CustomerManager : MonoBehaviour
     [SerializeField] private List<CustomerType> customerTypes = new List<CustomerType>();
 
     [Header("Visual FX - Coins Animation")]
-    [SerializeField] private CoinFlyVFX coinFlyVFX; // reference to flying coins VFX
+    [SerializeField] private CoinFlyVFX coinFlyVFX;
 
     [Header("Removing ingredients")]
-    [SerializeField] private int maxMissingItems = 0; // level 2->1, level 3->2
+    [SerializeField] private int maxMissingItems = 0;
+
+    // Reward for a full correct order (before penalties)
+    [Header("Scoring per-order")]
+    [SerializeField] private int baseOrderReward = 30;
+
+    // Penalty per wrong/missing ingredient by level
+    [SerializeField] private int level1PenaltyPerMistake = 5;
+    [SerializeField] private int level2And3PenaltyPerMistake = 4;
+
+    // Set this in Inspector per scene (Level1=1, Level2=2, Level3=3)
+    [SerializeField] private int levelNumber = 1;
+
+    [Header("Instructions UI")]
+    [SerializeField] private FeatureHintsSequence instructionManager;
+    [SerializeField] private bool shouldRunInstructions_level2 = true;
+    [SerializeField] private bool shouldRunInstructions_level3 = true;
+
+    private CustomerType lastSpawnedType = null;
+    private CustomerType[] slotTypes = new CustomerType[3];
 
     /// <summary>
     /// Holds per-slot state so we don't duplicate variables (no slot0/slot1/slot2 code).
@@ -76,7 +98,6 @@ public class CustomerManager : MonoBehaviour
         }
         Instance = this;
     }
-
     private void Start()
     {
         if (PlayerFaceStore.HasAll)
@@ -84,8 +105,32 @@ public class CustomerManager : MonoBehaviour
             RegisterPlayerCustomer(PlayerFaceStore.Happy, PlayerFaceStore.Angry, PlayerFaceStore.Furious);
         }
         BuildSlotsFromInspector(); // Read standPoints + delays, create slots list
-        StartAllSlots();           // Spawn customers in each slot according to delays
+        StartAllSlots();
+        shouldRunInstructions_level2 = false;
+        shouldRunInstructions_level3 = false;
     }
+
+    // private async Task StartAsync()
+    // {
+    //     if (PlayerFaceStore.HasAll)
+    //     {
+    //         RegisterPlayerCustomer(PlayerFaceStore.Happy, PlayerFaceStore.Angry, PlayerFaceStore.Furious);
+    //     }
+    //     BuildSlotsFromInspector(); // Read standPoints + delays, create slots list
+    //     StartAllSlots();           // Spawn customers in each slot according to delays
+
+    //     if (UnityServices.State == ServicesInitializationState.Initialized &&
+    //     AuthenticationService.Instance.IsSignedIn)
+    //     {
+    //         var data = await DatabaseManager.LoadData("resumeScene");
+    //         string resumeScene = DatabaseManager.ReadString(data, "resumeScene", "");
+
+    //         //if (resumeScene == "Level2 - endScene")
+    //             shouldRunInstructions_level2 = false;
+    //         // if (resumeScene == "Level3 - endScene")
+    //         //     shouldRunInstructions_level3 = false;
+    //     }
+    // }
 
     /// <summary>
     /// Builds the slots list based on Inspector configuration.
@@ -147,8 +192,76 @@ public class CustomerManager : MonoBehaviour
         SpawnCustomerInSlot(slotIndex);
     }
 
+    // /// <summary>
+    // /// Spawns a new customer into the given slot and moves him to that slot's stand point.
+    // /// </summary>
+    // private void SpawnCustomerInSlot(int slotIndex)
+    // {
+    //     CustomerType previousCustomerType = null,chosen=null;
+    //     if (!IsValidSlot(slotIndex)) return;
+
+    //     // Validate required references
+    //     if (customerPrefab == null || spawnPoint == null || exitPoint == null)
+    //     {
+    //         Debug.LogWarning("CustomerManager: Missing customerPrefab/spawnPoint/exitPoint reference.");
+    //         return;
+    //     }
+
+    //     // Validate customer types
+    //     if (customerTypes == null || customerTypes.Count == 0)
+    //     {
+    //         Debug.LogWarning("CustomerManager: no customer types defined!");
+    //         return;
+    //     }
+
+    //     SlotState slot = slots[slotIndex];
+
+    //     // If something remains in slot, clean it up first
+    //     CleanupSlot(slotIndex);
+
+    //     // Choose random customer type
+    //     do
+    //     {
+    //         chosen = customerTypes[UnityEngine.Random.Range(0, customerTypes.Count)];
+    //     } while (chosen == previousCustomerType);
+    //     previousCustomerType = chosen;
+    //     // Instantiate + init customer
+    //     slot.customer = Instantiate(customerPrefab, spawnPoint.position, Quaternion.identity);
+    //     slot.customer.Init(chosen, maxMissingItems); // Implemented in Customer()
+
+    //     // Register mapping (customer -> slotIndex) so clicks can route quickly
+    //     customerToSlot[slot.customer] = slotIndex;
+
+    //     // Subscribe to mood timer (slot-specific handler)
+    //     if (slot.customer.MoodTimer != null)
+    //     {
+    //         // Create a unique handler for THIS slot so we know exactly which slot finished
+    //         slot.moodHandler = (served) => OnCustomerFinishedInSlot(slotIndex, served);
+
+    //         // Safety: ensure we don't double subscribe
+    //         slot.customer.MoodTimer.OnCustomerFinished -= slot.moodHandler;
+    //         slot.customer.MoodTimer.OnCustomerFinished += slot.moodHandler;
+    //     }
+    //     else
+    //     {
+    //         Debug.LogWarning("CustomerManager: Customer.MoodTimer is not assigned on the Customer prefab.");
+    //     }
+
+    //     // Move to stand point
+    //     StartMove(slotIndex, slot.customer.transform, slot.standPoint.position);
+
+    //     //if (shouldRunInstructions_level2 && instructionManager != null)
+    //     instructionManager.OnCustomerSpawned();
+
+    //     // if (shouldRunInstructions_level3 && instructionManager != null)
+    //     //     instructionManager.OnCustomerSpawned();
+
+    // }
+
     /// <summary>
     /// Spawns a new customer into the given slot and moves him to that slot's stand point.
+    /// Avoids repeating the last spawned type and avoids matching the type currently in the other slots.
+    /// Uses do/while like your style, but with a hard max-attempts guard (so no infinite loop).
     /// </summary>
     private void SpawnCustomerInSlot(int slotIndex)
     {
@@ -173,8 +286,46 @@ public class CustomerManager : MonoBehaviour
         // If something remains in slot, clean it up first
         CleanupSlot(slotIndex);
 
-        // Choose random customer type
-        CustomerType chosen = customerTypes[UnityEngine.Random.Range(0, customerTypes.Count)];
+        // Read current types of the other slots (only up to 3)
+        CustomerType type0 = (slots.Count > 0) ? slotTypes[0] : null;
+        CustomerType type1 = (slots.Count > 1) ? slotTypes[1] : null;
+        CustomerType type2 = (slots.Count > 2) ? slotTypes[2] : null;
+
+        CustomerType chosen = null;
+
+        // We guard the do/while with a max attempts count to avoid infinite loops.
+        // With 5 types and at most 3 forbidden (last + 2 other slots), a valid choice should exist.
+        int attempts = 0;
+        int maxAttempts = 30; // safe guard
+
+        do
+        {
+            chosen = customerTypes[UnityEngine.Random.Range(0, customerTypes.Count)];
+            attempts++;
+
+            // If we somehow can't find a valid type, relax rules in a controlled way:
+            if (attempts >= maxAttempts)
+            {
+                // First relax: allow repeating lastSpawnedType, still avoid other slots
+                if (chosen != type0 && chosen != type1 && chosen != type2)
+                    break;
+
+                // Final relax: just take anything to avoid freezing the game
+                chosen = customerTypes[UnityEngine.Random.Range(0, customerTypes.Count)];
+                break;
+            }
+
+        } while (
+            chosen == lastSpawnedType ||                          // not same as last spawned
+            (slotIndex != 0 && chosen == type0) ||                // not same as slot 0 (if other)
+            (slotIndex != 1 && chosen == type1) ||                // not same as slot 1 (if other)
+            (slotIndex != 2 && chosen == type2)                   // not same as slot 2 (if other)
+        );
+
+        // Save for next spawns
+        lastSpawnedType = chosen;
+        if (slotIndex >= 0 && slotIndex < slotTypes.Length)
+            slotTypes[slotIndex] = chosen;
 
         // Instantiate + init customer
         slot.customer = Instantiate(customerPrefab, spawnPoint.position, Quaternion.identity);
@@ -186,7 +337,6 @@ public class CustomerManager : MonoBehaviour
         // Subscribe to mood timer (slot-specific handler)
         if (slot.customer.MoodTimer != null)
         {
-            // Create a unique handler for THIS slot so we know exactly which slot finished
             slot.moodHandler = (served) => OnCustomerFinishedInSlot(slotIndex, served);
 
             // Safety: ensure we don't double subscribe
@@ -200,12 +350,14 @@ public class CustomerManager : MonoBehaviour
 
         // Move to stand point
         StartMove(slotIndex, slot.customer.transform, slot.standPoint.position);
+
+        instructionManager.OnCustomerSpawned();
     }
+
 
     /// <summary>
     /// Called when a customer's mood timer finishes (served or time-up), for a SPECIFIC slot.
     /// </summary>
-
     private void OnCustomerFinishedInSlot(int slotIndex, bool served)
     {
         if (!IsValidSlot(slotIndex)) return;
@@ -219,12 +371,34 @@ public class CustomerManager : MonoBehaviour
 
             if (ScoreManager.Instance != null)
             {
-                ScoreManager.Instance.AddMoney(30);
-                coinFlyVFX.PlayCoinsFromWorld(c.transform);
+                ScoreManager.Instance.AddMoney(baseOrderReward);
+                if (coinFlyVFX != null)
+                    coinFlyVFX.PlayCoinsFromWorld(c.transform);
             }
         }
 
         StartLeaveSequence(slotIndex);
+    }
+
+    // Updates per-level served/perfect stats
+    private void RegisterServedDish(bool isPerfect)
+    {
+        // Total served is always +1
+        if (levelNumber == 1)
+        {
+            LevelOneState.TotalServedDishes++;
+            if (isPerfect) LevelOneState.PerfectServedDishes++;
+        }
+        else if (levelNumber == 2)
+        {
+            LevelTwoState.TotalServedDishes++;
+            if (isPerfect) LevelTwoState.PerfectServedDishes++;
+        }
+        else if (levelNumber == 3)
+        {
+            LevelThreeState.TotalServedDishes++;
+            if (isPerfect) LevelThreeState.PerfectServedDishes++;
+        }
     }
 
 
@@ -259,35 +433,44 @@ public class CustomerManager : MonoBehaviour
         }
 
         List<string> ingredients = SelectionList.Instance.GetSelectedIngredients();
-        bool ok = target.IsOrderCorrect(ingredients);
+
+        // If this customer gives reward only when not served,
+        // then serving him (full or partial) gives ZERO points.
+        if (target.Data != null && target.Data.scoreIfNotServed)
+        {
+            Debug.Log("Special customer: served -> NO score (full or partial).");
+
+            if (ScoreManager.Instance != null)
+                ScoreManager.Instance.FlashPenaltyUI();
+
+            // Clear selection on serve attempt
+            SelectionList.Instance.ClearIngredients();
+
+            // Show angry + wait + leave
+            StartCoroutine(LeaveAfterWrongFeedback(slotIndex, target, 0.4f));
+            return;
+        }
+
+        // Instead of bool correct/incorrect, compute mistakes + reward
+        int mistakes = CountOrderMistakes(target, ingredients);
+        int reward = CalculateRewardFromMistakes(mistakes);
+        bool ok = (mistakes == 0);
+        // Count served dishes + perfect dishes
+        RegisterServedDish(ok);
 
         if (ok)
         {
             Debug.Log("Correct order!");
 
-            if (!target.Data.scoreIfNotServed)
+            if (ScoreManager.Instance != null)
             {
-                // Add reward
-                if (ScoreManager.Instance != null)
-                {
-                    ScoreManager.Instance.AddMoney(30);
+                // Full reward (mistakes==0 => reward==baseOrderReward)
+                ScoreManager.Instance.AddMoney(reward);
+
+                // Coins VFX only when reward > 0
+                if (reward > 0 && coinFlyVFX != null)
                     coinFlyVFX.PlayCoinsFromWorld(target.transform);
-
-                }
             }
-            else
-            {
-                if (ScoreManager.Instance != null)
-                {
-                    ScoreManager.Instance.FlashPenaltyUI();
-                }
-                // Show angry + wait + leave
-                StartCoroutine(LeaveAfterWrongFeedback(slotIndex, target, 0.4f));
-                SelectionList.Instance.ClearIngredients();
-                Debug.Log("Special customer: served but NO score.");
-                return;
-            }
-
 
             // Tell THIS customer's timer he was served in time
             if (target.MoodTimer != null)
@@ -301,19 +484,71 @@ public class CustomerManager : MonoBehaviour
             return;
         }
 
-        Debug.Log("Wrong order!");
-        // Negative feedback (sound + red flash)
+        Debug.Log($"Wrong order! Mistakes={mistakes}, Reward={reward}");
+
+        // Partial reward (never negative)
         if (ScoreManager.Instance != null)
         {
             ScoreManager.Instance.FlashPenaltyUI();
-            ScoreManager.Instance.AddMoney(-5);
+            ScoreManager.Instance.AddMoney(reward);
+
+            // Coins VFX only when reward > 0
+            if (reward > 0 && coinFlyVFX != null)
+                coinFlyVFX.PlayCoinsFromWorld(target.transform);
         }
+
         // Clear selection on wrong order
         SelectionList.Instance.ClearIngredients();
 
         // Show angry + wait + leave
         StartCoroutine(LeaveAfterWrongFeedback(slotIndex, target, 0.4f));
         return;
+    }
+
+    // Count mistakes between required vs given: 1.missing 2.extra 3.wrong)
+    private int CountOrderMistakes(Customer target, List<string> givenIngredients)
+    {
+        if (target == null)
+            return 0;
+
+        // Use the active order list
+        List<string> activeOrder = target.GetActiveRequiredIngredients();
+        if (activeOrder == null)
+            return 0;
+
+        List<string> required = new List<string>();
+        foreach (var r in activeOrder)
+            required.Add(r.ToLower());
+
+        List<string> given = new List<string>();
+        if (givenIngredients != null)
+        {
+            foreach (var g in givenIngredients)
+                given.Add(g.ToLower());
+        }
+
+        int mistakes = 0;
+
+        // Missing required
+        foreach (string r in required)
+            if (!given.Contains(r))
+                mistakes++;
+
+        // Extra/wrong given
+        foreach (string g in given)
+            if (!required.Contains(g))
+                mistakes++;
+
+        return mistakes;
+    }
+
+
+    // Convert mistakes into reward based on level rules
+    private int CalculateRewardFromMistakes(int mistakes)
+    {
+        int penaltyPerMistake = (levelNumber == 1) ? level1PenaltyPerMistake : level2And3PenaltyPerMistake;
+        int reward = baseOrderReward - (mistakes * penaltyPerMistake);
+        return Mathf.Max(0, reward); // Not return negative feedback
     }
 
     /// <summary>
@@ -414,6 +649,10 @@ public class CustomerManager : MonoBehaviour
         // Reset flags/handlers
         slot.isHandlingLeave = false;
         slot.moodHandler = null;
+
+        if (slotIndex >= 0 && slotIndex < slotTypes.Length)
+            slotTypes[slotIndex] = null;
+
     }
 
     /// <summary>
@@ -454,7 +693,7 @@ public class CustomerManager : MonoBehaviour
         return slotIndex >= 0 && slotIndex < slots.Count;
     }
 
-    // Negative indication for serving an incorrect order
+    // Negative indication for serving an incorrect order (and also used for special-customer "served -> no score")
     private IEnumerator LeaveAfterWrongFeedback(int slotIndex, Customer target, float delay)
     {
         if (target != null)
@@ -493,8 +732,4 @@ public class CustomerManager : MonoBehaviour
 
         AddCustomerType(playerType);
     }
-
-
-
-
 }

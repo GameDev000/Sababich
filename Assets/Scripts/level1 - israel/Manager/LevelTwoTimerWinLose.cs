@@ -18,8 +18,6 @@ public class LevelTwoTimerWinLose : MonoBehaviour
     [Header("End Scene")]
     [SerializeField] private string endSceneName = "Level2 - endScene";
 
-    // [Header("Coins Source")]
-    // [SerializeField] private ScoreManager playerCoins;
     private float timeLeft;
     private bool finished;
 
@@ -32,9 +30,6 @@ public class LevelTwoTimerWinLose : MonoBehaviour
     private void Start()
     {
         timeLeft = levelDurationSeconds;
-
-        // Do NOT cache coins manager from FindObjectOfType; duplicates can exist across scenes.
-        // We rely only on ScoreManager.Instance.
         UpdateTimerUI(timeLeft);
     }
 
@@ -44,7 +39,6 @@ public class LevelTwoTimerWinLose : MonoBehaviour
 
         timeLeft -= Time.deltaTime;
 
-        // Fallback polling
         TryFreezeTimeWhenReachedTarget();
 
         if (timeLeft <= 0f)
@@ -60,7 +54,6 @@ public class LevelTwoTimerWinLose : MonoBehaviour
         UpdateTimerUI(timeLeft);
     }
 
-    // Called from ScoreManager.AddMoney
     public void NotifyMoneyChanged(int newMoney)
     {
         FreezeTimeIfNeeded(newMoney);
@@ -68,12 +61,10 @@ public class LevelTwoTimerWinLose : MonoBehaviour
 
     private void TryFreezeTimeWhenReachedTarget()
     {
-        // Always read money from ScoreManager.Instance
         int moneyNow = (ScoreManager.Instance != null) ? ScoreManager.Instance.CurrentMoney : 0;
         FreezeTimeIfNeeded(moneyNow);
     }
 
-    // Freeze once, compute once, save once
     private void FreezeTimeIfNeeded(int moneyNow)
     {
         if (timeSaved) return;
@@ -87,13 +78,11 @@ public class LevelTwoTimerWinLose : MonoBehaviour
         }
     }
 
-    // Saves level2_timeSeconds once
     private void SaveLevel2TimeOnce()
     {
         if (timeSaved) return;
         timeSaved = true;
 
-        // Stable time even if save happens later
         float safeFrozen = (frozenTimeLeft < 0f) ? timeLeft : frozenTimeLeft;
         int timeToTargetSeconds = Mathf.RoundToInt(levelDurationSeconds - safeFrozen);
 
@@ -111,17 +100,14 @@ public class LevelTwoTimerWinLose : MonoBehaviour
 
     private void EndLevel()
     {
-        // Always read coins from ScoreManager.Instance
         int coinsEnd = (ScoreManager.Instance != null) ? ScoreManager.Instance.CurrentMoney : 0;
 
-        // Fallback save
         if (!timeSaved && coinsEnd >= coinsTarget)
         {
             if (frozenTimeLeft < 0f) frozenTimeLeft = timeLeft;
             SaveLevel2TimeOnce();
         }
 
-        // Save coins at end
         if (UnityServices.State == ServicesInitializationState.Initialized &&
             AuthenticationService.Instance.IsSignedIn)
         {
@@ -131,7 +117,19 @@ public class LevelTwoTimerWinLose : MonoBehaviour
         bool success = coinsEnd >= coinsTarget;
         LevelTwoState.IsSuccess = success;
 
-        // Save passed flag for level 2 (used after relogin / resume)
+        // Read served dishes statistics for Level 2
+        int totalServed = LevelTwoState.TotalServedDishes;
+        int perfectServed = LevelTwoState.PerfectServedDishes;
+
+        // Save served dishes statistics
+        if (UnityServices.State == ServicesInitializationState.Initialized &&
+            AuthenticationService.Instance.IsSignedIn)
+        {
+            _ = DatabaseManager.SaveData(("level2_totalServed", totalServed));
+            _ = DatabaseManager.SaveData(("level2_perfectServed", perfectServed));
+        }
+
+        // Save passed flag for level 2
         if (UnityServices.State == ServicesInitializationState.Initialized &&
             AuthenticationService.Instance.IsSignedIn)
         {
