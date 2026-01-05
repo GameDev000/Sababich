@@ -8,7 +8,7 @@ public class MusicPlayer : MonoBehaviour
     public static MusicPlayer Instance;
 
     [System.Serializable]
-    public class Track
+    public class Track // Represents a music track with an ID, display name, and audio clip.
     {
         public string id;
         public string displayName;
@@ -24,7 +24,7 @@ public class MusicPlayer : MonoBehaviour
     [Header("Tracks")]
     [SerializeField] private Track[] tracks;
 
-    public bool IsMuted => audioSource != null && audioSource.mute;
+    public bool IsMuted => audioSource != null && audioSource.mute;// Indicates whether the music is currently muted.
 
     private void Awake()
     {

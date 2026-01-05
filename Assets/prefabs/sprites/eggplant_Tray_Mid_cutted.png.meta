@@ -116,12 +116,12 @@ TextureImporter:
       name: eggplant_Tray_Mid_cutted_0
       rect:
         serializedVersion: 2
-        x: 4
-        y: 1
-        width: 428
-        height: 149
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 11
+        y: 12
+        width: 411
+        height: 210
+      alignment: 9
+      pivot: {x: 0.50246847, y: 0.5938406}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -138,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: fcbd439ee23b0364bbe665d3ce899a55
     internalID: 0
     vertices: []
     indices: 
