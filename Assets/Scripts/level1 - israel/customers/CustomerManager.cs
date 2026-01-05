@@ -104,7 +104,7 @@ public class CustomerManager : MonoBehaviour
             RegisterPlayerCustomer(PlayerFaceStore.Happy, PlayerFaceStore.Angry, PlayerFaceStore.Furious);
         }
         BuildSlotsFromInspector(); // Read standPoints + delays, create slots list
-        StartAllSlots();  
+        StartAllSlots();
         shouldRunInstructions_level2 = false;
         shouldRunInstructions_level3 = false;
     }
@@ -244,10 +244,10 @@ public class CustomerManager : MonoBehaviour
 
         // Move to stand point
         StartMove(slotIndex, slot.customer.transform, slot.standPoint.position);
-        
+
         //if (shouldRunInstructions_level2 && instructionManager != null)
-            instructionManager.OnCustomerSpawned();
-        
+        instructionManager.OnCustomerSpawned();
+
         // if (shouldRunInstructions_level3 && instructionManager != null)
         //     instructionManager.OnCustomerSpawned();
 
