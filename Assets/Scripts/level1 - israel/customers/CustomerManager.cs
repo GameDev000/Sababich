@@ -51,10 +51,11 @@ public class CustomerManager : MonoBehaviour
     // Reward for a full correct order (before penalties)
     [Header("Scoring per-order")]
     [SerializeField] private int baseOrderReward = 30;
+    [SerializeField] private int wrongDishPenalty = -5;
 
     // Penalty per wrong/missing ingredient by level
-    [SerializeField] private int level1PenaltyPerMistake = 5;
-    [SerializeField] private int level2And3PenaltyPerMistake = 4;
+    // [SerializeField] private int level1PenaltyPerMistake = 5;
+    //[SerializeField] private int level2And3PenaltyPerMistake = 4;
 
     // Set this in Inspector per scene (Level1=1, Level2=2, Level3=3)
     [SerializeField] private int levelNumber = 1;
@@ -453,8 +454,10 @@ public class CustomerManager : MonoBehaviour
 
         // Instead of bool correct/incorrect, compute mistakes + reward
         int mistakes = CountOrderMistakes(target, ingredients);
-        int reward = CalculateRewardFromMistakes(mistakes);
+
+        // int reward = CalculateRewardFromMistakes(mistakes);  // NOT RELEVANT ANYMORE (was per-ingredient penalty)
         bool ok = (mistakes == 0);
+
         // Count served dishes + perfect dishes
         RegisterServedDish(ok);
 
@@ -465,10 +468,17 @@ public class CustomerManager : MonoBehaviour
             if (ScoreManager.Instance != null)
             {
                 // Full reward (mistakes==0 => reward==baseOrderReward)
-                ScoreManager.Instance.AddMoney(reward);
+                // ScoreManager.Instance.AddMoney(reward); // NOT RELEVANT ANYMORE (reward calc removed)
+
+                // Perfect dish gives full base reward
+                ScoreManager.Instance.AddMoney(baseOrderReward);
 
                 // Coins VFX only when reward > 0
-                if (reward > 0 && coinFlyVFX != null)
+                // if (reward > 0 && coinFlyVFX != null) // NOT RELEVANT ANYMORE (reward removed)
+                //     coinFlyVFX.PlayCoinsFromWorld(target.transform);
+
+                // Play coins only when base reward > 0
+                if (baseOrderReward > 0 && coinFlyVFX != null)
                     coinFlyVFX.PlayCoinsFromWorld(target.transform);
             }
 
@@ -484,17 +494,27 @@ public class CustomerManager : MonoBehaviour
             return;
         }
 
-        Debug.Log($"Wrong order! Mistakes={mistakes}, Reward={reward}");
+        // Debug.Log($"Wrong order! Mistakes={mistakes}, Reward={reward}"); // NOT RELEVANT ANYMORE (reward removed)
+        Debug.Log($"Wrong order! Mistakes={mistakes}");
 
         // Partial reward (never negative)
+        // if (ScoreManager.Instance != null) // OLD BLOCK (reward-based) - NOT RELEVANT ANYMORE
+        // {
+        //     ScoreManager.Instance.FlashPenaltyUI();
+        //     ScoreManager.Instance.AddMoney(reward);
+
+        //     // Coins VFX only when reward > 0
+        //     if (reward > 0 && coinFlyVFX != null)
+        //         coinFlyVFX.PlayCoinsFromWorld(target.transform);
+        // }
+
+        // Fixed penalty once for wrong dish
         if (ScoreManager.Instance != null)
         {
             ScoreManager.Instance.FlashPenaltyUI();
-            ScoreManager.Instance.AddMoney(reward);
 
-            // Coins VFX only when reward > 0
-            if (reward > 0 && coinFlyVFX != null)
-                coinFlyVFX.PlayCoinsFromWorld(target.transform);
+            // Single penalty when dish is wrong
+            ScoreManager.Instance.AddMoney(wrongDishPenalty);
         }
 
         // Clear selection on wrong order
@@ -503,6 +523,7 @@ public class CustomerManager : MonoBehaviour
         // Show angry + wait + leave
         StartCoroutine(LeaveAfterWrongFeedback(slotIndex, target, 0.4f));
         return;
+
     }
 
     // Count mistakes between required vs given: 1.missing 2.extra 3.wrong)
@@ -543,13 +564,13 @@ public class CustomerManager : MonoBehaviour
     }
 
 
-    // Convert mistakes into reward based on level rules
-    private int CalculateRewardFromMistakes(int mistakes)
-    {
-        int penaltyPerMistake = (levelNumber == 1) ? level1PenaltyPerMistake : level2And3PenaltyPerMistake;
-        int reward = baseOrderReward - (mistakes * penaltyPerMistake);
-        return Mathf.Max(0, reward); // Not return negative feedback
-    }
+    // // Convert mistakes into reward based on level rules
+    // private int CalculateRewardFromMistakes(int mistakes)
+    // {
+    //     int penaltyPerMistake = (levelNumber == 1) ? level1PenaltyPerMistake : level2And3PenaltyPerMistake;
+    //     int reward = baseOrderReward - (mistakes * penaltyPerMistake);
+    //     return Mathf.Max(0, reward); // Not return negative feedback
+    // }
 
     /// <summary>
     /// Starts the leave sequence for a specific slot.

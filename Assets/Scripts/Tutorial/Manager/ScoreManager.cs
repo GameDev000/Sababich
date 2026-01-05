@@ -56,6 +56,7 @@ public class ScoreManager : MonoBehaviour
     {
         // reconnect UI text in the new scene
         ScoreText = FindScoreTextInScene();
+        scoreAnimator = (ScoreText != null) ? ScoreText.GetComponent<Animator>() : null;
 
         // reset only on GAMEPLAY level scenes (not end scenes)
         if (IsGameplayLevelScene(scene.name))
@@ -97,10 +98,8 @@ public class ScoreManager : MonoBehaviour
 
     public void AddMoney(int amount)
     {
-        if (amount < 0 && CurrentMoney + amount < 0) // Prevent coins<0
-            return;
-
-        CurrentMoney += amount;
+        // Allow penalties, but never go below 0
+        CurrentMoney = Mathf.Max(0, CurrentMoney + amount);
 
         // Only when money increases
         if (amount > 0)
@@ -151,13 +150,15 @@ public class ScoreManager : MonoBehaviour
     // For negative indication
     public void FlashPenaltyUI()
     {
-        // Flash animation
         if (scoreAnimator != null)
             scoreAnimator.Play("ScorePenaltyFlash", 0, 0f);
-        // Sounds
+        else
+            Debug.LogWarning("FlashPenaltyUI: scoreAnimator is null (missing Animator on ScoreText in this scene).");
+
         if (errorSounds != null)
             errorSounds.PlayNegative();
     }
+
 
     /// <summary>
     /// Updates the SFX sound target for coin sounds (set per scene).
@@ -166,4 +167,5 @@ public class ScoreManager : MonoBehaviour
     {
         soundCoins = newSoundCoins;
     }
+
 }
