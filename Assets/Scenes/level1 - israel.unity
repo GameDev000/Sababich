@@ -1391,8 +1391,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u05DE\u05D8\u05E8\u05D4: 051 \u05DE\u05D8\u05D1\u05E2\u05D5\u05EA!"
   m_isRightToLeft: 1
-  m_fontAsset: {fileID: 11400000, guid: a451420d173700c4b8b7eb12ced14bc3, type: 2}
-  m_sharedMaterial: {fileID: 879360639341279661, guid: a451420d173700c4b8b7eb12ced14bc3, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 681f681109cf26c4babde0a36fe09650, type: 2}
+  m_sharedMaterial: {fileID: -7317409489689584996, guid: 681f681109cf26c4babde0a36fe09650, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2290,12 +2290,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   clicksPerStage: 6
   dirtOverlayObject: {fileID: 1979700797}
-  dirtOverlayRenderer: {fileID: 0}
+  dirtOverlayRenderer: {fileID: 1979700798}
   dirtStageSprites:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 21300000, guid: 1127011c6fce0e14d8e71500c27fe03b, type: 3}
+  - {fileID: 21300000, guid: 341fa620279a9be4e9a1c427025e9083, type: 3}
+  - {fileID: 21300000, guid: 795692845c6e2ab44a73bea2b11726f6, type: 3}
+  - {fileID: 21300000, guid: 909e5cab7465c9044bc9be3422ff80ec, type: 3}
   mirrorRenderer: {fileID: 1114869949}
   mirrorCleanSprite: {fileID: 21300000, guid: 1a75f306bc5226c4eb8e144262b34f9b, type: 3}
   mirrorDirtySprite: {fileID: 21300000, guid: 42b282ba8f17d254c95b0e346c763567, type: 3}
@@ -4820,6 +4820,14 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1482633827447137748, guid: 342c60323b8fa884d828441a9c84b770, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 681f681109cf26c4babde0a36fe09650, type: 2}
+    - target: {fileID: 1482633827447137748, guid: 342c60323b8fa884d828441a9c84b770, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: -7317409489689584996, guid: 681f681109cf26c4babde0a36fe09650, type: 2}
+    - target: {fileID: 1482633827447137748, guid: 342c60323b8fa884d828441a9c84b770, type: 3}
       propertyPath: m_fontColor32.rgba
       value: 4279900698
       objectReference: {fileID: 0}
@@ -4847,6 +4855,14 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 2295059}
+    - target: {fileID: 3005204476576462044, guid: 342c60323b8fa884d828441a9c84b770, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 681f681109cf26c4babde0a36fe09650, type: 2}
+    - target: {fileID: 3005204476576462044, guid: 342c60323b8fa884d828441a9c84b770, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: -7317409489689584996, guid: 681f681109cf26c4babde0a36fe09650, type: 2}
     - target: {fileID: 3891561913378899565, guid: 342c60323b8fa884d828441a9c84b770, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -4943,6 +4959,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: 1512
       objectReference: {fileID: 0}
+    - target: {fileID: 9151668274323793874, guid: 342c60323b8fa884d828441a9c84b770, type: 3}
+      propertyPath: rewardTextPrefab
+      value: 
+      objectReference: {fileID: 6931110455707676036, guid: 1b81f9c59141feb4c93c6fdc08e5dc71, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

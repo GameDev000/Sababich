@@ -509,12 +509,17 @@ public class CustomerManager : MonoBehaviour
         // }
 
         // Fixed penalty once for wrong dish
+        // Fixed penalty once for wrong dish
         if (ScoreManager.Instance != null)
         {
             ScoreManager.Instance.FlashPenaltyUI();
 
             // Single penalty when dish is wrong
             ScoreManager.Instance.AddMoney(wrongDishPenalty);
+
+            // We want a positive number for amount here, the VFX function makes it negative itself.
+            if (coinFlyVFX != null)
+                coinFlyVFX.PlayPenaltyFromWorld(target.transform, Mathf.Abs(wrongDishPenalty));
         }
 
         // Clear selection on wrong order
