@@ -4963,6 +4963,10 @@ PrefabInstance:
       propertyPath: rewardTextPrefab
       value: 
       objectReference: {fileID: 6931110455707676036, guid: 1b81f9c59141feb4c93c6fdc08e5dc71, type: 3}
+    - target: {fileID: 9151668274323793874, guid: 342c60323b8fa884d828441a9c84b770, type: 3}
+      propertyPath: penaltyTextPrefab
+      value: 
+      objectReference: {fileID: 7716991577664780950, guid: 11cf6b9c6c0d54b4baa7a55c6130ee99, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -178,8 +178,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 1
-  m_fontAsset: {fileID: 11400000, guid: ccbea80bbf18a4543939c04c8b892a8c, type: 2}
-  m_sharedMaterial: {fileID: -2367795080497754151, guid: ccbea80bbf18a4543939c04c8b892a8c, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 681f681109cf26c4babde0a36fe09650, type: 2}
+  m_sharedMaterial: {fileID: -7317409489689584996, guid: 681f681109cf26c4babde0a36fe09650, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2405,8 +2405,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u05DE\u05D8\u05E8\u05D4: 003 \u05DE\u05D8\u05D1\u05E2\u05D5\u05EA!"
   m_isRightToLeft: 1
-  m_fontAsset: {fileID: 11400000, guid: ccbea80bbf18a4543939c04c8b892a8c, type: 2}
-  m_sharedMaterial: {fileID: -2367795080497754151, guid: ccbea80bbf18a4543939c04c8b892a8c, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 681f681109cf26c4babde0a36fe09650, type: 2}
+  m_sharedMaterial: {fileID: -7317409489689584996, guid: 681f681109cf26c4babde0a36fe09650, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2634,8 +2634,7 @@ MonoBehaviour:
   coinFlyVFX: {fileID: 2099307325}
   maxMissingItems: 2
   baseOrderReward: 30
-  level1PenaltyPerMistake: 10
-  level2And3PenaltyPerMistake: 10
+  wrongDishPenalty: -5
   levelNumber: 3
   instructionManager: {fileID: 1605576797}
   shouldRunInstructions_level2: 1
@@ -3070,8 +3069,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ccbea80bbf18a4543939c04c8b892a8c, type: 2}
-  m_sharedMaterial: {fileID: -2367795080497754151, guid: ccbea80bbf18a4543939c04c8b892a8c, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 681f681109cf26c4babde0a36fe09650, type: 2}
+  m_sharedMaterial: {fileID: -7317409489689584996, guid: 681f681109cf26c4babde0a36fe09650, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -7528,6 +7527,11 @@ MonoBehaviour:
   arcPixels: 120
   endScale: 0.6
   endPunch: 0.08
+  rewardTextPrefab: {fileID: 6931110455707676036, guid: 1b81f9c59141feb4c93c6fdc08e5dc71, type: 3}
+  rewardOffsetPixels: {x: 0, y: 50}
+  rewardDuration: 0.7
+  rewardEndScale: 1
+  penaltyTextPrefab: {fileID: 7716991577664780950, guid: 11cf6b9c6c0d54b4baa7a55c6130ee99, type: 3}
 --- !u!1001 &2105294426
 PrefabInstance:
   m_ObjectHideFlags: 0
