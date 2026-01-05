@@ -14,7 +14,6 @@ public class ScoreManager : MonoBehaviour
     [Header("Visual FX")]
     [SerializeField] private ParticleSystem coinSparkles;
 
-
     [SerializeField] private int target = 150;
 
     [SerializeField] private SoundCoins soundCoins;
@@ -23,6 +22,7 @@ public class ScoreManager : MonoBehaviour
     // For negative indication
     [SerializeField] private Animator scoreAnimator;
     [SerializeField] private SoundCoins errorSounds;
+    [SerializeField] private CoinFlyVFX coinFlyVFX;
 
     public int CurrentMoney { get; private set; }
 
@@ -39,7 +39,6 @@ public class ScoreManager : MonoBehaviour
 
         CurrentMoney = startMoney;
         UpdateScoreUI();
-
     }
 
     private void OnEnable()
@@ -101,14 +100,22 @@ public class ScoreManager : MonoBehaviour
             return;
 
         CurrentMoney += amount;
-        if (amount > 0 && soundCoins != null)
+
+        // Only when money increases
+        if (amount > 0)
         {
-            soundCoins.PlayFromSecond(coinSoundStartTime);
+            if (soundCoins != null)
+                soundCoins.PlayFromSecond(coinSoundStartTime);
+
+            if (coinSparkles != null)
+            {
+                coinSparkles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+                coinSparkles.Emit(30);
+            }
         }
 
         UpdateScoreUI();
 
-        // Notify active level timers so they can freeze timeLeft the first moment target is reached.
         var l1 = FindObjectOfType<LevelTimerWinLose>();
         if (l1 != null) l1.NotifyMoneyChanged(CurrentMoney);
 
@@ -117,18 +124,14 @@ public class ScoreManager : MonoBehaviour
 
         var l3 = FindObjectOfType<LevelThreeTimerWinLose>();
         if (l3 != null) l3.NotifyMoneyChanged(CurrentMoney);
-
-        if (coinSparkles != null)
-            coinSparkles.Emit(30);
-        else
-            Debug.LogWarning("coinSparkles is not assigned on ScoreManager!");
     }
+
+
     public void SetTarget(int newTarget)
     {
         target = newTarget;
         UpdateScoreUI();
     }
-
 
     private void UpdateScoreUI()
     {
@@ -162,6 +165,4 @@ public class ScoreManager : MonoBehaviour
     {
         soundCoins = newSoundCoins;
     }
-
-
 }

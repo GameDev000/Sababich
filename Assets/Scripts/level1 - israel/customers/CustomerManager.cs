@@ -43,10 +43,21 @@ public class CustomerManager : MonoBehaviour
     [SerializeField] private List<CustomerType> customerTypes = new List<CustomerType>();
 
     [Header("Visual FX - Coins Animation")]
-    [SerializeField] private CoinFlyVFX coinFlyVFX; // reference to flying coins VFX
+    [SerializeField] private CoinFlyVFX coinFlyVFX;
 
     [Header("Removing ingredients")]
-    [SerializeField] private int maxMissingItems = 0; // level 2->1, level 3->2
+    [SerializeField] private int maxMissingItems = 0;
+
+    // Reward for a full correct order (before penalties)
+    [Header("Scoring per-order")]
+    [SerializeField] private int baseOrderReward = 30;
+
+    // Penalty per wrong/missing ingredient by level
+    [SerializeField] private int level1PenaltyPerMistake = 5;
+    [SerializeField] private int level2And3PenaltyPerMistake = 4;
+
+    // Set this in Inspector per scene (Level1=1, Level2=2, Level3=3)
+    [SerializeField] private int levelNumber = 1;
 
     [Header("Instructions UI")]
     [SerializeField] private FeatureHintsSequence instructionManager;
@@ -245,7 +256,6 @@ public class CustomerManager : MonoBehaviour
     /// <summary>
     /// Called when a customer's mood timer finishes (served or time-up), for a SPECIFIC slot.
     /// </summary>
-
     private void OnCustomerFinishedInSlot(int slotIndex, bool served)
     {
         if (!IsValidSlot(slotIndex)) return;
@@ -259,12 +269,34 @@ public class CustomerManager : MonoBehaviour
 
             if (ScoreManager.Instance != null)
             {
-                ScoreManager.Instance.AddMoney(30);
-                coinFlyVFX.PlayCoinsFromWorld(c.transform);
+                ScoreManager.Instance.AddMoney(baseOrderReward);
+                if (coinFlyVFX != null)
+                    coinFlyVFX.PlayCoinsFromWorld(c.transform);
             }
         }
 
         StartLeaveSequence(slotIndex);
+    }
+
+    // Updates per-level served/perfect stats
+    private void RegisterServedDish(bool isPerfect)
+    {
+        // Total served is always +1
+        if (levelNumber == 1)
+        {
+            LevelOneState.TotalServedDishes++;
+            if (isPerfect) LevelOneState.PerfectServedDishes++;
+        }
+        else if (levelNumber == 2)
+        {
+            LevelTwoState.TotalServedDishes++;
+            if (isPerfect) LevelTwoState.PerfectServedDishes++;
+        }
+        else if (levelNumber == 3)
+        {
+            LevelThreeState.TotalServedDishes++;
+            if (isPerfect) LevelThreeState.PerfectServedDishes++;
+        }
     }
 
 
@@ -299,35 +331,44 @@ public class CustomerManager : MonoBehaviour
         }
 
         List<string> ingredients = SelectionList.Instance.GetSelectedIngredients();
-        bool ok = target.IsOrderCorrect(ingredients);
+
+        // If this customer gives reward only when not served,
+        // then serving him (full or partial) gives ZERO points.
+        if (target.Data != null && target.Data.scoreIfNotServed)
+        {
+            Debug.Log("Special customer: served -> NO score (full or partial).");
+
+            if (ScoreManager.Instance != null)
+                ScoreManager.Instance.FlashPenaltyUI();
+
+            // Clear selection on serve attempt
+            SelectionList.Instance.ClearIngredients();
+
+            // Show angry + wait + leave
+            StartCoroutine(LeaveAfterWrongFeedback(slotIndex, target, 0.4f));
+            return;
+        }
+
+        // Instead of bool correct/incorrect, compute mistakes + reward
+        int mistakes = CountOrderMistakes(target, ingredients);
+        int reward = CalculateRewardFromMistakes(mistakes);
+        bool ok = (mistakes == 0);
+        // Count served dishes + perfect dishes
+        RegisterServedDish(ok);
 
         if (ok)
         {
             Debug.Log("Correct order!");
 
-            if (!target.Data.scoreIfNotServed)
+            if (ScoreManager.Instance != null)
             {
-                // Add reward
-                if (ScoreManager.Instance != null)
-                {
-                    ScoreManager.Instance.AddMoney(30);
+                // Full reward (mistakes==0 => reward==baseOrderReward)
+                ScoreManager.Instance.AddMoney(reward);
+
+                // Coins VFX only when reward > 0
+                if (reward > 0 && coinFlyVFX != null)
                     coinFlyVFX.PlayCoinsFromWorld(target.transform);
-
-                }
             }
-            else
-            {
-                if (ScoreManager.Instance != null)
-                {
-                    ScoreManager.Instance.FlashPenaltyUI();
-                }
-                // Show angry + wait + leave
-                StartCoroutine(LeaveAfterWrongFeedback(slotIndex, target, 0.4f));
-                SelectionList.Instance.ClearIngredients();
-                Debug.Log("Special customer: served but NO score.");
-                return;
-            }
-
 
             // Tell THIS customer's timer he was served in time
             if (target.MoodTimer != null)
@@ -341,19 +382,71 @@ public class CustomerManager : MonoBehaviour
             return;
         }
 
-        Debug.Log("Wrong order!");
-        // Negative feedback (sound + red flash)
+        Debug.Log($"Wrong order! Mistakes={mistakes}, Reward={reward}");
+
+        // Partial reward (never negative)
         if (ScoreManager.Instance != null)
         {
             ScoreManager.Instance.FlashPenaltyUI();
-            ScoreManager.Instance.AddMoney(-5);
+            ScoreManager.Instance.AddMoney(reward);
+
+            // Coins VFX only when reward > 0
+            if (reward > 0 && coinFlyVFX != null)
+                coinFlyVFX.PlayCoinsFromWorld(target.transform);
         }
+
         // Clear selection on wrong order
         SelectionList.Instance.ClearIngredients();
 
         // Show angry + wait + leave
         StartCoroutine(LeaveAfterWrongFeedback(slotIndex, target, 0.4f));
         return;
+    }
+
+    // Count mistakes between required vs given: 1.missing 2.extra 3.wrong)
+    private int CountOrderMistakes(Customer target, List<string> givenIngredients)
+    {
+        if (target == null)
+            return 0;
+
+        // Use the active order list
+        List<string> activeOrder = target.GetActiveRequiredIngredients();
+        if (activeOrder == null)
+            return 0;
+
+        List<string> required = new List<string>();
+        foreach (var r in activeOrder)
+            required.Add(r.ToLower());
+
+        List<string> given = new List<string>();
+        if (givenIngredients != null)
+        {
+            foreach (var g in givenIngredients)
+                given.Add(g.ToLower());
+        }
+
+        int mistakes = 0;
+
+        // Missing required
+        foreach (string r in required)
+            if (!given.Contains(r))
+                mistakes++;
+
+        // Extra/wrong given
+        foreach (string g in given)
+            if (!required.Contains(g))
+                mistakes++;
+
+        return mistakes;
+    }
+
+
+    // Convert mistakes into reward based on level rules
+    private int CalculateRewardFromMistakes(int mistakes)
+    {
+        int penaltyPerMistake = (levelNumber == 1) ? level1PenaltyPerMistake : level2And3PenaltyPerMistake;
+        int reward = baseOrderReward - (mistakes * penaltyPerMistake);
+        return Mathf.Max(0, reward); // Not return negative feedback
     }
 
     /// <summary>
@@ -494,7 +587,7 @@ public class CustomerManager : MonoBehaviour
         return slotIndex >= 0 && slotIndex < slots.Count;
     }
 
-    // Negative indication for serving an incorrect order
+    // Negative indication for serving an incorrect order (and also used for special-customer "served -> no score")
     private IEnumerator LeaveAfterWrongFeedback(int slotIndex, Customer target, float delay)
     {
         if (target != null)
@@ -533,8 +626,4 @@ public class CustomerManager : MonoBehaviour
 
         AddCustomerType(playerType);
     }
-
-
-
-
 }

@@ -49,12 +49,18 @@ public class SelectionList : MonoBehaviour
     {
         string lower = ingredientName.ToLower();
 
-        // The first selected ingredient must be "pitta".
-        if (selectedIngredients.Count == 0 && lower != "pitta")
+        bool isPita = (lower == "pitta" || lower == "pita");
+
+        // First ingredient must be pita
+        if (selectedIngredients.Count == 0 && !isPita)
         {
             Debug.Log("First ingredient must be Pitta.");
             return false;
         }
+
+        // Normalize pita name to a single canonical key
+        if (isPita)
+            lower = "pitta";
 
         // Prevent adding eggplant if the eggplant tray is empty.
         if (lower == "eggplant" && eggplantTrayState != null && eggplantTrayState.IsEmpty)
