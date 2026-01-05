@@ -24,8 +24,8 @@ MonoBehaviour:
   m_missingGlyphCharacter: 0
   m_ClearDynamicDataOnBuild: 1
   m_warningsDisabled: 0
-  m_defaultFontAsset: {fileID: 11400000, guid: a451420d173700c4b8b7eb12ced14bc3, type: 2}
-  m_defaultFontAssetPath: Assets/Fonts/Rubik/Rubik-VariableFont_wght SDF.asset
+  m_defaultFontAsset: {fileID: 11400000, guid: 681f681109cf26c4babde0a36fe09650, type: 2}
+  m_defaultFontAssetPath: Assets/Fonts/Rubik/Rubik-VariableFont_wght SDF 1.asset
   m_defaultFontSize: 36
   m_defaultAutoSizeMinRatio: 0.5
   m_defaultAutoSizeMaxRatio: 2
@@ -34,7 +34,7 @@ MonoBehaviour:
   m_autoSizeTextContainer: 0
   m_IsTextObjectScaleStatic: 0
   m_fallbackFontAssets:
-  - {fileID: 11400000, guid: a451420d173700c4b8b7eb12ced14bc3, type: 2}
+  - {fileID: 11400000, guid: 681f681109cf26c4babde0a36fe09650, type: 2}
   m_matchMaterialPreset: 1
   m_HideSubTextObjects: 0
   m_defaultSpriteAsset: {fileID: 11400000, guid: c41005c129ba4d66911b75229fd70b45, type: 2}
