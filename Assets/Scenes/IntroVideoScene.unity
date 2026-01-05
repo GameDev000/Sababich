@@ -351,7 +351,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   videoPlayer: {fileID: 897500680}
-  fileName: Intro2.mp4
+  fileName: Intro1.mp4
   skipButton: {fileID: 706517028}
   nextSceneName: MainMenu
 --- !u!328 &897500680
