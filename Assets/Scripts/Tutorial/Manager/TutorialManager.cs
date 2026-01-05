@@ -275,61 +275,61 @@ public class TutorialManager : MonoBehaviour
     /// <summary>
     /// Starts a new customer round in the tutorial.
     /// </summary>
-       private void StartCustomerRound()
+    private void StartCustomerRound()
+    {
+        UpdateCustomerSprite();
+
+        if (customerLogic != null)
+            customerLogic.ResetCustomer();
+
+        currentCustomerWasServed = false;
+
+        if (servedCustomers == forbiddenCustomerIndex)
         {
-            UpdateCustomerSprite();
+            forbiddenFlowActive = true;
 
-            if (customerLogic != null)
-                customerLogic.ResetCustomer();
+            if (eggplantItem != null) eggplantItem.SetClickable(false);
+            SetAllOtherItemsClickable(false);
+            ShowArrow(false);
 
-            currentCustomerWasServed = false;
+            SetGamePhase(GamePhase.ForbiddenCustomerWarning);
 
-            if (servedCustomers == forbiddenCustomerIndex)
-            {
-                forbiddenFlowActive = true;
-
-                if (eggplantItem != null) eggplantItem.SetClickable(false);
-                SetAllOtherItemsClickable(false);
-                ShowArrow(false);
-
-                SetGamePhase(GamePhase.ForbiddenCustomerWarning);
-
-                if (forbiddenRoutine != null) StopCoroutine(forbiddenRoutine);
-                forbiddenRoutine = StartCoroutine(ForbiddenCustomerAutoLeaveRoutine());
-                return;
-            }
-
-            if (servedCustomers == 0)
-            {
-                phase = TutorialPhase.FryEggplant;
-                buildStep = 0;
-
-                if (eggplantItem != null)
-                    eggplantItem.SetClickable(true);
-
-                SetAllOtherItemsClickable(false);
-                ShowArrowAbove(eggplantItem ? eggplantItem.transform : null, 2.5f);
-                SetGamePhase(GamePhase.AddRowEggplant);
-            }
-            else
-            {
-                phase = TutorialPhase.BuildSandwich;
-                buildStep = 0;
-
-                if (eggplantItem != null)
-                    eggplantItem.SetClickable(false);
-
-                SetAllOtherItemsClickable(false);
-
-                if (otherItems != null && otherItems.Length > 0 && otherItems[0] != null)
-                {
-                    otherItems[0].SetClickable(true);
-                    ShowArrowAbove(otherItems[0].transform, 2f);
-                }
-
-                SetGamePhase(GamePhase.AssembleDish);
-            }
+            if (forbiddenRoutine != null) StopCoroutine(forbiddenRoutine);
+            forbiddenRoutine = StartCoroutine(ForbiddenCustomerAutoLeaveRoutine());
+            return;
         }
+
+        if (servedCustomers == 0)
+        {
+            phase = TutorialPhase.FryEggplant;
+            buildStep = 0;
+
+            if (eggplantItem != null)
+                eggplantItem.SetClickable(true);
+
+            SetAllOtherItemsClickable(false);
+            ShowArrowAbove(eggplantItem ? eggplantItem.transform : null, 2.5f);
+            SetGamePhase(GamePhase.AddRowEggplant);
+        }
+        else
+        {
+            phase = TutorialPhase.BuildSandwich;
+            buildStep = 0;
+
+            if (eggplantItem != null)
+                eggplantItem.SetClickable(false);
+
+            SetAllOtherItemsClickable(false);
+
+            if (otherItems != null && otherItems.Length > 0 && otherItems[0] != null)
+            {
+                otherItems[0].SetClickable(true);
+                ShowArrowAbove(otherItems[0].transform, 2f);
+            }
+
+            SetGamePhase(GamePhase.AssembleDish);
+        }
+    }
 
 
     // /// <summary>
@@ -345,9 +345,9 @@ public class TutorialManager : MonoBehaviour
             ScoreManager.Instance.AddMoney(rewardAmount);
 
         }
-            
+
         yield return new WaitForSeconds(1);
-       // yield return StartCoroutine(WalkCustomerOutRoutine());
+        // yield return StartCoroutine(WalkCustomerOutRoutine());
 
         forbiddenFlowActive = false;
 

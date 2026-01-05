@@ -94,37 +94,37 @@ public class ScoreManager : MonoBehaviour
         return null;
     }
 
-public void AddMoney(int amount)
-{
-    if (amount < 0 && CurrentMoney + amount < 0) // Prevent coins<0
-        return;
-
-    CurrentMoney += amount;
-
-    // Only when money increases
-    if (amount > 0)
+    public void AddMoney(int amount)
     {
-        if (soundCoins != null)
-            soundCoins.PlayFromSecond(coinSoundStartTime);
+        if (amount < 0 && CurrentMoney + amount < 0) // Prevent coins<0
+            return;
 
-        if (coinSparkles != null)
+        CurrentMoney += amount;
+
+        // Only when money increases
+        if (amount > 0)
         {
-            coinSparkles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
-            coinSparkles.Emit(30);
+            if (soundCoins != null)
+                soundCoins.PlayFromSecond(coinSoundStartTime);
+
+            if (coinSparkles != null)
+            {
+                coinSparkles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+                coinSparkles.Emit(30);
+            }
         }
+
+        UpdateScoreUI();
+
+        var l1 = FindObjectOfType<LevelTimerWinLose>();
+        if (l1 != null) l1.NotifyMoneyChanged(CurrentMoney);
+
+        var l2 = FindObjectOfType<LevelTwoTimerWinLose>();
+        if (l2 != null) l2.NotifyMoneyChanged(CurrentMoney);
+
+        var l3 = FindObjectOfType<LevelThreeTimerWinLose>();
+        if (l3 != null) l3.NotifyMoneyChanged(CurrentMoney);
     }
-
-    UpdateScoreUI();
-
-    var l1 = FindObjectOfType<LevelTimerWinLose>();
-    if (l1 != null) l1.NotifyMoneyChanged(CurrentMoney);
-
-    var l2 = FindObjectOfType<LevelTwoTimerWinLose>();
-    if (l2 != null) l2.NotifyMoneyChanged(CurrentMoney);
-
-    var l3 = FindObjectOfType<LevelThreeTimerWinLose>();
-    if (l3 != null) l3.NotifyMoneyChanged(CurrentMoney);
-}
 
 
     public void SetTarget(int newTarget)

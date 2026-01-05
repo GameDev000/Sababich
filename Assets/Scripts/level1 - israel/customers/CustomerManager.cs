@@ -305,7 +305,7 @@ public class CustomerManager : MonoBehaviour
             SelectionList.Instance.ClearIngredients();
 
             // Show angry + wait + leave
-            StartCoroutine(LeaveAfterWrongFeedback(slotIndex, target, 0.4f)); 
+            StartCoroutine(LeaveAfterWrongFeedback(slotIndex, target, 0.4f));
             return;
         }
 

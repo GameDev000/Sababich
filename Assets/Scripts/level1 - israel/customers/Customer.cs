@@ -184,11 +184,11 @@ public class Customer : MonoBehaviour
             orderBubbleRoot.SetActive(false); // Hide the order bubble
     }
 
-        // Expose the actual active order (after missing-items removal)
-        public List<string> GetActiveRequiredIngredients()
-        {
-            return activeRequiredIngredients;
-        }
+    // Expose the actual active order (after missing-items removal)
+    public List<string> GetActiveRequiredIngredients()
+    {
+        return activeRequiredIngredients;
+    }
 
 }
 
