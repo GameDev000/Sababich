@@ -1,9 +1,9 @@
 using UnityEngine;
-using TMPro; 
+using TMPro;
 
 public class WalletUI : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI coinsText; 
+    [SerializeField] private TextMeshProUGUI coinsText;
 
     private void Start()
     {
@@ -31,7 +31,7 @@ public class WalletUI : MonoBehaviour
     {
         if (coinsText != null)
         {
-            coinsText.text = amount.ToString(); 
+            coinsText.text = amount.ToString();
         }
     }
 }
