@@ -41,7 +41,7 @@ public class IntroVideoPlayer : MonoBehaviour
     {
         // Default UI state: show Start, hide Skip (optional)
         if (startButton != null) startButton.gameObject.SetActive(true);
-        if (skipButton != null)  skipButton.gameObject.SetActive(false);
+        if (skipButton != null) skipButton.gameObject.SetActive(false);
 
         videoPlayer.source = VideoSource.Url;
         videoPlayer.isLooping = false;
