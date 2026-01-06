@@ -1,48 +1,113 @@
-using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.Video;
 
-/// <summary>
-/// Plays an introductory video at the start of the game, with an option to skip.
-/// Upon completion or skipping, transitions to the specified next scene.
-/// </summary>
 public class IntroVideoPlayer : MonoBehaviour
 {
     [Header("Video")]
-    [SerializeField] private VideoPlayer videoPlayer; // Assign in Inspector or get in Awake
-    [SerializeField] private string fileName = "intro.mp4"; // Video file in StreamingAssets
+    [SerializeField] private VideoPlayer videoPlayer;
+
+    [Tooltip("If set, we will use this URL (recommended for itch/WebGL). Example: https://itamar000git.github.io/sababich-video/intro1.mp4")]
+    [SerializeField] private string videoUrlOverride = "";
+
+    [Tooltip("Used only if videoUrlOverride is empty. Must exist inside StreamingAssets.")]
+    [SerializeField] private string fileName = "intro.mp4";
 
     [Header("UI")]
-    [SerializeField] private Button skipButton; // Assign in Inspector
+    [SerializeField] private Button startButton;
+    [SerializeField] private Button skipButton;
 
     [Header("After Video")]
-    [SerializeField] private string nextSceneName = "MainMenu"; // Scene to load after video
+    [SerializeField] private string nextSceneName = "MainMenu";
 
     private bool isLeaving = false;
+    private bool isPreparing = false;
+    private bool hasStarted = false;
 
     private void Awake()
     {
         if (videoPlayer == null)
             videoPlayer = GetComponent<VideoPlayer>();
 
+        if (startButton != null)
+            startButton.onClick.AddListener(StartVideo);
+
         if (skipButton != null)
             skipButton.onClick.AddListener(Skip);
     }
 
-    /// <summary>
-    /// Starts playing the intro video and sets up the event to transition scenes upon completion.
-    /// </summary>
     private void Start()
     {
-        videoPlayer.source = VideoSource.Url; // Load from URL (file path)
-        videoPlayer.url = Path.Combine(Application.streamingAssetsPath, fileName); // Full path to video file
-        videoPlayer.isLooping = false; // Do not loop the video
+        // Default UI state: show Start, hide Skip (optional)
+        if (startButton != null) startButton.gameObject.SetActive(true);
+        if (skipButton != null)  skipButton.gameObject.SetActive(false);
 
-        videoPlayer.loopPointReached += _ => GoNext(); // Event when video ends
+        videoPlayer.source = VideoSource.Url;
+        videoPlayer.isLooping = false;
+        videoPlayer.playOnAwake = false;
 
-        videoPlayer.Play(); // Start playing the video
+        // IMPORTANT: For itch/WebGL, prefer a real HTTPS URL (GitHub Pages).
+        // Fallback: StreamingAssetsPath (works in editor/standalone, often fails on itch).
+        if (!string.IsNullOrWhiteSpace(videoUrlOverride))
+            videoPlayer.url = videoUrlOverride.Trim();
+        else
+            videoPlayer.url = $"{Application.streamingAssetsPath}/{fileName}";
+
+        Debug.Log($"[IntroVideoPlayer] Video URL: {videoPlayer.url}");
+
+        // Use named handlers (not lambdas) so we can unsubscribe safely.
+        videoPlayer.loopPointReached += OnVideoFinished;
+        videoPlayer.prepareCompleted += OnPrepared;
+        videoPlayer.errorReceived += OnVideoError;
+
+        videoPlayer.Stop();
+    }
+
+    public void StartVideo()
+    {
+        if (isLeaving) return;
+        if (hasStarted) return;
+
+        hasStarted = true;
+
+        // Hide Start, show Skip (optional)
+        if (startButton != null)
+            startButton.gameObject.SetActive(false);
+
+        if (skipButton != null)
+        {
+            skipButton.gameObject.SetActive(true);
+            skipButton.interactable = true;
+        }
+
+        // Prepare first (important for WebGL)
+        isPreparing = true;
+        Debug.Log("[IntroVideoPlayer] Preparing video...");
+        videoPlayer.Prepare();
+    }
+
+    private void OnPrepared(VideoPlayer vp)
+    {
+        if (isLeaving) return;
+        if (!isPreparing) return;
+
+        isPreparing = false;
+        Debug.Log("[IntroVideoPlayer] Prepared. Starting Play().");
+
+        vp.Play();
+    }
+
+    private void OnVideoFinished(VideoPlayer vp)
+    {
+        GoNext();
+    }
+
+    private void OnVideoError(VideoPlayer vp, string msg)
+    {
+        Debug.LogError($"[IntroVideoPlayer] Video error: {msg}");
+        // Optional: if video fails, don't freeze the game -> continue
+        GoNext();
     }
 
     private void Skip()
@@ -50,24 +115,26 @@ public class IntroVideoPlayer : MonoBehaviour
         GoNext();
     }
 
-    /// <summary>
-    /// Transitions to the next scene after the video ends or is skipped.
-    /// Prevents multiple calls if already leaving.
-    /// </summary>
     private void GoNext()
     {
         if (isLeaving) return;
-        isLeaving = true; // Mark as leaving to prevent re-entry
+        isLeaving = true;
 
-        if (skipButton != null)
-            skipButton.interactable = false; // Disable skip button
+        if (skipButton != null) skipButton.interactable = false;
+        if (startButton != null) startButton.interactable = false;
 
         if (videoPlayer != null)
-        {
-            videoPlayer.loopPointReached -= _ => GoNext();// Unsubscribe event
             videoPlayer.Stop();
-        }
 
-        SceneManager.LoadScene(nextSceneName); // Load the next scene
+        SceneManager.LoadScene(nextSceneName);
+    }
+
+    private void OnDestroy()
+    {
+        if (videoPlayer == null) return;
+
+        videoPlayer.loopPointReached -= OnVideoFinished;
+        videoPlayer.prepareCompleted -= OnPrepared;
+        videoPlayer.errorReceived -= OnVideoError;
     }
 }
