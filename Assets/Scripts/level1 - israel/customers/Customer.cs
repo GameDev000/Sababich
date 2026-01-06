@@ -49,21 +49,21 @@ public class Customer : MonoBehaviour
         }
         else
         {
-        if (spriteRenderer != null && data != null && data.sprite != null)
-            spriteRenderer.sprite = data.sprite;
+            if (spriteRenderer != null && data != null && data.sprite != null)
+                spriteRenderer.sprite = data.sprite;
 
-        if (moodTimer != null && data != null)
-        {
-            if (data.happyFace == null)
-                Debug.LogWarning($"CustomerType '{data.name}' has no happyFace assigned!");
+            if (moodTimer != null && data != null)
+            {
+                if (data.happyFace == null)
+                    Debug.LogWarning($"CustomerType '{data.name}' has no happyFace assigned!");
 
-            if (data.angryFaces == null || data.angryFaces.Length == 0)
-                Debug.LogWarning($"CustomerType '{data.name}' has no angryFaces assigned!");
+                if (data.angryFaces == null || data.angryFaces.Length == 0)
+                    Debug.LogWarning($"CustomerType '{data.name}' has no angryFaces assigned!");
 
-            moodTimer.Configure(data.happyFace, data.angryFaces); // Configure mood timer with faces
+                moodTimer.Configure(data.happyFace, data.angryFaces); // Configure mood timer with faces
+            }
         }
-        }
-        
+
         BuildActiveOrder(maxMissingItems); // For Actual customer order
         SetupOrderBubble(); // Setup the order bubble with icons
 
