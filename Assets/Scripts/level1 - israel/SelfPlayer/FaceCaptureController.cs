@@ -19,7 +19,7 @@ public class FaceCaptureController : MonoBehaviour
     private Texture2D capturedAngry;
     private Texture2D capturedFurious;
 
-    [SerializeField] private string introText = "צלם 3 תמונות:\n1. חייך\n2. כועס\n3. כועס מאוד";
+    [SerializeField] private string introText = "צלם 3 תמונות: חייך, כועס, כועס מאוד";
 
 
     [SerializeField] private float firstStageDelay = 3f;

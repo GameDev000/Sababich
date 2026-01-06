@@ -21,7 +21,9 @@ public class CustomerManager : MonoBehaviour
     public static CustomerManager Instance { get; private set; }
 
     [Header("Prefabs & Positions")]
-    [SerializeField] private Customer customerPrefab;
+    [SerializeField] private CustomerType playerBaseBodyType;
+    [SerializeField] private Customer customerPrefabNormal;
+    [SerializeField] private Customer customerPrefabPlayerHead;
     [SerializeField] private Transform spawnPoint;
     [SerializeField] private Transform exitPoint;
 
@@ -193,16 +195,18 @@ public class CustomerManager : MonoBehaviour
         SpawnCustomerInSlot(slotIndex);
     }
 
+
     // /// <summary>
     // /// Spawns a new customer into the given slot and moves him to that slot's stand point.
+    // /// Avoids repeating the last spawned type and avoids matching the type currently in the other slots.
+    // /// Uses do/while like your style, but with a hard max-attempts guard (so no infinite loop).
     // /// </summary>
     // private void SpawnCustomerInSlot(int slotIndex)
     // {
-    //     CustomerType previousCustomerType = null,chosen=null;
     //     if (!IsValidSlot(slotIndex)) return;
 
     //     // Validate required references
-    //     if (customerPrefab == null || spawnPoint == null || exitPoint == null)
+    //     if (customerPrefabNormal == null || spawnPoint == null || exitPoint == null)
     //     {
     //         Debug.LogWarning("CustomerManager: Missing customerPrefab/spawnPoint/exitPoint reference.");
     //         return;
@@ -220,14 +224,49 @@ public class CustomerManager : MonoBehaviour
     //     // If something remains in slot, clean it up first
     //     CleanupSlot(slotIndex);
 
-    //     // Choose random customer type
+    //     // Read current types of the other slots (only up to 3)
+    //     CustomerType type0 = (slots.Count > 0) ? slotTypes[0] : null;
+    //     CustomerType type1 = (slots.Count > 1) ? slotTypes[1] : null;
+    //     CustomerType type2 = (slots.Count > 2) ? slotTypes[2] : null;
+
+    //     CustomerType chosen = null;
+
+    //     // We guard the do/while with a max attempts count to avoid infinite loops.
+    //     // With 5 types and at most 3 forbidden (last + 2 other slots), a valid choice should exist.
+    //     int attempts = 0;
+    //     int maxAttempts = 30; // safe guard
+
     //     do
     //     {
     //         chosen = customerTypes[UnityEngine.Random.Range(0, customerTypes.Count)];
-    //     } while (chosen == previousCustomerType);
-    //     previousCustomerType = chosen;
+    //         attempts++;
+
+    //         // If we somehow can't find a valid type, relax rules in a controlled way:
+    //         if (attempts >= maxAttempts)
+    //         {
+    //             // First relax: allow repeating lastSpawnedType, still avoid other slots
+    //             if (chosen != type0 && chosen != type1 && chosen != type2)
+    //                 break;
+
+    //             // Final relax: just take anything to avoid freezing the game
+    //             chosen = customerTypes[UnityEngine.Random.Range(0, customerTypes.Count)];
+    //             break;
+    //         }
+
+    //     } while (
+    //         chosen == lastSpawnedType ||                          // not same as last spawned
+    //         (slotIndex != 0 && chosen == type0) ||                // not same as slot 0 (if other)
+    //         (slotIndex != 1 && chosen == type1) ||                // not same as slot 1 (if other)
+    //         (slotIndex != 2 && chosen == type2)                   // not same as slot 2 (if other)
+    //     );
+
+    //     // Save for next spawns
+    //     lastSpawnedType = chosen;
+    //     if (slotIndex >= 0 && slotIndex < slotTypes.Length)
+    //         slotTypes[slotIndex] = chosen;
+
     //     // Instantiate + init customer
-    //     slot.customer = Instantiate(customerPrefab, spawnPoint.position, Quaternion.identity);
+    //     slot.customer = Instantiate(customerPrefabNormal, spawnPoint.position, Quaternion.identity);
     //     slot.customer.Init(chosen, maxMissingItems); // Implemented in Customer()
 
     //     // Register mapping (customer -> slotIndex) so clicks can route quickly
@@ -236,7 +275,6 @@ public class CustomerManager : MonoBehaviour
     //     // Subscribe to mood timer (slot-specific handler)
     //     if (slot.customer.MoodTimer != null)
     //     {
-    //         // Create a unique handler for THIS slot so we know exactly which slot finished
     //         slot.moodHandler = (served) => OnCustomerFinishedInSlot(slotIndex, served);
 
     //         // Safety: ensure we don't double subscribe
@@ -251,12 +289,7 @@ public class CustomerManager : MonoBehaviour
     //     // Move to stand point
     //     StartMove(slotIndex, slot.customer.transform, slot.standPoint.position);
 
-    //     //if (shouldRunInstructions_level2 && instructionManager != null)
     //     instructionManager.OnCustomerSpawned();
-
-    //     // if (shouldRunInstructions_level3 && instructionManager != null)
-    //     //     instructionManager.OnCustomerSpawned();
-
     // }
 
     /// <summary>
@@ -269,9 +302,9 @@ public class CustomerManager : MonoBehaviour
         if (!IsValidSlot(slotIndex)) return;
 
         // Validate required references
-        if (customerPrefab == null || spawnPoint == null || exitPoint == null)
+        if (customerPrefabNormal == null || spawnPoint == null || exitPoint == null)
         {
-            Debug.LogWarning("CustomerManager: Missing customerPrefab/spawnPoint/exitPoint reference.");
+            Debug.LogWarning("CustomerManager: Missing customerPrefabNormal/spawnPoint/exitPoint reference.");
             return;
         }
 
@@ -328,8 +361,20 @@ public class CustomerManager : MonoBehaviour
         if (slotIndex >= 0 && slotIndex < slotTypes.Length)
             slotTypes[slotIndex] = chosen;
 
+        // Choose which prefab to spawn (player_customer uses the head+mask prefab)
+        bool isPlayerCustomer = chosen != null && chosen.name == "player_customer";
+        Customer prefabToSpawn = customerPrefabNormal;
+
+        if (isPlayerCustomer)
+        {
+            if (customerPrefabPlayerHead != null)
+                prefabToSpawn = customerPrefabPlayerHead;
+            else
+                Debug.LogWarning("CustomerManager: player_customer chosen but customerPrefabPlayerHead is not assigned. Falling back to normal prefab.");
+        }
+
         // Instantiate + init customer
-        slot.customer = Instantiate(customerPrefab, spawnPoint.position, Quaternion.identity);
+        slot.customer = Instantiate(prefabToSpawn, spawnPoint.position, Quaternion.identity);
         slot.customer.Init(chosen, maxMissingItems); // Implemented in Customer()
 
         // Register mapping (customer -> slotIndex) so clicks can route quickly
@@ -354,6 +399,7 @@ public class CustomerManager : MonoBehaviour
 
         instructionManager.OnCustomerSpawned();
     }
+
 
 
     /// <summary>
@@ -748,17 +794,18 @@ public class CustomerManager : MonoBehaviour
 
     public void RegisterPlayerCustomer(Sprite happy, Sprite angry, Sprite furious)
     {
-        if (customerTypes == null || customerTypes.Count == 0)
+        CustomerType baseType = playerBaseBodyType;
+
+        if (baseType == null)
         {
-            Debug.LogWarning("RegisterPlayerCustomer: customerTypes is empty (no base type).");
+            Debug.LogWarning("RegisterPlayerCustomer: playerBaseBodyType is not assigned.");
             return;
         }
-
-        CustomerType baseType = customerTypes[0];
 
         CustomerType playerType =
             RuntimeCustomerFactory.CreateFromBase(baseType, happy, angry, furious, "player_customer");
 
         AddCustomerType(playerType);
     }
+
 }

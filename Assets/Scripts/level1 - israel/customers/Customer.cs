@@ -42,12 +42,15 @@ public class Customer : MonoBehaviour
     public void Init(CustomerType data, int maxMissingItems = 0)
     {
         Data = data;
-
+        var headSetup = GetComponent<CustomerHeadSetup>();
+        if (headSetup != null)
+        {
+            headSetup.Apply(data);
+        }
+        else
+        {
         if (spriteRenderer != null && data != null && data.sprite != null)
             spriteRenderer.sprite = data.sprite;
-
-        BuildActiveOrder(maxMissingItems); // For Actual customer order
-        SetupOrderBubble(); // Setup the order bubble with icons
 
         if (moodTimer != null && data != null)
         {
@@ -59,6 +62,11 @@ public class Customer : MonoBehaviour
 
             moodTimer.Configure(data.happyFace, data.angryFaces); // Configure mood timer with faces
         }
+        }
+        
+        BuildActiveOrder(maxMissingItems); // For Actual customer order
+        SetupOrderBubble(); // Setup the order bubble with icons
+
     }
 
     private void BuildActiveOrder(int maxMissingItems)
