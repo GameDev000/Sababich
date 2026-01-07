@@ -289,7 +289,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 1570.08, y: 924}
+  m_AnchoredPosition: {x: 1570.0801, y: 924}
   m_SizeDelta: {x: 1166.28, y: 210.41}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &73499199
@@ -2635,7 +2635,7 @@ MonoBehaviour:
     happyFace: {fileID: 21300000, guid: f95b9f80c8ab2d04eb4cab7e8ab04360, type: 3}
     angryFaces:
     - {fileID: 21300000, guid: d7089c3929809204296a14e14c0d13f8, type: 3}
-    - {fileID: 21300000, guid: e15d9359118053e4f9c6ec07a5dd941a, type: 3}
+    - {fileID: 21300000, guid: a7f1c343cf0cf9147b00194ff1a8991b, type: 3}
     scoreIfNotServed: 1
   - name: full6
     sprite: {fileID: 21300000, guid: ef935435ace052c4e9ebe109d1a1b94b, type: 3}
