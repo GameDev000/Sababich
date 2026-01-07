@@ -54,6 +54,9 @@ public class CustomerManager : MonoBehaviour
     [Header("Scoring per-order")]
     [SerializeField] private int baseOrderReward = 30;
     [SerializeField] private int wrongDishPenalty = -5;
+    [SerializeField] private int alergicServePenalty = -10;
+    [SerializeField] private int alergicOrderReward = 20;
+
 
     // Penalty per wrong/missing ingredient by level
     // [SerializeField] private int level1PenaltyPerMistake = 5;
@@ -418,9 +421,9 @@ public class CustomerManager : MonoBehaviour
 
             if (ScoreManager.Instance != null)
             {
-                ScoreManager.Instance.AddMoney(baseOrderReward);
+                ScoreManager.Instance.AddMoney(alergicOrderReward);
                 if (coinFlyVFX != null)
-                    coinFlyVFX.PlayCoinsFromWorld(c.transform);
+                    coinFlyVFX.PlayCoinsFromWorld(c.transform, alergicOrderReward, true);
             }
         }
 
@@ -488,10 +491,16 @@ public class CustomerManager : MonoBehaviour
             Debug.Log("Special customer: served -> NO score (full or partial).");
 
             if (ScoreManager.Instance != null)
+            {
                 ScoreManager.Instance.FlashPenaltyUI();
+                ScoreManager.Instance.AddMoney(alergicServePenalty);
+                if (coinFlyVFX != null)
+                    coinFlyVFX.PlayPenaltyFromWorld(target.transform, Mathf.Abs(alergicServePenalty), true);
+            }
 
             // Clear selection on serve attempt
             SelectionList.Instance.ClearIngredients();
+            
 
             // Show angry + wait + leave
             StartCoroutine(LeaveAfterWrongFeedback(slotIndex, target, 0.4f));

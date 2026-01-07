@@ -28,11 +28,13 @@ public class CoinFlyVFX : MonoBehaviour
 
     [Header("Reward Text")]
     [SerializeField] private RectTransform rewardTextPrefab; // TMP or Image prefab (RectTransform)
+    [SerializeField] private RectTransform alergicRewardTextPrefab;
     [SerializeField] private Vector2 rewardOffsetPixels = new Vector2(0f, 50f);
     [SerializeField] private float rewardDuration = 0.7f;
     [SerializeField] private float rewardEndScale = 1.0f;
     [Header("Penalty Text")]
     [SerializeField] private RectTransform penaltyTextPrefab; // UI prefab for "-5"
+    [SerializeField] private RectTransform alergicPenaltyTextPrefab;
 
 
 
@@ -43,7 +45,7 @@ public class CoinFlyVFX : MonoBehaviour
     /// Call this when you add money.
     /// worldFrom = customer transform (world position).
     /// </summary>
-    public void PlayCoinsFromWorld(Transform worldFrom, int amount = 30)
+    public void PlayCoinsFromWorld(Transform worldFrom, int amount = 30,bool isAlergic = false)
     {
         if (uiCanvas == null || targetCoinUI == null || spawnParent == null || flyingCoinPrefab == null)
         {
@@ -55,11 +57,10 @@ public class CoinFlyVFX : MonoBehaviour
             Debug.LogWarning("CoinFlyVFX: worldFrom is null.");
             return;
         }
-
+        RectTransform rewardTextPrefab = isAlergic ? alergicRewardTextPrefab : this.rewardTextPrefab;
         if (rewardTextPrefab != null)
             StartCoroutine(SpawnAndFlyRewardText(worldFrom.position, amount, rewardTextPrefab));
 
-        // 2) מטבעות (כמו שיש לך)
         for (int i = 0; i < coinsPerReward; i++)
             StartCoroutine(SpawnAndFlyOneCoin(worldFrom.position));
     }
@@ -281,15 +282,15 @@ public class CoinFlyVFX : MonoBehaviour
     /// <summary>
     /// Call this when you REMOVE money (bad dish, mistake, etc.)
     /// </summary>
-    public void PlayPenaltyFromWorld(Transform worldFrom, int amount = 5)
+    public void PlayPenaltyFromWorld(Transform worldFrom, int amount = 5, bool isAlergic = false)
     {
         if (penaltyTextPrefab == null || worldFrom == null)
             return;
-
+        RectTransform prefab = isAlergic ? alergicPenaltyTextPrefab : penaltyTextPrefab;
         StartCoroutine(SpawnAndFlyRewardText(
             worldFrom.position,
-            -Mathf.Abs(amount),      // תמיד שלילי
-            penaltyTextPrefab
+            -Mathf.Abs(amount),
+            prefab
         ));
     }
 
