@@ -2635,6 +2635,7 @@ MonoBehaviour:
     happyFace: {fileID: 21300000, guid: f95b9f80c8ab2d04eb4cab7e8ab04360, type: 3}
     angryFaces:
     - {fileID: 21300000, guid: d7089c3929809204296a14e14c0d13f8, type: 3}
+    - {fileID: 21300000, guid: e15d9359118053e4f9c6ec07a5dd941a, type: 3}
     scoreIfNotServed: 1
   - name: full6
     sprite: {fileID: 21300000, guid: ef935435ace052c4e9ebe109d1a1b94b, type: 3}
@@ -4872,6 +4873,10 @@ PrefabInstance:
       propertyPath: spriteRenderer
       value: 
       objectReference: {fileID: 1377786689}
+    - target: {fileID: 6888950048463671603, guid: 926e0b516840a4a47b492b3c9c94e820, type: 3}
+      propertyPath: secondsPerStage
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 7470123069668971338, guid: 926e0b516840a4a47b492b3c9c94e820, type: 3}
       propertyPath: m_LocalPosition.x
       value: -11.29
