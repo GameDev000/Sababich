@@ -35,6 +35,7 @@ public class CoinFlyVFX : MonoBehaviour
     [Header("Penalty Text")]
     [SerializeField] private RectTransform penaltyTextPrefab; // UI prefab for "-5"
     [SerializeField] private RectTransform alergicPenaltyTextPrefab;
+    [SerializeField] private RectTransform duplicatePenaltyTextPrefab; // UI prefab for "-2"
 
 
 
@@ -293,6 +294,22 @@ public class CoinFlyVFX : MonoBehaviour
             prefab
         ));
     }
+
+    /// <summary>
+    /// Call this when user double-clicks / duplicates an ingredient: shows "-2" flying up.
+    /// </summary>
+    public void PlayDuplicatePenaltyFromWorld(Transform worldFrom, int amount = 2)
+    {
+        if (worldFrom == null || duplicatePenaltyTextPrefab == null)
+            return;
+
+        StartCoroutine(SpawnAndFlyRewardText(
+            worldFrom.position,
+            -Mathf.Abs(amount),
+            duplicatePenaltyTextPrefab
+        ));
+    }
+
 
 
 }

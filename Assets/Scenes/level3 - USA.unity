@@ -5545,6 +5545,7 @@ MonoBehaviour:
   pitaBuilder: {fileID: 350299356}
   eggplantTrayState: {fileID: 407841700}
   chipsTrayState: {fileID: 1788359166}
+  coinFlyVFX: {fileID: 2099307325}
 --- !u!114 &1559742142
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7723,6 +7724,7 @@ MonoBehaviour:
   rewardEndScale: 1
   penaltyTextPrefab: {fileID: 7716991577664780950, guid: 11cf6b9c6c0d54b4baa7a55c6130ee99, type: 3}
   alergicPenaltyTextPrefab: {fileID: 5929524616989154440, guid: f9972e6efecbc394e975800f9f5cabe1, type: 3}
+  duplicatePenaltyTextPrefab: {fileID: 7667534340651305567, guid: ac81af0495a78c348af02239569ea793, type: 3}
 --- !u!1001 &2105294426
 PrefabInstance:
   m_ObjectHideFlags: 0

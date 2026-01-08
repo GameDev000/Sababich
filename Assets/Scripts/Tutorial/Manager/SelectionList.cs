@@ -24,6 +24,9 @@ public class SelectionList : MonoBehaviour
     [SerializeField] private FriedTrayState eggplantTrayState;
     [SerializeField] private FriedTrayState chipsTrayState;
 
+    // For negative indication
+    [SerializeField] private CoinFlyVFX coinFlyVFX;
+
     private readonly List<string> selectedIngredients = new List<string>();
 
     private void Awake()
@@ -45,7 +48,7 @@ public class SelectionList : MonoBehaviour
     }
 
     // Tries to add an ingredient to the selection list
-    public bool TryAddIngredient(string ingredientName)
+    public bool TryAddIngredient(string ingredientName , Transform worldFrom = null)
     {
         string lower = ingredientName.ToLower();
 
@@ -80,6 +83,8 @@ public class SelectionList : MonoBehaviour
         {
             ScoreManager.Instance.FlashPenaltyUI();
             ScoreManager.Instance.AddMoney(-2);
+            if (coinFlyVFX != null)
+                coinFlyVFX.PlayDuplicatePenaltyFromWorld(worldFrom);
             Debug.Log($"Duplicate ingredient in same order: {lower} => -2");
             return false;
         }

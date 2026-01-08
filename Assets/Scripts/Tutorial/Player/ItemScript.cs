@@ -26,7 +26,7 @@ public class Item : MonoBehaviour
 
             if (lower != "eggplantrow" && lower != "fryzone" && lower != "potatoes") //Item that are not "pitta_in_hands". potatoes for level3
             {
-                bool added = SelectionList.Instance.TryAddIngredient(ingredientName);
+                bool added = SelectionList.Instance.TryAddIngredient(ingredientName, this.transform);
 
                 if (!added) //Check that the item was actually added to list
                 {
