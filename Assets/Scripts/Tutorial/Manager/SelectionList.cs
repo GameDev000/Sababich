@@ -48,7 +48,7 @@ public class SelectionList : MonoBehaviour
     }
 
     // Tries to add an ingredient to the selection list
-    public bool TryAddIngredient(string ingredientName , Transform worldFrom = null)
+    public bool TryAddIngredient(string ingredientName, Transform worldFrom = null)
     {
         string lower = ingredientName.ToLower();
 
