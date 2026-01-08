@@ -2267,10 +2267,26 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 6c19786ea9b9dc54ba02a434ba92b3ac, type: 3}
     - {fileID: 21300000, guid: a8675d518e7350c41b056f7eb2c4ea88, type: 3}
     scoreIfNotServed: 0
+  - name: full6
+    sprite: {fileID: -6929814343056034091, guid: 787b2451a6e4ac7409df87c080966637, type: 3}
+    requiredIngredients:
+    - pitta
+    - salad
+    - egg
+    - eggplant
+    - tahini
+    - amba
+    happyFace: {fileID: 21300000, guid: 787b2451a6e4ac7409df87c080966637, type: 3}
+    angryFaces:
+    - {fileID: 21300000, guid: 411b8570812d35b499db181776cdf6f2, type: 3}
+    - {fileID: 21300000, guid: d29019f5cf31c6842912bdffba4e25ac, type: 3}
+    scoreIfNotServed: 0
   coinFlyVFX: {fileID: 906972935}
   maxMissingItems: 0
   baseOrderReward: 30
   wrongDishPenalty: -5
+  alergicServePenalty: -10
+  alergicOrderReward: 20
   levelNumber: 1
   instructionManager: {fileID: 320788933}
   shouldRunInstructions_level2: 1
@@ -5580,6 +5596,14 @@ PrefabInstance:
       propertyPath: penaltyTextPrefab
       value: 
       objectReference: {fileID: 7716991577664780950, guid: 11cf6b9c6c0d54b4baa7a55c6130ee99, type: 3}
+    - target: {fileID: 9151668274323793874, guid: 342c60323b8fa884d828441a9c84b770, type: 3}
+      propertyPath: alergicRewardTextPrefab
+      value: 
+      objectReference: {fileID: 3993720466674129446, guid: 8b41e5df0ccb8604cbe4ea147cb92776, type: 3}
+    - target: {fileID: 9151668274323793874, guid: 342c60323b8fa884d828441a9c84b770, type: 3}
+      propertyPath: alergicPenaltyTextPrefab
+      value: 
+      objectReference: {fileID: 5929524616989154440, guid: f9972e6efecbc394e975800f9f5cabe1, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

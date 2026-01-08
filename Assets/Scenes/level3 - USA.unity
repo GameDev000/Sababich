@@ -2656,6 +2656,8 @@ MonoBehaviour:
   maxMissingItems: 2
   baseOrderReward: 30
   wrongDishPenalty: -5
+  alergicServePenalty: -10
+  alergicOrderReward: 20
   levelNumber: 3
   instructionManager: {fileID: 1605576797}
   shouldRunInstructions_level2: 1
@@ -7715,10 +7717,12 @@ MonoBehaviour:
   endScale: 0.6
   endPunch: 0.08
   rewardTextPrefab: {fileID: 6931110455707676036, guid: 1b81f9c59141feb4c93c6fdc08e5dc71, type: 3}
+  alergicRewardTextPrefab: {fileID: 3993720466674129446, guid: 8b41e5df0ccb8604cbe4ea147cb92776, type: 3}
   rewardOffsetPixels: {x: 0, y: 50}
   rewardDuration: 0.7
   rewardEndScale: 1
   penaltyTextPrefab: {fileID: 7716991577664780950, guid: 11cf6b9c6c0d54b4baa7a55c6130ee99, type: 3}
+  alergicPenaltyTextPrefab: {fileID: 5929524616989154440, guid: f9972e6efecbc394e975800f9f5cabe1, type: 3}
 --- !u!1001 &2105294426
 PrefabInstance:
   m_ObjectHideFlags: 0
