@@ -500,7 +500,7 @@ public class CustomerManager : MonoBehaviour
 
             // Clear selection on serve attempt
             SelectionList.Instance.ClearIngredients();
-            
+
 
             // Show angry + wait + leave
             StartCoroutine(LeaveAfterWrongFeedback(slotIndex, target, 0.4f));

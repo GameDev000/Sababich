@@ -45,7 +45,7 @@ public class CoinFlyVFX : MonoBehaviour
     /// Call this when you add money.
     /// worldFrom = customer transform (world position).
     /// </summary>
-    public void PlayCoinsFromWorld(Transform worldFrom, int amount = 30,bool isAlergic = false)
+    public void PlayCoinsFromWorld(Transform worldFrom, int amount = 30, bool isAlergic = false)
     {
         if (uiCanvas == null || targetCoinUI == null || spawnParent == null || flyingCoinPrefab == null)
         {
