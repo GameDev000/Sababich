@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Factory for creating a CustomerType with custom face sprites at runtime
 public static class RuntimeCustomerFactory
 {
     public static CustomerType CreateFromBase(

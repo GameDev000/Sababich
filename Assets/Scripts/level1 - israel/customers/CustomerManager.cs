@@ -116,28 +116,6 @@ public class CustomerManager : MonoBehaviour
         shouldRunInstructions_level3 = false;
     }
 
-    // private async Task StartAsync()
-    // {
-    //     if (PlayerFaceStore.HasAll)
-    //     {
-    //         RegisterPlayerCustomer(PlayerFaceStore.Happy, PlayerFaceStore.Angry, PlayerFaceStore.Furious);
-    //     }
-    //     BuildSlotsFromInspector(); // Read standPoints + delays, create slots list
-    //     StartAllSlots();           // Spawn customers in each slot according to delays
-
-    //     if (UnityServices.State == ServicesInitializationState.Initialized &&
-    //     AuthenticationService.Instance.IsSignedIn)
-    //     {
-    //         var data = await DatabaseManager.LoadData("resumeScene");
-    //         string resumeScene = DatabaseManager.ReadString(data, "resumeScene", "");
-
-    //         //if (resumeScene == "Level2 - endScene")
-    //             shouldRunInstructions_level2 = false;
-    //         // if (resumeScene == "Level3 - endScene")
-    //         //     shouldRunInstructions_level3 = false;
-    //     }
-    // }
-
     /// <summary>
     /// Builds the slots list based on Inspector configuration.
     /// </summary>
@@ -198,102 +176,6 @@ public class CustomerManager : MonoBehaviour
         SpawnCustomerInSlot(slotIndex);
     }
 
-
-    // /// <summary>
-    // /// Spawns a new customer into the given slot and moves him to that slot's stand point.
-    // /// Avoids repeating the last spawned type and avoids matching the type currently in the other slots.
-    // /// Uses do/while like your style, but with a hard max-attempts guard (so no infinite loop).
-    // /// </summary>
-    // private void SpawnCustomerInSlot(int slotIndex)
-    // {
-    //     if (!IsValidSlot(slotIndex)) return;
-
-    //     // Validate required references
-    //     if (customerPrefabNormal == null || spawnPoint == null || exitPoint == null)
-    //     {
-    //         Debug.LogWarning("CustomerManager: Missing customerPrefab/spawnPoint/exitPoint reference.");
-    //         return;
-    //     }
-
-    //     // Validate customer types
-    //     if (customerTypes == null || customerTypes.Count == 0)
-    //     {
-    //         Debug.LogWarning("CustomerManager: no customer types defined!");
-    //         return;
-    //     }
-
-    //     SlotState slot = slots[slotIndex];
-
-    //     // If something remains in slot, clean it up first
-    //     CleanupSlot(slotIndex);
-
-    //     // Read current types of the other slots (only up to 3)
-    //     CustomerType type0 = (slots.Count > 0) ? slotTypes[0] : null;
-    //     CustomerType type1 = (slots.Count > 1) ? slotTypes[1] : null;
-    //     CustomerType type2 = (slots.Count > 2) ? slotTypes[2] : null;
-
-    //     CustomerType chosen = null;
-
-    //     // We guard the do/while with a max attempts count to avoid infinite loops.
-    //     // With 5 types and at most 3 forbidden (last + 2 other slots), a valid choice should exist.
-    //     int attempts = 0;
-    //     int maxAttempts = 30; // safe guard
-
-    //     do
-    //     {
-    //         chosen = customerTypes[UnityEngine.Random.Range(0, customerTypes.Count)];
-    //         attempts++;
-
-    //         // If we somehow can't find a valid type, relax rules in a controlled way:
-    //         if (attempts >= maxAttempts)
-    //         {
-    //             // First relax: allow repeating lastSpawnedType, still avoid other slots
-    //             if (chosen != type0 && chosen != type1 && chosen != type2)
-    //                 break;
-
-    //             // Final relax: just take anything to avoid freezing the game
-    //             chosen = customerTypes[UnityEngine.Random.Range(0, customerTypes.Count)];
-    //             break;
-    //         }
-
-    //     } while (
-    //         chosen == lastSpawnedType ||                          // not same as last spawned
-    //         (slotIndex != 0 && chosen == type0) ||                // not same as slot 0 (if other)
-    //         (slotIndex != 1 && chosen == type1) ||                // not same as slot 1 (if other)
-    //         (slotIndex != 2 && chosen == type2)                   // not same as slot 2 (if other)
-    //     );
-
-    //     // Save for next spawns
-    //     lastSpawnedType = chosen;
-    //     if (slotIndex >= 0 && slotIndex < slotTypes.Length)
-    //         slotTypes[slotIndex] = chosen;
-
-    //     // Instantiate + init customer
-    //     slot.customer = Instantiate(customerPrefabNormal, spawnPoint.position, Quaternion.identity);
-    //     slot.customer.Init(chosen, maxMissingItems); // Implemented in Customer()
-
-    //     // Register mapping (customer -> slotIndex) so clicks can route quickly
-    //     customerToSlot[slot.customer] = slotIndex;
-
-    //     // Subscribe to mood timer (slot-specific handler)
-    //     if (slot.customer.MoodTimer != null)
-    //     {
-    //         slot.moodHandler = (served) => OnCustomerFinishedInSlot(slotIndex, served);
-
-    //         // Safety: ensure we don't double subscribe
-    //         slot.customer.MoodTimer.OnCustomerFinished -= slot.moodHandler;
-    //         slot.customer.MoodTimer.OnCustomerFinished += slot.moodHandler;
-    //     }
-    //     else
-    //     {
-    //         Debug.LogWarning("CustomerManager: Customer.MoodTimer is not assigned on the Customer prefab.");
-    //     }
-
-    //     // Move to stand point
-    //     StartMove(slotIndex, slot.customer.transform, slot.standPoint.position);
-
-    //     instructionManager.OnCustomerSpawned();
-    // }
 
     /// <summary>
     /// Spawns a new customer into the given slot and moves him to that slot's stand point.

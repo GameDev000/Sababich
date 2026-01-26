@@ -2,12 +2,14 @@ using UnityEngine;
 
 public static class PlayerFaceStore
 {
+    // Stored captured face sprites
     public static Sprite Happy { get; private set; }
     public static Sprite Angry { get; private set; }
     public static Sprite Furious { get; private set; }
 
     public static bool HasAll => Happy != null && Angry != null && Furious != null;
 
+    // Sets the captured face sprites
     public static void Set(Sprite happy, Sprite angry, Sprite furious)
     {
         Happy = happy;

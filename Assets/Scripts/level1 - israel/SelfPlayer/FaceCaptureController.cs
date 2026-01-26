@@ -24,52 +24,57 @@ public class FaceCaptureController : MonoBehaviour
 
     [SerializeField] private float firstStageDelay = 3f;
 
+    // Opens the face capture UI and starts the process
     public void Open()
     {
-        panelRoot.SetActive(true);
-        capturedHappy = capturedAngry = capturedFurious = null;
+        panelRoot.SetActive(true); // show panel
+        capturedHappy = capturedAngry = capturedFurious = null; // reset
 
-        StartCoroutine(OpenSequence());
+        StartCoroutine(OpenSequence()); // start capture sequence
     }
 
 
+    // Sequence coroutine for opening and initial delay before first capture
     private System.Collections.IEnumerator OpenSequence()
     {
-        stage = -1;
-        if (instructionText != null)
+        stage = -1; // waiting for intro
+        if (instructionText != null) // show intro text
             instructionText.text = introText;
 
-        StartCamera();
+        StartCamera(); // start camera
 
-        yield return new WaitForSeconds(firstStageDelay);
+        yield return new WaitForSeconds(firstStageDelay); // wait before first capture
 
-        stage = 0;
-        UpdateInstruction();
+        stage = 0; // first capture stage
+        UpdateInstruction(); // update instruction text
     }
 
+    // Closes the face capture UI and stops the camera
     public void Close()
     {
         StopCamera();
         panelRoot.SetActive(false);
     }
 
+    // Starts the device camera and shows preview
     private void StartCamera()
     {
-        if (cam != null) return;
+        if (cam != null) return; 
 
-        if (WebCamTexture.devices == null || WebCamTexture.devices.Length == 0)
+        if (WebCamTexture.devices == null || WebCamTexture.devices.Length == 0) // no camera
         {
             Debug.LogWarning("No camera devices found.");
             return;
         }
 
-        cam = new WebCamTexture(requestedWidth, requestedHeight);
-        cam.Play();
+        cam = new WebCamTexture(requestedWidth, requestedHeight); // create camera texture
+        cam.Play(); // start camera
 
-        if (preview != null)
+        if (preview != null) // show preview link to UI
             preview.texture = cam;
     }
 
+    // Stops the device camera
     private void StopCamera()
     {
         if (cam == null) return;
@@ -81,6 +86,7 @@ public class FaceCaptureController : MonoBehaviour
             preview.texture = null;
     }
 
+    // Captures the current frame for the current stage
     public void CaptureCurrentStage()
     {
         if (stage < 0)
@@ -88,6 +94,7 @@ public class FaceCaptureController : MonoBehaviour
             Debug.Log("Waiting for intro delay...");
             return;
         }
+        // Ensure camera is running
         if (cam == null || !cam.isPlaying)
         {
             Debug.LogWarning("Camera not running.");
@@ -95,17 +102,18 @@ public class FaceCaptureController : MonoBehaviour
         }
 
         // Grab current frame
-        Texture2D snap = new Texture2D(cam.width, cam.height, TextureFormat.RGBA32, false);
-        snap.SetPixels(cam.GetPixels());
-        snap.Apply();
+        Texture2D snap = new Texture2D(cam.width, cam.height, TextureFormat.RGBA32, false); 
+        snap.SetPixels(cam.GetPixels()); // copy pixels
+        snap.Apply(); // apply changes
 
+        // Store based on stage
         if (stage == 0) capturedHappy = snap;
         else if (stage == 1) capturedAngry = snap;
         else if (stage == 2) capturedFurious = snap;
 
-        stage++;
+        stage++; // advance stage
 
-        if (stage >= 3)
+        if (stage >= 3) // all done
         {
             // Convert to sprites and store globally
             Sprite happy = ToSprite(capturedHappy);
@@ -118,9 +126,10 @@ public class FaceCaptureController : MonoBehaviour
             return;
         }
 
-        UpdateInstruction();
+        UpdateInstruction(); // update for next stage
     }
 
+    // Updates the instruction text based on the current stage
     private void UpdateInstruction()
     {
         if (instructionText == null) return;
@@ -130,6 +139,7 @@ public class FaceCaptureController : MonoBehaviour
         else instructionText.text = "כועס מאוד 🤬";
     }
 
+    // Converts a Texture2D to a Sprite
     private Sprite ToSprite(Texture2D tex)
     {
         if (tex == null) return null;
