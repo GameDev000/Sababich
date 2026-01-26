@@ -25,6 +25,9 @@ public class IntroVideoPlayer : MonoBehaviour
     private bool isPreparing = false;
     private bool hasStarted = false;
 
+    //for showing a preview frame before clicking start
+    private bool previewFrameShown = false;
+
     private void Awake()
     {
         if (videoPlayer == null)
@@ -47,8 +50,14 @@ public class IntroVideoPlayer : MonoBehaviour
         videoPlayer.isLooping = false;
         videoPlayer.playOnAwake = false;
 
-        // IMPORTANT: For itch/WebGL, prefer a real HTTPS URL (GitHub Pages).
-        // Fallback: StreamingAssetsPath (works in editor/standalone, often fails on itch).
+        //helps avoid black flashes when starting playback
+        videoPlayer.waitForFirstFrame = true;
+
+        //we need this to catch the first decoded frame and pause on it
+        videoPlayer.sendFrameReadyEvents = true;
+
+        //For itch/WebGL, prefer a real HTTPS URL (GitHub Pages).
+        //StreamingAssetsPath (works in editor/standalone, often fails on itch).
         if (!string.IsNullOrWhiteSpace(videoUrlOverride))
             videoPlayer.url = videoUrlOverride.Trim();
         else
@@ -61,7 +70,15 @@ public class IntroVideoPlayer : MonoBehaviour
         videoPlayer.prepareCompleted += OnPrepared;
         videoPlayer.errorReceived += OnVideoError;
 
+        //pause on the first frame to show a "thumbnail" preview
+        videoPlayer.frameReady += OnFrameReady;
+
         videoPlayer.Stop();
+
+        //preload now so the first frame can be shown behind the Start button
+        isPreparing = true;
+        Debug.Log("[IntroVideoPlayer] Preparing video for preview...");
+        videoPlayer.Prepare();
     }
 
     public void StartVideo()
@@ -81,7 +98,14 @@ public class IntroVideoPlayer : MonoBehaviour
             skipButton.interactable = true;
         }
 
-        // Prepare first (important for WebGL)
+        // If already prepared (we preloaded), just play.
+        if (videoPlayer.isPrepared)
+        {
+            videoPlayer.Play();
+            return;
+        }
+
+        // Fallback: if somehow not prepared yet, prepare now
         isPreparing = true;
         Debug.Log("[IntroVideoPlayer] Preparing video...");
         videoPlayer.Prepare();
@@ -93,9 +117,30 @@ public class IntroVideoPlayer : MonoBehaviour
         if (!isPreparing) return;
 
         isPreparing = false;
-        Debug.Log("[IntroVideoPlayer] Prepared. Starting Play().");
 
-        vp.Play();
+        // If user already pressed Start -> play normally
+        if (hasStarted)
+        {
+            Debug.Log("[IntroVideoPlayer] Prepared. Starting Play().");
+            vp.Play();
+            return;
+        }
+
+        // Otherwise, we are in "preview" mode: play until first frame, then pause in OnFrameReady
+        previewFrameShown = false;
+        Debug.Log("[IntroVideoPlayer] Prepared for preview. Grabbing first frame...");
+        vp.Play(); // OnFrameReady will pause on first frame
+    }
+
+    private void OnFrameReady(VideoPlayer vp, long frameIdx)
+    {
+        // Only for preview (before clicking Start)
+        if (hasStarted) return;
+        if (previewFrameShown) return;
+
+        previewFrameShown = true;
+        vp.Pause(); // leaves the first frame rendered as the background
+        Debug.Log("[IntroVideoPlayer] Preview frame shown (paused on first frame).");
     }
 
     private void OnVideoFinished(VideoPlayer vp)
@@ -106,7 +151,6 @@ public class IntroVideoPlayer : MonoBehaviour
     private void OnVideoError(VideoPlayer vp, string msg)
     {
         Debug.LogError($"[IntroVideoPlayer] Video error: {msg}");
-        // Optional: if video fails, don't freeze the game -> continue
         GoNext();
     }
 
@@ -136,5 +180,7 @@ public class IntroVideoPlayer : MonoBehaviour
         videoPlayer.loopPointReached -= OnVideoFinished;
         videoPlayer.prepareCompleted -= OnPrepared;
         videoPlayer.errorReceived -= OnVideoError;
+
+        videoPlayer.frameReady -= OnFrameReady;
     }
 }

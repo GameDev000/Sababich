@@ -1047,7 +1047,9 @@ MonoBehaviour:
   overlayRenderer: {fileID: 239105897}
   fryingSprite: {fileID: 5327227921415917561, guid: f79b72f1cfa4f7e418843dc3aa93ea48, type: 3}
   readySprite: {fileID: 7029942612502575384, guid: bd4f7b2430a667c4592a22d4f691b3df, type: 3}
+  burntSprite: {fileID: 0}
   fryTimeSeconds: 5
+  burnAfterReadySeconds: 10
   eggplantTray: {fileID: 1462907247}
   chipsTray: {fileID: 0}
 --- !u!1001 &242609445
@@ -1593,7 +1595,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 10.24, y: 15.36}
+    oldSize: {x: 10.244999, y: 15.359999}
     newSize: {x: 10.24, y: 15.36}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -5196,6 +5198,7 @@ MonoBehaviour:
   pitaBuilder: {fileID: 14871894}
   eggplantTrayState: {fileID: 0}
   chipsTrayState: {fileID: 0}
+  coinFlyVFX: {fileID: 0}
 --- !u!114 &1909080684
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5758,7 +5761,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 10.24, y: 15.36}
+    oldSize: {x: 10.244999, y: 15.359999}
     newSize: {x: 10.24, y: 15.36}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -6394,8 +6397,16 @@ PrefabInstance:
       value: 260
       objectReference: {fileID: 0}
     - target: {fileID: 3487550306636258038, guid: 6b08bc250a77d5944b63945313d63ca5, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3487550306636258038, guid: 6b08bc250a77d5944b63945313d63ca5, type: 3}
       propertyPath: m_SortingOrder
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 3487550306636258038, guid: 6b08bc250a77d5944b63945313d63ca5, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4529711906656957885, guid: 6b08bc250a77d5944b63945313d63ca5, type: 3}
       propertyPath: m_AnchoredPosition.x
