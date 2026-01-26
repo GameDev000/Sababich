@@ -2877,7 +2877,9 @@ MonoBehaviour:
   overlayRenderer: {fileID: 0}
   fryingSprite: {fileID: 0}
   readySprite: {fileID: 0}
+  burntSprite: {fileID: 0}
   fryTimeSeconds: 5
+  burnAfterReadySeconds: 10
   eggplantTray: {fileID: 407841701}
   chipsTray: {fileID: 0}
 --- !u!1 &884481071
@@ -3032,6 +3034,120 @@ Transform:
   m_Children: []
   m_Father: {fileID: 98716865}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &892925990
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1051982458}
+    m_Modifications:
+    - target: {fileID: 4396435785987944348, guid: 8d16bcddc19714443b3bed04743bc283, type: 3}
+      propertyPath: m_Pivot.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4396435785987944348, guid: 8d16bcddc19714443b3bed04743bc283, type: 3}
+      propertyPath: m_Pivot.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4396435785987944348, guid: 8d16bcddc19714443b3bed04743bc283, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4396435785987944348, guid: 8d16bcddc19714443b3bed04743bc283, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4396435785987944348, guid: 8d16bcddc19714443b3bed04743bc283, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4396435785987944348, guid: 8d16bcddc19714443b3bed04743bc283, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4396435785987944348, guid: 8d16bcddc19714443b3bed04743bc283, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 160
+      objectReference: {fileID: 0}
+    - target: {fileID: 4396435785987944348, guid: 8d16bcddc19714443b3bed04743bc283, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 4396435785987944348, guid: 8d16bcddc19714443b3bed04743bc283, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.4954916
+      objectReference: {fileID: 0}
+    - target: {fileID: 4396435785987944348, guid: 8d16bcddc19714443b3bed04743bc283, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2.5420563
+      objectReference: {fileID: 0}
+    - target: {fileID: 4396435785987944348, guid: 8d16bcddc19714443b3bed04743bc283, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.4954916
+      objectReference: {fileID: 0}
+    - target: {fileID: 4396435785987944348, guid: 8d16bcddc19714443b3bed04743bc283, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4396435785987944348, guid: 8d16bcddc19714443b3bed04743bc283, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4396435785987944348, guid: 8d16bcddc19714443b3bed04743bc283, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -9723.124
+      objectReference: {fileID: 0}
+    - target: {fileID: 4396435785987944348, guid: 8d16bcddc19714443b3bed04743bc283, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4396435785987944348, guid: 8d16bcddc19714443b3bed04743bc283, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4396435785987944348, guid: 8d16bcddc19714443b3bed04743bc283, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4396435785987944348, guid: 8d16bcddc19714443b3bed04743bc283, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4396435785987944348, guid: 8d16bcddc19714443b3bed04743bc283, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 29
+      objectReference: {fileID: 0}
+    - target: {fileID: 4396435785987944348, guid: 8d16bcddc19714443b3bed04743bc283, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -104
+      objectReference: {fileID: 0}
+    - target: {fileID: 4396435785987944348, guid: 8d16bcddc19714443b3bed04743bc283, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4396435785987944348, guid: 8d16bcddc19714443b3bed04743bc283, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4396435785987944348, guid: 8d16bcddc19714443b3bed04743bc283, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6005875181811275631, guid: 8d16bcddc19714443b3bed04743bc283, type: 3}
+      propertyPath: m_Name
+      value: pauseButton
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8d16bcddc19714443b3bed04743bc283, type: 3}
+--- !u!224 &892925991 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 4396435785987944348, guid: 8d16bcddc19714443b3bed04743bc283, type: 3}
+  m_PrefabInstance: {fileID: 892925990}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &905153750
 GameObject:
   m_ObjectHideFlags: 0
@@ -3400,6 +3516,7 @@ RectTransform:
   - {fileID: 1031642990}
   - {fileID: 1994094261}
   - {fileID: 482482090}
+  - {fileID: 892925991}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -4668,7 +4785,9 @@ MonoBehaviour:
   overlayRenderer: {fileID: 0}
   fryingSprite: {fileID: 0}
   readySprite: {fileID: 0}
+  burntSprite: {fileID: 0}
   fryTimeSeconds: 5
+  burnAfterReadySeconds: 10
   eggplantTray: {fileID: 0}
   chipsTray: {fileID: 1788359167}
 --- !u!1 &1352756599
@@ -7377,7 +7496,9 @@ MonoBehaviour:
   overlayRenderer: {fileID: 0}
   fryingSprite: {fileID: 0}
   readySprite: {fileID: 0}
+  burntSprite: {fileID: 0}
   fryTimeSeconds: 5
+  burnAfterReadySeconds: 10
   eggplantTray: {fileID: 407841701}
   chipsTray: {fileID: 1788359167}
 --- !u!212 &2079638645
