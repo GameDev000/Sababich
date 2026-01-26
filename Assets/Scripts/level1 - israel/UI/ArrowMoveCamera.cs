@@ -31,6 +31,8 @@ public class ArrowMoveCamera : MonoBehaviour
     /// </summary>
     private void OnMouseDown()
     {
+        if (PauseManager.Instance != null && PauseManager.Instance.IsPaused)
+            return;
         if (targetPoint == null) return;
 
         if (tutorial != null)

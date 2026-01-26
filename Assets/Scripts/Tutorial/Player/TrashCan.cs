@@ -31,18 +31,24 @@ public class TrashCan : MonoBehaviour
 
     private void OnMouseEnter()// Change sprite to open when hovered over
     {
+        if (PauseManager.Instance != null && PauseManager.Instance.IsPaused)
+            return;
         if (myRenderer != null && openSprite != null)
             myRenderer.sprite = openSprite;
     }
 
     private void OnMouseExit()// Change sprite back to closed when not hovered over
     {
+        if (PauseManager.Instance != null && PauseManager.Instance.IsPaused)
+            return;
         if (myRenderer != null && closedSprite != null)
             myRenderer.sprite = closedSprite;
     }
 
     private void OnMouseDown()// Discard selected ingredients when clicked
     {
+        if (PauseManager.Instance != null && PauseManager.Instance.IsPaused)
+            return;
         if (selectionListManager != null)
         {
             Debug.Log("Pita thrown to trash!");

@@ -26,6 +26,8 @@ public class CustomerClick : MonoBehaviour
 
     private void OnMouseDown()
     {
+        if (PauseManager.Instance != null && PauseManager.Instance.IsPaused)
+            return;
         if (customer == null) return;
         if (CustomerManager.Instance == null) return;
 
