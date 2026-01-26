@@ -12,7 +12,7 @@ public class Item : MonoBehaviour
     {
         if (!isClickable) return;
         if (PauseManager.Instance != null && PauseManager.Instance.IsPaused)
-        return;
+            return;
 
         Debug.Log("Clicked on ingredient: " + ingredientName);
 
