@@ -59,7 +59,7 @@ public class FaceCaptureController : MonoBehaviour
     // Starts the device camera and shows preview
     private void StartCamera()
     {
-        if (cam != null) return; 
+        if (cam != null) return;
 
         if (WebCamTexture.devices == null || WebCamTexture.devices.Length == 0) // no camera
         {
@@ -102,7 +102,7 @@ public class FaceCaptureController : MonoBehaviour
         }
 
         // Grab current frame
-        Texture2D snap = new Texture2D(cam.width, cam.height, TextureFormat.RGBA32, false); 
+        Texture2D snap = new Texture2D(cam.width, cam.height, TextureFormat.RGBA32, false);
         snap.SetPixels(cam.GetPixels()); // copy pixels
         snap.Apply(); // apply changes
 
