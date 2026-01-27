@@ -169,7 +169,7 @@ public class FryZoneIngredient : MonoBehaviour
         // Ready → collect and clear
         if (state == FryState.Ready)
         {
-            
+
             Collect();
             ClearPan();
             return;
