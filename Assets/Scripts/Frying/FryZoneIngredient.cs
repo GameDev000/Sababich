@@ -8,6 +8,7 @@ public class FryZoneIngredient : MonoBehaviour
 
     // Added Burnt state
     private enum FryState { Empty, Frying, Ready, Burnt }
+    [SerializeField] private bool is_level3 = false; // to control burn behavior in level3
 
     [Header("Type")]
     [SerializeField] private FryType currentType = FryType.Eggplant; // default for 0-2 levels
@@ -69,7 +70,7 @@ public class FryZoneIngredient : MonoBehaviour
         if (state == FryState.Ready)
         {
             readyTimer += Time.deltaTime;
-            if (readyTimer >= burnAfterReadySeconds)
+            if (readyTimer >= burnAfterReadySeconds && !is_level3) /// only burn in levels 0-2
             {
                 SetState(FryState.Burnt);
             }
@@ -86,8 +87,13 @@ public class FryZoneIngredient : MonoBehaviour
     // Called on LevelGameFlow
     public void StartFry()
     {
-        if (state != FryState.Empty) return;
+        Debug.Log($"[FryZone] StartFry on {name} id={GetInstanceID()} state={state} type={currentType}");
 
+        if (state != FryState.Empty)
+        {
+            Debug.LogWarning($"[FryZone] StartFry BLOCKED on {name} state={state}");
+            return;
+        }
         fryTimer = 0f;
         readyTimer = 0f;
         SetState(FryState.Frying);
@@ -163,8 +169,9 @@ public class FryZoneIngredient : MonoBehaviour
         // Ready → collect and clear
         if (state == FryState.Ready)
         {
-            ClearPan();
+            
             Collect();
+            ClearPan();
             return;
         }
 

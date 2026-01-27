@@ -326,7 +326,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -25, y: -249}
+  m_AnchoredPosition: {x: -25, y: -17}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!225 &8196993
@@ -1035,7 +1035,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -39.914062, y: -68.416855}
+  m_AnchoredPosition: {x: 41.6, y: -68.416855}
   m_SizeDelta: {x: 60, y: -70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &166610855
@@ -2506,12 +2506,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   clicksPerStage: 6
   dirtOverlayObject: {fileID: 1750575453}
-  dirtOverlayRenderer: {fileID: 0}
+  dirtOverlayRenderer: {fileID: 1750575455}
   dirtStageSprites:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 21300000, guid: 1127011c6fce0e14d8e71500c27fe03b, type: 3}
+  - {fileID: 21300000, guid: 341fa620279a9be4e9a1c427025e9083, type: 3}
+  - {fileID: 21300000, guid: 795692845c6e2ab44a73bea2b11726f6, type: 3}
+  - {fileID: 21300000, guid: 909e5cab7465c9044bc9be3422ff80ec, type: 3}
   mirrorRenderer: {fileID: 2079683475}
   mirrorCleanSprite: {fileID: 21300000, guid: 1a75f306bc5226c4eb8e144262b34f9b, type: 3}
   mirrorDirtySprite: {fileID: 21300000, guid: 42b282ba8f17d254c95b0e346c763567, type: 3}
@@ -7767,8 +7767,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 30
-  m_fontSizeBase: 30
+  m_fontSize: 26
+  m_fontSizeBase: 26
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -10296,6 +10296,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18fdfe0a0ed6df247b0605c95aeb5fa4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  is_level3: 0
   currentType: 0
   collectByClickOnThisObject: 1
   overlayRenderer: {fileID: 1748255141}
@@ -10810,15 +10811,17 @@ MonoBehaviour:
     trigger: 0
     levelId: 2
     customerIndex: 0
-  - message: "\u05E9\u05D9\u05DD \u05DC\u05D1! \u05E0\u05D9\u05EA\u05DF \u05DC\u05D4\u05D6\u05DE\u05D9\u05DF
-      \u05DE\u05E8\u05DB\u05D9\u05D1 \u05D0\u05D7\u05D3 \u05E4\u05D7\u05D5\u05EA
-      \u05D1\u05DE\u05E0\u05D4!"
+  - message: "\u05D8\u05D9\u05E4: \u05DC\u05E7\u05D5\u05D7 \u05D9\u05DB\u05D5\u05DC
+      \u05DC\u05D1\u05E7\u05E9 \u05DC\u05D4\u05D5\u05E8\u05D9\u05D3 \u05DE\u05E8\u05DB\u05D9\u05D1
+      \u05D0\u05D7\u05D3 \u05DE\u05D4\u05DE\u05E0\u05D4,\n\u05EA\u05D9\u05E9\u05D0\u05E8\u05D5
+      \u05E2\u05D9\u05E8\u05E0\u05D9\u05D9\u05DD!"
     target: {fileID: 0}
     trigger: 1
     levelId: 2
     customerIndex: 1
-  - message: "\u05E9\u05D9\u05DD \u05DC\u05D1! \u05D9\u05DB\u05D5\u05DC\u05D9\u05DD
-      \u05DC\u05D4\u05D2\u05D9\u05E2 2 \u05DC\u05E7\u05D5\u05D7\u05D5\u05EA \u05D1\u05DE\u05E7\u05D1\u05D9\u05DC!"
+  - message: "\u05D8\u05D9\u05E4: \u05D9\u05DB\u05D5\u05DC\u05D9\u05DD \u05DC\u05D4\u05D5\u05E4\u05D9\u05E2
+      \u05E9\u05E0\u05D9 \u05DC\u05E7\u05D5\u05D7\u05D5\u05EA \u05D1\u05D5-\u05D6\u05DE\u05E0\u05D9\u05EA
+      - \u05EA\u05EA\u05DB\u05D5\u05E0\u05E0\u05D5!"
     target: {fileID: 0}
     trigger: 1
     levelId: 2
@@ -11470,7 +11473,7 @@ RectTransform:
   m_GameObject: {fileID: 2045305801}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.3, y: 0.3, z: 1}
+  m_LocalScale: {x: 0.36540002, y: 0.36540002, z: 1.218}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1473994038}
@@ -11478,7 +11481,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.057693563}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 11, y: 421}
+  m_AnchoredPosition: {x: 11, y: 401}
   m_SizeDelta: {x: 0, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2079683473

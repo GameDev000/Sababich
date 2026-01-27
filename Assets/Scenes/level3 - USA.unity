@@ -430,6 +430,8 @@ Transform:
   - {fileID: 2000099186}
   - {fileID: 1591553241}
   - {fileID: 1627381846}
+  - {fileID: 881219674}
+  - {fileID: 1292984843}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &147048394
@@ -710,7 +712,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -39.914062, y: -68.416855}
+  m_AnchoredPosition: {x: 41.6, y: -68.416855}
   m_SizeDelta: {x: 60, y: -70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &310236954
@@ -1056,12 +1058,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   clicksPerStage: 6
   dirtOverlayObject: {fileID: 1174646035}
-  dirtOverlayRenderer: {fileID: 0}
+  dirtOverlayRenderer: {fileID: 1174646036}
   dirtStageSprites:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 21300000, guid: 1127011c6fce0e14d8e71500c27fe03b, type: 3}
+  - {fileID: 21300000, guid: 341fa620279a9be4e9a1c427025e9083, type: 3}
+  - {fileID: 21300000, guid: 795692845c6e2ab44a73bea2b11726f6, type: 3}
+  - {fileID: 21300000, guid: 909e5cab7465c9044bc9be3422ff80ec, type: 3}
   mirrorRenderer: {fileID: 403765450}
   mirrorCleanSprite: {fileID: 21300000, guid: cbf36770bf4e31040a1847b6786ecad2, type: 3}
   mirrorDirtySprite: {fileID: 21300000, guid: 7412baf6c3dc150489360cc6a28dcb89, type: 3}
@@ -1736,7 +1738,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -253}
+  m_AnchoredPosition: {x: 0, y: -85}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!225 &482482091
@@ -2737,11 +2739,11 @@ Transform:
   m_GameObject: {fileID: 881219673}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 7.26, y: -0.64, z: 0}
-  m_LocalScale: {x: 0.06012259, y: 0.0772418, z: 1}
+  m_LocalPosition: {x: -9.192211, y: -3.7832255, z: 0}
+  m_LocalScale: {x: 0.03501179, y: 0.06314826, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2079638643}
+  m_Father: {fileID: 98716865}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &881219675
 SpriteRenderer:
@@ -2872,6 +2874,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18fdfe0a0ed6df247b0605c95aeb5fa4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Scripts::FryZoneIngredient
+  is_level3: 1
   currentType: 0
   collectByClickOnThisObject: 0
   overlayRenderer: {fileID: 0}
@@ -4645,11 +4648,11 @@ Transform:
   m_GameObject: {fileID: 1292984842}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.42, y: -0.51, z: 0}
-  m_LocalScale: {x: 0.0723759, y: 0.069721945, z: 1}
+  m_LocalPosition: {x: -11.428397, y: -3.6769457, z: 0}
+  m_LocalScale: {x: 0.042147383, y: 0.057000477, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2079638643}
+  m_Father: {fileID: 98716865}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1292984844
 SpriteRenderer:
@@ -4780,6 +4783,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18fdfe0a0ed6df247b0605c95aeb5fa4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Scripts::FryZoneIngredient
+  is_level3: 1
   currentType: 1
   collectByClickOnThisObject: 0
   overlayRenderer: {fileID: 0}
@@ -5956,28 +5960,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Scripts::FeatureHintsSequence
   steps:
-  - message: "\u05E9\u05D9\u05DD \u05DC\u05D1! \u05E0\u05D5\u05E1\u05E3 \u05E6'\u05D9\u05E4\u05E1
-      \u05DC\u05E2\u05DE\u05D3\u05EA \u05D4\u05D8\u05D9\u05D2\u05D5\u05DF"
+  - message: "\u05D7\u05D3\u05E9: \u05D0\u05E4\u05E9\u05E8 \u05DC\u05D8\u05D2\u05DF
+      \u05E2\u05DB\u05E9\u05D9\u05D5 \u05D2\u05DD \u05E6\u05F3\u05D9\u05E4\u05E1!"
     target: {fileID: 0}
     trigger: 0
     levelId: 3
     customerIndex: 0
-  - message: "\u05D1\u05E1\u05D5\u05E3 \u05D4\u05D8\u05D9\u05D9\u05DE\u05E8 \u05D9\u05E9
-      \u05DC\u05DC\u05D7\u05D5\u05E5 \u05E2\u05DC \u05D4\u05E6'\u05D9\u05E4\u05E1
-      \u05D5\u05D4\u05D7\u05E6\u05D9\u05DC"
+  - message: "\u05D4\u05D8\u05D9\u05D9\u05DE\u05E8 \u05D4\u05E1\u05EA\u05D9\u05D9\u05DD?
+      \u05DC\u05D7\u05E6\u05D5 \u05E2\u05DC \u05D4\u05D0\u05D9\u05DE\u05D5\u05D2'\u05D9
+      \u05E9\u05DC \u05D4\u05E6\u05F3\u05D9\u05E4\u05E1 \u05D0\u05D5 \u05D4\u05D7\u05E6\u05D9\u05DC
+      \u05DB\u05D3\u05D9 \u05DC\u05DE\u05DC\u05D0 \u05D0\u05EA \u05D4\u05DE\u05D2\u05E9"
     target: {fileID: 0}
     trigger: 0
     levelId: 3
     customerIndex: 0
-  - message: "\u05E9\u05D9\u05DD \u05DC\u05D1! \u05D9\u05DB\u05D5\u05DC\u05D9\u05DD
-      \u05DC\u05D4\u05D9\u05D5\u05EA \u05D7\u05E1\u05E8\u05D9\u05DD 2 \u05DE\u05E8\u05DB\u05D9\u05D1\u05D9\u05DD
-      \u05D1\u05DE\u05E0\u05D4!"
+  - message: "\u05D7\u05D3\u05E9: \u05DC\u05E4\u05E2\u05DE\u05D9\u05DD \u05D4\u05DC\u05E7\u05D5\u05D7
+      \u05D9\u05D1\u05E7\u05E9 \u05DE\u05E0\u05D4 \u05D1\u05DC\u05D9 2 \u05DE\u05E8\u05DB\u05D9\u05D1\u05D9\u05DD!"
     target: {fileID: 0}
     trigger: 1
     levelId: 3
     customerIndex: 2
-  - message: "\u05E9\u05D9\u05DD \u05DC\u05D1! \u05D9\u05DB\u05D5\u05DC\u05D9\u05DD
-      \u05DC\u05D4\u05D2\u05D9\u05E2 3 \u05DC\u05E7\u05D5\u05D7\u05D5\u05EA \u05D1\u05DE\u05E7\u05D1\u05D9\u05DC!"
+  - message: "\u05D9\u05DB\u05D5\u05DC\u05D9\u05DD \u05DC\u05D4\u05D5\u05E4\u05D9\u05E2
+      3 \u05DC\u05E7\u05D5\u05D7\u05D5\u05EA \u05D1\u05D5-\u05D6\u05DE\u05E0\u05D9\u05EA
+      \u05EA\u05EA\u05DB\u05D5\u05E0\u05E0\u05D5!"
     target: {fileID: 0}
     trigger: 1
     levelId: 3
@@ -7454,14 +7459,13 @@ GameObject:
   - component: {fileID: 2079638643}
   - component: {fileID: 2079638646}
   - component: {fileID: 2079638645}
-  - component: {fileID: 2079638644}
   m_Layer: 0
   m_Name: fryzone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2079638643
 Transform:
   m_ObjectHideFlags: 0
@@ -7474,33 +7478,9 @@ Transform:
   m_LocalPosition: {x: -13.42, y: -3.26, z: 0}
   m_LocalScale: {x: 0.58234, y: 0.81754, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 881219674}
-  - {fileID: 1292984843}
+  m_Children: []
   m_Father: {fileID: 98716865}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2079638644
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2079638642}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18fdfe0a0ed6df247b0605c95aeb5fa4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  currentType: 0
-  collectByClickOnThisObject: 0
-  overlayRenderer: {fileID: 0}
-  fryingSprite: {fileID: 0}
-  readySprite: {fileID: 0}
-  burntSprite: {fileID: 0}
-  fryTimeSeconds: 5
-  burnAfterReadySeconds: 10
-  eggplantTray: {fileID: 407841701}
-  chipsTray: {fileID: 1788359167}
 --- !u!212 &2079638645
 SpriteRenderer:
   m_ObjectHideFlags: 0

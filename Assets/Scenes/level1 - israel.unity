@@ -1678,9 +1678,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Scripts::FeatureHintsSequence
   steps:
-  - message: "\u05E9\u05D9\u05DD \u05DC\u05D1!\n\u05E7\u05D9\u05D9\u05DD \u05E4\u05D7
-      \u05D1\u05D5 \u05EA\u05D5\u05DB\u05DC \u05DC\u05D6\u05E8\u05D5\u05E7 \u05DE\u05E0\u05D4
-      \u05DC\u05D0 \u05EA\u05E7\u05D9\u05E0\u05D4"
+  - message: "\u05D8\u05D9\u05E4: \u05DE\u05E0\u05D4 \u05DC\u05D0 \u05EA\u05E7\u05D9\u05E0\u05D4?\n\u05D2\u05E8\u05E8\u05D5
+      \u05D0\u05D5\u05EA\u05D4 \u05DC\u05E4\u05D7 \u05DB\u05D3\u05D9 \u05DC\u05D4\u05D9\u05E4\u05D8\u05E8
+      \u05DE\u05DE\u05E0\u05D4"
     target: {fileID: 0}
     trigger: 0
     levelId: 1
@@ -1730,8 +1730,8 @@ Transform:
   m_GameObject: {fileID: 346603060}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.14, y: -6.4, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: -6.02, z: 0}
+  m_LocalScale: {x: 0.89393, y: 0.89393, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 295093908}
@@ -1977,7 +1977,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -39.914062, y: -68.416855}
+  m_AnchoredPosition: {x: 41.5, y: -68.416855}
   m_SizeDelta: {x: 60, y: -70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &442228388
@@ -2407,7 +2407,7 @@ RectTransform:
   m_GameObject: {fileID: 526678341}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 17.283138, y: 2.9630978, z: 2.9630978}
+  m_LocalScale: {x: 15.303928, y: 2.6237736, z: 2.6237736}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 426270291}
@@ -2416,7 +2416,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -35.000004, y: -108.673096}
+  m_AnchoredPosition: {x: -35.000004, y: -134.76}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!225 &526678344
@@ -4245,6 +4245,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18fdfe0a0ed6df247b0605c95aeb5fa4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  is_level3: 0
   currentType: 0
   collectByClickOnThisObject: 1
   overlayRenderer: {fileID: 1748255141}
@@ -4999,8 +5000,8 @@ Transform:
   m_GameObject: {fileID: 2003438623}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.88, y: 2.43, z: 0}
-  m_LocalScale: {x: 0.10599591, y: 0.10599591, z: 0.10599591}
+  m_LocalPosition: {x: -8.15, y: 2.34, z: 0}
+  m_LocalScale: {x: 0.08288668, y: 0.08288668, z: 0.08288668}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}

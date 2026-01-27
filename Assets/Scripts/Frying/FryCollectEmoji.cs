@@ -6,11 +6,14 @@ public class FryCollectEmoji : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (targetFryer == null) return;
+        if (targetFryer == null) { Debug.LogWarning("[Emoji] targetFryer is NULL"); return; }
+
+        Debug.Log($"[Emoji] Clicked {name} -> targetFryer={targetFryer.name} id={targetFryer.GetInstanceID()} ready={targetFryer.IsReady}");
+
         if (!targetFryer.IsReady) return; // Valid to click if IsReady
 
-        targetFryer.ClearPan();
         //Calls the private Collect() method on the fryer by SendMessage to move the ready item to its tray without exposing the method publicly
         targetFryer.SendMessage("Collect", SendMessageOptions.DontRequireReceiver);
+        targetFryer.ClearPan();
     }
 }
