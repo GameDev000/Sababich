@@ -1508,7 +1508,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 191.99991, y: 442.00006}
+  m_AnchoredPosition: {x: 191.99994, y: 442.00006}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.3, y: 0.3}
 --- !u!114 &265262813
@@ -2287,6 +2287,20 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 411b8570812d35b499db181776cdf6f2, type: 3}
     - {fileID: 21300000, guid: d29019f5cf31c6842912bdffba4e25ac, type: 3}
     scoreIfNotServed: 0
+  - name: full7
+    sprite: {fileID: -7394003462002523867, guid: 10856e21ac0c97e49bd59be187718fb7, type: 3}
+    requiredIngredients:
+    - pitta
+    - salad
+    - egg
+    - eggplant
+    - tahini
+    - amba
+    happyFace: {fileID: -7394003462002523867, guid: 10856e21ac0c97e49bd59be187718fb7, type: 3}
+    angryFaces:
+    - {fileID: 4031710385489623765, guid: c5751ae05a6b0fe44948ea796aecfacb, type: 3}
+    - {fileID: -6105133514296288220, guid: 0d2db8fb201e61148aa18efb0cf1dd34, type: 3}
+    scoreIfNotServed: 0
   coinFlyVFX: {fileID: 906972935}
   maxMissingItems: 0
   baseOrderReward: 30
@@ -2416,7 +2430,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -35.000004, y: -134.76}
+  m_AnchoredPosition: {x: -35.000004, y: -134.76001}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!225 &526678344
