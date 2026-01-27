@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: caddabd422f242444ae4af69b84b80f1
+guid: 0b6dffdbd7eeac14a94227ff3d841469
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -333727081986729096
-    second: SabichGold_0
+      213: -1837016955787848261
+    second: Emily_3_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: SabichGold_0
+      name: Emily_3_0
       rect:
         serializedVersion: 2
-        x: 153
-        y: 49
-        width: 864
-        height: 725
+        x: 0
+        y: 38
+        width: 685
+        height: 1161
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 87bd042bcfc5e5bf0800000000000000
-      internalID: -333727081986729096
+      spriteID: bb555e7cfca9186e0800000000000000
+      internalID: -1837016955787848261
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      SabichGold_0: -333727081986729096
+      Emily_3_0: -1837016955787848261
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

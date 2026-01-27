@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: caddabd422f242444ae4af69b84b80f1
+guid: c5751ae05a6b0fe44948ea796aecfacb
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -333727081986729096
-    second: SabichGold_0
+      213: 4031710385489623765
+    second: Nadav_2_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: SabichGold_0
+      name: Nadav_2_0
       rect:
         serializedVersion: 2
-        x: 153
-        y: 49
-        width: 864
-        height: 725
+        x: 236
+        y: 0
+        width: 527
+        height: 1185
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 87bd042bcfc5e5bf0800000000000000
-      internalID: -333727081986729096
+      spriteID: 5dabc541c3383f730800000000000000
+      internalID: 4031710385489623765
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      SabichGold_0: -333727081986729096
+      Nadav_2_0: 4031710385489623765
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

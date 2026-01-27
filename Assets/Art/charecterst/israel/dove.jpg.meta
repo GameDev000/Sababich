@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: caddabd422f242444ae4af69b84b80f1
+guid: 50a1c0799e772ad4a8a0f15a5ff445a8
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -333727081986729096
-    second: SabichGold_0
+      213: -2946224621641151013
+    second: dove_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: SabichGold_0
+      name: dove_0
       rect:
         serializedVersion: 2
-        x: 153
-        y: 49
-        width: 864
-        height: 725
+        x: 0
+        y: 0
+        width: 1024
+        height: 559
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 87bd042bcfc5e5bf0800000000000000
-      internalID: -333727081986729096
+      spriteID: bddc19ef058ec17d0800000000000000
+      internalID: -2946224621641151013
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      SabichGold_0: -333727081986729096
+      dove_0: -2946224621641151013
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

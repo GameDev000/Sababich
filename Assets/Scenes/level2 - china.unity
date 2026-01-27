@@ -1734,6 +1734,21 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 8fe217c68187a3e45b12f7af03c6c58f, type: 3}
     - {fileID: 21300000, guid: 0383b516467e4284784ab0e40a87ed67, type: 3}
     scoreIfNotServed: 0
+  - name: full6
+    sprite: {fileID: -5830445100083647898, guid: cb7fa44c95b2fe04fb0f94b63f0d4900, type: 3}
+    requiredIngredients:
+    - pitta
+    - salad
+    - egg
+    - eggplant
+    - soy
+    - amba
+    - tahini
+    happyFace: {fileID: -5830445100083647898, guid: cb7fa44c95b2fe04fb0f94b63f0d4900, type: 3}
+    angryFaces:
+    - {fileID: 6166413747506897929, guid: b5a71e12070283345ad636355f444476, type: 3}
+    - {fileID: 4933529048943361695, guid: c598d565db042804485004d54fb26ce6, type: 3}
+    scoreIfNotServed: 0
   coinFlyVFX: {fileID: 95312388}
   maxMissingItems: 1
   baseOrderReward: 30
