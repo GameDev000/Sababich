@@ -29,7 +29,7 @@ public class EndOfLevelUI : MonoBehaviour
 
         // Show something immediately (no waiting)
         if (coinsText != null)
-            coinsText.text = $"Coins: {localCoins}";
+            coinsText.text = $"{localCoins}";
 
         // Original behavior for success/fail text (local flags)
         if (titleText != null)
@@ -87,7 +87,7 @@ public class EndOfLevelUI : MonoBehaviour
             perfect = LevelThreeState.PerfectServedDishes;
         }
 
-        perfectOrdersText.text = $"הוגשו {perfect} מנות מושלמות מתוך {total}";
+        perfectOrdersText.text = $"\u200E{perfect} / {total}\u200E";
     }
 
     // Pull coins from cloud for the relevant level end scene and update UI.
@@ -125,7 +125,7 @@ public class EndOfLevelUI : MonoBehaviour
         int cloudCoins = DatabaseManager.ReadInt(data, coinsKey, localCoins);
 
         if (coinsText != null)
-            coinsText.text = $"Coins: {cloudCoins}";
+            coinsText.text = $"{cloudCoins}";
 
         Debug.Log($"[EndOfLevelUI] Cloud coins override: {coinsKey}={cloudCoins}");
     }
@@ -171,7 +171,7 @@ public class EndOfLevelUI : MonoBehaviour
         int total = DatabaseManager.ReadInt(totalData, totalKey, 0);
         int perfect = DatabaseManager.ReadInt(perfectData, perfectKey, 0);
 
-        perfectOrdersText.text = $"הוגשו {perfect} מנות מושלמות מתוך {total}";
+        perfectOrdersText.text = $"\u200E{perfect} / {total}\u200E";
         Debug.Log($"[EndOfLevelUI] Cloud perfect orders override: perfect={perfect}, total={total}");
     }
 }

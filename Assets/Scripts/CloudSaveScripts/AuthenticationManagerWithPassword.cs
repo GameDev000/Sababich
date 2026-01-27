@@ -1,24 +1,24 @@
-using System;
 using System.Threading.Tasks;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
 using UnityEngine;
 
 /**
- * Handles Unity Gaming Services initialization and username+password authentication
+ * Handles Unity Gaming Services initialization and username+password authentication.
+ * Note: PlayerId is internal/debug info - do NOT show it in UI messages.
  */
 public class AuthenticationManagerWithPassword : MonoBehaviour
 {
-
     // Initializing the Unity Services SDK
-    async void Awake()
+    private async void Awake()
     {
         Debug.Log("AuthenticationManagerWithPassword Awake");
         await UnityServices.InitializeAsync();
 
+        // Debug only (Console). This is NOT shown in the UI unless you explicitly put it in a return string.
         if (AuthenticationService.Instance.IsSignedIn)
         {
-            Debug.Log($"Player is already signed in as: {AuthenticationService.Instance.PlayerId}");
+            Debug.Log($"Player is already signed in. PlayerId: {AuthenticationService.Instance.PlayerId}");
         }
         else
         {
@@ -27,36 +27,46 @@ public class AuthenticationManagerWithPassword : MonoBehaviour
     }
 
     /**
-     * Sign up a new user with username and password. 
-     * Return the success/error message.
+     * Sign up a new user with username and password.
+     * Returns a user-friendly success/error message (without PlayerId).
      */
     public async Task<string> RegisterWithUsernameAndPassword(string username, string password)
     {
         try
         {
             await AuthenticationService.Instance.SignUpWithUsernamePasswordAsync(username, password);
-            return ($"Register successful! Player ID: {AuthenticationService.Instance.PlayerId}");
+
+            // Debug only
+            Debug.Log($"Register successful. PlayerId: {AuthenticationService.Instance.PlayerId}");
+
+            // UI message (NO PlayerId)
+            return "Register successful!";
         }
         catch (AuthenticationException ex)
         {
-            return ($"Register failed: {ex.Message}");
+            return $"Register failed: {ex.Message}";
         }
         catch (RequestFailedException ex)
         {
-            return ($"Register request failed: {ex.Message}");
+            return $"Register request failed: {ex.Message}";
         }
     }
 
     /**
      * Sign in an existing user with username and password.
-     * Return the success/error message.
+     * Returns a user-friendly success/error message (without PlayerId).
      */
     public async Task<string> LoginWithUsernameAndPassword(string username, string password)
     {
         try
         {
             await AuthenticationService.Instance.SignInWithUsernamePasswordAsync(username, password);
-            return $"Login successful! Player ID: {AuthenticationService.Instance.PlayerId}";
+
+            // Debug only
+            Debug.Log($"Login successful. PlayerId: {AuthenticationService.Instance.PlayerId}");
+
+            // UI message (NO PlayerId)
+            return "Login successful!";
         }
         catch (AuthenticationException ex)
         {
@@ -69,18 +79,30 @@ public class AuthenticationManagerWithPassword : MonoBehaviour
     }
 
     /**
-    * Sign in as a guest (anonymous) user.
-    */
+     * Sign in as a guest (anonymous) user.
+     * Returns a user-friendly success/error message (without PlayerId).
+     */
     public async Task<string> LoginAnonymously()
     {
         try
         {
             // If already signed in, avoid throwing
             if (AuthenticationService.Instance.IsSignedIn)
-                return $"Guest already signed in. Player ID: {AuthenticationService.Instance.PlayerId}";
+            {
+                // Debug only
+                Debug.Log($"Guest already signed in. PlayerId: {AuthenticationService.Instance.PlayerId}");
+
+                // UI message (NO PlayerId)
+                return "Guest already signed in.";
+            }
 
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
-            return $"Guest login successful! Player ID: {AuthenticationService.Instance.PlayerId}";
+
+            // Debug only
+            Debug.Log($"Guest login successful. PlayerId: {AuthenticationService.Instance.PlayerId}");
+
+            // UI message (NO PlayerId)
+            return "Guest login successful!";
         }
         catch (AuthenticationException ex)
         {
@@ -93,11 +115,11 @@ public class AuthenticationManagerWithPassword : MonoBehaviour
     }
 
     /**
-     * Sign out the current user
+     * Sign out the current user.
      */
     public void SignOut()
     {
-        AuthenticationService.Instance.SignOut();  // this returns "void", so it cannot be awaited.
+        AuthenticationService.Instance.SignOut();
         Debug.Log("Player signed out");
     }
 }
