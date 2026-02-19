@@ -1631,7 +1631,7 @@ MonoBehaviour:
     angryFaces: []
     scoreIfNotServed: 0
   customerPrefabNormal: {fileID: 1815610952}
-  customerPrefabPlayerHead: {fileID: 0}
+  customerPrefabPlayerHead: {fileID: 1158063542}
   spawnPoint: {fileID: 1477147590}
   exitPoint: {fileID: 1901759619}
   standPoints:
@@ -8555,6 +8555,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1158063542 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4082672149055246188, guid: 926e0b516840a4a47b492b3c9c94e820, type: 3}
+  m_PrefabInstance: {fileID: 1472782006}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 540986953}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 177a1a8a514362b42af5e8cd3481fb2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!4 &1235463534 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4561966467305094, guid: fa8d00a30836965448ebdeeffdac87ed, type: 3}

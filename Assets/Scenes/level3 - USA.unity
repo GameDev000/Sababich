@@ -2654,6 +2654,21 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 144ecb97c3f216b4483efd596b052a31, type: 3}
     - {fileID: 21300000, guid: cc358ddf44121a849a39935e3f2c3da9, type: 3}
     scoreIfNotServed: 0
+  - name: full7
+    sprite: {fileID: 21300000, guid: 553e157876ceeda4f8a6794aa4a7d67d, type: 3}
+    requiredIngredients:
+    - pitta
+    - salad
+    - egg
+    - eggplant
+    - tahini
+    - amba
+    - chips
+    happyFace: {fileID: 21300000, guid: 553e157876ceeda4f8a6794aa4a7d67d, type: 3}
+    angryFaces:
+    - {fileID: 21300000, guid: 37e17a60fde732d4aadc35b9465765e1, type: 3}
+    - {fileID: 21300000, guid: 0b6dffdbd7eeac14a94227ff3d841469, type: 3}
+    scoreIfNotServed: 0
   coinFlyVFX: {fileID: 2099307325}
   maxMissingItems: 2
   baseOrderReward: 30
@@ -4974,6 +4989,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 478067142618997981, guid: 926e0b516840a4a47b492b3c9c94e820, type: 3}
+      propertyPath: m_SortingOrder
+      value: -3
+      objectReference: {fileID: 0}
     - target: {fileID: 1953483316766201519, guid: 926e0b516840a4a47b492b3c9c94e820, type: 3}
       propertyPath: m_Name
       value: customer_head
@@ -5053,6 +5072,10 @@ PrefabInstance:
     - target: {fileID: 8366673163794166381, guid: 926e0b516840a4a47b492b3c9c94e820, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.14042933
+      objectReference: {fileID: 0}
+    - target: {fileID: 8890312713942604861, guid: 926e0b516840a4a47b492b3c9c94e820, type: 3}
+      propertyPath: m_SortingOrder
+      value: -3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
