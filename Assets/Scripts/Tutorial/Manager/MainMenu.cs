@@ -52,52 +52,52 @@ public class MainMenu : MonoBehaviour
     // }
 
 
-public void OnEndLevelOne()
-{
-    ShowAdThen(() =>
+    public void OnEndLevelOne()
     {
-        if (LevelOneState.IsSuccess)
-            SceneManager.LoadScene("level2 - china");
-        else
-            SceneManager.LoadScene("level1 - israel");
-    });
-}
-
-public void OnEndLevelTwo()
-{
-    ShowAdThen(() =>
-    {
-        if (LevelTwoState.IsSuccess)
-            SceneManager.LoadScene("level3 - USA");
-        else
-            SceneManager.LoadScene("level2 - china");
-    });
-}
-
-public void OnEndLevelThree()
-{
-    ShowAdThen(() =>
-    {
-        if (LevelThreeState.IsSuccess)
-            SceneManager.LoadScene("MainMenu");
-        else
-            SceneManager.LoadScene("level3 - USA");
-    });
-}
-
-
-private void ShowAdThen(System.Action afterAd)
-{
-    if (global::AdsManager.Instance == null)
-    {
-        afterAd?.Invoke();
-        return;
+        ShowAdThen(() =>
+        {
+            if (LevelOneState.IsSuccess)
+                SceneManager.LoadScene("level2 - china");
+            else
+                SceneManager.LoadScene("level1 - israel");
+        });
     }
 
-    global::AdsManager.Instance.ShowInterstitialThen(() =>
+    public void OnEndLevelTwo()
     {
-        afterAd?.Invoke();
-    });
-}
+        ShowAdThen(() =>
+        {
+            if (LevelTwoState.IsSuccess)
+                SceneManager.LoadScene("level3 - USA");
+            else
+                SceneManager.LoadScene("level2 - china");
+        });
+    }
+
+    public void OnEndLevelThree()
+    {
+        ShowAdThen(() =>
+        {
+            if (LevelThreeState.IsSuccess)
+                SceneManager.LoadScene("MainMenu");
+            else
+                SceneManager.LoadScene("level3 - USA");
+        });
+    }
+
+
+    private void ShowAdThen(System.Action afterAd)
+    {
+        if (global::AdsManager.Instance == null)
+        {
+            afterAd?.Invoke();
+            return;
+        }
+
+        global::AdsManager.Instance.ShowInterstitialThen(() =>
+        {
+            afterAd?.Invoke();
+        });
+    }
 
 }
