@@ -11,6 +11,8 @@ public class Item : MonoBehaviour
     public void OnClick()
     {
         if (!isClickable) return;
+        if (FeatureHintOverlay.IsOpen)
+            return;
         if (PauseManager.Instance != null && PauseManager.Instance.IsPaused)
             return;
 

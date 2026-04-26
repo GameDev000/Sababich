@@ -31,6 +31,8 @@ public class TrashCan : MonoBehaviour
 
     private void OnMouseEnter()// Change sprite to open when hovered over
     {
+        if (FeatureHintOverlay.IsOpen)
+            return;
         if (PauseManager.Instance != null && PauseManager.Instance.IsPaused)
             return;
         if (myRenderer != null && openSprite != null)
@@ -39,6 +41,8 @@ public class TrashCan : MonoBehaviour
 
     private void OnMouseExit()// Change sprite back to closed when not hovered over
     {
+        if (FeatureHintOverlay.IsOpen)
+            return;
         if (PauseManager.Instance != null && PauseManager.Instance.IsPaused)
             return;
         if (myRenderer != null && closedSprite != null)

@@ -6,6 +6,8 @@ public class MessyClickSource : MonoBehaviour
 {
     private void OnMouseDown()
     {
+        if (FeatureHintOverlay.IsOpen)
+            return;
         if (PauseManager.Instance != null && PauseManager.Instance.IsPaused)
             return;
         if (DirtStateManager.Instance != null)
