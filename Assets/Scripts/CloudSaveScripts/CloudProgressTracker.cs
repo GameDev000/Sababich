@@ -44,8 +44,7 @@ public class CloudProgressTracker : MonoBehaviour
             return;
 
         // 4) Save the current scene name to the cloud.
-        // Key: "resumeScene"
-        await DatabaseManager.SaveData(("resumeScene", scene.name));
+        await DatabaseManager.SaveData((CloudSaveKeys.ResumeScene, scene.name));
 
         Debug.Log($"[CloudProgressTracker] Saved resumeScene = '{scene.name}'");
     }
@@ -69,7 +68,7 @@ public class CloudProgressTracker : MonoBehaviour
             return;
         }
 
-        await DatabaseManager.SaveData(("resumeScene", "MainMenu"));
+        await DatabaseManager.SaveData((CloudSaveKeys.ResumeScene, "MainMenu"));
         Debug.Log("[CloudProgressTracker] Game completed -> resumeScene = 'MainMenu'");
     }
 

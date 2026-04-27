@@ -121,9 +121,9 @@ public class ScoreOfAuthenticatedUser : MonoBehaviour
         {
             if (AllowCloudSave())
             {
-                await DatabaseManager.SaveData(("displayName", displayName));
+                await DatabaseManager.SaveData((CloudSaveKeys.DisplayName, displayName));
                 await DatabaseManager.SaveData((NameMapKey(displayName), internalUsername));
-                await DatabaseManager.SaveData(("username", internalUsername));
+                await DatabaseManager.SaveData((CloudSaveKeys.Username, internalUsername));
             }
         }
 
@@ -172,8 +172,8 @@ public class ScoreOfAuthenticatedUser : MonoBehaviour
         else
             Debug.LogWarning("[ScoreOfAuthenticatedUser] CloudStateSync not found -> keeping local Level states.");
 
-        var data = await DatabaseManager.LoadData("resumeScene");
-        resumeScene = DatabaseManager.ReadString(data, "resumeScene", "");
+        var data = await DatabaseManager.LoadData(CloudSaveKeys.ResumeScene);
+        resumeScene = DatabaseManager.ReadString(data, CloudSaveKeys.ResumeScene, "");
 
         GoToResumeOrMainMenu();
     }
@@ -311,7 +311,7 @@ public class ScoreOfAuthenticatedUser : MonoBehaviour
 
         resumeScene = sceneName;
 
-        await DatabaseManager.SaveData(("resumeScene", resumeScene));
+        await DatabaseManager.SaveData((CloudSaveKeys.ResumeScene, resumeScene));
     }
 
     public async void ClearResumeToMainMenu()
@@ -328,7 +328,7 @@ public class ScoreOfAuthenticatedUser : MonoBehaviour
 
         resumeScene = mainMenuSceneName;
 
-        await DatabaseManager.SaveData(("resumeScene", resumeScene));
+        await DatabaseManager.SaveData((CloudSaveKeys.ResumeScene, resumeScene));
     }
 
     private void GoToResumeOrMainMenu()

@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Threading.Tasks;
 using Unity.Services.Core;
 using Unity.Services.Authentication;
 
@@ -93,7 +94,7 @@ public class LevelTimerWinLose : MonoBehaviour
         if (UnityServices.State == ServicesInitializationState.Initialized &&
             AuthenticationService.Instance.IsSignedIn)
         {
-            _ = DatabaseManager.SaveData(("level1_timeSeconds", timeToTargetSeconds)); //1
+            _ = DatabaseManager.SaveData((CloudSaveKeys.Level1TimeSeconds, timeToTargetSeconds));
             Debug.Log($"[Level1] Saved timeSeconds={timeToTargetSeconds}");
         }
         else
@@ -102,7 +103,7 @@ public class LevelTimerWinLose : MonoBehaviour
         }
     }
 
-    private void EndLevel()
+    private async void EndLevel()
     {
         int coinsEnd = (ScoreManager.Instance != null) ? ScoreManager.Instance.CurrentMoney : 0;
 
@@ -112,7 +113,7 @@ public class LevelTimerWinLose : MonoBehaviour
             SaveLevel1TimeOnce();
         }
 
-        SaveLevel1CoinsToCloud(coinsEnd);
+        await SaveLevel1CoinsToCloud(coinsEnd);
 
         bool success = coinsEnd >= coinsTarget;
         LevelOneState.IsSuccess = success;
@@ -125,26 +126,34 @@ public class LevelTimerWinLose : MonoBehaviour
         if (UnityServices.State == ServicesInitializationState.Initialized &&
             AuthenticationService.Instance.IsSignedIn)
         {
-            _ = DatabaseManager.SaveData(("level1_totalServed", totalServed));
-            _ = DatabaseManager.SaveData(("level1_perfectServed", perfectServed));
+            await DatabaseManager.SaveData((CloudSaveKeys.Level1TotalServed, totalServed));
+            await DatabaseManager.SaveData((CloudSaveKeys.Level1PerfectServed, perfectServed));
         }
 
         if (UnityServices.State == ServicesInitializationState.Initialized &&
             AuthenticationService.Instance.IsSignedIn)
         {
-            _ = DatabaseManager.SaveData(("level1_passed", success ? 1 : 0)); // 2
+            await DatabaseManager.SaveData((CloudSaveKeys.Level1Passed, success ? 1 : 0));
+        }
+
+        if (UnityServices.State == ServicesInitializationState.Initialized &&
+            AuthenticationService.Instance.IsSignedIn)
+        {
+            await DatabaseManager.SaveData((CloudSaveKeys.DuplicateClicksKey(1),     LevelOneState.DuplicateIngredientClicks));
+            await DatabaseManager.SaveData((CloudSaveKeys.GlutenChildAppearedKey(1), LevelOneState.GlutenChildAppeared));
+            await DatabaseManager.SaveData((CloudSaveKeys.GlutenChildServedKey(1),   LevelOneState.GlutenChildServed));
         }
 
         Time.timeScale = 1f;
         SceneManager.LoadScene(endSceneName);
     }
 
-    private void SaveLevel1CoinsToCloud(int coins)
+    private async Task SaveLevel1CoinsToCloud(int coins)
     {
         if (UnityServices.State != ServicesInitializationState.Initialized) return;
         if (!AuthenticationService.Instance.IsSignedIn) return;
 
-        _ = DatabaseManager.SaveData(("level1_coins", coins));// 3
+        await DatabaseManager.SaveData((CloudSaveKeys.Level1Coins, coins));
     }
 
     private void UpdateTimerUI(float secondsLeft)

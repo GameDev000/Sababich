@@ -86,6 +86,8 @@ public class SelectionList : MonoBehaviour
             if (coinFlyVFX != null)
                 coinFlyVFX.PlayDuplicatePenaltyFromWorld(worldFrom);
             Debug.Log($"Duplicate ingredient in same order: {lower} => -2");
+            if (CustomerManager.Instance != null)
+                CustomerManager.Instance.RegisterDuplicateIngredientClick();
             return false;
         }
 

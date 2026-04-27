@@ -12,11 +12,19 @@ public static class LevelOneState
 
     // Number of dishes that were served with 100% perfect match
     public static int PerfectServedDishes;
+
+    public static int DuplicateIngredientClicks;
+    public static int GlutenChildAppeared;
+    public static int GlutenChildServed;
+
     public static void Reset()
     {
         IsSuccess = false;
         TotalServedDishes = 0;
         PerfectServedDishes = 0;
+        DuplicateIngredientClicks = 0;
+        GlutenChildAppeared = 0;
+        GlutenChildServed = 0;
     }
 }
 
@@ -31,10 +39,17 @@ public static class LevelThreeState
     // Number of dishes that were served with 100% perfect match
     public static int PerfectServedDishes;
 
+    public static int DuplicateIngredientClicks;
+    public static int GlutenChildAppeared;
+    public static int GlutenChildServed;
+
     public static void Reset()
     {
         IsSuccess = false;
         TotalServedDishes = 0;
         PerfectServedDishes = 0;
+        DuplicateIngredientClicks = 0;
+        GlutenChildAppeared = 0;
+        GlutenChildServed = 0;
     }
 }

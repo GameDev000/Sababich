@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Threading.Tasks;
 using Unity.Services.Core;
 using Unity.Services.Authentication;
 
@@ -91,7 +92,7 @@ public class LevelThreeTimerWinLose : MonoBehaviour
         if (UnityServices.State == ServicesInitializationState.Initialized &&
             AuthenticationService.Instance.IsSignedIn)
         {
-            _ = DatabaseManager.SaveData(("level3_timeSeconds", timeToTargetSeconds));
+            _ = DatabaseManager.SaveData((CloudSaveKeys.Level3TimeSeconds, timeToTargetSeconds));
             Debug.Log($"[Level3] Saved timeSeconds={timeToTargetSeconds}");
         }
         else
@@ -100,7 +101,7 @@ public class LevelThreeTimerWinLose : MonoBehaviour
         }
     }
 
-    private void EndLevel()
+    private async void EndLevel()
     {
         int coinsEnd = (ScoreManager.Instance != null) ? ScoreManager.Instance.CurrentMoney : 0;
         Debug.Log($"[Level3] coinsEnd={coinsEnd}");
@@ -116,7 +117,7 @@ public class LevelThreeTimerWinLose : MonoBehaviour
         if (UnityServices.State == ServicesInitializationState.Initialized &&
             AuthenticationService.Instance.IsSignedIn)
         {
-            _ = DatabaseManager.SaveData(("level3_coins", coinsEnd));
+            await DatabaseManager.SaveData((CloudSaveKeys.Level3Coins, coinsEnd));
         }
 
         bool success = coinsEnd >= coinsTarget;
@@ -130,15 +131,23 @@ public class LevelThreeTimerWinLose : MonoBehaviour
         if (UnityServices.State == ServicesInitializationState.Initialized &&
             AuthenticationService.Instance.IsSignedIn)
         {
-            _ = DatabaseManager.SaveData(("level3_totalServed", totalServed));
-            _ = DatabaseManager.SaveData(("level3_perfectServed", perfectServed));
+            await DatabaseManager.SaveData((CloudSaveKeys.Level3TotalServed, totalServed));
+            await DatabaseManager.SaveData((CloudSaveKeys.Level3PerfectServed, perfectServed));
         }
 
         // Save passed flag for level 3 (used after relogin / resume)
         if (UnityServices.State == ServicesInitializationState.Initialized &&
             AuthenticationService.Instance.IsSignedIn)
         {
-            _ = DatabaseManager.SaveData(("level3_passed", success ? 1 : 0));
+            await DatabaseManager.SaveData((CloudSaveKeys.Level3Passed, success ? 1 : 0));
+        }
+
+        if (UnityServices.State == ServicesInitializationState.Initialized &&
+            AuthenticationService.Instance.IsSignedIn)
+        {
+            await DatabaseManager.SaveData((CloudSaveKeys.DuplicateClicksKey(3),     LevelThreeState.DuplicateIngredientClicks));
+            await DatabaseManager.SaveData((CloudSaveKeys.GlutenChildAppearedKey(3), LevelThreeState.GlutenChildAppeared));
+            await DatabaseManager.SaveData((CloudSaveKeys.GlutenChildServedKey(3),   LevelThreeState.GlutenChildServed));
         }
 
         Time.timeScale = 1f;
