@@ -139,9 +139,9 @@ public class LevelTimerWinLose : MonoBehaviour
         if (UnityServices.State == ServicesInitializationState.Initialized &&
             AuthenticationService.Instance.IsSignedIn)
         {
-            await DatabaseManager.SaveData((CloudSaveKeys.DuplicateClicksKey(1),     LevelOneState.DuplicateIngredientClicks));
+            await DatabaseManager.SaveData((CloudSaveKeys.DuplicateClicksKey(1), LevelOneState.DuplicateIngredientClicks));
             await DatabaseManager.SaveData((CloudSaveKeys.GlutenChildAppearedKey(1), LevelOneState.GlutenChildAppeared));
-            await DatabaseManager.SaveData((CloudSaveKeys.GlutenChildServedKey(1),   LevelOneState.GlutenChildServed));
+            await DatabaseManager.SaveData((CloudSaveKeys.GlutenChildServedKey(1), LevelOneState.GlutenChildServed));
         }
 
         Time.timeScale = 1f;

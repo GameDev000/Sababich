@@ -265,7 +265,7 @@ public class CustomerManager : MonoBehaviour
         // scoreIfNotServed == true identifies the gluten-sensitive child
         if (chosen != null && chosen.scoreIfNotServed)
         {
-            if      (levelNumber == 1) LevelOneState.GlutenChildAppeared++;
+            if (levelNumber == 1) LevelOneState.GlutenChildAppeared++;
             else if (levelNumber == 2) LevelTwoState.GlutenChildAppeared++;
             else if (levelNumber == 3) LevelThreeState.GlutenChildAppeared++;
         }
@@ -344,7 +344,7 @@ public class CustomerManager : MonoBehaviour
     // Called from SelectionList when the player clicks the same ingredient twice in one order
     public void RegisterDuplicateIngredientClick()
     {
-        if      (levelNumber == 1) LevelOneState.DuplicateIngredientClicks++;
+        if (levelNumber == 1) LevelOneState.DuplicateIngredientClicks++;
         else if (levelNumber == 2) LevelTwoState.DuplicateIngredientClicks++;
         else if (levelNumber == 3) LevelThreeState.DuplicateIngredientClicks++;
     }
@@ -389,7 +389,7 @@ public class CustomerManager : MonoBehaviour
             Debug.Log("Special customer: served -> NO score (full or partial).");
 
             // Count how many times the player mistakenly served the gluten-sensitive child
-            if      (levelNumber == 1) LevelOneState.GlutenChildServed++;
+            if (levelNumber == 1) LevelOneState.GlutenChildServed++;
             else if (levelNumber == 2) LevelTwoState.GlutenChildServed++;
             else if (levelNumber == 3) LevelThreeState.GlutenChildServed++;
 
