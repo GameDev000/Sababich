@@ -1,0 +1,434 @@
+# Sababich Dashboard System
+
+## Overview
+
+This project includes a therapist-facing analytics dashboard built for the Sababich game.
+
+Important:  
+The dashboard architecture and implementation were designed and developed with the assistance of Claude (AI), based on detailed requirements and iterative refinement.
+
+The system enables tracking, storing, and presenting player performance data across multiple sessions, focusing strictly on raw measurable metrics without any clinical interpretation.
+
+---
+
+## What the System Does
+
+After gameplay sessions, the system:
+
+- Collects gameplay metrics per level
+- Aggregates them into a session record
+- Stores session history (local + cloud backup)
+- Updates a static dashboard HTML file
+- Allows therapists to view data via a fixed link or button
+
+---
+
+## Project Structure
+
+### Backend (Unity - C#)
+
+Assets/Scripts/Outputs_to_Cloud/
+
+- SessionIdentity.cs — stores current player identity
+- SessionRecord.cs — data model for sessions
+- SessionDataCollector.cs — builds session data
+- CloudSessionHistory.cs — manages cloud session history
+- SessionExporter.cs — generates dashboard HTML with embedded data
+- ViewDashboardButton.cs — opens dashboard manually
+
+---
+
+### Frontend (Dashboard)
+
+Assets/StreamingAssets/Dashboard/
+
+- sababich_dashboard.html — main dashboard file
+- dashboard.css — styling
+- dashboard.js — filtering, sorting, charts, notes
+
+---
+
+## Data Tracked
+
+### Raw Metrics (from game)
+
+- Passed / Failed per level
+- Coins per level
+- Time to target
+- Total served dishes
+- Perfect served dishes
+- Duplicate ingredient clicks
+- Gluten-sensitive child appeared
+- Gluten-sensitive child served by mistake
+
+### Derived Metrics (calculated)
+
+- Incorrect dishes
+- Gluten child handled correctly
+- Average dish preparation time
+
+---
+
+## Session History
+
+- Each gameplay session is stored separately
+- Sessions are linked to a specific player
+- No overwriting of previous data
+- Stored locally (primary) and in Unity Cloud Save (backup)
+
+---
+
+## Dashboard Access
+
+The dashboard is:
+
+- Not opened automatically
+- Accessed via a button in MainMenu
+- Stored locally at:
+
+Application.persistentDataPath/Dashboard/sababich_dashboard.html
+
+- No server required
+- No terminal commands required
+- Works offline
+
+---
+
+## Therapist-Oriented Design
+
+The dashboard:
+
+- Displays raw data only
+- Does not perform analysis or diagnosis
+- Groups metrics into neutral sections:
+  - Dishes Served
+  - Attention & Repetition
+  - Rule-Based Responses
+  - Level Outcome
+
+Includes:
+
+- Filtering (player, date, level, etc.)
+- Sorting (coins, errors, time, etc.)
+- Session history
+- Therapist notes (stored in localStorage)
+
+---
+
+## Final Setup (Unity Editor)
+
+1. Open MainMenu scene  
+2. Create UI Button  
+3. Attach ViewDashboardButton component  
+4. In OnClick() assign:
+
+ViewDashboardButton.OpenDashboard()
+
+---
+
+## Testing Checklist
+
+- Play a level and return to MainMenu  
+- Verify dashboard file is created  
+- Click "View Dashboard" and confirm it opens  
+- Play again and verify a new session is appended  
+- Check Unity Console for errors  
+
+---
+
+## Claude Prompt (Full Requirements)
+Please revise and propose the Dashboard architecture plan for my Unity project.
+
+Do NOT modify any files.
+Do NOT create files.
+Do NOT implement anything yet.
+Only analyze the current project and update the architecture proposal.
+
+The Dashboard task should be split into two clear parts:
+1. Backend
+2. Frontend
+
+General goal:
+Create a therapist-facing analytics Dashboard for the Sababich game. The dashboard should present raw measurable gameplay data across multiple player sessions, allow filtering and sorting, and provide a notes area for the occupational therapist.
+
+Important:
+The dashboard is for an occupational therapist.
+Do NOT infer clinical conclusions.
+Do NOT diagnose.
+Do NOT write automatic interpretations like “low inhibition” or “poor working memory”.
+Do NOT generate recommendations.
+Only present raw measurable data and neutral calculated indicators.
+Skill categories may be used only as organizational sections, not as conclusions.
+
+Existing cloud-related scripts to inspect:
+Assets/Scripts/CloudSaveScripts/
+
+Especially:
+- AuthenticationManagerWithPassword.cs
+- CloudProgressTracker.cs
+- CloudSaveKeys.cs
+- CloudStateSync.cs
+- DatabaseManager.cs
+- ScoreOfAuthenticatedUser.cs
+
+Folder structure requirement:
+If implementation is approved later, new dashboard/export-related Unity scripts should go under:
+
+Assets/Scripts/Outputs_to_Cloud/
+
+Existing cloud scripts should remain under:
+
+Assets/Scripts/CloudSaveScripts/
+
+Do not mix dashboard/output logic into CloudSaveScripts unless absolutely necessary.
+
+BACKEND REQUIREMENTS
+
+The backend is responsible for collecting, organizing, saving, and exposing the data.
+
+1. Data to collect per player session
+
+For each finished play session, collect:
+- player display name / username
+- session date and time
+- last completed / reached level
+- resumeScene
+- per-level passed / failed
+- coins per level
+- time to target per level
+- total served dishes per level
+- perfect served dishes per level
+- incorrect dishes per level
+- duplicate ingredient clicks per level
+- gluten-sensitive child appeared per level
+- gluten-sensitive child served by mistake per level
+- gluten-sensitive child not served correctly per level
+- average dish preparation time per level
+
+2. Derived metrics only
+
+For new dashboard metrics, make sure they are calculated from data already saved or already counted in the game.
+
+Do NOT propose measuring extra gameplay events unless absolutely necessary.
+
+Derived metric examples:
+- incorrectDishes = totalServedDishes - perfectServedDishes
+- glutenChildNotServedCorrectly = glutenChildAppeared - glutenChildServedByMistake
+- averageDishPrepTime = timeToTargetSeconds / perfectServedDishes
+
+Important correction:
+Do NOT create a real-time LevelDishTimer.
+I do NOT want to measure dish preparation time with a new timer.
+The average dish preparation time should be calculated only from existing data:
+
+averageDishPrepTime = timeToTargetSeconds / perfectServedDishes
+
+If perfectServedDishes is 0, handle safely with N/A or -1.
+
+Please verify all derived metrics and explain exactly how each one is calculated.
+
+3. Session history
+
+Each play session must be saved as a new record.
+Previous sessions must NOT be overwritten.
+Use a reliable session ID or timestamp strategy.
+Connect every session to the correct player.
+
+Please check the best way to separate multiple sessions under the same Unity PlayerID / player identity in Unity Cloud Save.
+
+If Unity Cloud Save cannot naturally create subcollections per PlayerID, propose a reliable structure so the dashboard can still retrieve all sessions for the same player.
+
+Requirements:
+- Every play session must be preserved.
+- Sessions must be linked to the same player.
+- New sessions must not overwrite old sessions.
+- The dashboard must be able to list and load previous sessions for that same player.
+
+Compare options such as:
+- dashboard_session_count + dashboard_session_N
+- dashboardSessions JSON list
+- playerId + timestamp keys
+- one JSON object containing all sessions
+- local JSON file
+- generated HTML file
+- or another safer approach
+
+4. Storage strategy
+
+Propose the best structure:
+- Unity Cloud Save keys
+- JSON session object
+- local JSON file
+- generated HTML file
+- or a combination
+
+Please recommend the best option for the current project and explain tradeoffs clearly.
+
+5. Backend responsibilities
+
+Propose scripts/classes for:
+- collecting current session data
+- calculating derived metrics
+- saving session history
+- loading previous sessions
+- exporting data for the dashboard
+- providing access to the dashboard page
+
+6. Safety
+
+Explain:
+- how to avoid overwriting old sessions
+- how to handle guest users
+- how to handle missing cloud values
+- how to avoid breaking the existing cloud save flow
+- where dashboard access should be triggered
+
+7. No automatic browser opening
+
+Do NOT automatically open the browser when the user finishes playing.
+
+Instead, propose a fixed accessible dashboard link or stable entry point that the therapist can open when needed.
+
+The dashboard should update with new session data after the player plays, but access should be through a stable link/page or manual button, not automatic browser launch.
+
+8. No manual local server requirement
+
+In previous web dashboards, we had to run a server manually from the terminal.
+That is NOT acceptable here.
+
+Please propose a solution where the therapist can access the dashboard without manually running a server.
+
+Important requirements:
+- The game runs and updates the data.
+- The therapist can open a stable link/page.
+- No terminal command should be required by the therapist.
+- No manual local server startup should be required.
+
+Explain possible approaches:
+- local static HTML file
+- Unity StreamingAssets generated HTML
+- hosted static dashboard
+- GitHub Pages / Firebase Hosting / Unity Cloud Code / another lightweight backend
+- local dashboard file with embedded JSON
+- any other practical option
+
+FRONTEND REQUIREMENTS
+
+The frontend is responsible for presenting the data visually to the occupational therapist.
+
+1. Dashboard layout
+
+Use the attached dashboard image only as visual inspiration.
+
+The Dashboard should include:
+- top summary cards
+- aggregated overview across all levels
+- per-level breakdown
+- charts
+- tables
+- session history selector
+- therapist notes area
+
+2. Initial view
+
+The first view should show combined weighted/aggregated data across all levels.
+
+3. Filtering
+
+The therapist should be able to filter by:
+- player display name / username
+- session date
+- level
+- passed / failed
+- cognitive skill category / neutral observable category
+- time range
+- coin range
+- high / low error count
+
+4. Sorting
+
+The therapist should be able to sort by:
+- most recent session
+- best session
+- most difficult level
+- coins
+- time to target
+- duplicate clicks
+- gluten-child mistakes
+- perfect order rate
+- average dish preparation time
+
+5. Skill / observable categories
+
+Group metrics into neutral sections such as:
+- Cognitive flexibility
+- Working memory
+- Inhibition / impulse control
+- Planning / task efficiency
+
+Important:
+These categories should only organize the data.
+Do not infer conclusions from them.
+
+Example:
+- Working memory section: show total dishes, perfect dishes, incorrect dishes
+- Inhibition / impulse control section: show duplicate clicks and gluten-child serve mistakes
+- Planning / efficiency section: show coins and time metrics
+
+Use neutral wording.
+
+6. Therapist notes
+
+The Dashboard should include a free-text notes area where the therapist can document observations.
+
+The note should be connected to:
+- player
+- session date
+- viewed data/session
+
+Please recommend where notes should be saved:
+- local file
+- browser localStorage
+- Unity Cloud Save
+- another option
+
+7. Visual design
+
+Suggest a clean professional dashboard design:
+- cards
+- charts
+- per-level table
+- filters panel
+- date selector
+- notes panel
+- clear Hebrew/English text direction handling if needed
+
+8. Frontend technology
+
+Recommend whether the dashboard should be:
+- static HTML generated by Unity
+- local browser dashboard reading JSON
+- React/Vue dashboard
+- Unity WebView/browser output
+- hosted dashboard
+- or another simple approach
+
+FINAL OUTPUT REQUEST
+
+Please return an updated plan with:
+
+1. Revised Backend architecture
+2. Revised Frontend architecture
+3. Revised session storage strategy
+4. Revised dashboard access strategy without auto-opening
+5. Data model proposal
+6. List of raw metrics and derived metrics
+7. Which metrics are saved vs calculated
+8. Recommended folder/file structure
+9. Step-by-step implementation plan
+10. Risks, limitations, and tradeoffs
+
+Do not change any code.
+Do not create files.
+Do not apply fixes.
+Only revise and propose the plan.
