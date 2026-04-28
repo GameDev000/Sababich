@@ -9,13 +9,20 @@ public class FaceDetector : MonoBehaviour
 
     private Model runtimeModel;
     private Worker worker;
-    private float[] anchors; // flat array: [y0, x0, y1, x1, ...]
+    private float[] anchors; // flat array: [cy0, cx0, cy1, cx1, ...] — one (cy,cx) pair per anchor
 
     private const int InputSize   = 128;
     private const int NumAnchors  = 896;
 
     void Awake()
     {
+        if (modelAsset == null)
+        {
+            Debug.LogError("[FaceDetector] modelAsset is not assigned. Assign blazeface.onnx in the Inspector.");
+            enabled = false;
+            return;
+        }
+
         runtimeModel = ModelLoader.Load(modelAsset);
         worker = new Worker(runtimeModel, BackendType.CPU);
         GenerateAnchors();
