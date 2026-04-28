@@ -6,6 +6,7 @@ public class FaceDetector : MonoBehaviour
 {
     [SerializeField] private ModelAsset modelAsset;
     [SerializeField] [Range(0.3f, 0.95f)] private float confidenceThreshold = 0.75f;
+    [SerializeField] [Range(0f, 1f)] private float headPadding = 0.35f;
 
     private Model runtimeModel;
     private Worker worker;
@@ -114,6 +115,12 @@ public class FaceDetector : MonoBehaviour
     /// </summary>
     public Rect DetectFace(Texture2D texture)
     {
+        if (texture == null)
+        {
+            Debug.LogWarning("[FaceDetector] DetectFace called with null texture — using fallback.");
+            return CenterCropNormalized();
+        }
+
         Texture2D resized = ResizeTexture(texture, InputSize, InputSize);
 
         using Tensor<float> input = TextureToTensor(resized);
@@ -127,6 +134,13 @@ public class FaceDetector : MonoBehaviour
         // ----------------------------------------------------------------------
         var scoresTensor = worker.PeekOutput("classificators") as Tensor<float>;
         var boxesTensor  = worker.PeekOutput("regressors")     as Tensor<float>;
+
+        if (scoresTensor == null || boxesTensor == null)
+        {
+            Debug.LogError("[FaceDetector] Could not find model outputs 'classificators'/'regressors'. " +
+                           "Check the output layer names logged in Awake and update the strings.");
+            return CenterCropNormalized();
+        }
 
         scoresTensor.CompleteOperationsAndDownload();
         boxesTensor.CompleteOperationsAndDownload();
@@ -164,9 +178,8 @@ public class FaceDetector : MonoBehaviour
         float w  =              boxesTensor[0, bestIdx, 3] * anchorSize;
 
         // Add vertical padding to include the top of the head (hair)
-        float padTop = 0.35f;
-        cy -= h * padTop * 0.5f;
-        h  *= (1f + padTop);
+        cy -= h * headPadding * 0.5f;
+        h  *= (1f + headPadding);
 
         float xMin = Mathf.Clamp01(cx - w * 0.5f);
         float yMin = Mathf.Clamp01(cy - h * 0.5f);
