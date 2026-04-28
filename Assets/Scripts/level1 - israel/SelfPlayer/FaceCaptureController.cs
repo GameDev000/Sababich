@@ -23,6 +23,7 @@ public class FaceCaptureController : MonoBehaviour
 
 
     [SerializeField] private float firstStageDelay = 3f;
+    [SerializeField] private FaceDetector faceDetector;
 
     // Opens the face capture UI and starts the process
     public void Open()
@@ -115,14 +116,17 @@ public class FaceCaptureController : MonoBehaviour
 
         if (stage >= 3) // all done
         {
-            // Convert to sprites and store globally
-            Sprite happy = ToSprite(capturedHappy);
-            Sprite angry = ToSprite(capturedAngry);
-            Sprite furious = ToSprite(capturedFurious);
+            Rect? happyRect   = faceDetector != null ? faceDetector.DetectFace(capturedHappy)   : (Rect?)null;
+            Rect? angryRect   = faceDetector != null ? faceDetector.DetectFace(capturedAngry)   : (Rect?)null;
+            Rect? furiousRect = faceDetector != null ? faceDetector.DetectFace(capturedFurious) : (Rect?)null;
+
+            Sprite happy   = ToSprite(capturedHappy,   happyRect);
+            Sprite angry   = ToSprite(capturedAngry,   angryRect);
+            Sprite furious = ToSprite(capturedFurious, furiousRect);
 
             PlayerFaceStore.Set(happy, angry, furious);
 
-            Close(); // done
+            Close();
             return;
         }
 
@@ -139,12 +143,27 @@ public class FaceCaptureController : MonoBehaviour
         else instructionText.text = "כועס מאוד 🤬";
     }
 
-    // Converts a Texture2D to a Sprite
-    private Sprite ToSprite(Texture2D tex)
+    // faceRectNormalized: top-left origin, values in [0,1]. Null = full frame.
+    private Sprite ToSprite(Texture2D tex, Rect? faceRectNormalized = null)
     {
         if (tex == null) return null;
-        Rect r = new Rect(0, 0, tex.width, tex.height);
-        Vector2 pivot = new Vector2(0.5f, 0.5f);
-        return Sprite.Create(tex, r, pivot, 100f);
+
+        Rect pixelRect;
+        if (faceRectNormalized.HasValue)
+        {
+            Rect fr = faceRectNormalized.Value;
+            // Convert top-left normalized → bottom-left pixel (Unity Sprite.Create convention)
+            float pixX = fr.x * tex.width;
+            float pixY = (1f - fr.y - fr.height) * tex.height;
+            float pixW = fr.width  * tex.width;
+            float pixH = fr.height * tex.height;
+            pixelRect = new Rect(pixX, pixY, pixW, pixH);
+        }
+        else
+        {
+            pixelRect = new Rect(0, 0, tex.width, tex.height);
+        }
+
+        return Sprite.Create(tex, pixelRect, new Vector2(0.5f, 0.5f), 100f);
     }
 }
