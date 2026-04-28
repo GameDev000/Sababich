@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Threading.Tasks;
 using Unity.Services.Core;
 using Unity.Services.Authentication;
 
@@ -89,7 +90,7 @@ public class LevelTwoTimerWinLose : MonoBehaviour
         if (UnityServices.State == ServicesInitializationState.Initialized &&
             AuthenticationService.Instance.IsSignedIn)
         {
-            _ = DatabaseManager.SaveData(("level2_timeSeconds", timeToTargetSeconds));
+            _ = DatabaseManager.SaveData((CloudSaveKeys.Level2TimeSeconds, timeToTargetSeconds));
             Debug.Log($"[Level2] Saved timeSeconds={timeToTargetSeconds}");
         }
         else
@@ -98,7 +99,7 @@ public class LevelTwoTimerWinLose : MonoBehaviour
         }
     }
 
-    private void EndLevel()
+    private async void EndLevel()
     {
         int coinsEnd = (ScoreManager.Instance != null) ? ScoreManager.Instance.CurrentMoney : 0;
 
@@ -111,7 +112,7 @@ public class LevelTwoTimerWinLose : MonoBehaviour
         if (UnityServices.State == ServicesInitializationState.Initialized &&
             AuthenticationService.Instance.IsSignedIn)
         {
-            _ = DatabaseManager.SaveData(("level2_coins", coinsEnd));
+            await DatabaseManager.SaveData((CloudSaveKeys.Level2Coins, coinsEnd));
         }
 
         bool success = coinsEnd >= coinsTarget;
@@ -125,15 +126,23 @@ public class LevelTwoTimerWinLose : MonoBehaviour
         if (UnityServices.State == ServicesInitializationState.Initialized &&
             AuthenticationService.Instance.IsSignedIn)
         {
-            _ = DatabaseManager.SaveData(("level2_totalServed", totalServed));
-            _ = DatabaseManager.SaveData(("level2_perfectServed", perfectServed));
+            await DatabaseManager.SaveData((CloudSaveKeys.Level2TotalServed, totalServed));
+            await DatabaseManager.SaveData((CloudSaveKeys.Level2PerfectServed, perfectServed));
         }
 
         // Save passed flag for level 2
         if (UnityServices.State == ServicesInitializationState.Initialized &&
             AuthenticationService.Instance.IsSignedIn)
         {
-            _ = DatabaseManager.SaveData(("level2_passed", success ? 1 : 0));
+            await DatabaseManager.SaveData((CloudSaveKeys.Level2Passed, success ? 1 : 0));
+        }
+
+        if (UnityServices.State == ServicesInitializationState.Initialized &&
+            AuthenticationService.Instance.IsSignedIn)
+        {
+            await DatabaseManager.SaveData((CloudSaveKeys.DuplicateClicksKey(2),     LevelTwoState.DuplicateIngredientClicks));
+            await DatabaseManager.SaveData((CloudSaveKeys.GlutenChildAppearedKey(2), LevelTwoState.GlutenChildAppeared));
+            await DatabaseManager.SaveData((CloudSaveKeys.GlutenChildServedKey(2),   LevelTwoState.GlutenChildServed));
         }
 
         Time.timeScale = 1f;

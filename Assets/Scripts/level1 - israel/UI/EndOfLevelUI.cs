@@ -113,7 +113,7 @@ public class EndOfLevelUI : MonoBehaviour
             return;
         }
 
-        string coinsKey = $"level{levelNumber}_coins";
+        string coinsKey = CloudSaveKeys.CoinsKey(levelNumber);
         var data = await DatabaseManager.LoadData(coinsKey);
 
         if (data == null || !data.ContainsKey(coinsKey))
@@ -153,8 +153,8 @@ public class EndOfLevelUI : MonoBehaviour
             return;
         }
 
-        string totalKey = $"level{levelNumber}_totalServed";
-        string perfectKey = $"level{levelNumber}_perfectServed";
+        string totalKey = CloudSaveKeys.TotalServedKey(levelNumber);
+        string perfectKey = CloudSaveKeys.PerfectServedKey(levelNumber);
 
         // Load
         var totalData = await DatabaseManager.LoadData(totalKey);

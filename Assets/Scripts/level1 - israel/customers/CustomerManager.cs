@@ -262,6 +262,14 @@ public class CustomerManager : MonoBehaviour
         slot.customer = Instantiate(prefabToSpawn, spawnPoint.position, Quaternion.identity);
         slot.customer.Init(chosen, maxMissingItems); // Implemented in Customer()
 
+        // scoreIfNotServed == true identifies the gluten-sensitive child
+        if (chosen != null && chosen.scoreIfNotServed)
+        {
+            if      (levelNumber == 1) LevelOneState.GlutenChildAppeared++;
+            else if (levelNumber == 2) LevelTwoState.GlutenChildAppeared++;
+            else if (levelNumber == 3) LevelThreeState.GlutenChildAppeared++;
+        }
+
         // Register mapping (customer -> slotIndex) so clicks can route quickly
         customerToSlot[slot.customer] = slotIndex;
 
@@ -333,6 +341,14 @@ public class CustomerManager : MonoBehaviour
         }
     }
 
+    // Called from SelectionList when the player clicks the same ingredient twice in one order
+    public void RegisterDuplicateIngredientClick()
+    {
+        if      (levelNumber == 1) LevelOneState.DuplicateIngredientClicks++;
+        else if (levelNumber == 2) LevelTwoState.DuplicateIngredientClicks++;
+        else if (levelNumber == 3) LevelThreeState.DuplicateIngredientClicks++;
+    }
+
 
     /// <summary>
     /// Serves the customer that was clicked.
@@ -371,6 +387,11 @@ public class CustomerManager : MonoBehaviour
         if (target.Data != null && target.Data.scoreIfNotServed)
         {
             Debug.Log("Special customer: served -> NO score (full or partial).");
+
+            // Count how many times the player mistakenly served the gluten-sensitive child
+            if      (levelNumber == 1) LevelOneState.GlutenChildServed++;
+            else if (levelNumber == 2) LevelTwoState.GlutenChildServed++;
+            else if (levelNumber == 3) LevelThreeState.GlutenChildServed++;
 
             if (ScoreManager.Instance != null)
             {

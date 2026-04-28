@@ -16,7 +16,7 @@ public class CloudStateSync : MonoBehaviour
             return;
         }
 
-        var data = await DatabaseManager.LoadData("level1_passed", "level2_passed", "level3_passed");
+        var data = await DatabaseManager.LoadData(CloudSaveKeys.Level1Passed, CloudSaveKeys.Level2Passed, CloudSaveKeys.Level3Passed);
 
         // New user no data -> keep local states
         if (data == null || data.Count == 0)
@@ -25,9 +25,9 @@ public class CloudStateSync : MonoBehaviour
             return;
         }
 
-        int l1 = DatabaseManager.ReadInt(data, "level1_passed", LevelOneState.IsSuccess ? 1 : 0);
-        int l2 = DatabaseManager.ReadInt(data, "level2_passed", LevelTwoState.IsSuccess ? 1 : 0);
-        int l3 = DatabaseManager.ReadInt(data, "level3_passed", LevelThreeState.IsSuccess ? 1 : 0);
+        int l1 = DatabaseManager.ReadInt(data, CloudSaveKeys.Level1Passed, LevelOneState.IsSuccess ? 1 : 0);
+        int l2 = DatabaseManager.ReadInt(data, CloudSaveKeys.Level2Passed, LevelTwoState.IsSuccess ? 1 : 0);
+        int l3 = DatabaseManager.ReadInt(data, CloudSaveKeys.Level3Passed, LevelThreeState.IsSuccess ? 1 : 0);
 
         LevelOneState.IsSuccess = (l1 == 1);
         LevelTwoState.IsSuccess = (l2 == 1);
