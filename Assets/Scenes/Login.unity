@@ -2626,6 +2626,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14d72ec1250acf0418212873484ed458, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  androidGameId: 6050145
+  iosGameId: 6050144
+  interstitialPlacementIdAndroid: Interstitial_Android
+  rewardedPlacementIdAndroid: Rewarded_Android
+  bannerPlacementIdAndroid: Banner_Android
+  preloadOnInit: 1
+  interstitialCooldownSeconds: 45
+  loadRetryDelaySeconds: 10
+  adsEnabled: 0
 --- !u!4 &1431769659
 Transform:
   m_ObjectHideFlags: 0

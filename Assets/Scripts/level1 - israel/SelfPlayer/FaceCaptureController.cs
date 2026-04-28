@@ -117,12 +117,12 @@ public class FaceCaptureController : MonoBehaviour
 
         if (stage >= 3) // all done
         {
-            Rect? happyRect   = faceDetector != null ? faceDetector.DetectFace(capturedHappy)   : (Rect?)null;
-            Rect? angryRect   = faceDetector != null ? faceDetector.DetectFace(capturedAngry)   : (Rect?)null;
+            Rect? happyRect = faceDetector != null ? faceDetector.DetectFace(capturedHappy) : (Rect?)null;
+            Rect? angryRect = faceDetector != null ? faceDetector.DetectFace(capturedAngry) : (Rect?)null;
             Rect? furiousRect = faceDetector != null ? faceDetector.DetectFace(capturedFurious) : (Rect?)null;
 
-            Sprite happy   = ToSprite(capturedHappy,   happyRect);
-            Sprite angry   = ToSprite(capturedAngry,   angryRect);
+            Sprite happy = ToSprite(capturedHappy, happyRect);
+            Sprite angry = ToSprite(capturedAngry, angryRect);
             Sprite furious = ToSprite(capturedFurious, furiousRect);
 
             PlayerFaceStore.Set(happy, angry, furious);
@@ -156,7 +156,7 @@ public class FaceCaptureController : MonoBehaviour
             // Convert top-left normalized → bottom-left pixel (Unity Sprite.Create convention)
             float pixX = fr.x * tex.width;
             float pixY = (1f - fr.y - fr.height) * tex.height;
-            float pixW = fr.width  * tex.width;
+            float pixW = fr.width * tex.width;
             float pixH = fr.height * tex.height;
             if (pixW <= 0f || pixH <= 0f)
             {

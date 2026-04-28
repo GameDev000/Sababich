@@ -7,7 +7,8 @@
         "GUID:fe25561d224ed4743af4c60938a59d0b",
         "GUID:5540e30183c82e84b954c033c388e06c",
         "GUID:be0d2672886cc45b2bcea5a5053a5347",
-        "GUID:ff6de30450f3748908ff580f6ec64d9a"
+        "GUID:ff6de30450f3748908ff580f6ec64d9a",
+        "Unity.InferenceEngine"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

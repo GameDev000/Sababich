@@ -4553,6 +4553,7 @@ GameObject:
   - component: {fileID: 2097371570}
   - component: {fileID: 2097371569}
   - component: {fileID: 2097371571}
+  - component: {fileID: 2097371572}
   m_Layer: 5
   m_Name: FaceCapturePanel
   m_TagString: Untagged
@@ -4643,6 +4644,22 @@ MonoBehaviour:
   introText: "\u05E6\u05DC\u05DD 3 \u05EA\u05DE\u05D5\u05E0\u05D5\u05EA : \u05DE\u05D7\u05D9\u05D9\u05E3,
     \u05DB\u05D5\u05E2\u05E1 \u05D5\u05DB\u05D5\u05E2\u05E1 \u05DE\u05D0\u05D5\u05D3"
   firstStageDelay: 3
+  faceDetector: {fileID: 2097371572}
+--- !u!114 &2097371572
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2097371567}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a74e5d58fc37aa499be9bcdd8b7281d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Scripts::FaceDetector
+  modelAsset: {fileID: 5022602860645237092, guid: 9f5f57ebcc74f1a42a48a151d658ed43, type: 3}
+  confidenceThreshold: 0.75
+  headPadding: 0.35
 --- !u!1001 &1113684382786501212
 PrefabInstance:
   m_ObjectHideFlags: 0
