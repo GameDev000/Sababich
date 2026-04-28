@@ -23,6 +23,7 @@ public class FaceCaptureController : MonoBehaviour
 
 
     [SerializeField] private float firstStageDelay = 3f;
+    [Header("Face Detection")]
     [SerializeField] private FaceDetector faceDetector;
 
     // Opens the face capture UI and starts the process
@@ -157,7 +158,15 @@ public class FaceCaptureController : MonoBehaviour
             float pixY = (1f - fr.y - fr.height) * tex.height;
             float pixW = fr.width  * tex.width;
             float pixH = fr.height * tex.height;
-            pixelRect = new Rect(pixX, pixY, pixW, pixH);
+            if (pixW <= 0f || pixH <= 0f)
+            {
+                Debug.LogWarning("[FaceCaptureController] Face rect has zero size — falling back to full frame.");
+                pixelRect = new Rect(0, 0, tex.width, tex.height);
+            }
+            else
+            {
+                pixelRect = new Rect(pixX, pixY, pixW, pixH);
+            }
         }
         else
         {
