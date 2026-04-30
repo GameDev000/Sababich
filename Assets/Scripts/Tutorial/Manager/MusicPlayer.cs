@@ -21,7 +21,7 @@ public class MusicPlayer : MonoBehaviour
     [Header("Audio")]
     [SerializeField] private AudioSource audioSource;
     [SerializeField, Range(0f, 1f)] private float musicVolume = 0.35f;
-    
+
 
     [Header("Tracks")]
     [SerializeField] private Track[] tracks;
