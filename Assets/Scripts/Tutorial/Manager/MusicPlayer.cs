@@ -20,6 +20,8 @@ public class MusicPlayer : MonoBehaviour
 
     [Header("Audio")]
     [SerializeField] private AudioSource audioSource;
+    [SerializeField, Range(0f, 1f)] private float musicVolume = 0.35f;
+    
 
     [Header("Tracks")]
     [SerializeField] private Track[] tracks;
@@ -43,7 +45,11 @@ public class MusicPlayer : MonoBehaviour
     private void Start()
     {
         bool muted = PlayerPrefs.GetInt(PREF_MUTED, 0) == 1;
-        if (audioSource != null) audioSource.mute = muted;
+        if (audioSource != null)
+        {
+            audioSource.mute = muted;
+            audioSource.volume = musicVolume;
+        }
 
         string savedId = PlayerPrefs.GetString(PREF_TRACK, GetDefaultTrackId());
         SetTrack(savedId, playImmediately: true);
