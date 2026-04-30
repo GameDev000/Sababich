@@ -25,6 +25,8 @@ public class ScoreManager : MonoBehaviour
     [SerializeField] private SoundCoins errorSounds;
     [SerializeField] private CoinFlyVFX coinFlyVFX;
 
+
+
     public int CurrentMoney { get; private set; }
 
     private void Awake()

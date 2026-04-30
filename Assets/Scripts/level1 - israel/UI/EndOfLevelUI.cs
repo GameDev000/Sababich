@@ -20,6 +20,18 @@ public class EndOfLevelUI : MonoBehaviour
     [SerializeField] private string successMessage = "כל הכבוד! עמדת במשימה היעד הבא - יפן!";
     [SerializeField] private string failMessage = "לא נורא.. נסה שוב";
 
+    [Header("End Level Audio")]
+    [SerializeField] private AudioSource endLevelAudioSource;
+    [SerializeField] private AudioClip successClip_level1;
+    [SerializeField] private AudioClip failClip_level1;
+    [SerializeField] private AudioClip successClip_level2;
+    [SerializeField] private AudioClip failClip_level2;
+    [SerializeField] private AudioClip successClip_level3;
+    [SerializeField] private AudioClip failClip_level3;
+    [SerializeField, Range(0f, 1f)] private float endLevelAudioVolume = 1f;
+
+
+
     // Start is async so we can pull coins from cloud after showing local immediately
     private async void Start()
     {
@@ -37,14 +49,26 @@ public class EndOfLevelUI : MonoBehaviour
             if (currentScene.name == "Level1 - endScene")
             {
                 titleText.text = LevelOneState.IsSuccess ? successMessage : failMessage;
+                if (LevelOneState.IsSuccess)
+                    PlayEndLevelAudio(successClip_level1);
+                else
+                    PlayEndLevelAudio(failClip_level1);
             }
             else if (currentScene.name == "Level2 - endScene")
             {
                 titleText.text = LevelTwoState.IsSuccess ? successMessage : failMessage;
+                if (LevelTwoState.IsSuccess)
+                    PlayEndLevelAudio(successClip_level2);
+                else
+                    PlayEndLevelAudio(failClip_level2);
             }
             else if (currentScene.name == "Level3 - endScene")
             {
                 titleText.text = LevelThreeState.IsSuccess ? successMessage : failMessage;
+                if (LevelThreeState.IsSuccess)
+                    PlayEndLevelAudio(successClip_level3);
+                else
+                    PlayEndLevelAudio(failClip_level3);
             }
         }
 
@@ -61,6 +85,19 @@ public class EndOfLevelUI : MonoBehaviour
 
         // Try override perfect orders from cloud as well
         await TryOverridePerfectOrdersFromCloud(currentScene.name);
+    }
+
+
+    private void PlayEndLevelAudio(AudioClip Clip)
+    {
+
+        if (endLevelAudioSource == null)
+            return;
+
+        if (Clip == null)
+            return;
+
+        endLevelAudioSource.PlayOneShot(Clip, endLevelAudioVolume);
     }
 
     // Local display for perfect orders stats
