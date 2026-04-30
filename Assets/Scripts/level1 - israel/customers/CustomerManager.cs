@@ -73,6 +73,10 @@ public class CustomerManager : MonoBehaviour
     private CustomerType lastSpawnedType = null;
     private CustomerType[] slotTypes = new CustomerType[3];
 
+    [Header("Customer Voice Feedback")]
+    [SerializeField] private AudioSource customerVoiceAudioSource;
+    [SerializeField, Range(0f, 1f)] private float customerVoiceVolume = 1f;
+
     /// <summary>
     /// Holds per-slot state so we don't duplicate variables (no slot0/slot1/slot2 code).
     /// </summary>
@@ -387,6 +391,7 @@ public class CustomerManager : MonoBehaviour
         if (target.Data != null && target.Data.scoreIfNotServed)
         {
             Debug.Log("Special customer: served -> NO score (full or partial).");
+            PlayCustomerVoice(target, false);
 
             // Count how many times the player mistakenly served the gluten-sensitive child
             if (levelNumber == 1) LevelOneState.GlutenChildServed++;
@@ -422,6 +427,7 @@ public class CustomerManager : MonoBehaviour
         if (ok)
         {
             Debug.Log("Correct order!");
+            PlayCustomerVoice(target, true);
 
             if (ScoreManager.Instance != null)
             {
@@ -454,6 +460,7 @@ public class CustomerManager : MonoBehaviour
 
         // Debug.Log($"Wrong order! Mistakes={mistakes}, Reward={reward}"); // NOT RELEVANT ANYMORE (reward removed)
         Debug.Log($"Wrong order! Mistakes={mistakes}");
+        PlayCustomerVoice(target, false);
 
         // Partial reward (never negative)
         // if (ScoreManager.Instance != null) // OLD BLOCK (reward-based) - NOT RELEVANT ANYMORE
@@ -718,6 +725,25 @@ public class CustomerManager : MonoBehaviour
             RuntimeCustomerFactory.CreateFromBase(baseType, happy, angry, furious, "player_customer");
 
         AddCustomerType(playerType);
+    }
+
+
+    private void PlayCustomerVoice(Customer target, bool success)
+    {
+        if (target == null || target.Data == null)
+            return;
+
+        AudioClip clip = success
+            ? target.Data.successVoiceClip
+            : target.Data.failureVoiceClip;
+
+        if (clip == null)
+            return;
+
+        if (customerVoiceAudioSource != null)
+        {
+            customerVoiceAudioSource.PlayOneShot(clip, customerVoiceVolume);
+        }
     }
 
 }

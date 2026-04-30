@@ -26,6 +26,7 @@ public class SelectionList : MonoBehaviour
 
     // For negative indication
     [SerializeField] private CoinFlyVFX coinFlyVFX;
+    
 
     private readonly List<string> selectedIngredients = new List<string>();
 
@@ -82,6 +83,7 @@ public class SelectionList : MonoBehaviour
         if (selectedIngredients.Contains(lower)) // We will not allow double-clicking on the same component
         {
             ScoreManager.Instance.FlashPenaltyUI();
+            ScoreManager.Instance.PlayDuplicateClickPenaltySound();
             ScoreManager.Instance.AddMoney(-2);
             if (coinFlyVFX != null)
                 coinFlyVFX.PlayDuplicatePenaltyFromWorld(worldFrom);

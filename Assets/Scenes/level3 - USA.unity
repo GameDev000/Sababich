@@ -2510,6 +2510,7 @@ GameObject:
   m_Component:
   - component: {fileID: 824672115}
   - component: {fileID: 824672114}
+  - component: {fileID: 824672116}
   m_Layer: 0
   m_Name: customerManager
   m_TagString: Untagged
@@ -2544,6 +2545,8 @@ MonoBehaviour:
     happyFace: {fileID: 0}
     angryFaces: []
     scoreIfNotServed: 0
+    successVoiceClip: {fileID: 0}
+    failureVoiceClip: {fileID: 0}
   customerPrefabNormal: {fileID: 1080409501}
   customerPrefabPlayerHead: {fileID: 1664062253}
   spawnPoint: {fileID: 147048395}
@@ -2575,6 +2578,8 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 86972088847a76d4eadd8f8b4f3636b3, type: 3}
     - {fileID: 21300000, guid: 00e9ec39c39c3b343b8aeaef4b587f40, type: 3}
     scoreIfNotServed: 0
+    successVoiceClip: {fileID: 8300000, guid: e62a2f98964a80741a33034d6c454947, type: 3}
+    failureVoiceClip: {fileID: 8300000, guid: 5c615e26f0f9938479caa83ffd1a077e, type: 3}
   - name: full2
     sprite: {fileID: 21300000, guid: ab66e26b1e5c72f47b2b354c2479f250, type: 3}
     requiredIngredients:
@@ -2590,6 +2595,8 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 15942946be20c8b4e9e5d52037eb2729, type: 3}
     - {fileID: 21300000, guid: 778488006d159b04597bc2eff55fdeb6, type: 3}
     scoreIfNotServed: 0
+    successVoiceClip: {fileID: 8300000, guid: f94314f0a861ef34685b665d75fdb41e, type: 3}
+    failureVoiceClip: {fileID: 8300000, guid: 6b3cb963862ffdb4aa4863c0e8fcd594, type: 3}
   - name: full3
     sprite: {fileID: 21300000, guid: 9365cfdf0a6af05478f16715497a4172, type: 3}
     requiredIngredients:
@@ -2605,6 +2612,8 @@ MonoBehaviour:
     - {fileID: 21300000, guid: cf6108857dc147248a8662f89ad3c456, type: 3}
     - {fileID: 21300000, guid: ec07a93f56748df46b33407da825def6, type: 3}
     scoreIfNotServed: 0
+    successVoiceClip: {fileID: 8300000, guid: af3f02b5097b9b34cad5b9581dda0fcf, type: 3}
+    failureVoiceClip: {fileID: 8300000, guid: 98c3feceaff8cbd4c9ae76a582d3f8cd, type: 3}
   - name: full4
     sprite: {fileID: 21300000, guid: 4db2ef4b3e099af40b56045c5d930d9e, type: 3}
     requiredIngredients:
@@ -2620,6 +2629,8 @@ MonoBehaviour:
     - {fileID: 21300000, guid: ef10a405a369d0340b64557b098ad3d5, type: 3}
     - {fileID: 21300000, guid: 17ca3daab5e235045bae164b643da746, type: 3}
     scoreIfNotServed: 0
+    successVoiceClip: {fileID: 8300000, guid: bf1d5144f96a9774fb362d9aadfecce8, type: 3}
+    failureVoiceClip: {fileID: 8300000, guid: 9f16fbb5ade4bfd4c952c3420894f581, type: 3}
   - name: full5
     sprite: {fileID: 21300000, guid: 87aada0da78c7dc49a4ea93479d16e57, type: 3}
     requiredIngredients:
@@ -2635,6 +2646,8 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 269c56fca0535f84a8c291f7e0a1a957, type: 3}
     - {fileID: 21300000, guid: 25f43392e10e4ef4bbadf1f6c546959b, type: 3}
     scoreIfNotServed: 0
+    successVoiceClip: {fileID: 8300000, guid: 4ba6c0c933fb2e141b3e2da04159ce91, type: 3}
+    failureVoiceClip: {fileID: 8300000, guid: 4601f110fcb130341b0fcd7f1aed44fd, type: 3}
   - name: not_ToServe_1
     sprite: {fileID: 21300000, guid: f95b9f80c8ab2d04eb4cab7e8ab04360, type: 3}
     requiredIngredients:
@@ -2650,6 +2663,8 @@ MonoBehaviour:
     - {fileID: 21300000, guid: d7089c3929809204296a14e14c0d13f8, type: 3}
     - {fileID: 21300000, guid: a7f1c343cf0cf9147b00194ff1a8991b, type: 3}
     scoreIfNotServed: 1
+    successVoiceClip: {fileID: 8300000, guid: 9337886da6aac814da94fa13f8d1e17c, type: 3}
+    failureVoiceClip: {fileID: 8300000, guid: 5dd655fa7b64e1347b446242260a5f87, type: 3}
   - name: full6
     sprite: {fileID: 21300000, guid: ef935435ace052c4e9ebe109d1a1b94b, type: 3}
     requiredIngredients:
@@ -2665,6 +2680,8 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 144ecb97c3f216b4483efd596b052a31, type: 3}
     - {fileID: 21300000, guid: cc358ddf44121a849a39935e3f2c3da9, type: 3}
     scoreIfNotServed: 0
+    successVoiceClip: {fileID: 8300000, guid: ee386e55737424a4889b581f7a33cd48, type: 3}
+    failureVoiceClip: {fileID: 8300000, guid: b39f98539dda81b4aad4c23e326a0fb8, type: 3}
   - name: full7
     sprite: {fileID: 21300000, guid: 553e157876ceeda4f8a6794aa4a7d67d, type: 3}
     requiredIngredients:
@@ -2680,6 +2697,8 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 37e17a60fde732d4aadc35b9465765e1, type: 3}
     - {fileID: 21300000, guid: 0b6dffdbd7eeac14a94227ff3d841469, type: 3}
     scoreIfNotServed: 0
+    successVoiceClip: {fileID: 8300000, guid: 4ba6c0c933fb2e141b3e2da04159ce91, type: 3}
+    failureVoiceClip: {fileID: 8300000, guid: 9f16fbb5ade4bfd4c952c3420894f581, type: 3}
   coinFlyVFX: {fileID: 2099307325}
   maxMissingItems: 2
   baseOrderReward: 30
@@ -2690,6 +2709,8 @@ MonoBehaviour:
   instructionManager: {fileID: 1605576797}
   shouldRunInstructions_level2: 1
   shouldRunInstructions_level3: 1
+  customerVoiceAudioSource: {fileID: 824672116}
+  customerVoiceVolume: 1
 --- !u!4 &824672115
 Transform:
   m_ObjectHideFlags: 0
@@ -2705,6 +2726,103 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &824672116
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 824672113}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &871768373
 GameObject:
   m_ObjectHideFlags: 0
@@ -8412,6 +8530,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   coinClip: {fileID: 8300000, guid: 1874e8f4cacf53744a2c7e2fe0a96fd1, type: 3}
   negativeClip: {fileID: 8300000, guid: 3a44a6ff02ce8394aad9c3e0694cf316, type: 3}
+  duplicateClickClip: {fileID: 8300000, guid: cc2a3247814cfe14188780507b1caed2, type: 3}
   audioSource: {fileID: 8220566009105857268}
 --- !u!82 &8220566009105857268
 AudioSource:

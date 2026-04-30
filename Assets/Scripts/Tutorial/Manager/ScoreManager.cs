@@ -168,4 +168,10 @@ public class ScoreManager : MonoBehaviour
         soundCoins = newSoundCoins;
     }
 
+    public void PlayDuplicateClickPenaltySound()
+    {
+        if (errorSounds != null)
+            errorSounds.PlayDuplicateClick();
+    }
+
 }

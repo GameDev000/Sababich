@@ -1597,6 +1597,7 @@ GameObject:
   m_Component:
   - component: {fileID: 485516105}
   - component: {fileID: 485516104}
+  - component: {fileID: 485516106}
   m_Layer: 0
   m_Name: customerManager
   m_TagString: Untagged
@@ -1631,6 +1632,8 @@ MonoBehaviour:
     happyFace: {fileID: 0}
     angryFaces: []
     scoreIfNotServed: 0
+    successVoiceClip: {fileID: 0}
+    failureVoiceClip: {fileID: 0}
   customerPrefabNormal: {fileID: 1815610952}
   customerPrefabPlayerHead: {fileID: 1158063542}
   spawnPoint: {fileID: 1477147590}
@@ -1660,6 +1663,8 @@ MonoBehaviour:
     - {fileID: 946438546, guid: 56ae42582d73fc7469b85bb7ff5deb45, type: 3}
     - {fileID: 670815436, guid: 56ae42582d73fc7469b85bb7ff5deb45, type: 3}
     scoreIfNotServed: 0
+    successVoiceClip: {fileID: 8300000, guid: 962193032290cd24ab59977cf89ff849, type: 3}
+    failureVoiceClip: {fileID: 8300000, guid: 7a7c1223488e3b04892f06ac20fb894c, type: 3}
   - name: full2
     sprite: {fileID: 4916252322571490122, guid: 74df7af14c285f940945a97b042bce0a, type: 3}
     requiredIngredients:
@@ -1675,6 +1680,8 @@ MonoBehaviour:
     - {fileID: 66903516, guid: 74df7af14c285f940945a97b042bce0a, type: 3}
     - {fileID: -1426621035, guid: 74df7af14c285f940945a97b042bce0a, type: 3}
     scoreIfNotServed: 0
+    successVoiceClip: {fileID: 0}
+    failureVoiceClip: {fileID: 0}
   - name: full3
     sprite: {fileID: 21300000, guid: 1444700c6ef4b7647b1f01d1ff9da676, type: 3}
     requiredIngredients:
@@ -1690,6 +1697,8 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 5973f473922649146a7c2b1dcf907f1d, type: 3}
     - {fileID: 21300000, guid: dd87182cf7566e64595499ba7d9f8379, type: 3}
     scoreIfNotServed: 0
+    successVoiceClip: {fileID: 0}
+    failureVoiceClip: {fileID: 0}
   - name: notToServe
     sprite: {fileID: 631383137157731774, guid: 9532189d6153b0a44a26d00b91076d93, type: 3}
     requiredIngredients:
@@ -1705,6 +1714,8 @@ MonoBehaviour:
     - {fileID: 1416934472522487765, guid: cb5e48e43a8c9c947be973b903c28b7d, type: 3}
     - {fileID: 5242136313942155814, guid: 204f0289b8ffe8f499ada8184c1c69d5, type: 3}
     scoreIfNotServed: 1
+    successVoiceClip: {fileID: 8300000, guid: 5dd655fa7b64e1347b446242260a5f87, type: 3}
+    failureVoiceClip: {fileID: 8300000, guid: 2997570c3d255e6488f9bf8b0b67be39, type: 3}
   - name: full4
     sprite: {fileID: 21300000, guid: ea35b0cf1a57def419f26004b8d4b1d2, type: 3}
     requiredIngredients:
@@ -1720,6 +1731,8 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 353799973f47cf74ea7e6fd3dbbbcb7d, type: 3}
     - {fileID: 21300000, guid: 9058406723b2cf04bb3dc41bc76d2906, type: 3}
     scoreIfNotServed: 0
+    successVoiceClip: {fileID: 8300000, guid: a50c750411014504598bc990fd220462, type: 3}
+    failureVoiceClip: {fileID: 8300000, guid: 98388cd506f0388459198d20b7342b99, type: 3}
   - name: full5
     sprite: {fileID: 21300000, guid: 4016f70557e45ee479d026c23818c609, type: 3}
     requiredIngredients:
@@ -1735,6 +1748,8 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 8fe217c68187a3e45b12f7af03c6c58f, type: 3}
     - {fileID: 21300000, guid: 0383b516467e4284784ab0e40a87ed67, type: 3}
     scoreIfNotServed: 0
+    successVoiceClip: {fileID: 8300000, guid: 53604e213a4204b4880a9bd15fdf2154, type: 3}
+    failureVoiceClip: {fileID: 8300000, guid: 7a7c1223488e3b04892f06ac20fb894c, type: 3}
   - name: full6
     sprite: {fileID: -5830445100083647898, guid: cb7fa44c95b2fe04fb0f94b63f0d4900, type: 3}
     requiredIngredients:
@@ -1750,6 +1765,8 @@ MonoBehaviour:
     - {fileID: 6166413747506897929, guid: b5a71e12070283345ad636355f444476, type: 3}
     - {fileID: 4933529048943361695, guid: c598d565db042804485004d54fb26ce6, type: 3}
     scoreIfNotServed: 0
+    successVoiceClip: {fileID: 0}
+    failureVoiceClip: {fileID: 0}
   coinFlyVFX: {fileID: 95312388}
   maxMissingItems: 1
   baseOrderReward: 30
@@ -1760,6 +1777,8 @@ MonoBehaviour:
   instructionManager: {fileID: 1891575256}
   shouldRunInstructions_level2: 1
   shouldRunInstructions_level3: 1
+  customerVoiceAudioSource: {fileID: 485516106}
+  customerVoiceVolume: 1
 --- !u!4 &485516105
 Transform:
   m_ObjectHideFlags: 0
@@ -1775,6 +1794,103 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &485516106
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 485516103}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &540986953 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1953483316766201519, guid: 926e0b516840a4a47b492b3c9c94e820, type: 3}
@@ -1951,6 +2067,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   coinClip: {fileID: 8300000, guid: 1874e8f4cacf53744a2c7e2fe0a96fd1, type: 3}
   negativeClip: {fileID: 8300000, guid: 3a44a6ff02ce8394aad9c3e0694cf316, type: 3}
+  duplicateClickClip: {fileID: 8300000, guid: cc2a3247814cfe14188780507b1caed2, type: 3}
   audioSource: {fileID: 559278375}
 --- !u!82 &559278375
 AudioSource:

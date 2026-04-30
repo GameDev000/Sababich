@@ -16,4 +16,8 @@ public class CustomerType
     [Header("Special Rules")]
     public bool scoreIfNotServed = false;
 
+    [Header("Voice Feedback")]
+    public AudioClip successVoiceClip;
+    public AudioClip failureVoiceClip;
+
 }
