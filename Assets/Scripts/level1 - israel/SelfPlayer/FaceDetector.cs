@@ -12,8 +12,8 @@ public class FaceDetector : MonoBehaviour
     [SerializeField] private ModelAsset modelAsset;
 
     [Header("Detection Settings")]
-    [SerializeField][Range(0.3f, 0.95f)] private float confidenceThreshold = 0.75f;
-    [SerializeField][Range(0f, 1f)] private float headPadding = 0.35f;
+    [SerializeField] [Range(0.3f, 0.95f)] private float confidenceThreshold = 0.75f;
+    [SerializeField] [Range(0f, 1f)] private float headPadding = 0.35f;
 
     private Model runtimeModel;
     private Worker worker;

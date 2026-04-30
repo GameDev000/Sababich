@@ -27,7 +27,6 @@ public class SelectionList : MonoBehaviour
     // For negative indication
     [SerializeField] private CoinFlyVFX coinFlyVFX;
 
-
     private readonly List<string> selectedIngredients = new List<string>();
 
     private void Awake()
