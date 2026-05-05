@@ -40,4 +40,8 @@ public static class CloudSaveKeys
     public static string DuplicateClicksKey(int level) => $"level{level}_duplicateClicks";
     public static string GlutenChildAppearedKey(int level) => $"level{level}_glutenChildAppeared";
     public static string GlutenChildServedKey(int level) => $"level{level}_glutenChildServed";
+
+    // ── Dashboard session history ─────────────────────────────────
+    public const string DashboardSessionCount = "dashboard_session_count";
+    public static string DashboardSessionKey(int n) => $"dashboard_session_{n}";
 }

@@ -27,9 +27,12 @@ public class LevelTwoTimerWinLose : MonoBehaviour
 
     // Freeze the exact timeLeft at the first moment target is reached
     private float frozenTimeLeft = -1f;
+    private int timeToTargetSeconds = -1;
 
     private void Start()
     {
+        // Clear stats from any previous attempt so retries don't accumulate
+        LevelTwoState.Reset();
         timeLeft = levelDurationSeconds;
         UpdateTimerUI(timeLeft);
     }
@@ -85,7 +88,7 @@ public class LevelTwoTimerWinLose : MonoBehaviour
         timeSaved = true;
 
         float safeFrozen = (frozenTimeLeft < 0f) ? timeLeft : frozenTimeLeft;
-        int timeToTargetSeconds = Mathf.RoundToInt(levelDurationSeconds - safeFrozen);
+        timeToTargetSeconds = Mathf.RoundToInt(levelDurationSeconds - safeFrozen);
 
         if (UnityServices.State == ServicesInitializationState.Initialized &&
             AuthenticationService.Instance.IsSignedIn)
@@ -144,6 +147,9 @@ public class LevelTwoTimerWinLose : MonoBehaviour
             await DatabaseManager.SaveData((CloudSaveKeys.GlutenChildAppearedKey(2), LevelTwoState.GlutenChildAppeared));
             await DatabaseManager.SaveData((CloudSaveKeys.GlutenChildServedKey(2), LevelTwoState.GlutenChildServed));
         }
+
+        // Record this level's attempt for dashboard export before leaving the scene
+        SessionDataCollector.RecordLevelAttempt(2, timeToTargetSeconds);
 
         Time.timeScale = 1f;
         SceneManager.LoadScene(endSceneName);

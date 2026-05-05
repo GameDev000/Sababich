@@ -34,6 +34,8 @@ public class LevelTimerWinLose : MonoBehaviour
 
     private void Start()
     {
+        // Clear stats from any previous attempt so retries don't accumulate
+        LevelOneState.Reset();
         timeLeft = levelDurationSeconds;
         UpdateTimerUI(timeLeft);
     }
@@ -143,6 +145,9 @@ public class LevelTimerWinLose : MonoBehaviour
             await DatabaseManager.SaveData((CloudSaveKeys.GlutenChildAppearedKey(1), LevelOneState.GlutenChildAppeared));
             await DatabaseManager.SaveData((CloudSaveKeys.GlutenChildServedKey(1), LevelOneState.GlutenChildServed));
         }
+
+        // Record this level's attempt for dashboard export before leaving the scene
+        SessionDataCollector.RecordLevelAttempt(1, timeToTargetSeconds);
 
         Time.timeScale = 1f;
         SceneManager.LoadScene(endSceneName);

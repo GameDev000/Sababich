@@ -259,6 +259,10 @@ public class ScoreOfAuthenticatedUser : MonoBehaviour
         displayName = "Guest";
         internalUsername = "guest_" + Guid.NewGuid().ToString("N").Substring(0, 8);
 
+        // Populate SessionIdentity for guest session — cloud write will be skipped,
+        // but local dashboard export still uses this identity.
+        SessionIdentity.SetFromLogin("Guest", internalUsername, isGuest: true);
+
         string message = await authManager.LoginAnonymously();
 
         // Do NOT show message (no PlayerID / no extra text)
@@ -358,6 +362,10 @@ public class ScoreOfAuthenticatedUser : MonoBehaviour
 
     private async Task HandlePostAuth(ButtonType type)
     {
+        // Populate SessionIdentity so dashboard backend scripts know who is logged in
+        // without needing to access private fields of this class.
+        SessionIdentity.SetFromLogin(displayName, internalUsername, isGuest: false);
+
         await PostSignInCommon();
         enabled = true;
 

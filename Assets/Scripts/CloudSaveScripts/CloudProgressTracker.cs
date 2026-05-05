@@ -43,6 +43,11 @@ public class CloudProgressTracker : MonoBehaviour
         if (scene.name == "Login")
             return;
 
+        // Trigger dashboard export when the player reaches MainMenu or any level end scene.
+        // The exportCalled guard inside SessionDataCollector prevents double-export.
+        if (scene.name == "MainMenu" || scene.name.EndsWith("endScene"))
+            _ = SessionDataCollector.FinalizeAndExport();
+
         // 4) Save the current scene name to the cloud.
         await DatabaseManager.SaveData((CloudSaveKeys.ResumeScene, scene.name));
 

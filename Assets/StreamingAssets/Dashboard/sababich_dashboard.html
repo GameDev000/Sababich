@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>הישגי מטופל - סבביח</title>
+  <link rel="stylesheet" href="dashboard.css" />
+</head>
+<body>
+
+<header class="header">
+  <h1>הישגי מטופל - סבביח</h1>
+  <button class="lang-btn">English</button>
+</header>
+
+<div class="page">
+
+  <!-- Patient selector -->
+  <div class="patient-bar">
+    <label>מטופל:</label>
+    <select id="patientSelect"></select>
+  </div>
+
+  <!-- Filters -->
+  <button class="filters-toggle">▼ סינון</button>
+  <div class="filters-panel">
+    <div class="filter-group">
+      <label data-label="filterDateFrom">מתאריך</label>
+      <input type="date" id="fDateFrom" />
+    </div>
+    <div class="filter-group">
+      <label data-label="filterDateTo">עד תאריך</label>
+      <input type="date" id="fDateTo" />
+    </div>
+    <div class="filter-group">
+      <label data-label="filterLevel">רמה</label>
+      <select id="fLevel">
+        <option value="0">הכל</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label data-label="filterResult">תוצאה</label>
+      <select id="fResult">
+        <option value="all">הכל</option>
+        <option value="pass">עבר</option>
+        <option value="fail">נכשל</option>
+      </select>
+    </div>
+    <button class="filters-reset">אפס סינון</button>
+  </div>
+
+  <!-- Summary cards — row 1: Sessions, Last Level Passed, Avg Coins, Avg Dish Prep Time -->
+  <!-- Summary cards — row 2: Total Served, Total Errors -->
+  <div class="cards-row">
+    <div class="card"><div class="card-label" id="labelSessions">סשנים</div><div class="card-value" id="cardSessions">—</div></div>
+    <div class="card"><div class="card-label" id="labelPassed">רמה אחרונה שעבר</div><div class="card-value" id="cardPassed">—</div></div>
+    <div class="card"><div class="card-label" id="labelAvgCoins">ממוצע מטבעות</div><div class="card-value" id="cardAvgCoins">—</div></div>
+    <div class="card"><div class="card-label" id="labelAvgTime">זמן ממוצע להכנת מנה</div><div class="card-value" id="cardAvgTime">—</div></div>
+    <div class="card"><div class="card-label" id="labelTotalServed">מנות שהוגשו סה״כ</div><div class="card-value" id="cardTotalServed">—</div></div>
+    <div class="card"><div class="card-label" id="labelErrors">שגיאות סה״כ</div><div class="card-value" id="cardErrors">—</div></div>
+  </div>
+
+  <!-- Session list -->
+  <div class="section-title" id="sessionTitle">היסטוריית סשנים</div>
+  <div class="sort-bar">
+    <span id="sortLabel">מיון:</span>
+    <select id="sortSelect">
+      <option value="recent">אחרון ראשון</option>
+      <option value="oldest">ישן ראשון</option>
+      <option value="coinsHigh">מטבעות ↓</option>
+      <option value="coinsLow">מטבעות ↑</option>
+      <option value="time">זמן למטרה</option>
+      <option value="duplicates">קליקים כפולים</option>
+      <option value="gluten">טעויות גלוטן</option>
+      <option value="perfect">אחוז מנות מושלמות</option>
+    </select>
+  </div>
+  <div class="session-list" id="sessionList"></div>
+
+  <!-- Session detail -->
+  <div class="detail-panel" id="detailPanel">
+    <div class="section-title" id="detailTitle">פרטי סשן</div>
+    <div class="detail-meta" id="detailMeta"></div>
+    <div class="level-table-wrap">
+      <table id="levelTable"></table>
+    </div>
+    <div id="obsSections"></div>
+  </div>
+
+  <!-- Charts -->
+  <div class="section-title" id="chartsTitle">גרפים</div>
+  <div class="charts-row">
+    <div class="chart-card">
+      <div class="obs-section-title" id="labelChartCoins">מטבעות לאורך זמן</div>
+      <canvas id="chartCoins"></canvas>
+    </div>
+    <div class="chart-card">
+      <div class="obs-section-title" id="labelChartErrors">שגיאות לאורך זמן</div>
+      <canvas id="chartErrors"></canvas>
+    </div>
+    <div class="chart-card">
+      <div class="obs-section-title" id="labelChartPerfect">מנות מושלמות מול שגויות</div>
+      <canvas id="chartPerfect"></canvas>
+    </div>
+    <div class="chart-card">
+      <div class="obs-section-title" id="labelChartTime">זמן למטרה לאורך זמן</div>
+      <canvas id="chartTime"></canvas>
+    </div>
+    <div class="chart-card">
+      <div class="obs-section-title" id="labelChartGluten">אירועי גלוטן לאורך זמן</div>
+      <canvas id="chartGluten"></canvas>
+    </div>
+  </div>
+
+  <!-- Therapist notes -->
+  <div class="notes-panel">
+    <div class="section-title" id="notesTitle">הערות מטפל</div>
+    <textarea id="notesArea" placeholder="הוסף הערות לסשן זה..."></textarea>
+    <div class="notes-meta" id="notesMeta"></div>
+    <button class="print-btn" id="printBtn">הדפסה</button>
+  </div>
+
+</div>
+
+<!-- Embedded session data — replaced by SessionExporter.cs on each save -->
+<script>const SABABICH_DATA = {"sessions":[]};</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="dashboard.js"></script>
+</body>
+</html>
