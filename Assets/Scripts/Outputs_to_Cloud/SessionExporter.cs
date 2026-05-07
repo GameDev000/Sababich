@@ -36,7 +36,7 @@ public static class SessionExporter
 
             foreach (var s in all)
             {
-                if (s.levels != null && s.levels.Count > 0)
+                if (s.levels != null && s.levels.Count > 0 && s.sessionId != record.sessionId)
                 {
                     sessions.Add(s);
                 }
@@ -50,7 +50,7 @@ public static class SessionExporter
         Debug.Log($"[SE] Total sessions to write={sessions.Count}");
 
         // 4. Serialize the full list and embed it back into the HTML.
-        var file = new SessionDataFile { sessions = sessions };
+        var file = new SessionDataFile { sessions = sessions, currentPlayer = record.displayName };
         string json = JsonUtility.ToJson(file, prettyPrint: false);
         html = EmbedData(html, json);
 

@@ -7,14 +7,14 @@ public static class SessionDataCollector
     // Keyed by levelNumber — last attempt wins if player retries a level
     static readonly Dictionary<int, LevelAttempt> attempts = new Dictionary<int, LevelAttempt>();
     static int lastLevelReached;
-    static bool exportCalled;
+    static string currentSessionId;
 
     // Called from EndLevel() in each level's timer script.
     // timeToTargetSeconds is passed directly from the timer (-1 if target was never reached).
     public static void RecordLevelAttempt(int levelNumber, int timeToTargetSeconds)
     {
         bool passed;
-        int totalServed, perfectServed, duplicateClicks, glutenAppeared, glutenServed, coins;
+        int totalServed, perfectServed, duplicateClicks, glutenAppeared, glutenServed, coins, customersArrived;
 
         if (levelNumber == 1)
         {
@@ -24,6 +24,7 @@ public static class SessionDataCollector
             duplicateClicks = LevelOneState.DuplicateIngredientClicks;
             glutenAppeared = LevelOneState.GlutenChildAppeared;
             glutenServed = LevelOneState.GlutenChildServed;
+            customersArrived = LevelOneState.CustomersArrived;
         }
         else if (levelNumber == 2)
         {
@@ -33,6 +34,7 @@ public static class SessionDataCollector
             duplicateClicks = LevelTwoState.DuplicateIngredientClicks;
             glutenAppeared = LevelTwoState.GlutenChildAppeared;
             glutenServed = LevelTwoState.GlutenChildServed;
+            customersArrived = LevelTwoState.CustomersArrived;
         }
         else // level 3
         {
@@ -42,6 +44,7 @@ public static class SessionDataCollector
             duplicateClicks = LevelThreeState.DuplicateIngredientClicks;
             glutenAppeared = LevelThreeState.GlutenChildAppeared;
             glutenServed = LevelThreeState.GlutenChildServed;
+            customersArrived = LevelThreeState.CustomersArrived;
         }
 
         coins = ScoreManager.Instance != null ? ScoreManager.Instance.CurrentMoney : 0;
@@ -69,6 +72,7 @@ public static class SessionDataCollector
             glutenChildServedByMistake = glutenServed,
             glutenChildHandledCorrectly = glutenHandled,
             averageDishPrepTimeSeconds = avgPrepTime,
+            customersArrived = customersArrived,
         };
 
         if (levelNumber > lastLevelReached)
@@ -86,30 +90,26 @@ public static class SessionDataCollector
     // Called when the player returns to MainMenu (via CloudProgressTracker).
     public static async Task FinalizeAndExport()
     {
-        Debug.Log($"[SDC] FinalizeAndExport called: exportCalled={exportCalled} attempts.Count={attempts.Count}");
+        Debug.Log($"[SDC] FinalizeAndExport called: currentSessionId={currentSessionId} attempts.Count={attempts.Count}");
 
-        // Guard against double export (CloudProgressTracker fires on every scene load)
-        if (exportCalled)
-        {
-            Debug.Log("[SDC] FinalizeAndExport: returning early — exportCalled=true");
-            return;
-        }
-
-        // No gameplay yet (e.g. MainMenu loaded immediately after login) — don't lock the guard.
+        // No gameplay yet (e.g. MainMenu loaded immediately after login) — nothing to export.
         if (attempts.Count == 0)
         {
             Debug.Log("[SDC] FinalizeAndExport: returning early — attempts empty (no gameplay yet)");
             return;
         }
 
-        exportCalled = true;
-        Debug.Log($"[SDC] FinalizeAndExport: proceeding — exportCalled locked, levels to export={attempts.Count}");
+        // Generate session ID once; reuse it on subsequent end-scene exports within the same play-through.
+        if (currentSessionId == null)
+            currentSessionId = SessionIdentity.GenerateSessionId();
+
+        Debug.Log($"[SDC] FinalizeAndExport: proceeding — sessionId={currentSessionId} levels to export={attempts.Count}");
 
         var levelList = new List<LevelAttempt>(attempts.Values);
 
         var record = new SessionRecord
         {
-            sessionId = SessionIdentity.GenerateSessionId(),
+            sessionId = currentSessionId,
             displayName = SessionIdentity.DisplayName ?? "Unknown",
             internalUsername = SessionIdentity.InternalUsername ?? "unknown",
             isGuest = SessionIdentity.IsGuest,
@@ -127,6 +127,6 @@ public static class SessionDataCollector
     {
         attempts.Clear();
         lastLevelReached = 0;
-        exportCalled = false;
+        currentSessionId = null;
     }
 }

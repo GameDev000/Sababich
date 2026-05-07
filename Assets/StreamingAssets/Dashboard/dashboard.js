@@ -34,7 +34,7 @@ const LABELS = {
     sessionTitle: 'היסטוריית סשנים',
     detailTitle: 'פרטי סשן',
     metaDate: 'תאריך:',
-    metaScene: 'סצנה אחרונה:',
+    metaScene: 'שלב נוכחי:',
     metaGuest: 'אורח',
     tableLevel: 'רמה',
     tableResult: 'תוצאה',
@@ -49,6 +49,8 @@ const LABELS = {
     tableGlutenHandled: 'לא הוגש גלוטן',
     tableAvgPrep: 'זמן הכנה ממוצע',
     obsDishes: 'מנות שהוגשו',
+    tableCustomersArrived:   'לקוחות שהגיעו',
+    tableCustomersNotServed: 'לקוחות שלא קיבלו מנה',
     obsClicks: 'קשב וחזרתיות',
     obsGluten: 'הימנעות מהגשה לילד רגיש לגלוטן',
     obsOutcome: 'תוצאת רמה',
@@ -102,7 +104,7 @@ const LABELS = {
     sessionTitle: 'Session History',
     detailTitle: 'Session Detail',
     metaDate: 'Date:',
-    metaScene: 'Last scene:',
+    metaScene: 'Current stage:',
     metaGuest: 'Guest',
     tableLevel: 'Level',
     tableResult: 'Result',
@@ -117,6 +119,8 @@ const LABELS = {
     tableGlutenHandled: 'Gluten Not Served',
     tableAvgPrep: 'Avg Prep Time',
     obsDishes: 'Dishes Served',
+    tableCustomersArrived:   'Customers Arrived',
+    tableCustomersNotServed: 'Customers Not Served',
     obsClicks: 'Attention & Repetition',
     obsGluten: 'Avoiding Serving Gluten-Sensitive Child',
     obsOutcome: 'Level Outcome',
@@ -140,7 +144,7 @@ const LABELS = {
 
 // ── State ─────────────────────────────────────────────────────────────────────
 let lang = 'he';
-let selectedPatient = '';
+let selectedPatient = SABABICH_DATA.currentPlayer || '';
 let selectedSession = null;
 let sortMode = 'recent';
 let filterDateFrom = '';
@@ -155,6 +159,29 @@ let glutenChart  = null;
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 const L = () => LABELS[lang];
+
+function sceneLabel(raw) {
+  const map = {
+    'level1 - israel':   { he: 'רמה 1',      en: 'Level 1' },
+    'level2 - china':    { he: 'רמה 2',      en: 'Level 2' },
+    'level3 - USA':      { he: 'רמה 3',      en: 'Level 3' },
+    'MainMenu':          { he: 'תפריט ראשי', en: 'Main Menu' },
+    'Level1 - endScene': { he: 'סיום שלב 1', en: 'End of Level 1' },
+    'Level2 - endScene': { he: 'סיום שלב 2', en: 'End of Level 2' },
+    'Level3 - endScene': { he: 'סיום שלב 3', en: 'End of Level 3' },
+    'TutorialScene':     { he: 'הדרכה',       en: 'Tutorial' },
+    'TutorialEndScene':  { he: 'סיום הדרכה', en: 'End of Tutorial' },
+    'Login':             { he: 'כניסה',       en: 'Login' },
+  };
+  if (!raw) return '—';
+  return (map[raw] || {})[lang] || raw;
+}
+
+function displayScene(s) {
+  if (s.resumeScene) return sceneLabel(s.resumeScene);
+  if (s.lastLevelReached > 0) return lang === 'he' ? `רמה ${s.lastLevelReached}` : `Level ${s.lastLevelReached}`;
+  return '—';
+}
 
 function fmt(val) {
   if (val === null || val === undefined || val === -1) return L().na;
@@ -330,7 +357,7 @@ function renderDetail() {
   const s = selectedSession;
   document.getElementById('detailMeta').innerHTML =
     `<span>${L().metaDate} ${fmtDate(s.sessionDateTimeISO)}</span>` +
-    `<span>${L().metaScene} ${s.resumeScene || '—'}</span>` +
+    `<span>${L().metaScene} ${displayScene(s)}</span>` +
     (s.isGuest ? `<span class="badge badge-guest">${L().metaGuest}</span>` : '');
 
   renderLevelTable(s);
@@ -393,6 +420,8 @@ function renderObsSections(s) {
 
   document.getElementById('obsSections').innerHTML =
     section(T.obsDishes,
+      mkRow(T.tableCustomersArrived,   attempted.map(l => l.customersArrived)) +
+      mkRow(T.tableCustomersNotServed, attempted.map(l => Math.max(0, l.customersArrived - l.totalServedDishes))) +
       mkRow(T.tableTotal,    attempted.map(l => l.totalServedDishes)) +
       mkRow(T.tablePerfect,  attempted.map(l => l.perfectServedDishes)) +
       mkRow(T.tableIncorrect,attempted.map(l => l.incorrectDishes))
@@ -458,6 +487,9 @@ function renderCharts() {
         spanGaps: true,
         tension: 0.3,
         pointRadius: 4,
+        showLine: true,
+        borderWidth: 2,
+        fill: false,
       }))
     },
     options: { responsive: true, plugins: { legend: { position: 'bottom' } }, scales: { y: { beginAtZero: true } } }
@@ -517,6 +549,9 @@ function renderCharts() {
           spanGaps: true,
           tension: 0.3,
           pointRadius: 4,
+          showLine: true,
+          borderWidth: 2,
+          fill: false,
         }))
       },
       options: { responsive: true, plugins: { legend: { position: 'bottom' } }, scales: { y: { beginAtZero: true } } }

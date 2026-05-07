@@ -277,6 +277,10 @@ public class CustomerManager : MonoBehaviour
         // Register mapping (customer -> slotIndex) so clicks can route quickly
         customerToSlot[slot.customer] = slotIndex;
 
+        if (levelNumber == 1)      LevelOneState.CustomersArrived++;
+        else if (levelNumber == 2) LevelTwoState.CustomersArrived++;
+        else if (levelNumber == 3) LevelThreeState.CustomersArrived++;
+
         // Subscribe to mood timer (slot-specific handler)
         if (slot.customer.MoodTimer != null)
         {

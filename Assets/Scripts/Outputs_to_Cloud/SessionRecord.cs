@@ -16,6 +16,7 @@ public class LevelAttempt
     public int glutenChildServedByMistake;
     public int glutenChildHandledCorrectly; // derived: appeared - servedByMistake
     public float averageDishPrepTimeSeconds; // derived: timeToTarget / perfectServed, -1 if N/A
+    public int customersArrived;
 }
 
 [System.Serializable]
@@ -36,4 +37,5 @@ public class SessionRecord
 public class SessionDataFile
 {
     public List<SessionRecord> sessions;
+    public string currentPlayer;
 }

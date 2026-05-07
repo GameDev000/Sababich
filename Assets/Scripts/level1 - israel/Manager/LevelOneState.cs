@@ -16,6 +16,7 @@ public static class LevelOneState
     public static int DuplicateIngredientClicks;
     public static int GlutenChildAppeared;
     public static int GlutenChildServed;
+    public static int CustomersArrived;
 
     public static void Reset()
     {
@@ -25,6 +26,7 @@ public static class LevelOneState
         DuplicateIngredientClicks = 0;
         GlutenChildAppeared = 0;
         GlutenChildServed = 0;
+        CustomersArrived = 0;
     }
 }
 
@@ -42,6 +44,7 @@ public static class LevelThreeState
     public static int DuplicateIngredientClicks;
     public static int GlutenChildAppeared;
     public static int GlutenChildServed;
+    public static int CustomersArrived;
 
     public static void Reset()
     {
@@ -51,5 +54,6 @@ public static class LevelThreeState
         DuplicateIngredientClicks = 0;
         GlutenChildAppeared = 0;
         GlutenChildServed = 0;
+        CustomersArrived = 0;
     }
 }

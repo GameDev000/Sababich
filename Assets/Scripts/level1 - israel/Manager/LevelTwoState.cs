@@ -15,6 +15,7 @@ public static class LevelTwoState
     public static int DuplicateIngredientClicks;
     public static int GlutenChildAppeared;
     public static int GlutenChildServed;
+    public static int CustomersArrived;
 
     public static void Reset()
     {
@@ -24,5 +25,6 @@ public static class LevelTwoState
         DuplicateIngredientClicks = 0;
         GlutenChildAppeared = 0;
         GlutenChildServed = 0;
+        CustomersArrived = 0;
     }
 }
