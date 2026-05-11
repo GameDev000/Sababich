@@ -50,4 +50,4 @@
   <img src="Images/visual.png" width="700"/>
 </p>
 
-<a href="https://raz-oununu.itch.io/sababich">link</a>
+<a href="https://raz-oununu.itch.io/sababich">itch.io</a>
