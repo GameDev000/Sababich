@@ -1,3 +1,5 @@
+<div dir="rtl">
+
 # ארכיטקטורת שמירת נתונים ודשבורד – Sababich
 
 ## Overview
@@ -17,7 +19,7 @@
 ## Design Goals
 
 - עבודה מלאה ללא שרת
-- הפרדה בין Gameplay ל־Analytics
+- הפרדה בין `Gameplay` ל־`Analytics`
 - תמיכה בעברית ואנגלית
 - שמירת נתונים מקומית + גיבוי בענן
 - פתיחה פשוטה וישירה מתוך המשחק
@@ -126,6 +128,7 @@ SessionDataCollector.RecordLevelAttempt(...)
 - לקוחות שהגיעו
 
 הנתונים נשמרים זמנית בזיכרון בתוך:
+
 ```csharp
 attempts
 ```
@@ -176,7 +179,7 @@ Application.persistentDataPath/Dashboard/sababich_dashboard.html
 CloudSessionHistory.AppendSession()
 ```
 
-השמירה בענן משמשת כגיבוי Persistence בלבד.
+השמירה בענן משמשת כגיבוי `Persistence` בלבד.
 
 ---
 
@@ -304,7 +307,7 @@ Chart.js
 |---|---|---|
 | שמירה לענן | ✅ | ❌ |
 | קובץ HTML מקומי | ✅ | ✅ |
-| Resume לסצנה | ✅ | ❌ |
+| `Resume` לסצנה | ✅ | ❌ |
 | סנכרון מצב רמות | ✅ | ❌ |
 | היסטוריית סשנים בענן | ✅ | ❌ |
 
@@ -316,7 +319,7 @@ Chart.js
 
 התהליך כלל:
 - כתיבת פרומפטים מדויקים
-- Root Cause Analysis
+- `Root Cause Analysis`
 - תיקונים מדורגים
 - בדיקות בתוך Unity והדשבורד
 
@@ -325,7 +328,7 @@ Chart.js
 - הזרקת נתונים ל־HTML
 - מניעת סשנים ריקים
 - תיקון זמן הייצוא
-- סנכרון בין Backend ל־Frontend
+- סנכרון בין `Backend` ל־`Frontend`
 
 ---
 
@@ -351,4 +354,6 @@ Chart.js
 
 ## Future Improvements
 
-- סנכרון מלא בין ענן לדשבורד (תיתכן פגיעה באבטחת נתונים)
+- סנכרון מלא בין ענן לדשבורד (תיתכן פגיעה בסודיות נתונים רפואיים)
+
+</div>
