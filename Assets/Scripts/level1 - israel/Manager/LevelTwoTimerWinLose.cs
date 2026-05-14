@@ -33,13 +33,15 @@ public class LevelTwoTimerWinLose : MonoBehaviour
     {
         // Clear stats from any previous attempt so retries don't accumulate
         LevelTwoState.Reset();
+
         timeLeft = levelDurationSeconds;
         UpdateTimerUI(timeLeft);
     }
 
     private void Update()
     {
-        if (finished) return;
+        if (finished)
+            return;
 
         timeLeft -= Time.deltaTime;
 
@@ -58,6 +60,34 @@ public class LevelTwoTimerWinLose : MonoBehaviour
         UpdateTimerUI(timeLeft);
     }
 
+    /// <summary>
+    /// Adds or removes seconds from the current remaining level time.
+    /// The timer cannot go below zero.
+    /// This is used by the runtime control panel.
+    /// </summary>
+    public void AddTimeSeconds(float secondsToAdd)
+    {
+        if (finished)
+            return;
+
+        float elapsedTime = Mathf.Max(0f, levelDurationSeconds - timeLeft);
+
+        timeLeft = Mathf.Max(0f, timeLeft + secondsToAdd);
+
+        // Keep levelDurationSeconds aligned so timeToTargetSeconds remains logical
+        // even if time was added or removed during the level.
+        levelDurationSeconds = elapsedTime + timeLeft;
+
+        UpdateTimerUI(timeLeft);
+
+        Debug.Log($"[LevelTwoTimerWinLose] Time changed by {secondsToAdd}. New timeLeft={timeLeft}");
+    }
+
+    public float GetTimeLeft()
+    {
+        return timeLeft;
+    }
+
     public void NotifyMoneyChanged(int newMoney)
     {
         FreezeTimeIfNeeded(newMoney);
@@ -71,7 +101,8 @@ public class LevelTwoTimerWinLose : MonoBehaviour
 
     private void FreezeTimeIfNeeded(int moneyNow)
     {
-        if (timeSaved) return;
+        if (timeSaved)
+            return;
 
         if (moneyNow >= coinsTarget)
         {
@@ -84,7 +115,9 @@ public class LevelTwoTimerWinLose : MonoBehaviour
 
     private void SaveLevel2TimeOnce()
     {
-        if (timeSaved) return;
+        if (timeSaved)
+            return;
+
         timeSaved = true;
 
         float safeFrozen = (frozenTimeLeft < 0f) ? timeLeft : frozenTimeLeft;
@@ -108,7 +141,9 @@ public class LevelTwoTimerWinLose : MonoBehaviour
 
         if (!timeSaved && coinsEnd >= coinsTarget)
         {
-            if (frozenTimeLeft < 0f) frozenTimeLeft = timeLeft;
+            if (frozenTimeLeft < 0f)
+                frozenTimeLeft = timeLeft;
+
             SaveLevel2TimeOnce();
         }
 
@@ -157,7 +192,8 @@ public class LevelTwoTimerWinLose : MonoBehaviour
 
     private void UpdateTimerUI(float secondsLeft)
     {
-        if (timerText == null) return;
+        if (timerText == null)
+            return;
 
         int totalSeconds = Mathf.CeilToInt(secondsLeft);
         int minutes = totalSeconds / 60;

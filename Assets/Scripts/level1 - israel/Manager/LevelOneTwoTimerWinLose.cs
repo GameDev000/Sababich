@@ -17,7 +17,7 @@ public class LevelOneTwoTimerWinLose : MonoBehaviour
     [SerializeField] private int coinsTarget = 10;
 
     [Header("End Scene")]
-    [SerializeField] private string endSceneName = "Level2 - endScene";
+    [SerializeField] private string endSceneName = "Level1.2 - endScene";
 
     private float timeLeft;
     private bool finished;
@@ -33,13 +33,15 @@ public class LevelOneTwoTimerWinLose : MonoBehaviour
     {
         // Clear stats from any previous attempt so retries don't accumulate
         LevelOneTwoState.Reset();
+
         timeLeft = levelDurationSeconds;
         UpdateTimerUI(timeLeft);
     }
 
     private void Update()
     {
-        if (finished) return;
+        if (finished)
+            return;
 
         timeLeft -= Time.deltaTime;
 
@@ -58,6 +60,34 @@ public class LevelOneTwoTimerWinLose : MonoBehaviour
         UpdateTimerUI(timeLeft);
     }
 
+    /// <summary>
+    /// Adds or removes seconds from the current remaining level time.
+    /// The timer cannot go below zero.
+    /// This is used by the runtime control panel.
+    /// </summary>
+    public void AddTimeSeconds(float secondsToAdd)
+    {
+        if (finished)
+            return;
+
+        float elapsedTime = Mathf.Max(0f, levelDurationSeconds - timeLeft);
+
+        timeLeft = Mathf.Max(0f, timeLeft + secondsToAdd);
+
+        // Keep levelDurationSeconds aligned so timeToTargetSeconds remains logical
+        // even if time was added or removed during the level.
+        levelDurationSeconds = elapsedTime + timeLeft;
+
+        UpdateTimerUI(timeLeft);
+
+        Debug.Log($"[LevelOneTwoTimerWinLose] Time changed by {secondsToAdd}. New timeLeft={timeLeft}");
+    }
+
+    public float GetTimeLeft()
+    {
+        return timeLeft;
+    }
+
     public void NotifyMoneyChanged(int newMoney)
     {
         FreezeTimeIfNeeded(newMoney);
@@ -71,7 +101,8 @@ public class LevelOneTwoTimerWinLose : MonoBehaviour
 
     private void FreezeTimeIfNeeded(int moneyNow)
     {
-        if (timeSaved) return;
+        if (timeSaved)
+            return;
 
         if (moneyNow >= coinsTarget)
         {
@@ -84,7 +115,9 @@ public class LevelOneTwoTimerWinLose : MonoBehaviour
 
     private void SaveLevel2TimeOnce()
     {
-        if (timeSaved) return;
+        if (timeSaved)
+            return;
+
         timeSaved = true;
 
         float safeFrozen = (frozenTimeLeft < 0f) ? timeLeft : frozenTimeLeft;
@@ -94,11 +127,11 @@ public class LevelOneTwoTimerWinLose : MonoBehaviour
             AuthenticationService.Instance.IsSignedIn)
         {
             _ = DatabaseManager.SaveData((CloudSaveKeys.Level2TimeSeconds, timeToTargetSeconds));
-            Debug.Log($"[Level2] Saved timeSeconds={timeToTargetSeconds}");
+            Debug.Log($"[Level1.2] Saved timeSeconds={timeToTargetSeconds}");
         }
         else
         {
-            Debug.LogWarning("[Level2] Could not save time (services not ready or not signed in).");
+            Debug.LogWarning("[Level1.2] Could not save time (services not ready or not signed in).");
         }
     }
 
@@ -108,7 +141,9 @@ public class LevelOneTwoTimerWinLose : MonoBehaviour
 
         if (!timeSaved && coinsEnd >= coinsTarget)
         {
-            if (frozenTimeLeft < 0f) frozenTimeLeft = timeLeft;
+            if (frozenTimeLeft < 0f)
+                frozenTimeLeft = timeLeft;
+
             SaveLevel2TimeOnce();
         }
 
@@ -121,7 +156,7 @@ public class LevelOneTwoTimerWinLose : MonoBehaviour
         bool success = coinsEnd >= coinsTarget;
         LevelOneTwoState.IsSuccess = success;
 
-        // Read served dishes statistics for Level 2
+        // Read served dishes statistics for Level 1.2
         int totalServed = LevelOneTwoState.TotalServedDishes;
         int perfectServed = LevelOneTwoState.PerfectServedDishes;
 
@@ -133,7 +168,7 @@ public class LevelOneTwoTimerWinLose : MonoBehaviour
             await DatabaseManager.SaveData((CloudSaveKeys.Level2PerfectServed, perfectServed));
         }
 
-        // Save passed flag for level 2
+        // Save passed flag
         if (UnityServices.State == ServicesInitializationState.Initialized &&
             AuthenticationService.Instance.IsSignedIn)
         {
@@ -157,7 +192,8 @@ public class LevelOneTwoTimerWinLose : MonoBehaviour
 
     private void UpdateTimerUI(float secondsLeft)
     {
-        if (timerText == null) return;
+        if (timerText == null)
+            return;
 
         int totalSeconds = Mathf.CeilToInt(secondsLeft);
         int minutes = totalSeconds / 60;

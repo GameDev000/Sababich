@@ -33,13 +33,15 @@ public class LevelThreeTimerWinLose : MonoBehaviour
     {
         // Clear stats from any previous attempt so retries don't accumulate
         LevelThreeState.Reset();
+
         timeLeft = levelDurationSeconds;
         UpdateTimerUI(timeLeft);
     }
 
     private void Update()
     {
-        if (finished) return;
+        if (finished)
+            return;
 
         timeLeft -= Time.deltaTime;
 
@@ -59,6 +61,34 @@ public class LevelThreeTimerWinLose : MonoBehaviour
         UpdateTimerUI(timeLeft);
     }
 
+    /// <summary>
+    /// Adds or removes seconds from the current remaining level time.
+    /// The timer cannot go below zero.
+    /// This is used by the runtime control panel.
+    /// </summary>
+    public void AddTimeSeconds(float secondsToAdd)
+    {
+        if (finished)
+            return;
+
+        float elapsedTime = Mathf.Max(0f, levelDurationSeconds - timeLeft);
+
+        timeLeft = Mathf.Max(0f, timeLeft + secondsToAdd);
+
+        // Keep levelDurationSeconds aligned so timeToTargetSeconds remains logical
+        // even if time was added or removed during the level.
+        levelDurationSeconds = elapsedTime + timeLeft;
+
+        UpdateTimerUI(timeLeft);
+
+        Debug.Log($"[LevelThreeTimerWinLose] Time changed by {secondsToAdd}. New timeLeft={timeLeft}");
+    }
+
+    public float GetTimeLeft()
+    {
+        return timeLeft;
+    }
+
     // Called from ScoreManager.AddMoney
     public void NotifyMoneyChanged(int newMoney)
     {
@@ -73,7 +103,8 @@ public class LevelThreeTimerWinLose : MonoBehaviour
 
     private void FreezeTimeIfNeeded(int moneyNow)
     {
-        if (timeSaved) return;
+        if (timeSaved)
+            return;
 
         if (moneyNow >= coinsTarget)
         {
@@ -86,7 +117,9 @@ public class LevelThreeTimerWinLose : MonoBehaviour
 
     private void SaveLevel3TimeOnce()
     {
-        if (timeSaved) return;
+        if (timeSaved)
+            return;
+
         timeSaved = true;
 
         float safeFrozen = (frozenTimeLeft < 0f) ? timeLeft : frozenTimeLeft;
@@ -112,7 +145,9 @@ public class LevelThreeTimerWinLose : MonoBehaviour
         // Fallback save
         if (!timeSaved && coinsEnd >= coinsTarget)
         {
-            if (frozenTimeLeft < 0f) frozenTimeLeft = timeLeft;
+            if (frozenTimeLeft < 0f)
+                frozenTimeLeft = timeLeft;
+
             SaveLevel3TimeOnce();
         }
 
@@ -138,7 +173,7 @@ public class LevelThreeTimerWinLose : MonoBehaviour
             await DatabaseManager.SaveData((CloudSaveKeys.Level3PerfectServed, perfectServed));
         }
 
-        // Save passed flag for level 3 (used after relogin / resume)
+        // Save passed flag for level 3
         if (UnityServices.State == ServicesInitializationState.Initialized &&
             AuthenticationService.Instance.IsSignedIn)
         {
@@ -162,7 +197,8 @@ public class LevelThreeTimerWinLose : MonoBehaviour
 
     private void UpdateTimerUI(float secondsLeft)
     {
-        if (timerText == null) return;
+        if (timerText == null)
+            return;
 
         int totalSeconds = Mathf.CeilToInt(secondsLeft);
         int minutes = totalSeconds / 60;

@@ -13,6 +13,7 @@ public class LevelOneOneTimerWinLose : MonoBehaviour
 {
     [Header("Timer")]
     [SerializeField] private float levelDurationSeconds = 90f;
+
     [Header("Timer UI")]
     [SerializeField] private TextMeshProUGUI timerText;
 
@@ -20,7 +21,7 @@ public class LevelOneOneTimerWinLose : MonoBehaviour
     [SerializeField] private int coinsTarget = 150;
 
     [Header("End Scene")]
-    [SerializeField] private string endSceneName = "Level1 - endScene";
+    [SerializeField] private string endSceneName = "Level1.1 - endScene";
 
     // Current timer state
     private float timeLeft;
@@ -29,6 +30,7 @@ public class LevelOneOneTimerWinLose : MonoBehaviour
     // We want to save time to reach target only once
     private bool timeSaved = false;
     private int timeToTargetSeconds = -1;
+
     // Freeze the exact remaining time
     private float frozenTimeLeft = -1f;
 
@@ -36,13 +38,15 @@ public class LevelOneOneTimerWinLose : MonoBehaviour
     {
         // Clear stats from any previous attempt so retries don't accumulate
         LevelOneOneState.Reset();
+
         timeLeft = levelDurationSeconds;
         UpdateTimerUI(timeLeft);
     }
 
     private void Update()
     {
-        if (finished) return;
+        if (finished)
+            return;
 
         timeLeft -= Time.deltaTime;
 
@@ -61,6 +65,37 @@ public class LevelOneOneTimerWinLose : MonoBehaviour
         UpdateTimerUI(timeLeft);
     }
 
+    /// <summary>
+    /// Adds or removes seconds from the current remaining level time.
+    /// The timer cannot go below zero.
+    /// This is used by the runtime control panel.
+    /// </summary>
+    public void AddTimeSeconds(float secondsToAdd)
+    {
+        if (finished)
+            return;
+
+        float elapsedTime = Mathf.Max(0f, levelDurationSeconds - timeLeft);
+
+        timeLeft = Mathf.Max(0f, timeLeft + secondsToAdd);
+
+        // Keep levelDurationSeconds aligned so timeToTargetSeconds remains logical
+        // even if time was added or removed during the level.
+        levelDurationSeconds = elapsedTime + timeLeft;
+
+        UpdateTimerUI(timeLeft);
+
+        Debug.Log($"[LevelOneOneTimerWinLose] Time changed by {secondsToAdd}. New timeLeft={timeLeft}");
+    }
+
+    /// <summary>
+    /// Returns the current remaining time in seconds.
+    /// </summary>
+    public float GetTimeLeft()
+    {
+        return timeLeft;
+    }
+
     public void NotifyMoneyChanged(int newMoney)
     {
         FreezeTimeIfNeeded(newMoney);
@@ -74,7 +109,8 @@ public class LevelOneOneTimerWinLose : MonoBehaviour
 
     private void FreezeTimeIfNeeded(int moneyNow)
     {
-        if (timeSaved) return;
+        if (timeSaved)
+            return;
 
         if (moneyNow >= coinsTarget)
         {
@@ -87,7 +123,9 @@ public class LevelOneOneTimerWinLose : MonoBehaviour
 
     private void SaveLevel1TimeOnce()
     {
-        if (timeSaved) return;
+        if (timeSaved)
+            return;
+
         timeSaved = true;
 
         float safeFrozen = (frozenTimeLeft < 0f) ? timeLeft : frozenTimeLeft;
@@ -97,11 +135,11 @@ public class LevelOneOneTimerWinLose : MonoBehaviour
             AuthenticationService.Instance.IsSignedIn)
         {
             _ = DatabaseManager.SaveData((CloudSaveKeys.Level1TimeSeconds, timeToTargetSeconds));
-            Debug.Log($"[Level1] Saved timeSeconds={timeToTargetSeconds}");
+            Debug.Log($"[Level1.1] Saved timeSeconds={timeToTargetSeconds}");
         }
         else
         {
-            Debug.LogWarning("[Level1] Could not save time (services not ready or not signed in).");
+            Debug.LogWarning("[Level1.1] Could not save time (services not ready or not signed in).");
         }
     }
 
@@ -111,7 +149,9 @@ public class LevelOneOneTimerWinLose : MonoBehaviour
 
         if (!timeSaved && coinsEnd >= coinsTarget)
         {
-            if (frozenTimeLeft < 0f) frozenTimeLeft = timeLeft;
+            if (frozenTimeLeft < 0f)
+                frozenTimeLeft = timeLeft;
+
             SaveLevel1TimeOnce();
         }
 
@@ -120,7 +160,7 @@ public class LevelOneOneTimerWinLose : MonoBehaviour
         bool success = coinsEnd >= coinsTarget;
         LevelOneOneState.IsSuccess = success;
 
-        // Read served dishes statistics for Level 1
+        // Read served dishes statistics for Level 1.1
         int totalServed = LevelOneOneState.TotalServedDishes;
         int perfectServed = LevelOneOneState.PerfectServedDishes;
 
@@ -155,15 +195,19 @@ public class LevelOneOneTimerWinLose : MonoBehaviour
 
     private async Task SaveLevel1CoinsToCloud(int coins)
     {
-        if (UnityServices.State != ServicesInitializationState.Initialized) return;
-        if (!AuthenticationService.Instance.IsSignedIn) return;
+        if (UnityServices.State != ServicesInitializationState.Initialized)
+            return;
+
+        if (!AuthenticationService.Instance.IsSignedIn)
+            return;
 
         await DatabaseManager.SaveData((CloudSaveKeys.Level1Coins, coins));
     }
 
     private void UpdateTimerUI(float secondsLeft)
     {
-        if (timerText == null) return;
+        if (timerText == null)
+            return;
 
         int totalSeconds = Mathf.CeilToInt(secondsLeft);
         int minutes = totalSeconds / 60;
