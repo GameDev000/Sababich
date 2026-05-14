@@ -142,7 +142,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &90040641
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4648,7 +4648,7 @@ MonoBehaviour:
   instructionText: {fileID: 189247614}
   requestedWidth: 400
   requestedHeight: 512
-  introText: "\u05E6\u05DC\u05DD 3 \u05EA\u05DE\u05D5\u05E0\u05D5\u05EA : \u05DE\u05D7\u05D9\u05D9\u05E3,
+  introText: "\u05E6\u05DC\u05DD 3 \u05EA\u05DE\u05D5\u05E0\u05D5\u05EA : \u05DE\u05D7\u05D9\u05D9\u05DA,
     \u05DB\u05D5\u05E2\u05E1 \u05D5\u05DB\u05D5\u05E2\u05E1 \u05DE\u05D0\u05D5\u05D3"
   firstStageDelay: 3
   faceDetector: {fileID: 2097371572}
