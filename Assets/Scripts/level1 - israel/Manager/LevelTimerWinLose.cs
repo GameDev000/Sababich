@@ -1,3 +1,180 @@
+// using TMPro;
+// using UnityEngine;
+// using UnityEngine.SceneManagement;
+// using System.Threading.Tasks;
+// using Unity.Services.Core;
+// using Unity.Services.Authentication;
+
+// /// <summary>
+// /// Runs the level countdown timer and ends the level when time is over.
+// /// Tracks if the player reached the coin target, and saves results (time + coins + passed) to the cloud.
+// /// </summary>
+// public class LevelTimerWinLose : MonoBehaviour
+// {
+//     [Header("Timer")]
+//     [SerializeField] private float levelDurationSeconds = 90f;
+//     [Header("Timer UI")]
+//     [SerializeField] private TextMeshProUGUI timerText;
+
+//     [Header("Win Condition")]
+//     [SerializeField] private int coinsTarget = 150;
+
+//     [Header("End Scene")]
+//     [SerializeField] private string endSceneName = "Level1 - endScene";
+
+//     // Current timer state
+//     private float timeLeft;
+//     private bool finished;
+
+//     // We want to save time to reach target only once
+//     private bool timeSaved = false;
+//     private int timeToTargetSeconds = -1;
+//     // Freeze the exact remaining time
+//     private float frozenTimeLeft = -1f;
+
+//     private void Start()
+//     {
+//         // Clear stats from any previous attempt so retries don't accumulate
+//         LevelOneState.Reset();
+//         timeLeft = levelDurationSeconds;
+//         UpdateTimerUI(timeLeft);
+//     }
+
+//     private void Update()
+//     {
+//         if (finished) return;
+
+//         timeLeft -= Time.deltaTime;
+
+//         TryFreezeTimeWhenReachedTarget();
+
+//         if (timeLeft <= 0f)
+//         {
+//             timeLeft = 0f;
+//             UpdateTimerUI(timeLeft);
+
+//             finished = true;
+//             EndLevel();
+//             return;
+//         }
+
+//         UpdateTimerUI(timeLeft);
+//     }
+
+//     public void NotifyMoneyChanged(int newMoney)
+//     {
+//         FreezeTimeIfNeeded(newMoney);
+//     }
+
+//     private void TryFreezeTimeWhenReachedTarget()
+//     {
+//         int moneyNow = (ScoreManager.Instance != null) ? ScoreManager.Instance.CurrentMoney : 0;
+//         FreezeTimeIfNeeded(moneyNow);
+//     }
+
+//     private void FreezeTimeIfNeeded(int moneyNow)
+//     {
+//         if (timeSaved) return;
+
+//         if (moneyNow >= coinsTarget)
+//         {
+//             if (frozenTimeLeft < 0f)
+//                 frozenTimeLeft = timeLeft;
+
+//             SaveLevel1TimeOnce();
+//         }
+//     }
+
+//     private void SaveLevel1TimeOnce()
+//     {
+//         if (timeSaved) return;
+//         timeSaved = true;
+
+//         float safeFrozen = (frozenTimeLeft < 0f) ? timeLeft : frozenTimeLeft;
+//         timeToTargetSeconds = Mathf.RoundToInt(levelDurationSeconds - safeFrozen);
+
+//         if (UnityServices.State == ServicesInitializationState.Initialized &&
+//             AuthenticationService.Instance.IsSignedIn)
+//         {
+//             _ = DatabaseManager.SaveData((CloudSaveKeys.Level1TimeSeconds, timeToTargetSeconds));
+//             Debug.Log($"[Level1] Saved timeSeconds={timeToTargetSeconds}");
+//         }
+//         else
+//         {
+//             Debug.LogWarning("[Level1] Could not save time (services not ready or not signed in).");
+//         }
+//     }
+
+//     private async void EndLevel()
+//     {
+//         int coinsEnd = (ScoreManager.Instance != null) ? ScoreManager.Instance.CurrentMoney : 0;
+
+//         if (!timeSaved && coinsEnd >= coinsTarget)
+//         {
+//             if (frozenTimeLeft < 0f) frozenTimeLeft = timeLeft;
+//             SaveLevel1TimeOnce();
+//         }
+
+//         await SaveLevel1CoinsToCloud(coinsEnd);
+
+//         bool success = coinsEnd >= coinsTarget;
+//         LevelOneState.IsSuccess = success;
+
+//         // Read served dishes statistics for Level 1
+//         int totalServed = LevelOneState.TotalServedDishes;
+//         int perfectServed = LevelOneState.PerfectServedDishes;
+
+//         // Save served dishes statistics
+//         if (UnityServices.State == ServicesInitializationState.Initialized &&
+//             AuthenticationService.Instance.IsSignedIn)
+//         {
+//             await DatabaseManager.SaveData((CloudSaveKeys.Level1TotalServed, totalServed));
+//             await DatabaseManager.SaveData((CloudSaveKeys.Level1PerfectServed, perfectServed));
+//         }
+
+//         if (UnityServices.State == ServicesInitializationState.Initialized &&
+//             AuthenticationService.Instance.IsSignedIn)
+//         {
+//             await DatabaseManager.SaveData((CloudSaveKeys.Level1Passed, success ? 1 : 0));
+//         }
+
+//         if (UnityServices.State == ServicesInitializationState.Initialized &&
+//             AuthenticationService.Instance.IsSignedIn)
+//         {
+//             await DatabaseManager.SaveData((CloudSaveKeys.DuplicateClicksKey(1), LevelOneState.DuplicateIngredientClicks));
+//             await DatabaseManager.SaveData((CloudSaveKeys.GlutenChildAppearedKey(1), LevelOneState.GlutenChildAppeared));
+//             await DatabaseManager.SaveData((CloudSaveKeys.GlutenChildServedKey(1), LevelOneState.GlutenChildServed));
+//         }
+
+//         // Record this level's attempt for dashboard export before leaving the scene
+//         SessionDataCollector.RecordLevelAttempt(1, timeToTargetSeconds);
+
+//         Time.timeScale = 1f;
+//         SceneManager.LoadScene(endSceneName);
+//     }
+
+//     private async Task SaveLevel1CoinsToCloud(int coins)
+//     {
+//         if (UnityServices.State != ServicesInitializationState.Initialized) return;
+//         if (!AuthenticationService.Instance.IsSignedIn) return;
+
+//         await DatabaseManager.SaveData((CloudSaveKeys.Level1Coins, coins));
+//     }
+
+//     private void UpdateTimerUI(float secondsLeft)
+//     {
+//         if (timerText == null) return;
+
+//         int totalSeconds = Mathf.CeilToInt(secondsLeft);
+//         int minutes = totalSeconds / 60;
+//         int seconds = totalSeconds % 60;
+
+//         timerText.text = $"{minutes:00}:{seconds:00}";
+//     }
+// }
+
+
+
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -7,12 +184,13 @@ using Unity.Services.Authentication;
 
 /// <summary>
 /// Runs the level countdown timer and ends the level when time is over.
-/// Tracks if the player reached the coin target, and saves results (time + coins + passed) to the cloud.
+/// Tracks if the player reached the coin target, and saves results to the cloud.
 /// </summary>
 public class LevelTimerWinLose : MonoBehaviour
 {
     [Header("Timer")]
     [SerializeField] private float levelDurationSeconds = 90f;
+
     [Header("Timer UI")]
     [SerializeField] private TextMeshProUGUI timerText;
 
@@ -29,6 +207,7 @@ public class LevelTimerWinLose : MonoBehaviour
     // We want to save time to reach target only once
     private bool timeSaved = false;
     private int timeToTargetSeconds = -1;
+
     // Freeze the exact remaining time
     private float frozenTimeLeft = -1f;
 
@@ -36,13 +215,15 @@ public class LevelTimerWinLose : MonoBehaviour
     {
         // Clear stats from any previous attempt so retries don't accumulate
         LevelOneState.Reset();
+
         timeLeft = levelDurationSeconds;
         UpdateTimerUI(timeLeft);
     }
 
     private void Update()
     {
-        if (finished) return;
+        if (finished)
+            return;
 
         timeLeft -= Time.deltaTime;
 
@@ -61,6 +242,33 @@ public class LevelTimerWinLose : MonoBehaviour
         UpdateTimerUI(timeLeft);
     }
 
+    /// <summary>
+    /// Adds or removes seconds from the current remaining level time.
+    /// The timer cannot go below zero.
+    /// This is used by the runtime control panel.
+    /// </summary>
+    public void AddTimeSeconds(float secondsToAdd)
+    {
+        if (finished)
+            return;
+
+        timeLeft = Mathf.Max(0f, timeLeft + secondsToAdd);
+
+        // Keep the visible timer updated immediately, even while the game is paused.
+        UpdateTimerUI(timeLeft);
+
+        Debug.Log($"[LevelTimerWinLose] Time changed by {secondsToAdd}. New timeLeft={timeLeft}");
+    }
+
+    /// <summary>
+    /// Returns the current remaining time in seconds.
+    /// Useful for UI/debugging.
+    /// </summary>
+    public float GetTimeLeft()
+    {
+        return timeLeft;
+    }
+
     public void NotifyMoneyChanged(int newMoney)
     {
         FreezeTimeIfNeeded(newMoney);
@@ -74,7 +282,8 @@ public class LevelTimerWinLose : MonoBehaviour
 
     private void FreezeTimeIfNeeded(int moneyNow)
     {
-        if (timeSaved) return;
+        if (timeSaved)
+            return;
 
         if (moneyNow >= coinsTarget)
         {
@@ -87,7 +296,9 @@ public class LevelTimerWinLose : MonoBehaviour
 
     private void SaveLevel1TimeOnce()
     {
-        if (timeSaved) return;
+        if (timeSaved)
+            return;
+
         timeSaved = true;
 
         float safeFrozen = (frozenTimeLeft < 0f) ? timeLeft : frozenTimeLeft;
@@ -111,7 +322,9 @@ public class LevelTimerWinLose : MonoBehaviour
 
         if (!timeSaved && coinsEnd >= coinsTarget)
         {
-            if (frozenTimeLeft < 0f) frozenTimeLeft = timeLeft;
+            if (frozenTimeLeft < 0f)
+                frozenTimeLeft = timeLeft;
+
             SaveLevel1TimeOnce();
         }
 
@@ -155,15 +368,19 @@ public class LevelTimerWinLose : MonoBehaviour
 
     private async Task SaveLevel1CoinsToCloud(int coins)
     {
-        if (UnityServices.State != ServicesInitializationState.Initialized) return;
-        if (!AuthenticationService.Instance.IsSignedIn) return;
+        if (UnityServices.State != ServicesInitializationState.Initialized)
+            return;
+
+        if (!AuthenticationService.Instance.IsSignedIn)
+            return;
 
         await DatabaseManager.SaveData((CloudSaveKeys.Level1Coins, coins));
     }
 
     private void UpdateTimerUI(float secondsLeft)
     {
-        if (timerText == null) return;
+        if (timerText == null)
+            return;
 
         int totalSeconds = Mathf.CeilToInt(secondsLeft);
         int minutes = totalSeconds / 60;
