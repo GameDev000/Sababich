@@ -38,6 +38,18 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/IntroVideoScene.unity
     guid: f9286299d89b7ed4baa035c7ffbd69e6
+  - enabled: 1
+    path: Assets/Scenes/level1.2 - china.unity
+    guid: bd6087fa9b8c5764c872d6a9e2403dc9
+  - enabled: 1
+    path: Assets/Scenes/Level1.1 - endScene.unity
+    guid: 1ada1e003c3ebe84684692f7a2df4d7f
+  - enabled: 1
+    path: Assets/Scenes/level1.1 - israel.unity
+    guid: 727504602b6eabb4ea86df2f7e80ceb1
+  - enabled: 1
+    path: Assets/Scenes/Level1.2 - endScene.unity
+    guid: 4cb031edcdd423f4a9910c65e5634b43
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
