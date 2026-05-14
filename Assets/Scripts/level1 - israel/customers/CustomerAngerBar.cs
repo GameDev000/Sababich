@@ -37,7 +37,7 @@ public class CustomerAngerBar : MonoBehaviour
         }
     }
 
-    
+
 
     /// <summary>
     /// Stops and hides the anger bar.
