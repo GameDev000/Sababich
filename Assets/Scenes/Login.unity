@@ -3606,6 +3606,22 @@ PrefabInstance:
       propertyPath: musicVolume
       value: 0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 8442130689097025670, guid: 556dc76247a18d24c9a9208e5daf9764, type: 3}
+      propertyPath: tracks.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8442130689097025670, guid: 556dc76247a18d24c9a9208e5daf9764, type: 3}
+      propertyPath: tracks.Array.data[3].id
+      value: relaxing_music
+      objectReference: {fileID: 0}
+    - target: {fileID: 8442130689097025670, guid: 556dc76247a18d24c9a9208e5daf9764, type: 3}
+      propertyPath: tracks.Array.data[3].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: 6b954f933a7321541884ebe8f539659e, type: 3}
+    - target: {fileID: 8442130689097025670, guid: 556dc76247a18d24c9a9208e5daf9764, type: 3}
+      propertyPath: tracks.Array.data[3].displayName
+      value: relaxingMusic
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
