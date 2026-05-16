@@ -2962,6 +2962,18 @@ PrefabInstance:
       propertyPath: levelTimerBehaviour
       value: 
       objectReference: {fileID: 520318747}
+    - target: {fileID: 1053789933039332494, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
+      propertyPath: markAddedItemsToggle
+      value: 
+      objectReference: {fileID: 1153374332}
+    - target: {fileID: 1053789933039332494, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
+      propertyPath: worldVisualRootsToHideWhilePanelOpen.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1053789933039332494, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
+      propertyPath: 'worldVisualRootsToHideWhilePanelOpen.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8942518448022305187}
     - target: {fileID: 1985906100376915902, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
       propertyPath: m_Name
       value: ControlPanelUI
@@ -4049,6 +4061,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 635302376}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1153374332 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8784111855488528574, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
+  m_PrefabInstance: {fileID: 637750400}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Toggle
 --- !u!4 &1235463534 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4561966467305094, guid: fa8d00a30836965448ebdeeffdac87ed, type: 3}
@@ -6547,6 +6570,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1869520216}
   m_SourcePrefab: {fileID: 100100000, guid: de4c8b1251d1f8442be6fd1c2ee07a11, type: 3}
+--- !u!4 &8942518448022305187 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7110069025878859205, guid: de4c8b1251d1f8442be6fd1c2ee07a11, type: 3}
+  m_PrefabInstance: {fileID: 8942518448022305186}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

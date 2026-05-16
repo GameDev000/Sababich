@@ -8714,6 +8714,10 @@ PrefabInstance:
       propertyPath: levelTimerBehaviour
       value: 
       objectReference: {fileID: 742827636}
+    - target: {fileID: 1053789933039332494, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
+      propertyPath: worldVisualRootsToHideWhilePanelOpen.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1985906100376915902, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
       propertyPath: m_Name
       value: ControlPanelUI

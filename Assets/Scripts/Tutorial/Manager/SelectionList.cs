@@ -106,20 +106,40 @@ public class SelectionList : MonoBehaviour
     }
 
     // Updates the UI text and tells the PitaBuilder to rebuild the visual pita
+    // private void UpdateText()
+    // {
+    //     if (selectedText != null)
+    //     {
+    //         string result = "פריטים:\n";
+    //         foreach (string ing in selectedIngredients)
+    //             result += "- " + ToHebrew(ing) + "\n";
+
+    //         selectedText.text = result;
+    //     }
+
+    //     if (pitaBuilder != null)
+    //         pitaBuilder.BuildFromSelection(selectedIngredients);
+    // }
+
+
     private void UpdateText()
+{
+    if (selectedText != null)
     {
-        if (selectedText != null)
-        {
-            string result = "פריטים:\n";
-            foreach (string ing in selectedIngredients)
-                result += "- " + ToHebrew(ing) + "\n";
+        string result = "פריטים:\n";
 
-            selectedText.text = result;
-        }
+        foreach (string ing in selectedIngredients)
+            result += "- " + ToHebrew(ing) + "\n";
 
-        if (pitaBuilder != null)
-            pitaBuilder.BuildFromSelection(selectedIngredients);
+        selectedText.text = result;
     }
+
+    if (pitaBuilder != null)
+        pitaBuilder.BuildFromSelection(selectedIngredients);
+
+    // Update all customer order-bubble markers according to the current pita ingredients.
+    Customer.RefreshAllCustomerIngredientMarkers(selectedIngredients);
+}
 
     private string ToHebrew(string ingredient)
     {

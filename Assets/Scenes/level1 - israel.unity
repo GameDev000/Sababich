@@ -3800,6 +3800,17 @@ CapsuleCollider:
   m_Height: 8.836716
   m_Direction: 1
   m_Center: {x: 0, y: 2.231643, z: 0}
+--- !u!114 &947156983 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8784111855488528574, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
+  m_PrefabInstance: {fileID: 7919345448669776258}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Toggle
 --- !u!212 &981546837 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 1563102635950299477, guid: de4c8b1251d1f8442be6fd1c2ee07a11, type: 3}
@@ -4844,6 +4855,11 @@ MonoBehaviour:
   saladSprite: {fileID: 21300000, guid: a618670da1d854245b9e285463d56619, type: 3}
   chipsSprite: {fileID: 0}
   soySprite: {fileID: 0}
+--- !u!4 &1869520217 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7110069025878859205, guid: de4c8b1251d1f8442be6fd1c2ee07a11, type: 3}
+  m_PrefabInstance: {fileID: 8942518448022305186}
+  m_PrefabAsset: {fileID: 0}
 --- !u!212 &1889214889 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 8896958299370979809, guid: de4c8b1251d1f8442be6fd1c2ee07a11, type: 3}
@@ -6252,7 +6268,8 @@ PrefabInstance:
       value: customer
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 6841058193729085543, guid: 4c0914c7c8f14894696d4b40bed48725, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 855442832858710653, guid: 4c0914c7c8f14894696d4b40bed48725, type: 3}
       insertIndex: -1
@@ -6284,6 +6301,18 @@ PrefabInstance:
       propertyPath: levelTimerBehaviour
       value: 
       objectReference: {fileID: 520318745}
+    - target: {fileID: 1053789933039332494, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
+      propertyPath: markAddedItemsToggle
+      value: 
+      objectReference: {fileID: 947156983}
+    - target: {fileID: 1053789933039332494, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
+      propertyPath: worldVisualRootsToHideWhilePanelOpen.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1053789933039332494, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
+      propertyPath: 'worldVisualRootsToHideWhilePanelOpen.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1869520217}
     - target: {fileID: 1985906100376915902, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
       propertyPath: m_Name
       value: ControlPanelUI
@@ -6376,7 +6405,8 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2692156601397494829, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

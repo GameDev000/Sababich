@@ -718,6 +718,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4816904612880140665}
   - component: {fileID: 1053789933039332494}
+  - component: {fileID: 2692156601397494829}
   m_Layer: 5
   m_Name: ControlPanelUI
   m_TagString: Untagged
@@ -769,7 +770,23 @@ MonoBehaviour:
   saveButton: {fileID: 4078962495586092305}
   angerTimeSlider: {fileID: 1231508304998633900}
   angerTimeValueText: {fileID: 6413825638868636659}
+  markAddedItemsToggle: {fileID: 8784111855488528574}
+  worldVisualRootsToHideWhilePanelOpen:
+  - {fileID: 7110069025878859205, guid: de4c8b1251d1f8442be6fd1c2ee07a11, type: 3}
   defaultAngerTimeSeconds: 7
+  defaultMarkAddedItemsEnabled: 0
+--- !u!210 &2692156601397494829
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1985906100376915902}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 20
+  m_SortAtRoot: 0
 --- !u!1 &2039867551355319124
 GameObject:
   m_ObjectHideFlags: 0

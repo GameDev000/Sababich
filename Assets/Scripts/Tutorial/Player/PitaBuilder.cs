@@ -110,7 +110,7 @@ public class PitaBuilder : MonoBehaviour
             return;
         }
 
-        // Pita exists show front sprite and update
+        // Pita exists show front sprite and update 
         if (frontPita != null)
             frontPita.gameObject.SetActive(true);
 
