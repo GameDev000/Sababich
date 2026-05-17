@@ -405,7 +405,6 @@ public class CustomerManager : MonoBehaviour
                 if (coinFlyVFX != null)
                     coinFlyVFX.PlayPenaltyFromWorld(target.transform, Mathf.Abs(alergicServePenalty), true);
             }
-
             // Clear selection on serve attempt
             SelectionList.Instance.ClearIngredients();
 
@@ -451,6 +450,10 @@ public class CustomerManager : MonoBehaviour
                 target.MoodTimer.CustomerServed();
 
             // Clear selection after serving
+            if (ControlPanelUI.MarkAddedItemsEnabled)
+            {
+                target.PreserveIngredientMarkersUntilDestroyed();
+            }
             SelectionList.Instance.ClearIngredients();
 
             // Start leaving for this slot
@@ -488,6 +491,10 @@ public class CustomerManager : MonoBehaviour
         }
 
         // Clear selection on wrong order
+        if (ControlPanelUI.MarkAddedItemsEnabled)
+        {
+            target.PreserveIngredientMarkersUntilDestroyed();
+        }
         SelectionList.Instance.ClearIngredients();
 
         // Show angry + wait + leave

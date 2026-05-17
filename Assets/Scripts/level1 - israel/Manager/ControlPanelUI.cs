@@ -383,7 +383,7 @@ public class ControlPanelUI : MonoBehaviour
     private bool panelPausedGame;
     private MethodInfo addTimeMethod;
 
-    private readonly List<SpriteRenderer> hiddenWorldRenderers = new List<SpriteRenderer>();
+    private readonly List<Renderer> hiddenWorldRenderers = new List<Renderer>();
     private readonly List<bool> previousWorldRendererStates = new List<bool>();
 
     private void Awake()
@@ -599,8 +599,7 @@ public class ControlPanelUI : MonoBehaviour
             controlPanelCanvasGroup.blocksRaycasts = visible;
         }
     }
-
-    private void HideWorldVisualsForPanel()
+   private void HideWorldVisualsForPanel()
     {
         hiddenWorldRenderers.Clear();
         previousWorldRendererStates.Clear();
@@ -613,28 +612,27 @@ public class ControlPanelUI : MonoBehaviour
             if (root == null)
                 continue;
 
-            SpriteRenderer[] renderers = root.GetComponentsInChildren<SpriteRenderer>(true);
+            Renderer[] renderers = root.GetComponentsInChildren<Renderer>(true);
 
-            foreach (SpriteRenderer spriteRenderer in renderers)
+            foreach (Renderer rendererToHide in renderers)
             {
-                if (spriteRenderer == null)
+                if (rendererToHide == null)
                     continue;
 
-                hiddenWorldRenderers.Add(spriteRenderer);
-                previousWorldRendererStates.Add(spriteRenderer.enabled);
+                hiddenWorldRenderers.Add(rendererToHide);
+                previousWorldRendererStates.Add(rendererToHide.enabled);
 
-                spriteRenderer.enabled = false;
+                rendererToHide.enabled = false;
             }
         }
     }
-
     private void RestoreWorldVisualsAfterPanel()
     {
         int count = Mathf.Min(hiddenWorldRenderers.Count, previousWorldRendererStates.Count);
 
         for (int i = 0; i < count; i++)
         {
-            SpriteRenderer rendererToRestore = hiddenWorldRenderers[i];
+            Renderer rendererToRestore = hiddenWorldRenderers[i];
 
             if (rendererToRestore == null)
                 continue;
@@ -645,7 +643,6 @@ public class ControlPanelUI : MonoBehaviour
         hiddenWorldRenderers.Clear();
         previousWorldRendererStates.Clear();
     }
-
     private void OnAngerTimeSliderChanged(float value)
     {
         UpdateAngerTimeText();

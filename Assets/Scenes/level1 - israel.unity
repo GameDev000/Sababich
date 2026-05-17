@@ -5877,7 +5877,7 @@ PrefabInstance:
       objectReference: {fileID: 2295059}
     - target: {fileID: 2812279549565941923, guid: 342c60323b8fa884d828441a9c84b770, type: 3}
       propertyPath: m_SortingOrder
-      value: 10
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 3005204476576462044, guid: 342c60323b8fa884d828441a9c84b770, type: 3}
       propertyPath: m_fontAsset

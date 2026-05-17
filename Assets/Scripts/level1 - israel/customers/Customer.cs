@@ -1,11 +1,16 @@
+
+
 // using System.Collections.Generic;
 // using UnityEngine;
-
+// using TMPro;
 // /// <summary>
-// /// Represents a customer in the game, managing their appearance, order, mood, and anger bar UI.
+// /// Represents a customer in the game, managing their appearance, order, mood,
+// /// anger bar UI, and order ingredient markers.
 // /// </summary>
 // public class Customer : MonoBehaviour
 // {
+//     private const string ADDED_MARKER_CHILD_NAME = "AddedMarker";
+
 //     [SerializeField] private SpriteRenderer spriteRenderer;
 //     [SerializeField] private GameObject orderBubbleRoot;
 //     [SerializeField] private Transform iconsParent;
@@ -21,25 +26,29 @@
 
 //     [SerializeField] private bool autoStartAngerBarOnInit = true;
 
-//     private List<string> activeRequiredIngredients; // Actual customer order
+//     [Header("Ingredient Markers")]
+//     [Tooltip("Prefab used to show a red X on ingredients that were added but are not part of this customer's order.")]
+//     [SerializeField] private GameObject wrongIngredientMarkerPrefab;
+//     [SerializeField] private Vector3 addedMarkerWorldScale = new Vector3(0.25f, 0.25f, 0.25f);
+//     [SerializeField] private Vector3 wrongMarkerScale = new Vector3(0.35f, 0.35f, 0.35f);
+
+//     private List<string> activeRequiredIngredients; // Actual customer order after missing-items removal
 //     public CustomerMoodTimer_levels MoodTimer => moodTimer;
 
 //     public CustomerType Data { get; private set; }
 //     public bool IsLeaving { get; private set; }
 
-//     private Dictionary<string, IngredientIconInfo> iconLookup; // For quick lookup of ingredient icons by ID
+//     private Dictionary<string, IngredientIconInfo> iconLookup; // Ingredient id -> icon info
+//     private Dictionary<string, GameObject> orderIconObjects;   // Ingredient id -> instantiated order icon
+//     private Dictionary<string, GameObject> addedMarkers;       // Ingredient id -> AddedMarker child
+//     private readonly List<GameObject> wrongIngredientMarkers = new List<GameObject>();
 
 //     private void Awake()
 //     {
-//         iconLookup = new Dictionary<string, IngredientIconInfo>();
+//         BuildIconLookup();
 
-//         foreach (var info in ingredientIcons)
-//         {
-//             if (!string.IsNullOrEmpty(info.id) && info.sprite != null)
-//             {
-//                 iconLookup[info.id.ToLower()] = info;
-//             }
-//         }
+//         orderIconObjects = new Dictionary<string, GameObject>();
+//         addedMarkers = new Dictionary<string, GameObject>();
 
 //         if (moodTimer == null)
 //             moodTimer = GetComponent<CustomerMoodTimer_levels>();
@@ -50,7 +59,7 @@
 
 //     /// <summary>
 //     /// Initializes the customer with the provided data.
-//     /// maxMissingItems - for subtracting ingredients.
+//     /// maxMissingItems is used for subtracting ingredients from the displayed order.
 //     /// </summary>
 //     public void Init(CustomerType data, int maxMissingItems = 0)
 //     {
@@ -93,6 +102,25 @@
 //         }
 //     }
 
+//     private void BuildIconLookup()
+//     {
+//         iconLookup = new Dictionary<string, IngredientIconInfo>();
+
+//         if (ingredientIcons == null)
+//             return;
+
+//         foreach (var info in ingredientIcons)
+//         {
+//             if (info == null)
+//                 continue;
+
+//             string normalizedId = NormalizeIngredientId(info.id);
+
+//             if (!string.IsNullOrEmpty(normalizedId) && info.sprite != null)
+//                 iconLookup[normalizedId] = info;
+//         }
+//     }
+
 //     private void BuildActiveOrder(int maxMissingItems)
 //     {
 //         activeRequiredIngredients = new List<string>();
@@ -102,8 +130,10 @@
 
 //         foreach (var r in Data.requiredIngredients)
 //         {
-//             if (!string.IsNullOrWhiteSpace(r))
-//                 activeRequiredIngredients.Add(r.ToLower());
+//             string normalizedIngredient = NormalizeIngredientId(r);
+
+//             if (!string.IsNullOrWhiteSpace(normalizedIngredient))
+//                 activeRequiredIngredients.Add(normalizedIngredient);
 //         }
 
 //         if (maxMissingItems <= 0)
@@ -149,6 +179,7 @@
 //     {
 //         IsLeaving = true;
 //         StopAngerBar();
+//         ClearIngredientMarkers();
 //     }
 
 //     /// <summary>
@@ -162,11 +193,7 @@
 //         float durationSeconds = fallbackAngerBarDurationSeconds;
 
 //         if (moodTimer != null)
-//         {
 //             durationSeconds = moodTimer.GetTotalAngerDurationSeconds();
-//         }
-
-//         Debug.Log($"[CustomerAngerBar] Customer={gameObject.name}, Duration={durationSeconds}");
 
 //         angerBar.StartBar(durationSeconds);
 //     }
@@ -194,10 +221,15 @@
 //     }
 
 //     /// <summary>
-//     /// Sets up the order bubble by instantiating ingredient icons based on the customer's order.
+//     /// Sets up the order bubble by instantiating ingredient icons based on the customer's active order.
 //     /// </summary>
 //     private void SetupOrderBubble()
 //     {
+//         ClearIngredientMarkers();
+
+//         orderIconObjects.Clear();
+//         addedMarkers.Clear();
+
 //         if (orderBubbleRoot == null || iconsParent == null || iconPrefab == null || Data == null)
 //             return;
 
@@ -206,31 +238,164 @@
 //         for (int i = iconsParent.childCount - 1; i >= 0; i--)
 //             Destroy(iconsParent.GetChild(i).gameObject);
 
-//         var ingredients = activeRequiredIngredients;
-
-//         if (ingredients == null || ingredients.Count == 0)
+//         if (activeRequiredIngredients == null || activeRequiredIngredients.Count == 0)
 //             return;
 
-//         foreach (var ing in ingredients)
+//         foreach (var ing in activeRequiredIngredients)
 //         {
-//             var id = ing.ToLower();
+//             string id = NormalizeIngredientId(ing);
 
 //             if (!iconLookup.TryGetValue(id, out var info))
 //                 continue;
 
-//             var icon = Instantiate(iconPrefab, iconsParent);
+//             GameObject icon = Instantiate(iconPrefab, iconsParent);
 //             icon.transform.localPosition = info.localPosition;
 //             icon.transform.localScale = info.localScale;
 
-//             var sr = icon.GetComponent<SpriteRenderer>();
+//             SpriteRenderer sr = icon.GetComponent<SpriteRenderer>();
 
 //             if (sr != null)
 //                 sr.sprite = info.sprite;
+
+//             orderIconObjects[id] = icon;
+
+//             // Transform markerTransform = icon.transform.Find(ADDED_MARKER_CHILD_NAME);
+
+//             // if (markerTransform != null)
+//             // {
+//             //     GameObject markerObject = markerTransform.gameObject;
+//             //     markerObject.SetActive(false);
+//             //     addedMarkers[id] = markerObject;
+//             // }
+//             Transform markerTransform = icon.transform.Find(ADDED_MARKER_CHILD_NAME);
+
+//             if (markerTransform != null)
+//             {
+//                 GameObject markerObject = markerTransform.gameObject;
+
+//                 // Keep the V marker visually consistent even when ingredient icons have different scales.
+//                 Vector3 iconScale = icon.transform.localScale;
+
+//                 markerTransform.localScale = new Vector3(
+//                     iconScale.x != 0f ? addedMarkerWorldScale.x / iconScale.x : addedMarkerWorldScale.x,
+//                     iconScale.y != 0f ? addedMarkerWorldScale.y / iconScale.y : addedMarkerWorldScale.y,
+//                     iconScale.z != 0f ? addedMarkerWorldScale.z / iconScale.z : addedMarkerWorldScale.z
+//                 );
+
+//                 TextMeshPro text = markerObject.GetComponent<TextMeshPro>();
+
+//                 if (text != null)
+//                     text.fontStyle = FontStyles.Bold;
+
+//                 markerObject.SetActive(false);
+//                 addedMarkers[id] = markerObject;
+//             }
 //         }
 //     }
 
 //     /// <summary>
-//     /// Checks if the provided list of ingredients matches the customer's order.
+//     /// Updates all order-bubble markers according to the ingredients currently inside the pita.
+//     /// Correct ingredients get a green check marker.
+//     /// Extra ingredients get a red X at their fixed ingredient position.
+//     /// </summary>
+//     public void UpdateIngredientMarkers(List<string> currentPitaIngredients, bool featureEnabled)
+//     {
+//         ClearIngredientMarkers();
+
+//         if (!featureEnabled)
+//             return;
+
+//         if (currentPitaIngredients == null || currentPitaIngredients.Count == 0)
+//             return;
+
+//         if (activeRequiredIngredients == null)
+//             return;
+
+//         HashSet<string> currentIngredients = BuildNormalizedSet(currentPitaIngredients);
+//         HashSet<string> requiredIngredients = new HashSet<string>(activeRequiredIngredients);
+
+//         foreach (string ingredientId in currentIngredients)
+//         {
+//             if (requiredIngredients.Contains(ingredientId))
+//             {
+//                 ShowAddedMarker(ingredientId);
+//             }
+//             else
+//             {
+//                 ShowWrongIngredientMarker(ingredientId);
+//             }
+//         }
+//     }
+
+//     /// <summary>
+//     /// Clears all green check markers and red X markers from this customer's order bubble.
+//     /// </summary>
+//     public void ClearIngredientMarkers()
+//     {
+//         foreach (var marker in addedMarkers.Values)
+//         {
+//             if (marker != null)
+//                 marker.SetActive(false);
+//         }
+
+//         for (int i = wrongIngredientMarkers.Count - 1; i >= 0; i--)
+//         {
+//             if (wrongIngredientMarkers[i] != null)
+//                 Destroy(wrongIngredientMarkers[i]);
+//         }
+
+//         wrongIngredientMarkers.Clear();
+//     }
+
+//     private void ShowAddedMarker(string ingredientId)
+//     {
+//         if (addedMarkers.TryGetValue(ingredientId, out GameObject marker) && marker != null)
+//         {
+//             marker.SetActive(true);
+//         }
+//     }
+//     private void ShowWrongIngredientMarker(string ingredientId)
+//     {
+//         if (wrongIngredientMarkerPrefab == null)
+//         {
+//             Debug.LogWarning("[Customer] WrongIngredientMarkerPrefab is not assigned.");
+//             return;
+//         }
+
+//         if (iconsParent == null)
+//         {
+//             Debug.LogWarning("[Customer] IconsParent is not assigned.");
+//             return;
+//         }
+
+//         if (!iconLookup.TryGetValue(ingredientId, out IngredientIconInfo info))
+//         {
+//             Debug.LogWarning($"[Customer] No IngredientIconInfo found for wrong ingredient id: {ingredientId}");
+//             return;
+//         }
+
+//         GameObject wrongMarker = Instantiate(wrongIngredientMarkerPrefab, iconsParent);
+
+//         wrongMarker.transform.localPosition = info.localPosition;
+//         wrongMarker.transform.localRotation = Quaternion.identity;
+//         wrongMarker.transform.localScale = wrongMarkerScale;
+
+//         TextMeshPro text = wrongMarker.GetComponent<TextMeshPro>();
+
+//         if (text != null)
+//         {
+//             text.fontStyle = FontStyles.Bold;
+//             text.color = Color.red;
+//         }
+
+//         wrongMarker.SetActive(true);
+//         wrongIngredientMarkers.Add(wrongMarker);
+
+//         Debug.Log($"[Customer] Wrong ingredient marker shown for: {ingredientId}");
+//     }
+
+//     /// <summary>
+//     /// Checks if the provided list of ingredients matches the customer's active order.
 //     /// </summary>
 //     public bool IsOrderCorrect(List<string> ingredients)
 //     {
@@ -240,10 +405,7 @@
 //         if (ingredients == null)
 //             return false;
 
-//         var given = new HashSet<string>();
-
-//         foreach (var x in ingredients)
-//             given.Add(x.ToLower());
+//         HashSet<string> given = BuildNormalizedSet(ingredients);
 
 //         if (given.Count != activeRequiredIngredients.Count)
 //             return false;
@@ -259,6 +421,8 @@
 
 //     public void HideOrderBubble()
 //     {
+//         ClearIngredientMarkers();
+
 //         if (orderBubbleRoot != null)
 //             orderBubbleRoot.SetActive(false);
 //     }
@@ -271,9 +435,70 @@
 //         return activeRequiredIngredients;
 //     }
 
+//     /// <summary>
+//     /// Refreshes ingredient markers for every customer currently in the scene.
+//     /// Call this after adding an ingredient to the pita.
+//     /// </summary>
+//     public static void RefreshAllCustomerIngredientMarkers(List<string> currentPitaIngredients)
+//     {
+//         Customer[] customers = FindObjectsOfType<Customer>(true);
+
+//         foreach (Customer customer in customers)
+//         {
+//             if (customer == null)
+//                 continue;
+
+//             customer.UpdateIngredientMarkers(
+//                 currentPitaIngredients,
+//                 ControlPanelUI.MarkAddedItemsEnabled
+//             );
+//         }
+//     }
+
+//     /// <summary>
+//     /// Clears ingredient markers from every customer currently in the scene.
+//     /// Call this after serving a dish or throwing it in the trash.
+//     /// </summary>
+//     public static void ClearAllCustomerIngredientMarkers()
+//     {
+//         Customer[] customers = FindObjectsOfType<Customer>(true);
+
+//         foreach (Customer customer in customers)
+//         {
+//             if (customer == null)
+//                 continue;
+
+//             customer.ClearIngredientMarkers();
+//         }
+//     }
+
+//     private static HashSet<string> BuildNormalizedSet(List<string> ingredients)
+//     {
+//         HashSet<string> normalized = new HashSet<string>();
+
+//         foreach (string ingredient in ingredients)
+//         {
+//             string normalizedIngredient = NormalizeIngredientId(ingredient);
+
+//             if (!string.IsNullOrWhiteSpace(normalizedIngredient))
+//                 normalized.Add(normalizedIngredient);
+//         }
+
+//         return normalized;
+//     }
+
+//     private static string NormalizeIngredientId(string ingredientId)
+//     {
+//         if (string.IsNullOrWhiteSpace(ingredientId))
+//             return string.Empty;
+
+//         return ingredientId.Trim().ToLower();
+//     }
+
 //     private void OnDisable()
 //     {
 //         StopAngerBar();
+//         ClearIngredientMarkers();
 //     }
 // }
 
@@ -287,11 +512,10 @@
 // }
 
 
-
-
 using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
+
 /// <summary>
 /// Represents a customer in the game, managing their appearance, order, mood,
 /// anger bar UI, and order ingredient markers.
@@ -318,8 +542,12 @@ public class Customer : MonoBehaviour
     [Header("Ingredient Markers")]
     [Tooltip("Prefab used to show a red X on ingredients that were added but are not part of this customer's order.")]
     [SerializeField] private GameObject wrongIngredientMarkerPrefab;
+
+    [Tooltip("Visual scale for the green V marker. This keeps V size consistent across differently scaled icons.")]
     [SerializeField] private Vector3 addedMarkerWorldScale = new Vector3(0.25f, 0.25f, 0.25f);
-    [SerializeField] private Vector3 wrongMarkerScale = new Vector3(0.35f, 0.35f, 0.35f);
+
+    [Tooltip("Scale for the red X marker.")]
+    [SerializeField] private Vector3 wrongMarkerScale = new Vector3(0.45f, 0.45f, 0.45f);
 
     private List<string> activeRequiredIngredients; // Actual customer order after missing-items removal
     public CustomerMoodTimer_levels MoodTimer => moodTimer;
@@ -331,6 +559,9 @@ public class Customer : MonoBehaviour
     private Dictionary<string, GameObject> orderIconObjects;   // Ingredient id -> instantiated order icon
     private Dictionary<string, GameObject> addedMarkers;       // Ingredient id -> AddedMarker child
     private readonly List<GameObject> wrongIngredientMarkers = new List<GameObject>();
+
+    // If true, the current ingredient markers remain visible until this customer is destroyed/disabled.
+    private bool preserveIngredientMarkersUntilDestroyed;
 
     private void Awake()
     {
@@ -354,6 +585,7 @@ public class Customer : MonoBehaviour
     {
         Data = data;
         IsLeaving = false;
+        preserveIngredientMarkersUntilDestroyed = false;
 
         var headSetup = GetComponent<CustomerHeadSetup>();
 
@@ -463,12 +695,21 @@ public class Customer : MonoBehaviour
 
     /// <summary>
     /// Marks the customer as leaving and stops the anger bar.
+    /// Does not clear ingredient markers, because after serving we may want to keep them visible.
     /// </summary>
     public void MarkLeaving()
     {
         IsLeaving = true;
         StopAngerBar();
-        ClearIngredientMarkers();
+    }
+
+    /// <summary>
+    /// Keeps the current ingredient markers visible until this customer is destroyed.
+    /// Call this right before clearing the pita after serving this customer.
+    /// </summary>
+    public void PreserveIngredientMarkersUntilDestroyed()
+    {
+        preserveIngredientMarkersUntilDestroyed = true;
     }
 
     /// <summary>
@@ -514,7 +755,7 @@ public class Customer : MonoBehaviour
     /// </summary>
     private void SetupOrderBubble()
     {
-        ClearIngredientMarkers();
+        ClearIngredientMarkers(true);
 
         orderIconObjects.Clear();
         addedMarkers.Clear();
@@ -548,21 +789,12 @@ public class Customer : MonoBehaviour
 
             orderIconObjects[id] = icon;
 
-            // Transform markerTransform = icon.transform.Find(ADDED_MARKER_CHILD_NAME);
-
-            // if (markerTransform != null)
-            // {
-            //     GameObject markerObject = markerTransform.gameObject;
-            //     markerObject.SetActive(false);
-            //     addedMarkers[id] = markerObject;
-            // }
             Transform markerTransform = icon.transform.Find(ADDED_MARKER_CHILD_NAME);
 
             if (markerTransform != null)
             {
                 GameObject markerObject = markerTransform.gameObject;
 
-                // Keep the V marker visually consistent even when ingredient icons have different scales.
                 Vector3 iconScale = icon.transform.localScale;
 
                 markerTransform.localScale = new Vector3(
@@ -571,10 +803,10 @@ public class Customer : MonoBehaviour
                     iconScale.z != 0f ? addedMarkerWorldScale.z / iconScale.z : addedMarkerWorldScale.z
                 );
 
-                TextMeshPro text = markerObject.GetComponent<TextMeshPro>();
+                TextMeshPro markerText = markerObject.GetComponent<TextMeshPro>();
 
-                if (text != null)
-                    text.fontStyle = FontStyles.Bold;
+                if (markerText != null)
+                    markerText.fontStyle = FontStyles.Bold;
 
                 markerObject.SetActive(false);
                 addedMarkers[id] = markerObject;
@@ -589,6 +821,9 @@ public class Customer : MonoBehaviour
     /// </summary>
     public void UpdateIngredientMarkers(List<string> currentPitaIngredients, bool featureEnabled)
     {
+        if (preserveIngredientMarkersUntilDestroyed)
+            return;
+
         ClearIngredientMarkers();
 
         if (!featureEnabled)
@@ -618,9 +853,13 @@ public class Customer : MonoBehaviour
 
     /// <summary>
     /// Clears all green check markers and red X markers from this customer's order bubble.
+    /// If this customer is preserving markers after being served, normal clearing is ignored.
     /// </summary>
-    public void ClearIngredientMarkers()
+    public void ClearIngredientMarkers(bool forceClear = false)
     {
+        if (preserveIngredientMarkersUntilDestroyed && !forceClear)
+            return;
+
         foreach (var marker in addedMarkers.Values)
         {
             if (marker != null)
@@ -643,6 +882,7 @@ public class Customer : MonoBehaviour
             marker.SetActive(true);
         }
     }
+
     private void ShowWrongIngredientMarker(string ingredientId)
     {
         if (wrongIngredientMarkerPrefab == null)
@@ -746,7 +986,7 @@ public class Customer : MonoBehaviour
 
     /// <summary>
     /// Clears ingredient markers from every customer currently in the scene.
-    /// Call this after serving a dish or throwing it in the trash.
+    /// Preserved customers will keep their markers.
     /// </summary>
     public static void ClearAllCustomerIngredientMarkers()
     {
@@ -758,6 +998,23 @@ public class Customer : MonoBehaviour
                 continue;
 
             customer.ClearIngredientMarkers();
+        }
+    }
+
+    /// <summary>
+    /// Forces marker clearing from every customer, including customers that preserve markers.
+    /// Use only when resetting a scene or disabling/destroying customers.
+    /// </summary>
+    public static void ForceClearAllCustomerIngredientMarkers()
+    {
+        Customer[] customers = FindObjectsOfType<Customer>(true);
+
+        foreach (Customer customer in customers)
+        {
+            if (customer == null)
+                continue;
+
+            customer.ClearIngredientMarkers(true);
         }
     }
 
@@ -787,7 +1044,8 @@ public class Customer : MonoBehaviour
     private void OnDisable()
     {
         StopAngerBar();
-        ClearIngredientMarkers();
+        ClearIngredientMarkers(true);
+        preserveIngredientMarkersUntilDestroyed = false;
     }
 }
 

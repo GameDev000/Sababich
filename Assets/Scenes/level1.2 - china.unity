@@ -8716,8 +8716,12 @@ PrefabInstance:
       objectReference: {fileID: 742827636}
     - target: {fileID: 1053789933039332494, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
       propertyPath: worldVisualRootsToHideWhilePanelOpen.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1053789933039332494, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
+      propertyPath: 'worldVisualRootsToHideWhilePanelOpen.Array.data[0]'
+      value: 
+      objectReference: {fileID: 72751112}
     - target: {fileID: 1985906100376915902, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
       propertyPath: m_Name
       value: ControlPanelUI
@@ -12505,6 +12509,10 @@ PrefabInstance:
     - target: {fileID: 4173742809619845330, guid: 4c0914c7c8f14894696d4b40bed48725, type: 3}
       propertyPath: ingredientIcons.Array.data[6].localPosition.y
       value: 0.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 7229633725886005063, guid: 4c0914c7c8f14894696d4b40bed48725, type: 3}
+      propertyPath: m_SortingOrder
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 8304715749176166037, guid: 4c0914c7c8f14894696d4b40bed48725, type: 3}
       propertyPath: m_Name
