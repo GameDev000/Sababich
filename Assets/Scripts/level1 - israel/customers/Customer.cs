@@ -1,8 +1,8 @@
 
-
 // using System.Collections.Generic;
-// using UnityEngine;
 // using TMPro;
+// using UnityEngine;
+
 // /// <summary>
 // /// Represents a customer in the game, managing their appearance, order, mood,
 // /// anger bar UI, and order ingredient markers.
@@ -29,8 +29,12 @@
 //     [Header("Ingredient Markers")]
 //     [Tooltip("Prefab used to show a red X on ingredients that were added but are not part of this customer's order.")]
 //     [SerializeField] private GameObject wrongIngredientMarkerPrefab;
+
+//     [Tooltip("Visual scale for the green V marker. This keeps V size consistent across differently scaled icons.")]
 //     [SerializeField] private Vector3 addedMarkerWorldScale = new Vector3(0.25f, 0.25f, 0.25f);
-//     [SerializeField] private Vector3 wrongMarkerScale = new Vector3(0.35f, 0.35f, 0.35f);
+
+//     [Tooltip("Scale for the red X marker.")]
+//     [SerializeField] private Vector3 wrongMarkerScale = new Vector3(0.45f, 0.45f, 0.45f);
 
 //     private List<string> activeRequiredIngredients; // Actual customer order after missing-items removal
 //     public CustomerMoodTimer_levels MoodTimer => moodTimer;
@@ -42,6 +46,9 @@
 //     private Dictionary<string, GameObject> orderIconObjects;   // Ingredient id -> instantiated order icon
 //     private Dictionary<string, GameObject> addedMarkers;       // Ingredient id -> AddedMarker child
 //     private readonly List<GameObject> wrongIngredientMarkers = new List<GameObject>();
+
+//     // If true, the current ingredient markers remain visible until this customer is destroyed/disabled.
+//     private bool preserveIngredientMarkersUntilDestroyed;
 
 //     private void Awake()
 //     {
@@ -65,6 +72,7 @@
 //     {
 //         Data = data;
 //         IsLeaving = false;
+//         preserveIngredientMarkersUntilDestroyed = false;
 
 //         var headSetup = GetComponent<CustomerHeadSetup>();
 
@@ -174,12 +182,21 @@
 
 //     /// <summary>
 //     /// Marks the customer as leaving and stops the anger bar.
+//     /// Does not clear ingredient markers, because after serving we may want to keep them visible.
 //     /// </summary>
 //     public void MarkLeaving()
 //     {
 //         IsLeaving = true;
 //         StopAngerBar();
-//         ClearIngredientMarkers();
+//     }
+
+//     /// <summary>
+//     /// Keeps the current ingredient markers visible until this customer is destroyed.
+//     /// Call this right before clearing the pita after serving this customer.
+//     /// </summary>
+//     public void PreserveIngredientMarkersUntilDestroyed()
+//     {
+//         preserveIngredientMarkersUntilDestroyed = true;
 //     }
 
 //     /// <summary>
@@ -225,7 +242,7 @@
 //     /// </summary>
 //     private void SetupOrderBubble()
 //     {
-//         ClearIngredientMarkers();
+//         ClearIngredientMarkers(true);
 
 //         orderIconObjects.Clear();
 //         addedMarkers.Clear();
@@ -259,21 +276,12 @@
 
 //             orderIconObjects[id] = icon;
 
-//             // Transform markerTransform = icon.transform.Find(ADDED_MARKER_CHILD_NAME);
-
-//             // if (markerTransform != null)
-//             // {
-//             //     GameObject markerObject = markerTransform.gameObject;
-//             //     markerObject.SetActive(false);
-//             //     addedMarkers[id] = markerObject;
-//             // }
 //             Transform markerTransform = icon.transform.Find(ADDED_MARKER_CHILD_NAME);
 
 //             if (markerTransform != null)
 //             {
 //                 GameObject markerObject = markerTransform.gameObject;
 
-//                 // Keep the V marker visually consistent even when ingredient icons have different scales.
 //                 Vector3 iconScale = icon.transform.localScale;
 
 //                 markerTransform.localScale = new Vector3(
@@ -282,10 +290,10 @@
 //                     iconScale.z != 0f ? addedMarkerWorldScale.z / iconScale.z : addedMarkerWorldScale.z
 //                 );
 
-//                 TextMeshPro text = markerObject.GetComponent<TextMeshPro>();
+//                 TextMeshPro markerText = markerObject.GetComponent<TextMeshPro>();
 
-//                 if (text != null)
-//                     text.fontStyle = FontStyles.Bold;
+//                 if (markerText != null)
+//                     markerText.fontStyle = FontStyles.Bold;
 
 //                 markerObject.SetActive(false);
 //                 addedMarkers[id] = markerObject;
@@ -300,6 +308,9 @@
 //     /// </summary>
 //     public void UpdateIngredientMarkers(List<string> currentPitaIngredients, bool featureEnabled)
 //     {
+//         if (preserveIngredientMarkersUntilDestroyed)
+//             return;
+
 //         ClearIngredientMarkers();
 
 //         if (!featureEnabled)
@@ -329,9 +340,13 @@
 
 //     /// <summary>
 //     /// Clears all green check markers and red X markers from this customer's order bubble.
+//     /// If this customer is preserving markers after being served, normal clearing is ignored.
 //     /// </summary>
-//     public void ClearIngredientMarkers()
+//     public void ClearIngredientMarkers(bool forceClear = false)
 //     {
+//         if (preserveIngredientMarkersUntilDestroyed && !forceClear)
+//             return;
+
 //         foreach (var marker in addedMarkers.Values)
 //         {
 //             if (marker != null)
@@ -354,6 +369,7 @@
 //             marker.SetActive(true);
 //         }
 //     }
+
 //     private void ShowWrongIngredientMarker(string ingredientId)
 //     {
 //         if (wrongIngredientMarkerPrefab == null)
@@ -457,7 +473,7 @@
 
 //     /// <summary>
 //     /// Clears ingredient markers from every customer currently in the scene.
-//     /// Call this after serving a dish or throwing it in the trash.
+//     /// Preserved customers will keep their markers.
 //     /// </summary>
 //     public static void ClearAllCustomerIngredientMarkers()
 //     {
@@ -469,6 +485,23 @@
 //                 continue;
 
 //             customer.ClearIngredientMarkers();
+//         }
+//     }
+
+//     /// <summary>
+//     /// Forces marker clearing from every customer, including customers that preserve markers.
+//     /// Use only when resetting a scene or disabling/destroying customers.
+//     /// </summary>
+//     public static void ForceClearAllCustomerIngredientMarkers()
+//     {
+//         Customer[] customers = FindObjectsOfType<Customer>(true);
+
+//         foreach (Customer customer in customers)
+//         {
+//             if (customer == null)
+//                 continue;
+
+//             customer.ClearIngredientMarkers(true);
 //         }
 //     }
 
@@ -498,7 +531,8 @@
 //     private void OnDisable()
 //     {
 //         StopAngerBar();
-//         ClearIngredientMarkers();
+//         ClearIngredientMarkers(true);
+//         preserveIngredientMarkersUntilDestroyed = false;
 //     }
 // }
 
@@ -510,7 +544,6 @@
 //     public Vector3 localPosition;
 //     public Vector3 localScale = Vector3.one;
 // }
-
 
 using System.Collections.Generic;
 using TMPro;
@@ -549,15 +582,20 @@ public class Customer : MonoBehaviour
     [Tooltip("Scale for the red X marker.")]
     [SerializeField] private Vector3 wrongMarkerScale = new Vector3(0.45f, 0.45f, 0.45f);
 
-    private List<string> activeRequiredIngredients; // Actual customer order after missing-items removal
+    // The customer's real order after maxMissingItems, before runtime ingredient availability filtering.
+    private List<string> baseRequiredIngredients;
+
+    // The actual order currently displayed/checked after removing unavailable ingredients.
+    private List<string> activeRequiredIngredients;
+
     public CustomerMoodTimer_levels MoodTimer => moodTimer;
 
     public CustomerType Data { get; private set; }
     public bool IsLeaving { get; private set; }
 
-    private Dictionary<string, IngredientIconInfo> iconLookup; // Ingredient id -> icon info
-    private Dictionary<string, GameObject> orderIconObjects;   // Ingredient id -> instantiated order icon
-    private Dictionary<string, GameObject> addedMarkers;       // Ingredient id -> AddedMarker child
+    private Dictionary<string, IngredientIconInfo> iconLookup;
+    private Dictionary<string, GameObject> orderIconObjects;
+    private Dictionary<string, GameObject> addedMarkers;
     private readonly List<GameObject> wrongIngredientMarkers = new List<GameObject>();
 
     // If true, the current ingredient markers remain visible until this customer is destroyed/disabled.
@@ -610,7 +648,8 @@ public class Customer : MonoBehaviour
             }
         }
 
-        BuildActiveOrder(maxMissingItems);
+        BuildBaseOrder(maxMissingItems);
+        ApplyIngredientAvailabilityToActiveOrder();
         SetupOrderBubble();
 
         if (autoStartAngerBarOnInit)
@@ -642,9 +681,13 @@ public class Customer : MonoBehaviour
         }
     }
 
-    private void BuildActiveOrder(int maxMissingItems)
+    /// <summary>
+    /// Builds the base order once.
+    /// This includes maxMissingItems logic, but does not include runtime availability filtering.
+    /// </summary>
+    private void BuildBaseOrder(int maxMissingItems)
     {
-        activeRequiredIngredients = new List<string>();
+        baseRequiredIngredients = new List<string>();
 
         if (Data == null || Data.requiredIngredients == null)
             return;
@@ -654,7 +697,7 @@ public class Customer : MonoBehaviour
             string normalizedIngredient = NormalizeIngredientId(r);
 
             if (!string.IsNullOrWhiteSpace(normalizedIngredient))
-                activeRequiredIngredients.Add(normalizedIngredient);
+                baseRequiredIngredients.Add(normalizedIngredient);
         }
 
         if (maxMissingItems <= 0)
@@ -662,14 +705,14 @@ public class Customer : MonoBehaviour
 
         const string pitaId = "pitta";
 
-        if (!activeRequiredIngredients.Contains(pitaId))
-            activeRequiredIngredients.Insert(0, pitaId);
+        if (!baseRequiredIngredients.Contains(pitaId))
+            baseRequiredIngredients.Insert(0, pitaId);
 
         List<int> removableIndices = new List<int>();
 
-        for (int i = 0; i < activeRequiredIngredients.Count; i++)
+        for (int i = 0; i < baseRequiredIngredients.Count; i++)
         {
-            if (activeRequiredIngredients[i] != pitaId)
+            if (baseRequiredIngredients[i] != pitaId)
                 removableIndices.Add(i);
         }
 
@@ -681,7 +724,7 @@ public class Customer : MonoBehaviour
             int pick = Random.Range(0, removableIndices.Count);
             int idxToRemove = removableIndices[pick];
 
-            activeRequiredIngredients.RemoveAt(idxToRemove);
+            baseRequiredIngredients.RemoveAt(idxToRemove);
 
             for (int j = 0; j < removableIndices.Count; j++)
             {
@@ -690,6 +733,41 @@ public class Customer : MonoBehaviour
             }
 
             removableIndices.RemoveAt(pick);
+        }
+    }
+
+    /// <summary>
+    /// Filters the base order according to LevelIngredientAvailabilityManager.
+    /// </summary>
+    private void ApplyIngredientAvailabilityToActiveOrder()
+    {
+        activeRequiredIngredients = new List<string>();
+
+        if (baseRequiredIngredients == null)
+            return;
+
+        foreach (string ingredientId in baseRequiredIngredients)
+        {
+            if (LevelIngredientAvailabilityManager.IsIngredientCurrentlyAvailable(ingredientId))
+                activeRequiredIngredients.Add(ingredientId);
+        }
+    }
+
+    /// <summary>
+    /// Rebuilds this customer's order bubble according to the current ingredient availability.
+    /// Does not destroy or respawn the customer.
+    /// </summary>
+    public void RefreshOrderBubbleForCurrentIngredientAvailability()
+    {
+        if (preserveIngredientMarkersUntilDestroyed)
+            return;
+
+        ApplyIngredientAvailabilityToActiveOrder();
+        SetupOrderBubble();
+
+        if (SelectionList.Instance != null)
+        {
+            Customer.RefreshAllCustomerIngredientMarkers(SelectionList.Instance.GetSelectedIngredients());
         }
     }
 
@@ -712,9 +790,6 @@ public class Customer : MonoBehaviour
         preserveIngredientMarkersUntilDestroyed = true;
     }
 
-    /// <summary>
-    /// Starts the visual anger bar using the real duration from the mood timer.
-    /// </summary>
     public void StartAngerBar()
     {
         if (angerBar == null)
@@ -728,9 +803,6 @@ public class Customer : MonoBehaviour
         angerBar.StartBar(durationSeconds);
     }
 
-    /// <summary>
-    /// Stops and hides the visual anger bar.
-    /// </summary>
     public void StopAngerBar()
     {
         if (angerBar == null)
@@ -739,9 +811,6 @@ public class Customer : MonoBehaviour
         angerBar.StopBar();
     }
 
-    /// <summary>
-    /// Resets the anger bar without starting it.
-    /// </summary>
     public void ResetAngerBar()
     {
         if (angerBar == null)
@@ -751,7 +820,7 @@ public class Customer : MonoBehaviour
     }
 
     /// <summary>
-    /// Sets up the order bubble by instantiating ingredient icons based on the customer's active order.
+    /// Sets up the order bubble by instantiating ingredient icons based on the currently active order.
     /// </summary>
     private void SetupOrderBubble()
     {
@@ -840,6 +909,11 @@ public class Customer : MonoBehaviour
 
         foreach (string ingredientId in currentIngredients)
         {
+            // If the ingredient is disabled in the level, ignore it here.
+            // In practice the pita should be cleared when availability changes.
+            if (!LevelIngredientAvailabilityManager.IsIngredientCurrentlyAvailable(ingredientId))
+                continue;
+
             if (requiredIngredients.Contains(ingredientId))
             {
                 ShowAddedMarker(ingredientId);
@@ -851,10 +925,6 @@ public class Customer : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Clears all green check markers and red X markers from this customer's order bubble.
-    /// If this customer is preserving markers after being served, normal clearing is ignored.
-    /// </summary>
     public void ClearIngredientMarkers(bool forceClear = false)
     {
         if (preserveIngredientMarkersUntilDestroyed && !forceClear)
@@ -923,9 +993,6 @@ public class Customer : MonoBehaviour
         Debug.Log($"[Customer] Wrong ingredient marker shown for: {ingredientId}");
     }
 
-    /// <summary>
-    /// Checks if the provided list of ingredients matches the customer's active order.
-    /// </summary>
     public bool IsOrderCorrect(List<string> ingredients)
     {
         if (activeRequiredIngredients == null)
@@ -957,7 +1024,7 @@ public class Customer : MonoBehaviour
     }
 
     /// <summary>
-    /// Exposes the actual active order after missing-items removal.
+    /// Exposes the current active order after both maxMissingItems and ingredient availability filtering.
     /// </summary>
     public List<string> GetActiveRequiredIngredients()
     {
@@ -985,9 +1052,21 @@ public class Customer : MonoBehaviour
     }
 
     /// <summary>
-    /// Clears ingredient markers from every customer currently in the scene.
-    /// Preserved customers will keep their markers.
+    /// Rebuilds order bubbles for every customer according to the current ingredient availability.
     /// </summary>
+    public static void RefreshAllCustomerOrderBubblesForIngredientAvailability()
+    {
+        Customer[] customers = FindObjectsOfType<Customer>(true);
+
+        foreach (Customer customer in customers)
+        {
+            if (customer == null)
+                continue;
+
+            customer.RefreshOrderBubbleForCurrentIngredientAvailability();
+        }
+    }
+
     public static void ClearAllCustomerIngredientMarkers()
     {
         Customer[] customers = FindObjectsOfType<Customer>(true);
@@ -1001,10 +1080,6 @@ public class Customer : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Forces marker clearing from every customer, including customers that preserve markers.
-    /// Use only when resetting a scene or disabling/destroying customers.
-    /// </summary>
     public static void ForceClearAllCustomerIngredientMarkers()
     {
         Customer[] customers = FindObjectsOfType<Customer>(true);
@@ -1038,7 +1113,7 @@ public class Customer : MonoBehaviour
         if (string.IsNullOrWhiteSpace(ingredientId))
             return string.Empty;
 
-        return ingredientId.Trim().ToLower();
+        return ingredientId.Trim().ToLowerInvariant();
     }
 
     private void OnDisable()

@@ -1,4 +1,3 @@
-
 // using System.Collections.Generic;
 // using System.Reflection;
 // using TMPro;
@@ -43,6 +42,17 @@
 //     [Header("Dirt Settings")]
 //     [SerializeField] private Toggle showDirtToggle;
 
+//     [Header("Concurrent Customers")]
+//     [SerializeField] private Button customerLimit1Button;
+//     [SerializeField] private Button customerLimit2Button;
+//     [SerializeField] private Button customerLimit3Button;
+
+//     [SerializeField] private Color selectedCustomerLimitColor = new Color(0.36f, 0.62f, 0.30f);
+//     [SerializeField] private Color normalCustomerLimitColor = new Color(0.54f, 0.52f, 0.42f);
+//     [SerializeField] private Color disabledCustomerLimitColor = new Color(0.55f, 0.55f, 0.55f);
+//     [SerializeField] private Color enabledCustomerLimitTextColor = Color.white;
+//     [SerializeField] private Color disabledCustomerLimitTextColor = new Color(0.85f, 0.85f, 0.85f);
+
 //     [Header("World Visuals Hidden While Panel Is Open")]
 //     [Tooltip("Drag here world objects such as pitta_in_hands or world timer objects. All Renderers under these roots will be hidden while the control panel is open.")]
 //     [SerializeField] private Transform[] worldVisualRootsToHideWhilePanelOpen;
@@ -56,6 +66,9 @@
 
 //     private bool panelPausedGame;
 //     private MethodInfo addTimeMethod;
+
+//     private int selectedCustomerLimit = 1;
+//     private int supportedCustomerLimit = 1;
 
 //     private readonly List<Renderer> hiddenWorldRenderers = new List<Renderer>();
 //     private readonly List<bool> previousWorldRendererStates = new List<bool>();
@@ -80,12 +93,27 @@
 //         if (remove30SecondsButton != null)
 //             remove30SecondsButton.onClick.AddListener(OnRemove30SecondsClicked);
 
+//         if (customerLimit1Button != null)
+//             customerLimit1Button.onClick.AddListener(OnCustomerLimit1Clicked);
+
+//         if (customerLimit2Button != null)
+//             customerLimit2Button.onClick.AddListener(OnCustomerLimit2Clicked);
+
+//         if (customerLimit3Button != null)
+//             customerLimit3Button.onClick.AddListener(OnCustomerLimit3Clicked);
+
 //         SetupAngerTimeSlider();
 //         SetupMarkAddedItemsToggle();
 //         SetupDirtToggle();
 
 //         ResolveLevelTimerIfNeeded();
+//         SyncCustomerLimitButtonsFromManager();
 //         UpdateAngerTimeText();
+//     }
+
+//     private void Start()
+//     {
+//         SyncCustomerLimitButtonsFromManager();
 //     }
 
 //     private void OnDestroy()
@@ -104,6 +132,15 @@
 
 //         if (remove30SecondsButton != null)
 //             remove30SecondsButton.onClick.RemoveListener(OnRemove30SecondsClicked);
+
+//         if (customerLimit1Button != null)
+//             customerLimit1Button.onClick.RemoveListener(OnCustomerLimit1Clicked);
+
+//         if (customerLimit2Button != null)
+//             customerLimit2Button.onClick.RemoveListener(OnCustomerLimit2Clicked);
+
+//         if (customerLimit3Button != null)
+//             customerLimit3Button.onClick.RemoveListener(OnCustomerLimit3Clicked);
 
 //         if (angerTimeSlider != null)
 //             angerTimeSlider.onValueChanged.RemoveListener(OnAngerTimeSliderChanged);
@@ -164,6 +201,7 @@
 //         if (showDirtToggle != null)
 //             showDirtToggle.isOn = DirtEnabled;
 
+//         SyncCustomerLimitButtonsFromManager();
 //         UpdateAngerTimeText();
 
 //         PauseGameForPanel();
@@ -176,6 +214,7 @@
 //         ApplyAngerTimeSetting();
 //         ApplyMarkAddedItemsSetting();
 //         ApplyDirtSetting();
+//         ApplyCustomerLimitSetting();
 
 //         SetPanelVisible(false);
 //         RestoreWorldVisualsAfterPanel();
@@ -195,6 +234,8 @@
 
 //         MarkAddedItemsEnabled = defaultMarkAddedItemsEnabled;
 //         DirtEnabled = defaultDirtEnabled;
+
+//         ResetCustomerLimitToLevelDefault();
 
 //         if (!MarkAddedItemsEnabled)
 //             Customer.ClearAllCustomerIngredientMarkers();
@@ -254,6 +295,135 @@
 //         }
 
 //         Debug.Log($"[ControlPanelUI] Dirt enabled saved: {DirtEnabled}");
+//     }
+
+//     private void ApplyCustomerLimitSetting()
+//     {
+//         CustomerManager manager = CustomerManager.Instance;
+
+//         if (manager == null)
+//         {
+//             Debug.LogWarning("[ControlPanelUI] CustomerManager.Instance was not found.");
+//             return;
+//         }
+
+//         int supported = manager.GetMaxSupportedConcurrentCustomers();
+//         selectedCustomerLimit = Mathf.Clamp(selectedCustomerLimit, 1, supported);
+
+//         manager.SetMaxConcurrentCustomers(selectedCustomerLimit);
+
+//         SyncCustomerLimitButtonsFromManager();
+
+//         Debug.Log($"[ControlPanelUI] Customer limit saved: {selectedCustomerLimit}");
+//     }
+
+//     private void SyncCustomerLimitButtonsFromManager()
+//     {
+//         CustomerManager manager = CustomerManager.Instance;
+
+//         if (manager == null)
+//         {
+//             supportedCustomerLimit = 1;
+//             selectedCustomerLimit = 1;
+//             UpdateCustomerLimitButtonsVisualState();
+//             return;
+//         }
+
+//         supportedCustomerLimit = manager.GetMaxSupportedConcurrentCustomers();
+//         selectedCustomerLimit = manager.GetCurrentMaxConcurrentCustomers();
+
+//         selectedCustomerLimit = Mathf.Clamp(selectedCustomerLimit, 1, supportedCustomerLimit);
+
+//         UpdateCustomerLimitButtonsVisualState();
+//     }
+
+//     private void ResetCustomerLimitToLevelDefault()
+//     {
+//         CustomerManager manager = CustomerManager.Instance;
+
+//         if (manager == null)
+//         {
+//             supportedCustomerLimit = 1;
+//             selectedCustomerLimit = 1;
+//         }
+//         else
+//         {
+//             supportedCustomerLimit = manager.GetMaxSupportedConcurrentCustomers();
+//             selectedCustomerLimit = supportedCustomerLimit;
+//         }
+
+//         UpdateCustomerLimitButtonsVisualState();
+//     }
+
+//     private void OnCustomerLimit1Clicked()
+//     {
+//         SelectCustomerLimit(1);
+//     }
+
+//     private void OnCustomerLimit2Clicked()
+//     {
+//         SelectCustomerLimit(2);
+//     }
+
+//     private void OnCustomerLimit3Clicked()
+//     {
+//         SelectCustomerLimit(3);
+//     }
+
+//     private void SelectCustomerLimit(int amount)
+//     {
+//         if (amount < 1 || amount > supportedCustomerLimit)
+//             return;
+
+//         selectedCustomerLimit = amount;
+//         UpdateCustomerLimitButtonsVisualState();
+
+//         Debug.Log($"[ControlPanelUI] Customer limit selected in panel: {selectedCustomerLimit}");
+//     }
+
+//     private void UpdateCustomerLimitButtonsVisualState()
+//     {
+//         UpdateCustomerLimitButton(customerLimit1Button, 1);
+//         UpdateCustomerLimitButton(customerLimit2Button, 2);
+//         UpdateCustomerLimitButton(customerLimit3Button, 3);
+//     }
+
+//     private void UpdateCustomerLimitButton(Button button, int value)
+//     {
+//         if (button == null)
+//             return;
+
+//         bool supported = value <= supportedCustomerLimit;
+//         bool selected = value == selectedCustomerLimit;
+
+//         button.interactable = supported;
+
+//         Color targetColor;
+
+//         if (!supported)
+//             targetColor = disabledCustomerLimitColor;
+//         else if (selected)
+//             targetColor = selectedCustomerLimitColor;
+//         else
+//             targetColor = normalCustomerLimitColor;
+
+//         Graphic graphic = button.targetGraphic;
+
+//         if (graphic != null)
+//             graphic.color = targetColor;
+
+//         ColorBlock colors = button.colors;
+//         colors.normalColor = targetColor;
+//         colors.highlightedColor = supported ? targetColor * 1.08f : disabledCustomerLimitColor;
+//         colors.pressedColor = supported ? selectedCustomerLimitColor * 0.9f : disabledCustomerLimitColor;
+//         colors.selectedColor = targetColor;
+//         colors.disabledColor = disabledCustomerLimitColor;
+//         button.colors = colors;
+
+//         TextMeshProUGUI label = button.GetComponentInChildren<TextMeshProUGUI>(true);
+
+//         if (label != null)
+//             label.color = supported ? enabledCustomerLimitTextColor : disabledCustomerLimitTextColor;
 //     }
 
 //     private void PauseGameForPanel()
@@ -440,7 +610,6 @@
 // }
 
 
-
 using System.Collections.Generic;
 using System.Reflection;
 using TMPro;
@@ -496,6 +665,10 @@ public class ControlPanelUI : MonoBehaviour
     [SerializeField] private Color enabledCustomerLimitTextColor = Color.white;
     [SerializeField] private Color disabledCustomerLimitTextColor = new Color(0.85f, 0.85f, 0.85f);
 
+    [Header("Ingredient Count")]
+    [SerializeField] private Slider ingredientCountSlider;
+    [SerializeField] private TextMeshProUGUI ingredientCountValueText;
+
     [Header("World Visuals Hidden While Panel Is Open")]
     [Tooltip("Drag here world objects such as pitta_in_hands or world timer objects. All Renderers under these roots will be hidden while the control panel is open.")]
     [SerializeField] private Transform[] worldVisualRootsToHideWhilePanelOpen;
@@ -512,6 +685,10 @@ public class ControlPanelUI : MonoBehaviour
 
     private int selectedCustomerLimit = 1;
     private int supportedCustomerLimit = 1;
+
+    private int selectedIngredientCount = 1;
+    private int minIngredientCount = 1;
+    private int maxIngredientCount = 1;
 
     private readonly List<Renderer> hiddenWorldRenderers = new List<Renderer>();
     private readonly List<bool> previousWorldRendererStates = new List<bool>();
@@ -548,15 +725,18 @@ public class ControlPanelUI : MonoBehaviour
         SetupAngerTimeSlider();
         SetupMarkAddedItemsToggle();
         SetupDirtToggle();
+        SetupIngredientCountSlider();
 
         ResolveLevelTimerIfNeeded();
         SyncCustomerLimitButtonsFromManager();
+        SyncIngredientCountSliderFromManager();
         UpdateAngerTimeText();
     }
 
     private void Start()
     {
         SyncCustomerLimitButtonsFromManager();
+        SyncIngredientCountSliderFromManager();
     }
 
     private void OnDestroy()
@@ -587,6 +767,9 @@ public class ControlPanelUI : MonoBehaviour
 
         if (angerTimeSlider != null)
             angerTimeSlider.onValueChanged.RemoveListener(OnAngerTimeSliderChanged);
+
+        if (ingredientCountSlider != null)
+            ingredientCountSlider.onValueChanged.RemoveListener(OnIngredientCountSliderChanged);
 
         RestoreWorldVisualsAfterPanel();
     }
@@ -631,6 +814,15 @@ public class ControlPanelUI : MonoBehaviour
         showDirtToggle.isOn = DirtEnabled;
     }
 
+    private void SetupIngredientCountSlider()
+    {
+        if (ingredientCountSlider == null)
+            return;
+
+        ingredientCountSlider.wholeNumbers = true;
+        ingredientCountSlider.onValueChanged.AddListener(OnIngredientCountSliderChanged);
+    }
+
     public void OpenPanel()
     {
         transform.SetAsLastSibling();
@@ -645,6 +837,8 @@ public class ControlPanelUI : MonoBehaviour
             showDirtToggle.isOn = DirtEnabled;
 
         SyncCustomerLimitButtonsFromManager();
+        SyncIngredientCountSliderFromManager();
+
         UpdateAngerTimeText();
 
         PauseGameForPanel();
@@ -658,6 +852,7 @@ public class ControlPanelUI : MonoBehaviour
         ApplyMarkAddedItemsSetting();
         ApplyDirtSetting();
         ApplyCustomerLimitSetting();
+        ApplyIngredientCountSetting();
 
         SetPanelVisible(false);
         RestoreWorldVisualsAfterPanel();
@@ -679,6 +874,7 @@ public class ControlPanelUI : MonoBehaviour
         DirtEnabled = defaultDirtEnabled;
 
         ResetCustomerLimitToLevelDefault();
+        ResetIngredientCountToLevelDefault();
 
         if (!MarkAddedItemsEnabled)
             Customer.ClearAllCustomerIngredientMarkers();
@@ -697,7 +893,6 @@ public class ControlPanelUI : MonoBehaviour
             return;
 
         int selectedAngerTime = Mathf.RoundToInt(angerTimeSlider.value);
-
         CustomerMoodTimer_levels.SetRuntimeSecondsPerStage(selectedAngerTime);
 
         Debug.Log($"[ControlPanelUI] Anger time saved: {selectedAngerTime} seconds per stage.");
@@ -733,9 +928,7 @@ public class ControlPanelUI : MonoBehaviour
         DirtEnabled = showDirtToggle.isOn;
 
         if (!DirtEnabled && DirtStateManager.Instance != null)
-        {
             DirtStateManager.Instance.Clean();
-        }
 
         Debug.Log($"[ControlPanelUI] Dirt enabled saved: {DirtEnabled}");
     }
@@ -754,10 +947,31 @@ public class ControlPanelUI : MonoBehaviour
         selectedCustomerLimit = Mathf.Clamp(selectedCustomerLimit, 1, supported);
 
         manager.SetMaxConcurrentCustomers(selectedCustomerLimit);
-
         SyncCustomerLimitButtonsFromManager();
 
         Debug.Log($"[ControlPanelUI] Customer limit saved: {selectedCustomerLimit}");
+    }
+
+    private void ApplyIngredientCountSetting()
+    {
+        LevelIngredientAvailabilityManager manager = LevelIngredientAvailabilityManager.Instance;
+
+        if (manager == null)
+        {
+            Debug.LogWarning("[ControlPanelUI] LevelIngredientAvailabilityManager.Instance was not found.");
+            return;
+        }
+
+        selectedIngredientCount = Mathf.Clamp(
+            selectedIngredientCount,
+            manager.MinIngredientCount,
+            manager.MaxIngredientCount
+        );
+
+        manager.ApplyIngredientCount(selectedIngredientCount, true);
+        SyncIngredientCountSliderFromManager();
+
+        Debug.Log($"[ControlPanelUI] Ingredient count saved: {selectedIngredientCount}/{manager.MaxIngredientCount}");
     }
 
     private void SyncCustomerLimitButtonsFromManager()
@@ -774,7 +988,6 @@ public class ControlPanelUI : MonoBehaviour
 
         supportedCustomerLimit = manager.GetMaxSupportedConcurrentCustomers();
         selectedCustomerLimit = manager.GetCurrentMaxConcurrentCustomers();
-
         selectedCustomerLimit = Mathf.Clamp(selectedCustomerLimit, 1, supportedCustomerLimit);
 
         UpdateCustomerLimitButtonsVisualState();
@@ -796,6 +1009,76 @@ public class ControlPanelUI : MonoBehaviour
         }
 
         UpdateCustomerLimitButtonsVisualState();
+    }
+
+    private void SyncIngredientCountSliderFromManager()
+    {
+        LevelIngredientAvailabilityManager manager = LevelIngredientAvailabilityManager.Instance;
+
+        if (manager == null)
+        {
+            minIngredientCount = 1;
+            maxIngredientCount = 1;
+            selectedIngredientCount = 1;
+
+            if (ingredientCountSlider != null)
+            {
+                ingredientCountSlider.interactable = false;
+                ingredientCountSlider.minValue = 1;
+                ingredientCountSlider.maxValue = 1;
+                ingredientCountSlider.SetValueWithoutNotify(1);
+            }
+
+            UpdateIngredientCountText();
+            return;
+        }
+
+        minIngredientCount = manager.MinIngredientCount;
+        maxIngredientCount = manager.MaxIngredientCount;
+        selectedIngredientCount = Mathf.Clamp(
+            manager.CurrentIngredientCount,
+            minIngredientCount,
+            maxIngredientCount
+        );
+
+        if (ingredientCountSlider != null)
+        {
+            ingredientCountSlider.interactable = true;
+            ingredientCountSlider.wholeNumbers = true;
+            ingredientCountSlider.minValue = minIngredientCount;
+            ingredientCountSlider.maxValue = maxIngredientCount;
+            ingredientCountSlider.SetValueWithoutNotify(selectedIngredientCount);
+        }
+
+        UpdateIngredientCountText();
+    }
+
+    private void ResetIngredientCountToLevelDefault()
+    {
+        LevelIngredientAvailabilityManager manager = LevelIngredientAvailabilityManager.Instance;
+
+        if (manager == null)
+        {
+            minIngredientCount = 1;
+            maxIngredientCount = 1;
+            selectedIngredientCount = 1;
+        }
+        else
+        {
+            minIngredientCount = manager.MinIngredientCount;
+            maxIngredientCount = manager.MaxIngredientCount;
+            selectedIngredientCount = manager.MaxIngredientCount;
+        }
+
+        if (ingredientCountSlider != null)
+        {
+            ingredientCountSlider.interactable = true;
+            ingredientCountSlider.minValue = minIngredientCount;
+            ingredientCountSlider.maxValue = maxIngredientCount;
+            ingredientCountSlider.SetValueWithoutNotify(selectedIngredientCount);
+        }
+
+        UpdateIngredientCountText();
     }
 
     private void OnCustomerLimit1Clicked()
@@ -867,6 +1150,24 @@ public class ControlPanelUI : MonoBehaviour
 
         if (label != null)
             label.color = supported ? enabledCustomerLimitTextColor : disabledCustomerLimitTextColor;
+    }
+
+    private void OnIngredientCountSliderChanged(float value)
+    {
+        selectedIngredientCount = Mathf.RoundToInt(value);
+        selectedIngredientCount = Mathf.Clamp(selectedIngredientCount, minIngredientCount, maxIngredientCount);
+
+        UpdateIngredientCountText();
+
+        Debug.Log($"[ControlPanelUI] Ingredient count selected in panel: {selectedIngredientCount}/{maxIngredientCount}");
+    }
+
+    private void UpdateIngredientCountText()
+    {
+        if (ingredientCountValueText == null)
+            return;
+
+        ingredientCountValueText.text = $"{selectedIngredientCount}/{maxIngredientCount}";
     }
 
     private void PauseGameForPanel()

@@ -340,6 +340,7 @@ GameObject:
   m_Component:
   - component: {fileID: 98716865}
   - component: {fileID: 98716864}
+  - component: {fileID: 98716866}
   m_Layer: 0
   m_Name: ItemsLevel
   m_TagString: Untagged
@@ -434,6 +435,43 @@ Transform:
   - {fileID: 1292984843}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &98716866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 98716863}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03819f107db8e3a4abd58db65c80fe0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Scripts::LevelIngredientAvailabilityManager
+  maxIngredientCount: 7
+  maxRemovableIngredients: 4
+  removalOrder:
+  - chips
+  - tahini
+  - amba
+  - eggplant
+  ingredientObjectsGroups:
+  - ingredientId: chips
+    objectsToToggle:
+    - {fileID: 1591553240}
+    - {fileID: 1788359164}
+  - ingredientId: tahini
+    objectsToToggle:
+    - {fileID: 600460393}
+  - ingredientId: amba
+    objectsToToggle:
+    - {fileID: 1437525825}
+  - ingredientId: eggplant
+    objectsToToggle:
+    - {fileID: 2000099185}
+    - {fileID: 407841698}
+  selectionListManager: {fileID: 1559742141}
+  clearPitaWhenIngredientCountChanges: 1
+  refreshCustomerBubblesWhenIngredientCountChanges: 1
 --- !u!1 &147048394
 GameObject:
   m_ObjectHideFlags: 0
@@ -7116,6 +7154,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1051982458}
     m_Modifications:
+    - target: {fileID: 926151163448728870, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 926151163448728870, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1053789933039332494, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
       propertyPath: pauseButton
       value: 
@@ -7254,6 +7300,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5263072343843545989, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7359590257822759895, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7359590257822759895, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7359590257822759895, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
+      propertyPath: m_AnchorMin.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7778021859470372432, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}

@@ -1643,6 +1643,7 @@ GameObject:
   m_Component:
   - component: {fileID: 295093908}
   - component: {fileID: 295093907}
+  - component: {fileID: 295093909}
   m_Layer: 0
   m_Name: ItemsLevel
   m_TagString: Untagged
@@ -1732,6 +1733,40 @@ Transform:
   - {fileID: 1489417421}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &295093909
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 295093906}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03819f107db8e3a4abd58db65c80fe0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Scripts::LevelIngredientAvailabilityManager
+  maxIngredientCount: 6
+  maxRemovableIngredients: 3
+  removalOrder:
+  - tahini
+  - amba
+  - eggplant
+  ingredientObjectsGroups:
+  - ingredientId: tahini
+    objectsToToggle:
+    - {fileID: 166610855}
+  - ingredientId: amba
+    objectsToToggle:
+    - {fileID: 1261954854}
+  - ingredientId: eggplant
+    objectsToToggle:
+    - {fileID: 641353721}
+    - {fileID: 29336330}
+    - {fileID: 1748255138}
+  selectionListManager: {fileID: 1770097434}
+  clearPitaWhenIngredientCountChanges: 1
+  refreshCustomerBubblesWhenIngredientCountChanges: 1
+  pitaBuilderToClear: {fileID: 1869520216}
 --- !u!1 &320788932
 GameObject:
   m_ObjectHideFlags: 0
@@ -6293,6 +6328,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 442228389}
     m_Modifications:
+    - target: {fileID: 443182120451543322, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 926151163448728870, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 926151163448728870, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1053789933039332494, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
       propertyPath: pauseButton
       value: 
@@ -6313,6 +6360,18 @@ PrefabInstance:
       propertyPath: 'worldVisualRootsToHideWhilePanelOpen.Array.data[0]'
       value: 
       objectReference: {fileID: 1869520217}
+    - target: {fileID: 1136545492500060991, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1136545492500060991, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1136545492500060991, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1985906100376915902, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
       propertyPath: m_Name
       value: ControlPanelUI
@@ -6398,10 +6457,46 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5263072343843545989, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5263072343843545989, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5793747032418739517, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7359590257822759895, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7359590257822759895, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7359590257822759895, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7778021859470372432, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7778021859470372432, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7778021859470372432, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9204472049247176857, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9204472049247176857, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}

@@ -99,10 +99,41 @@ public class SelectionList : MonoBehaviour
         return true;
     }
 
+    // public void ClearIngredients()
+    // {
+    //     selectedIngredients.Clear();
+    //     UpdateText();
+    // }
+
     public void ClearIngredients()
     {
+        Debug.Log("[SelectionList] ClearIngredients CALLED.");
+
         selectedIngredients.Clear();
+
+        Debug.Log("[SelectionList] selectedIngredients cleared. Calling UpdateText().");
+
+        // Must stay here because other systems / tutorial rely on UpdateText.
         UpdateText();
+
+        Debug.Log("[SelectionList] UpdateText FINISHED.");
+
+        // Extra safety: force full visual clear of the pita after UpdateText.
+        // This ensures all pita layers disappear, even if some ingredients are still visually enabled.
+        if (pitaBuilder != null)
+        {
+            Debug.Log("[SelectionList] Calling pitaBuilder.ClearPita().");
+            pitaBuilder.ClearPita();
+            Debug.Log("[SelectionList] pitaBuilder.ClearPita() FINISHED.");
+        }
+        else
+        {
+            Debug.LogWarning("[SelectionList] pitaBuilder is NULL. Cannot force clear pita visuals.");
+        }
+
+        Customer.ClearAllCustomerIngredientMarkers();
+
+        Debug.Log("[SelectionList] ClearIngredients FINISHED.");
     }
 
     // Updates the UI text and tells the PitaBuilder to rebuild the visual pita
