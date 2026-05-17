@@ -1,4 +1,4 @@
-
+// using System.Collections.Generic;
 // using System.Reflection;
 // using TMPro;
 // using UnityEngine;
@@ -38,6 +38,10 @@
 //     [Header("Added Items Marking")]
 //     [SerializeField] private Toggle markAddedItemsToggle;
 
+//     [Header("World Visuals Hidden While Panel Is Open")]
+//     [Tooltip("Drag here world objects such as pitta_in_hands. All SpriteRenderers under these roots will be hidden while the control panel is open.")]
+//     [SerializeField] private Transform[] worldVisualRootsToHideWhilePanelOpen;
+
 //     [Header("Defaults")]
 //     [SerializeField] private int defaultAngerTimeSeconds = 7;
 //     [SerializeField] private bool defaultMarkAddedItemsEnabled = false;
@@ -46,6 +50,9 @@
 
 //     private bool panelPausedGame;
 //     private MethodInfo addTimeMethod;
+
+//     private readonly List<Renderer> hiddenWorldRenderers = new List<Renderer>();
+//     private readonly List<bool> previousWorldRendererStates = new List<bool>();
 
 //     private void Awake()
 //     {
@@ -93,6 +100,8 @@
 
 //         if (angerTimeSlider != null)
 //             angerTimeSlider.onValueChanged.RemoveListener(OnAngerTimeSliderChanged);
+
+//         RestoreWorldVisualsAfterPanel();
 //     }
 
 //     private void SetupCanvasGroup()
@@ -129,17 +138,18 @@
 
 //     public void OpenPanel()
 //     {
+//         transform.SetAsLastSibling();
 
 //         if (angerTimeSlider != null)
 //             angerTimeSlider.value = CustomerMoodTimer_levels.RuntimeSecondsPerStage;
 
 //         if (markAddedItemsToggle != null)
 //             markAddedItemsToggle.isOn = MarkAddedItemsEnabled;
-       
 
 //         UpdateAngerTimeText();
 
 //         PauseGameForPanel();
+//         HideWorldVisualsForPanel();
 //         SetPanelVisible(true);
 //     }
 
@@ -149,6 +159,7 @@
 //         ApplyMarkAddedItemsSetting();
 
 //         SetPanelVisible(false);
+//         RestoreWorldVisualsAfterPanel();
 //         ResumeGameAfterPanel();
 //     }
 
@@ -161,6 +172,9 @@
 //             markAddedItemsToggle.isOn = defaultMarkAddedItemsEnabled;
 
 //         MarkAddedItemsEnabled = defaultMarkAddedItemsEnabled;
+
+//         if (!MarkAddedItemsEnabled)
+//             Customer.ClearAllCustomerIngredientMarkers();
 
 //         UpdateAngerTimeText();
 
@@ -184,11 +198,15 @@
 //         if (markAddedItemsToggle == null)
 //         {
 //             MarkAddedItemsEnabled = false;
+//             Customer.ClearAllCustomerIngredientMarkers();
 //             Debug.LogWarning("[ControlPanelUI] Mark Added Items Toggle is not assigned.");
 //             return;
 //         }
 
 //         MarkAddedItemsEnabled = markAddedItemsToggle.isOn;
+
+//         if (!MarkAddedItemsEnabled)
+//             Customer.ClearAllCustomerIngredientMarkers();
 
 //         Debug.Log($"[ControlPanelUI] Mark added items saved: {MarkAddedItemsEnabled}");
 //     }
@@ -249,7 +267,50 @@
 //             controlPanelCanvasGroup.blocksRaycasts = visible;
 //         }
 //     }
+//    private void HideWorldVisualsForPanel()
+//     {
+//         hiddenWorldRenderers.Clear();
+//         previousWorldRendererStates.Clear();
 
+//         if (worldVisualRootsToHideWhilePanelOpen == null)
+//             return;
+
+//         foreach (Transform root in worldVisualRootsToHideWhilePanelOpen)
+//         {
+//             if (root == null)
+//                 continue;
+
+//             Renderer[] renderers = root.GetComponentsInChildren<Renderer>(true);
+
+//             foreach (Renderer rendererToHide in renderers)
+//             {
+//                 if (rendererToHide == null)
+//                     continue;
+
+//                 hiddenWorldRenderers.Add(rendererToHide);
+//                 previousWorldRendererStates.Add(rendererToHide.enabled);
+
+//                 rendererToHide.enabled = false;
+//             }
+//         }
+//     }
+//     private void RestoreWorldVisualsAfterPanel()
+//     {
+//         int count = Mathf.Min(hiddenWorldRenderers.Count, previousWorldRendererStates.Count);
+
+//         for (int i = 0; i < count; i++)
+//         {
+//             Renderer rendererToRestore = hiddenWorldRenderers[i];
+
+//             if (rendererToRestore == null)
+//                 continue;
+
+//             rendererToRestore.enabled = previousWorldRendererStates[i];
+//         }
+
+//         hiddenWorldRenderers.Clear();
+//         previousWorldRendererStates.Clear();
+//     }
 //     private void OnAngerTimeSliderChanged(float value)
 //     {
 //         UpdateAngerTimeText();
@@ -330,6 +391,8 @@
 //     }
 // }
 
+
+
 using System.Collections.Generic;
 using System.Reflection;
 using TMPro;
@@ -344,6 +407,7 @@ using UnityEngine.UI;
 public class ControlPanelUI : MonoBehaviour
 {
     public static bool MarkAddedItemsEnabled { get; private set; }
+    public static bool DirtEnabled { get; private set; } = true;
 
     [Header("Root")]
     [SerializeField] private GameObject controlPanelOverlay;
@@ -370,13 +434,17 @@ public class ControlPanelUI : MonoBehaviour
     [Header("Added Items Marking")]
     [SerializeField] private Toggle markAddedItemsToggle;
 
+    [Header("Dirt Settings")]
+    [SerializeField] private Toggle showDirtToggle;
+
     [Header("World Visuals Hidden While Panel Is Open")]
-    [Tooltip("Drag here world objects such as pitta_in_hands. All SpriteRenderers under these roots will be hidden while the control panel is open.")]
+    [Tooltip("Drag here world objects such as pitta_in_hands or world timer objects. All Renderers under these roots will be hidden while the control panel is open.")]
     [SerializeField] private Transform[] worldVisualRootsToHideWhilePanelOpen;
 
     [Header("Defaults")]
     [SerializeField] private int defaultAngerTimeSeconds = 7;
     [SerializeField] private bool defaultMarkAddedItemsEnabled = false;
+    [SerializeField] private bool defaultDirtEnabled = true;
 
     private const string ADD_TIME_METHOD_NAME = "AddTimeSeconds";
 
@@ -408,6 +476,7 @@ public class ControlPanelUI : MonoBehaviour
 
         SetupAngerTimeSlider();
         SetupMarkAddedItemsToggle();
+        SetupDirtToggle();
 
         ResolveLevelTimerIfNeeded();
         UpdateAngerTimeText();
@@ -468,6 +537,14 @@ public class ControlPanelUI : MonoBehaviour
         markAddedItemsToggle.isOn = MarkAddedItemsEnabled;
     }
 
+    private void SetupDirtToggle()
+    {
+        if (showDirtToggle == null)
+            return;
+
+        showDirtToggle.isOn = DirtEnabled;
+    }
+
     public void OpenPanel()
     {
         transform.SetAsLastSibling();
@@ -477,6 +554,9 @@ public class ControlPanelUI : MonoBehaviour
 
         if (markAddedItemsToggle != null)
             markAddedItemsToggle.isOn = MarkAddedItemsEnabled;
+
+        if (showDirtToggle != null)
+            showDirtToggle.isOn = DirtEnabled;
 
         UpdateAngerTimeText();
 
@@ -489,6 +569,7 @@ public class ControlPanelUI : MonoBehaviour
     {
         ApplyAngerTimeSetting();
         ApplyMarkAddedItemsSetting();
+        ApplyDirtSetting();
 
         SetPanelVisible(false);
         RestoreWorldVisualsAfterPanel();
@@ -503,14 +584,21 @@ public class ControlPanelUI : MonoBehaviour
         if (markAddedItemsToggle != null)
             markAddedItemsToggle.isOn = defaultMarkAddedItemsEnabled;
 
+        if (showDirtToggle != null)
+            showDirtToggle.isOn = defaultDirtEnabled;
+
         MarkAddedItemsEnabled = defaultMarkAddedItemsEnabled;
+        DirtEnabled = defaultDirtEnabled;
 
         if (!MarkAddedItemsEnabled)
             Customer.ClearAllCustomerIngredientMarkers();
 
+        if (!DirtEnabled && DirtStateManager.Instance != null)
+            DirtStateManager.Instance.Clean();
+
         UpdateAngerTimeText();
 
-        Debug.Log("[ControlPanelUI] Settings reset. Anger time returned to 7 and added-items marking disabled.");
+        Debug.Log("[ControlPanelUI] Settings reset to defaults.");
     }
 
     private void ApplyAngerTimeSetting()
@@ -541,6 +629,25 @@ public class ControlPanelUI : MonoBehaviour
             Customer.ClearAllCustomerIngredientMarkers();
 
         Debug.Log($"[ControlPanelUI] Mark added items saved: {MarkAddedItemsEnabled}");
+    }
+
+    private void ApplyDirtSetting()
+    {
+        if (showDirtToggle == null)
+        {
+            DirtEnabled = true;
+            Debug.LogWarning("[ControlPanelUI] Show Dirt Toggle is not assigned. Dirt remains enabled.");
+            return;
+        }
+
+        DirtEnabled = showDirtToggle.isOn;
+
+        if (!DirtEnabled && DirtStateManager.Instance != null)
+        {
+            DirtStateManager.Instance.Clean();
+        }
+
+        Debug.Log($"[ControlPanelUI] Dirt enabled saved: {DirtEnabled}");
     }
 
     private void PauseGameForPanel()
@@ -599,7 +706,8 @@ public class ControlPanelUI : MonoBehaviour
             controlPanelCanvasGroup.blocksRaycasts = visible;
         }
     }
-   private void HideWorldVisualsForPanel()
+
+    private void HideWorldVisualsForPanel()
     {
         hiddenWorldRenderers.Clear();
         previousWorldRendererStates.Clear();
@@ -626,6 +734,7 @@ public class ControlPanelUI : MonoBehaviour
             }
         }
     }
+
     private void RestoreWorldVisualsAfterPanel()
     {
         int count = Mathf.Min(hiddenWorldRenderers.Count, previousWorldRendererStates.Count);
@@ -643,6 +752,7 @@ public class ControlPanelUI : MonoBehaviour
         hiddenWorldRenderers.Clear();
         previousWorldRendererStates.Clear();
     }
+
     private void OnAngerTimeSliderChanged(float value)
     {
         UpdateAngerTimeText();
