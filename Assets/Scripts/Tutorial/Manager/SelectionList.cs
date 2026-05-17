@@ -123,23 +123,23 @@ public class SelectionList : MonoBehaviour
 
 
     private void UpdateText()
-{
-    if (selectedText != null)
     {
-        string result = "פריטים:\n";
+        if (selectedText != null)
+        {
+            string result = "פריטים:\n";
 
-        foreach (string ing in selectedIngredients)
-            result += "- " + ToHebrew(ing) + "\n";
+            foreach (string ing in selectedIngredients)
+                result += "- " + ToHebrew(ing) + "\n";
 
-        selectedText.text = result;
+            selectedText.text = result;
+        }
+
+        if (pitaBuilder != null)
+            pitaBuilder.BuildFromSelection(selectedIngredients);
+
+        // Update all customer order-bubble markers according to the current pita ingredients.
+        Customer.RefreshAllCustomerIngredientMarkers(selectedIngredients);
     }
-
-    if (pitaBuilder != null)
-        pitaBuilder.BuildFromSelection(selectedIngredients);
-
-    // Update all customer order-bubble markers according to the current pita ingredients.
-    Customer.RefreshAllCustomerIngredientMarkers(selectedIngredients);
-}
 
     private string ToHebrew(string ingredient)
     {
