@@ -1110,9 +1110,9 @@ public class CustomerManager : MonoBehaviour
         slot.customer.Init(chosen, maxMissingItems);
 
         // Count every customer that arrives, regardless of type
-        if (levelNumber == 1)       LevelOneState.CustomersArrived++;
-        else if (levelNumber == 2)  LevelTwoState.CustomersArrived++;
-        else if (levelNumber == 3)  LevelThreeState.CustomersArrived++;
+        if (levelNumber == 1) LevelOneState.CustomersArrived++;
+        else if (levelNumber == 2) LevelTwoState.CustomersArrived++;
+        else if (levelNumber == 3) LevelThreeState.CustomersArrived++;
         else if (levelNumber == 11) LevelOneOneState.CustomersArrived++;
         else if (levelNumber == 12) LevelOneTwoState.CustomersArrived++;
 

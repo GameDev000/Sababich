@@ -32,16 +32,16 @@ public static class SupabaseClient
         public string session_id;
         public string display_name;
         public string session_date;
-        public int    level_number;
-        public bool   passed;
-        public int    coins;
-        public int    time_seconds;
-        public int    total_served;
-        public int    customers_arrived;
-        public int    perfect_served;
-        public int    duplicate_clicks;
-        public int    gluten_appeared;
-        public int    gluten_served;
+        public int level_number;
+        public bool passed;
+        public int coins;
+        public int time_seconds;
+        public int total_served;
+        public int customers_arrived;
+        public int perfect_served;
+        public int duplicate_clicks;
+        public int gluten_appeared;
+        public int gluten_served;
     }
 
     // ── Public API ────────────────────────────────────────────────
@@ -52,12 +52,21 @@ public static class SupabaseClient
     // Safe to call multiple times for the same session (upsert, not insert).
     public static async Task UpsertSession(SessionRecord record)
     {
-        if (record.isGuest) return;
-        if (record.levels == null || record.levels.Count == 0) return;
+        if (record.isGuest)
+        {
+            return;
+        }
+
+        if (record.levels == null || record.levels.Count == 0)
+        {
+            return;
+        }
 
         // One HTTP request per level attempt (Supabase stores one row per level)
         foreach (var level in record.levels)
+        {
             await UpsertRow(record, level);
+        }
     }
 
     // ── Private ───────────────────────────────────────────────────
@@ -68,32 +77,33 @@ public static class SupabaseClient
     {
         var row = new SessionRow
         {
-            session_id        = record.sessionId,
-            display_name      = record.displayName,
-            session_date      = record.sessionDateTimeISO,
-            level_number      = level.levelNumber,
-            passed            = level.passed,
-            coins             = level.coins,
-            time_seconds      = level.timeToTargetSeconds,
-            total_served      = level.totalServedDishes,
+            session_id = record.sessionId,
+            display_name = record.displayName,
+            session_date = record.sessionDateTimeISO,
+            level_number = level.levelNumber,
+            passed = level.passed,
+            coins = level.coins,
+            time_seconds = level.timeToTargetSeconds,
+            total_served = level.totalServedDishes,
             customers_arrived = level.customersArrived,
-            perfect_served    = level.perfectServedDishes,
-            duplicate_clicks  = level.duplicateIngredientClicks,
-            gluten_appeared   = level.glutenChildAppeared,
-            gluten_served     = level.glutenChildServedByMistake,
+            perfect_served = level.perfectServedDishes,
+            duplicate_clicks = level.duplicateIngredientClicks,
+            gluten_appeared = level.glutenChildAppeared,
+            gluten_served = level.glutenChildServedByMistake,
         };
 
         string json = JsonUtility.ToJson(row);
-        string url  = ProjectUrl + Endpoint;
+        string url = ProjectUrl + Endpoint;
 
         using var request = new UnityWebRequest(url, "POST");
-        request.uploadHandler   = new UploadHandlerRaw(System.Text.Encoding.UTF8.GetBytes(json));
+        request.uploadHandler = new UploadHandlerRaw(System.Text.Encoding.UTF8.GetBytes(json));
         request.downloadHandler = new DownloadHandlerBuffer();
 
         // Required headers for Supabase REST API
-        request.SetRequestHeader("Content-Type",  "application/json");
-        request.SetRequestHeader("apikey",        AnonKey);
+        request.SetRequestHeader("Content-Type", "application/json");
+        request.SetRequestHeader("apikey", AnonKey);
         request.SetRequestHeader("Authorization", "Bearer " + AnonKey);
+
         // merge-duplicates = upsert: update the existing row on conflict, insert if new
         request.SetRequestHeader("Prefer", "resolution=merge-duplicates,return=minimal");
 
@@ -101,11 +111,20 @@ public static class SupabaseClient
 
         // Await without blocking the main thread
         while (!op.isDone)
+        {
             await Task.Yield();
+        }
 
         if (request.result == UnityWebRequest.Result.Success)
+        {
             Debug.Log($"[Supabase] Upserted level {level.levelNumber} for '{record.displayName}'");
+        }
         else
-            Debug.LogError($"[Supabase] Upsert failed (level {level.levelNumber}): {request.error} — {request.downloadHandler.text}");
+        {
+            Debug.LogError(
+                $"[Supabase] Upsert failed (level {level.levelNumber}): {request.error} — "
+                + request.downloadHandler.text
+            );
+        }
     }
 }
