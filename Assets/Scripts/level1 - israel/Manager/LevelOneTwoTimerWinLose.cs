@@ -126,7 +126,7 @@ public class LevelOneTwoTimerWinLose : MonoBehaviour
         if (UnityServices.State == ServicesInitializationState.Initialized &&
             AuthenticationService.Instance.IsSignedIn)
         {
-            _ = DatabaseManager.SaveData((CloudSaveKeys.Level2TimeSeconds, timeToTargetSeconds));
+            _ = DatabaseManager.SaveData((CloudSaveKeys.Level1_2TimeSeconds, timeToTargetSeconds));
             Debug.Log($"[Level1.2] Saved timeSeconds={timeToTargetSeconds}");
         }
         else
@@ -147,10 +147,13 @@ public class LevelOneTwoTimerWinLose : MonoBehaviour
             SaveLevel2TimeOnce();
         }
 
+        if (!timeSaved)
+            timeToTargetSeconds = Mathf.RoundToInt(levelDurationSeconds);
+
         if (UnityServices.State == ServicesInitializationState.Initialized &&
             AuthenticationService.Instance.IsSignedIn)
         {
-            await DatabaseManager.SaveData((CloudSaveKeys.Level2Coins, coinsEnd));
+            await DatabaseManager.SaveData((CloudSaveKeys.Level1_2Coins, coinsEnd));
         }
 
         bool success = coinsEnd >= coinsTarget;
@@ -164,27 +167,28 @@ public class LevelOneTwoTimerWinLose : MonoBehaviour
         if (UnityServices.State == ServicesInitializationState.Initialized &&
             AuthenticationService.Instance.IsSignedIn)
         {
-            await DatabaseManager.SaveData((CloudSaveKeys.Level2TotalServed, totalServed));
-            await DatabaseManager.SaveData((CloudSaveKeys.Level2PerfectServed, perfectServed));
+            await DatabaseManager.SaveData((CloudSaveKeys.Level1_2TotalServed, totalServed));
+            await DatabaseManager.SaveData((CloudSaveKeys.Level1_2PerfectServed, perfectServed));
         }
 
         // Save passed flag
         if (UnityServices.State == ServicesInitializationState.Initialized &&
             AuthenticationService.Instance.IsSignedIn)
         {
-            await DatabaseManager.SaveData((CloudSaveKeys.Level2Passed, success ? 1 : 0));
+            await DatabaseManager.SaveData((CloudSaveKeys.Level1_2Passed, success ? 1 : 0));
         }
 
         if (UnityServices.State == ServicesInitializationState.Initialized &&
             AuthenticationService.Instance.IsSignedIn)
         {
-            await DatabaseManager.SaveData((CloudSaveKeys.DuplicateClicksKey(2), LevelOneTwoState.DuplicateIngredientClicks));
-            await DatabaseManager.SaveData((CloudSaveKeys.GlutenChildAppearedKey(2), LevelOneTwoState.GlutenChildAppeared));
-            await DatabaseManager.SaveData((CloudSaveKeys.GlutenChildServedKey(2), LevelOneTwoState.GlutenChildServed));
+            await DatabaseManager.SaveData((CloudSaveKeys.DuplicateClicksKey("1.2"), LevelOneTwoState.DuplicateIngredientClicks));
+            await DatabaseManager.SaveData((CloudSaveKeys.GlutenChildAppearedKey("1.2"), LevelOneTwoState.GlutenChildAppeared));
+            await DatabaseManager.SaveData((CloudSaveKeys.GlutenChildServedKey("1.2"), LevelOneTwoState.GlutenChildServed));
+            await DatabaseManager.SaveData((CloudSaveKeys.CustomersArrivedKey("1.2"), LevelOneTwoState.CustomersArrived));
         }
 
         // Record this level's attempt for dashboard export before leaving the scene
-        SessionDataCollector.RecordLevelAttempt(2, timeToTargetSeconds);
+        SessionDataCollector.RecordLevelAttempt(12, timeToTargetSeconds);
 
         Time.timeScale = 1f;
         SceneManager.LoadScene(endSceneName);

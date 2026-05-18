@@ -72,7 +72,12 @@ public class ScoreOfAuthenticatedUser : MonoBehaviour
         if (usernameInputField != null) usernameInputField.readOnly = false;
         if (passwordInputField != null) passwordInputField.readOnly = false;
 
-        if (statusField != null) statusField.text = "";
+        if (statusField != null)
+        {
+            statusField.text = "";
+            statusField.isRightToLeftText = true;
+            statusField.alignment = TMPro.TextAlignmentOptions.Right;
+        }
 
         if (continueButton != null) continueButton.interactable = false;
         if (continueButtonText != null) continueButtonText.text = "";
@@ -116,15 +121,35 @@ public class ScoreOfAuthenticatedUser : MonoBehaviour
     // Runs after successful auth for register/login
     private async Task PostSignInCommon()
     {
-        // Save mapping right after sign-in (registered/logged-in users only)
+        // Save username right after sign-in (registered/logged-in users only)
+        Debug.Log($"[PostSignIn] displayName='{displayName}' internalUsername='{internalUsername}' isGuest={isGuest} IsSignedIn={AuthenticationService.Instance.IsSignedIn}");
+
         if (!string.IsNullOrEmpty(displayName) && !string.IsNullOrEmpty(internalUsername))
         {
             if (AllowCloudSave())
             {
-                await DatabaseManager.SaveData((CloudSaveKeys.DisplayName, displayName));
-                await DatabaseManager.SaveData((NameMapKey(displayName), internalUsername));
-                await DatabaseManager.SaveData((CloudSaveKeys.Username, internalUsername));
+                try
+                {
+                    await DatabaseManager.SaveData(
+                        (CloudSaveKeys.DisplayName, displayName),
+                        (NameMapKey(displayName), internalUsername),
+                        (CloudSaveKeys.Username, internalUsername)
+                    );
+                    Debug.Log($"[PostSignIn] Username saved to cloud: displayName='{displayName}'");
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogError($"[PostSignIn] Failed to save username to cloud: {e.Message}");
+                }
             }
+            else
+            {
+                Debug.LogWarning($"[PostSignIn] Cloud save skipped — AllowCloudSave()=false (isGuest={isGuest}, IsSignedIn={AuthenticationService.Instance.IsSignedIn})");
+            }
+        }
+        else
+        {
+            Debug.LogWarning($"[PostSignIn] Cloud save skipped — displayName or internalUsername is empty");
         }
 
         // Enable tracker after sign-in (so resumeScene can be saved automatically)
@@ -202,7 +227,7 @@ public class ScoreOfAuthenticatedUser : MonoBehaviour
 
         if (string.IsNullOrEmpty(displayName))
         {
-            if (statusField != null) statusField.text = "Please enter username";
+            if (statusField != null) statusField.text = "אנא הכנס שם";
             return;
         }
 
@@ -212,17 +237,14 @@ public class ScoreOfAuthenticatedUser : MonoBehaviour
 
         if (type == ButtonType.REGISTER)
         {
-            if (statusField != null) statusField.text = "Registering...";
+            if (statusField != null) statusField.text = "נרשם...";
             message = await authManager.RegisterWithUsernameAndPassword(internalUsername, password);
         }
         else
         {
-            if (statusField != null) statusField.text = "Logging in...";
+            if (statusField != null) statusField.text = "מתחבר...";
             message = await authManager.LoginWithUsernameAndPassword(internalUsername, password);
         }
-
-        // IMPORTANT: Do NOT show message (no success/fail feedback here).
-        // We keep showing only "Registering..." / "Logging in..." until scene changes.
 
         if (message != null && message.ToLower().Contains("success"))
         {
@@ -233,10 +255,7 @@ public class ScoreOfAuthenticatedUser : MonoBehaviour
         }
         else
         {
-            // Optional: clear or keep the "Logging in..." text.
-            // If you want absolutely no extra feedback, keep it as is.
-            // If you prefer clearing it:
-            // if (statusField != null) statusField.text = "";
+            if (statusField != null) statusField.text = "שגיאה — נסה שוב";
         }
     }
 
@@ -252,7 +271,7 @@ public class ScoreOfAuthenticatedUser : MonoBehaviour
 
     public async void OnGuestButtonClicked()
     {
-        if (statusField != null) statusField.text = "Signing in as guest...";
+        if (statusField != null) statusField.text = "כניסה כאורח...";
 
         isGuest = true;
 

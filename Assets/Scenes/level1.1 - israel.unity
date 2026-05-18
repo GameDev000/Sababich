@@ -2447,7 +2447,7 @@ MonoBehaviour:
   wrongDishPenalty: -5
   alergicServePenalty: -10
   alergicOrderReward: 20
-  levelNumber: 1
+  levelNumber: 11
   instructionManager: {fileID: 320788933}
   shouldRunInstructions_level2: 1
   shouldRunInstructions_level3: 1

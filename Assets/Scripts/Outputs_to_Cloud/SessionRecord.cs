@@ -28,14 +28,5 @@ public class SessionRecord
     public bool isGuest;
     public string sessionDateTimeISO;
     public string resumeScene;
-    public int lastLevelReached;
     public List<LevelAttempt> levels;
-}
-
-// JsonUtility requires a class wrapper — cannot serialize a bare List<T> at the root.
-[System.Serializable]
-public class SessionDataFile
-{
-    public List<SessionRecord> sessions;
-    public string currentPlayer;
 }

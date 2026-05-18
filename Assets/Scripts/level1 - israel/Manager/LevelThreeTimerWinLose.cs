@@ -151,6 +151,9 @@ public class LevelThreeTimerWinLose : MonoBehaviour
             SaveLevel3TimeOnce();
         }
 
+        if (!timeSaved)
+            timeToTargetSeconds = Mathf.RoundToInt(levelDurationSeconds);
+
         // Save coins at end
         if (UnityServices.State == ServicesInitializationState.Initialized &&
             AuthenticationService.Instance.IsSignedIn)

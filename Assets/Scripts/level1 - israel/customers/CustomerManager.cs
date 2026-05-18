@@ -1109,6 +1109,13 @@ public class CustomerManager : MonoBehaviour
         slot.customer = Instantiate(prefabToSpawn, spawnPoint.position, Quaternion.identity);
         slot.customer.Init(chosen, maxMissingItems);
 
+        // Count every customer that arrives, regardless of type
+        if (levelNumber == 1)       LevelOneState.CustomersArrived++;
+        else if (levelNumber == 2)  LevelTwoState.CustomersArrived++;
+        else if (levelNumber == 3)  LevelThreeState.CustomersArrived++;
+        else if (levelNumber == 11) LevelOneOneState.CustomersArrived++;
+        else if (levelNumber == 12) LevelOneTwoState.CustomersArrived++;
+
         if (chosen != null && chosen.scoreIfNotServed)
         {
             if (levelNumber == 1)
@@ -1117,6 +1124,10 @@ public class CustomerManager : MonoBehaviour
                 LevelTwoState.GlutenChildAppeared++;
             else if (levelNumber == 3)
                 LevelThreeState.GlutenChildAppeared++;
+            else if (levelNumber == 11)
+                LevelOneOneState.GlutenChildAppeared++;
+            else if (levelNumber == 12)
+                LevelOneTwoState.GlutenChildAppeared++;
         }
 
         customerToSlot[slot.customer] = slotIndex;
@@ -1189,6 +1200,20 @@ public class CustomerManager : MonoBehaviour
             if (isPerfect)
                 LevelThreeState.PerfectServedDishes++;
         }
+        else if (levelNumber == 11)
+        {
+            LevelOneOneState.TotalServedDishes++;
+
+            if (isPerfect)
+                LevelOneOneState.PerfectServedDishes++;
+        }
+        else if (levelNumber == 12)
+        {
+            LevelOneTwoState.TotalServedDishes++;
+
+            if (isPerfect)
+                LevelOneTwoState.PerfectServedDishes++;
+        }
     }
 
     public void RegisterDuplicateIngredientClick()
@@ -1199,6 +1224,10 @@ public class CustomerManager : MonoBehaviour
             LevelTwoState.DuplicateIngredientClicks++;
         else if (levelNumber == 3)
             LevelThreeState.DuplicateIngredientClicks++;
+        else if (levelNumber == 11)
+            LevelOneOneState.DuplicateIngredientClicks++;
+        else if (levelNumber == 12)
+            LevelOneTwoState.DuplicateIngredientClicks++;
     }
 
     /// <summary>
@@ -1240,6 +1269,10 @@ public class CustomerManager : MonoBehaviour
                 LevelTwoState.GlutenChildServed++;
             else if (levelNumber == 3)
                 LevelThreeState.GlutenChildServed++;
+            else if (levelNumber == 11)
+                LevelOneOneState.GlutenChildServed++;
+            else if (levelNumber == 12)
+                LevelOneTwoState.GlutenChildServed++;
 
             if (ScoreManager.Instance != null)
             {

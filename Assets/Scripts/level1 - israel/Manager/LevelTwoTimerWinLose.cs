@@ -147,6 +147,9 @@ public class LevelTwoTimerWinLose : MonoBehaviour
             SaveLevel2TimeOnce();
         }
 
+        if (!timeSaved)
+            timeToTargetSeconds = Mathf.RoundToInt(levelDurationSeconds);
+
         if (UnityServices.State == ServicesInitializationState.Initialized &&
             AuthenticationService.Instance.IsSignedIn)
         {

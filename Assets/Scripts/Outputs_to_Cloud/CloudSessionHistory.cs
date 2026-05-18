@@ -18,61 +18,44 @@ public static class CloudSessionHistory
         if (UnityServices.State != ServicesInitializationState.Initialized) return;
         if (!AuthenticationService.Instance.IsSignedIn) return;
 
-        // Load current session count (default 0 for new player)
         var countData = await DatabaseManager.LoadData(CloudSaveKeys.DashboardSessionCount);
         int count = DatabaseManager.ReadInt(countData, CloudSaveKeys.DashboardSessionCount, 0);
 
-        // Serialize session to compact JSON and save to its numbered slot
         string json = JsonUtility.ToJson(record);
-        string sessionKey = CloudSaveKeys.DashboardSessionKey(count % MaxSessions);
 
+        // If the most recent slot holds the same session, overwrite it without incrementing count.
+        if (count > 0)
+        {
+            string lastKey = CloudSaveKeys.DashboardSessionKey((count - 1) % MaxSessions);
+            var lastData = await DatabaseManager.LoadData(lastKey);
+            string lastJson = DatabaseManager.ReadString(lastData, lastKey, "");
+            if (!string.IsNullOrEmpty(lastJson))
+            {
+                try
+                {
+                    var lastRecord = JsonUtility.FromJson<SessionRecord>(lastJson);
+                    if (lastRecord?.sessionId == record.sessionId)
+                    {
+                        await DatabaseManager.SaveData((lastKey, json));
+                        Debug.Log($"[CloudSessionHistory] Updated existing session slot {(count - 1) % MaxSessions} (same sessionId)");
+                        // Also upsert to Supabase — handles new levels added after first export
+                        await SupabaseClient.UpsertSession(record);
+                        return;
+                    }
+                }
+                catch { }
+            }
+        }
+
+        // New session — use next slot and increment count.
+        string sessionKey = CloudSaveKeys.DashboardSessionKey(count % MaxSessions);
         await DatabaseManager.SaveData(
             (sessionKey, json),
             (CloudSaveKeys.DashboardSessionCount, count + 1)
         );
-
-        Debug.Log($"[CloudSessionHistory] Saved session slot {count % MaxSessions} (total={count + 1})");
+        Debug.Log($"[CloudSessionHistory] Saved new session slot {count % MaxSessions} (total={count + 1})");
+        // Send to Supabase so the researcher dashboard receives this session
+        await SupabaseClient.UpsertSession(record);
     }
 
-    // Loads all sessions for the current player from cloud.
-    public static async Task<List<SessionRecord>> LoadAllSessions()
-    {
-        var result = new List<SessionRecord>();
-
-        if (UnityServices.State != ServicesInitializationState.Initialized) return result;
-        if (!AuthenticationService.Instance.IsSignedIn) return result;
-
-        var countData = await DatabaseManager.LoadData(CloudSaveKeys.DashboardSessionCount);
-        int count = DatabaseManager.ReadInt(countData, CloudSaveKeys.DashboardSessionCount, 0);
-        if (count == 0) return result;
-
-        // Build key list for batch load — cap at MaxSessions (ring buffer)
-        int slots = Mathf.Min(count, MaxSessions);
-        var keys = new string[slots];
-        for (int i = 0; i < slots; i++)
-            keys[i] = CloudSaveKeys.DashboardSessionKey(i);
-
-        var data = await DatabaseManager.LoadData(keys);
-
-        for (int i = 0; i < slots; i++)
-        {
-            string json = DatabaseManager.ReadString(data, keys[i], "");
-            if (string.IsNullOrEmpty(json))
-            {
-                Debug.LogWarning($"[CloudSessionHistory] Missing session slot {i} — skipping.");
-                continue;
-            }
-
-            try
-            {
-                result.Add(JsonUtility.FromJson<SessionRecord>(json));
-            }
-            catch (System.Exception e)
-            {
-                Debug.LogWarning($"[CloudSessionHistory] Failed to parse slot {i}: {e.Message}");
-            }
-        }
-
-        return result;
-    }
 }

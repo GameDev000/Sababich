@@ -328,6 +328,9 @@ public class LevelTimerWinLose : MonoBehaviour
             SaveLevel1TimeOnce();
         }
 
+        if (!timeSaved)
+            timeToTargetSeconds = Mathf.RoundToInt(levelDurationSeconds);
+
         await SaveLevel1CoinsToCloud(coinsEnd);
 
         bool success = coinsEnd >= coinsTarget;

@@ -6,7 +6,6 @@ public static class SessionDataCollector
 {
     // Keyed by levelNumber — last attempt wins if player retries a level
     static readonly Dictionary<int, LevelAttempt> attempts = new Dictionary<int, LevelAttempt>();
-    static int lastLevelReached;
     static string currentSessionId;
 
     // Called from EndLevel() in each level's timer script.
@@ -36,6 +35,26 @@ public static class SessionDataCollector
             glutenServed = LevelTwoState.GlutenChildServed;
             customersArrived = LevelTwoState.CustomersArrived;
         }
+        else if (levelNumber == 11)
+        {
+            passed = LevelOneOneState.IsSuccess;
+            totalServed = LevelOneOneState.TotalServedDishes;
+            perfectServed = LevelOneOneState.PerfectServedDishes;
+            duplicateClicks = LevelOneOneState.DuplicateIngredientClicks;
+            glutenAppeared = LevelOneOneState.GlutenChildAppeared;
+            glutenServed = LevelOneOneState.GlutenChildServed;
+            customersArrived = LevelOneOneState.CustomersArrived;
+        }
+        else if (levelNumber == 12)
+        {
+            passed = LevelOneTwoState.IsSuccess;
+            totalServed = LevelOneTwoState.TotalServedDishes;
+            perfectServed = LevelOneTwoState.PerfectServedDishes;
+            duplicateClicks = LevelOneTwoState.DuplicateIngredientClicks;
+            glutenAppeared = LevelOneTwoState.GlutenChildAppeared;
+            glutenServed = LevelOneTwoState.GlutenChildServed;
+            customersArrived = LevelOneTwoState.CustomersArrived;
+        }
         else // level 3
         {
             passed = LevelThreeState.IsSuccess;
@@ -52,10 +71,9 @@ public static class SessionDataCollector
         // Derived metrics — no new runtime tracking needed
         int incorrectDishes = totalServed - perfectServed;
         int glutenHandled = glutenAppeared - glutenServed;
-        float avgPrepTime =
-            (perfectServed > 0 && timeToTargetSeconds != -1)
-                ? (float)timeToTargetSeconds / perfectServed
-                : -1f;
+        float avgPrepTime = perfectServed > 0
+            ? (float)timeToTargetSeconds / perfectServed
+            : -1f;
 
         attempts[levelNumber] = new LevelAttempt
         {
@@ -74,11 +92,6 @@ public static class SessionDataCollector
             averageDishPrepTimeSeconds = avgPrepTime,
             customersArrived = customersArrived,
         };
-
-        if (levelNumber > lastLevelReached)
-        {
-            lastLevelReached = levelNumber;
-        }
 
         Debug.Log(
             $"[SDC] RecordLevelAttempt: level={levelNumber} passed={passed} coins={coins} "
@@ -114,19 +127,17 @@ public static class SessionDataCollector
             internalUsername = SessionIdentity.InternalUsername ?? "unknown",
             isGuest = SessionIdentity.IsGuest,
             sessionDateTimeISO = System.DateTime.UtcNow.ToString("o"),
-            resumeScene = "", // SessionExporter fills this from CloudProgressTracker if needed
-            lastLevelReached = lastLevelReached,
+            resumeScene = "",
             levels = levelList,
         };
 
-        await SessionExporter.ExportSession(record);
+        await CloudSessionHistory.AppendSession(record);
     }
 
     // Called at session start (login) to clear state from any previous session
     public static void Reset()
     {
         attempts.Clear();
-        lastLevelReached = 0;
         currentSessionId = null;
     }
 }

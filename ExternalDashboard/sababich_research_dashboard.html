@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>דשבורד מחקר - סבביח</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      direction: rtl;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 15px;
+      background: #f4f6f9;
+      color: #1a1a2e;
+    }
+
+    body { padding: 0 0 40px; }
+
+    /* ── Loading overlay ─────────────────────── */
+    .loading-overlay {
+      position: fixed; inset: 0;
+      background: rgba(30, 58, 95, 0.82);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .loading-overlay.hidden { display: none; }
+    .loading-box {
+      background: #fff;
+      border-radius: 10px;
+      padding: 32px 48px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      min-width: 200px;
+    }
+    .spinner {
+      width: 40px; height: 40px;
+      border: 4px solid #dde3ec;
+      border-top-color: #1e3a5f;
+      border-radius: 50%;
+      animation: spin 0.75s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #loadingText { color: #3a5070; font-size: 0.95rem; font-weight: 600; }
+    #errorBanner {
+      background: #fce8e8;
+      border: 1px solid #e0a0a0;
+      border-radius: 6px;
+      color: #a03030;
+      padding: 12px 18px;
+      margin-bottom: 16px;
+      display: none;
+      font-size: 0.9rem;
+    }
+
+    /* ── Header ─────────────────────────────── */
+    .header {
+      background: #1e3a5f;
+      color: #fff;
+      padding: 16px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .header h1 { font-size: 1.25rem; font-weight: 600; }
+    .header-btns { display: flex; gap: 10px; align-items: center; }
+    .refresh-btn {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: #fff;
+      padding: 5px 14px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+    .refresh-btn:hover { background: rgba(255,255,255,0.25); }
+    .print-btn-header {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: #fff;
+      padding: 5px 14px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+    .print-btn-header:hover { background: rgba(255,255,255,0.25); }
+
+    /* ── Page layout ────────────────────────── */
+    .page { max-width: 1200px; margin: 0 auto; padding: 20px 20px 0; }
+
+    /* ── Patient selector ───────────────────── */
+    .patient-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+    .patient-bar label { font-weight: 600; white-space: nowrap; }
+    .patient-bar select {
+      padding: 7px 12px;
+      border: 1px solid #c5cdd8;
+      border-radius: 5px;
+      font-size: 0.95rem;
+      background: #fff;
+      min-width: 200px;
+    }
+
+    /* ── Filters panel ──────────────────────── */
+    .filters-toggle {
+      background: none;
+      border: 1px solid #b0bac8;
+      border-radius: 5px;
+      padding: 6px 14px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      color: #3a5070;
+      margin-bottom: 12px;
+    }
+    .filters-panel {
+      background: #fff;
+      border: 1px solid #dde3ec;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      display: none;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .filters-panel.open { display: flex; }
+    .filter-group { display: flex; flex-direction: column; gap: 5px; min-width: 160px; }
+    .filter-group label { font-size: 0.8rem; color: #5a6a7e; font-weight: 600; }
+    .filter-group input,
+    .filter-group select { padding: 5px 8px; border: 1px solid #c5cdd8; border-radius: 4px; font-size: 0.88rem; }
+    .filters-reset {
+      align-self: flex-end;
+      padding: 6px 14px;
+      background: #e8edf3;
+      border: 1px solid #c5cdd8;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+
+    /* ── Summary cards ──────────────────────── */
+    .cards-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+    .card {
+      background: #fff;
+      border: 1px solid #dde3ec;
+      border-inline-start: 3px solid #2a6fad;
+      border-radius: 8px;
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+    }
+    .card-label { font-size: 0.78rem; color: #7a8a9e; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
+    .card-value { font-size: 1.6rem; font-weight: 700; color: #1e3a5f; }
+
+    /* ── Section title ──────────────────────── */
+    .section-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #1e3a5f;
+      margin-bottom: 10px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid #dde3ec;
+    }
+
+    /* ── Sort bar ───────────────────────────── */
+    .sort-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+      font-size: 0.85rem;
+      color: #5a6a7e;
+    }
+    .sort-bar select { padding: 4px 8px; border: 1px solid #c5cdd8; border-radius: 4px; font-size: 0.85rem; }
+
+    /* ── Session list ───────────────────────── */
+    .session-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 24px; }
+    .session-row {
+      background: #fff;
+      border: 1px solid #dde3ec;
+      border-radius: 6px;
+      padding: 12px 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      transition: border-color 0.15s;
+    }
+    .session-row:hover { border-color: #7aaad4; }
+    .session-row.active { border-color: #1e6fba; background: #f0f6fc; }
+    .session-date { font-size: 0.85rem; color: #5a6a7e; white-space: nowrap; }
+    .session-name { font-weight: 600; }
+    .badge { font-size: 0.75rem; padding: 2px 9px; border-radius: 10px; font-weight: 600; }
+    .badge-pass    { background: #e0f0e8; color: #2a7a4a; }
+    .badge-fail    { background: #fce8e8; color: #a03030; }
+    .badge-guest   { background: #efefef; color: #777; }
+
+    /* ── Session detail ─────────────────────── */
+    .detail-panel {
+      background: #fff;
+      border: 1px solid #dde3ec;
+      border-radius: 8px;
+      padding: 20px 24px;
+      margin-bottom: 24px;
+      display: none;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+    }
+    .detail-panel.open { display: block; }
+    .detail-meta { font-size: 0.85rem; color: #7a8a9e; margin-bottom: 16px; }
+    .detail-meta span { margin-inline-end: 18px; }
+
+    /* ── Tables ─────────────────────────────── */
+    .level-table-wrap { overflow-x: auto; margin-bottom: 20px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    th {
+      background: #f0f4f8;
+      color: #3a5070;
+      font-weight: 600;
+      padding: 8px 10px;
+      text-align: center;
+      border-bottom: 2px solid #dde3ec;
+      white-space: nowrap;
+    }
+    td {
+      padding: 8px 10px;
+      text-align: center;
+      border-bottom: 1px solid #eaeef3;
+    }
+    tr:last-child td { border-bottom: none; }
+    .shade-low  { background: #f5f5f5; }
+    .shade-mid  { background: #e8f0fa; }
+    .shade-high { background: #d0e4f7; }
+    .shade-good { background: #e0f0e8; }
+    .shade-bad  { background: #fce8e8; }
+    .na { color: #aaa; font-style: italic; }
+    .table-label { text-align: start; font-weight: 600; padding: 6px 10px; white-space: nowrap; min-width: 160px; }
+    .table-val   { text-align: center; padding: 6px 10px; min-width: 60px; }
+
+    /* ── Observable sections ────────────────── */
+    .obs-section { margin-bottom: 18px; }
+    .obs-section-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #5a6a7e;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid #eaeef3;
+    }
+
+    /* ── Domain charts ──────────────────────── */
+    .domain-section {
+      background: #fff;
+      border: 1px solid #dde3ec;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-bottom: 18px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+    }
+    .domain-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #1e3a5f;
+      background: #eef4fb;
+      border-inline-start: 4px solid #2a6fad;
+      padding: 8px 14px;
+      border-radius: 4px;
+      margin-bottom: 14px;
+      letter-spacing: 0.03em;
+    }
+    .charts-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 18px;
+    }
+    .chart-card {
+      background: #f8fafc;
+      border: 1px solid #dde3ec;
+      border-radius: 8px;
+      padding: 14px 16px;
+    }
+    .chart-card .chart-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #5a6a7e;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 10px;
+    }
+    .chart-card canvas { max-height: 200px; }
+
+    /* ── Notes panels ───────────────────────── */
+    .notes-panel {
+      background: #fff;
+      border: 1px solid #dde3ec;
+      border-radius: 8px;
+      padding: 18px 22px;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+    }
+    .notes-panel textarea {
+      width: 100%;
+      min-height: 90px;
+      border: 1px solid #c5cdd8;
+      border-radius: 5px;
+      padding: 10px 12px;
+      font-size: 0.92rem;
+      font-family: inherit;
+      resize: vertical;
+      direction: rtl;
+      margin-top: 10px;
+    }
+    .notes-meta { font-size: 0.8rem; color: #aaa; margin-top: 6px; }
+
+    /* ── Print styles ───────────────────────── */
+    @media print {
+      .loading-overlay,
+      .header .header-btns,
+      .patient-bar,
+      .filters-toggle,
+      .filters-panel,
+      .sort-bar,
+      #errorBanner { display: none !important; }
+      .detail-panel { display: block !important; }
+      .domain-section { break-inside: avoid; }
+      body { background: #fff; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Loading overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-box">
+    <div class="spinner"></div>
+    <div id="loadingText">טוען נתונים...</div>
+  </div>
+</div>
+
+<header class="header">
+  <h1>דשבורד מחקר - סבביח</h1>
+  <div class="header-btns">
+    <button class="refresh-btn" id="refreshBtn">↺ רענן</button>
+    <button class="print-btn-header" onclick="window.print()">הדפסה / שמור PDF</button>
+  </div>
+</header>
+
+<div class="page">
+
+  <div id="errorBanner"></div>
+
+  <!-- Patient selector -->
+  <div class="patient-bar">
+    <label>מטופל:</label>
+    <select id="patientSelect"></select>
+  </div>
+
+  <!-- Filters -->
+  <button class="filters-toggle" id="filtersToggle">▼ סינון</button>
+  <div class="filters-panel" id="filtersPanel">
+    <div class="filter-group">
+      <label>מתאריך</label>
+      <input type="date" id="fDateFrom" />
+    </div>
+    <div class="filter-group">
+      <label>עד תאריך</label>
+      <input type="date" id="fDateTo" />
+    </div>
+    <div class="filter-group">
+      <label>רמה</label>
+      <select id="fLevel">
+        <option value="0">הכל</option>
+        <option value="1">רמה 1</option>
+        <option value="11">רמה 1.1</option>
+        <option value="12">רמה 1.2</option>
+        <option value="2">רמה 2</option>
+        <option value="3">רמה 3</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>תוצאה</label>
+      <select id="fResult">
+        <option value="all">הכל</option>
+        <option value="pass">עבר</option>
+        <option value="fail">נכשל</option>
+      </select>
+    </div>
+    <button class="filters-reset" id="filtersReset">אפס סינון</button>
+  </div>
+
+  <!-- Summary cards -->
+  <div class="cards-row">
+    <div class="card"><div class="card-label">סשנים</div><div class="card-value" id="cardSessions">—</div></div>
+<div class="card"><div class="card-label">ממוצע מטבעות</div><div class="card-value" id="cardAvgCoins">—</div></div>
+    <div class="card"><div class="card-label">זמן ממוצע להכנת מנה (שנ')</div><div class="card-value" id="cardAvgTime">—</div></div>
+    <div class="card"><div class="card-label">מנות שהוגשו סה״כ</div><div class="card-value" id="cardTotalServed">—</div></div>
+    <div class="card"><div class="card-label">שגיאות סה״כ</div><div class="card-value" id="cardErrors">—</div></div>
+  </div>
+
+  <!-- Session list -->
+  <div class="section-title">היסטוריית סשנים</div>
+  <div class="sort-bar">
+    <span>מיון:</span>
+    <select id="sortSelect">
+      <option value="recent">אחרון ראשון</option>
+      <option value="oldest">ישן ראשון</option>
+      <option value="coinsHigh">מטבעות ↓</option>
+      <option value="coinsLow">מטבעות ↑</option>
+      <option value="time">זמן למטרה</option>
+      <option value="duplicates">קליקים כפולים</option>
+      <option value="gluten">טעויות גלוטן</option>
+      <option value="perfect">אחוז מנות מושלמות</option>
+    </select>
+  </div>
+  <div class="session-list" id="sessionList"></div>
+
+  <!-- Session detail -->
+  <div class="detail-panel" id="detailPanel">
+    <div class="section-title">פרטי סשן</div>
+    <div class="detail-meta" id="detailMeta"></div>
+    <div class="level-table-wrap">
+      <table id="levelTable"></table>
+    </div>
+    <div id="obsSections"></div>
+  </div>
+
+  <!-- Charts by functional domain -->
+  <div class="section-title" style="margin-top:8px">גרפים לפי תחומים תפקודיים לאורך זמן</div>
+
+  <!-- Domain 1: תפוקה ויעילות -->
+  <div class="domain-section">
+    <div class="domain-title">תפוקה ויעילות</div>
+    <div class="charts-row">
+      <div class="chart-card">
+        <div class="chart-label">מטבעות</div>
+        <canvas id="chartCoins"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-label">מנות שהוגשו</div>
+        <canvas id="chartServed"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Domain 2: קשב וחזרתיות -->
+  <div class="domain-section">
+    <div class="domain-title">קשב וחזרתיות</div>
+    <div class="charts-row">
+      <div class="chart-card">
+        <div class="chart-label">קליקים כפולים</div>
+        <canvas id="chartDuplicates"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Domain 3: תכנון ויעילות משימה -->
+  <div class="domain-section">
+    <div class="domain-title">תכנון ויעילות משימה</div>
+    <div class="charts-row">
+      <div class="chart-card">
+        <div class="chart-label">זמן למטרה</div>
+        <canvas id="chartTime"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-label">זמן הכנת מנה ממוצע</div>
+        <canvas id="chartAvgPrep"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Domain 4: דיוק -->
+  <div class="domain-section">
+    <div class="domain-title">דיוק</div>
+    <div class="charts-row">
+      <div class="chart-card">
+        <div class="chart-label">מנות מושלמות מול שגויות</div>
+        <canvas id="chartPerfect"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Domain 5: ניהול גלוטן -->
+  <div class="domain-section">
+    <div class="domain-title">ניהול גלוטן</div>
+    <div class="charts-row">
+      <div class="chart-card">
+        <div class="chart-label">אירועי גלוטן</div>
+        <canvas id="chartGluten"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Per-patient notes (always visible when patient selected) -->
+  <div class="notes-panel" id="patientNotesPanel">
+    <div class="section-title">הערות על המטופל</div>
+    <textarea id="patientNotesArea" placeholder="הוסף הערות כלליות על המטופל..."></textarea>
+    <div class="notes-meta" id="patientNotesMeta"></div>
+  </div>
+
+  <!-- Per-session notes (visible when session selected) -->
+  <div class="notes-panel" id="sessionNotesPanel" style="display:none">
+    <div class="section-title">הערות על הסשן הנבחר</div>
+    <textarea id="notesArea" placeholder="הוסף הערות לסשן זה..."></textarea>
+    <div class="notes-meta" id="notesMeta"></div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// ── Supabase config ───────────────────────────────────────────────────────────
+const SUPABASE_URL = 'https://pojdoefmxxdlxhoxjbvk.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_UwRoPAdg_hCqjM7o43-x0w_tXYEXmi0';
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let allSessions     = [];
+let selectedPatient = '';
+let selectedSession = null;
+let sortMode        = 'recent';
+let filterDateFrom  = '';
+let filterDateTo    = '';
+let filterLevel     = 0;
+let filterResult    = 'all';
+
+let coinsChart    = null;
+let servedChart   = null;
+let dupChart      = null;
+let timeChart     = null;
+let avgPrepChart  = null;
+let perfectChart  = null;
+let glutenChart   = null;
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+function levelLabel(n) {
+  if (n === 11) return 'רמה 1.1';
+  if (n === 12) return 'רמה 1.2';
+  return `רמה ${n}`;
+}
+
+const LEVEL_ORDER = [1, 11, 12, 2, 3];
+function levelSortKey(n) { const i = LEVEL_ORDER.indexOf(n); return i === -1 ? 99 : i; }
+
+function fmt(val) {
+  if (val === null || val === undefined || val === -1) return 'לא זמין';
+  return String(val);
+}
+
+function fmtDate(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  return d.toLocaleDateString('he-IL') + ' ' + d.toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' });
+}
+
+function totalCoins(s)   { return s.levels.reduce((a, l) => a + (l.attempted ? l.coins : 0), 0); }
+function totalErrors(s)  { return s.levels.reduce((a, l) => a + (l.attempted ? l.incorrectDishes + l.duplicateIngredientClicks + l.glutenChildServedByMistake : 0), 0); }
+function levelsPassed(s) { return s.levels.filter(l => l.attempted && l.passed).length; }
+
+function lastLevelPassed(sessions) {
+  let max = 0;
+  for (const s of sessions)
+    for (const l of s.levels)
+      if (l.attempted && l.passed && l.levelNumber > max) max = l.levelNumber;
+  return max;
+}
+
+function totalServedAll(sessions) {
+  return sessions.reduce((a, s) => a + s.levels.reduce((b, l) => b + (l.attempted ? l.totalServedDishes : 0), 0), 0);
+}
+
+function shadeClass(val, low, high) {
+  if (val === -1 || val === null || val === undefined) return '';
+  if (val <= low)  return 'shade-low';
+  if (val <= high) return 'shade-mid';
+  return 'shade-high';
+}
+
+// ── Supabase fetch ────────────────────────────────────────────────────────────
+async function loadFromSupabase() {
+  showLoading('טוען נתונים מהשרת...');
+  hideError();
+  try {
+    // Fetch up to 10 000 rows (well above expected volume)
+    const url = `${SUPABASE_URL}/rest/v1/sessions?select=*&limit=10000&order=session_date.asc`;
+    const res = await fetch(url, {
+      headers: {
+        'apikey':        SUPABASE_KEY,
+        'Authorization': 'Bearer ' + SUPABASE_KEY,
+        'Content-Type':  'application/json',
+      }
+    });
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(`HTTP ${res.status}: ${text}`);
+    }
+    const rows = await res.json();
+    allSessions = reconstructSessions(rows);
+    render();
+  } catch (err) {
+    showError('שגיאה בטעינת נתונים: ' + err.message);
+  } finally {
+    hideLoading();
+  }
+}
+
+function reconstructSessions(rows) {
+  const map = new Map();
+  for (const row of rows) {
+    const sid = row.session_id;
+    if (!map.has(sid)) {
+      map.set(sid, {
+        sessionId:          sid,
+        displayName:        row.display_name || '',
+        internalUsername:   '',
+        isGuest:            false,
+        sessionDateTimeISO: row.session_date || '',
+        resumeScene:        '',
+        lastLevelReached:   0,
+        levels:             [],
+      });
+    }
+    const session = map.get(sid);
+    const n = parseInt(row.level_number, 10);
+    const ts = (row.time_seconds != null) ? row.time_seconds : -1;
+    const perf = (row.perfect_served != null) ? row.perfect_served : 0;
+    const total = (row.total_served != null) ? row.total_served : 0;
+    const glutenApp = (row.gluten_appeared != null) ? row.gluten_appeared : 0;
+    const glutenServed = (row.gluten_served != null) ? row.gluten_served : 0;
+
+    const level = {
+      levelNumber:                  n,
+      attempted:                    true,
+      passed:                       !!row.passed,
+      coins:                        row.coins || 0,
+      timeToTargetSeconds:          ts,
+      totalServedDishes:            total,
+      customersArrived:             row.customers_arrived || 0,
+      perfectServedDishes:          perf,
+      incorrectDishes:              Math.max(0, total - perf),
+      duplicateIngredientClicks:    row.duplicate_clicks || 0,
+      glutenChildAppeared:          glutenApp,
+      glutenChildServedByMistake:   glutenServed,
+      glutenChildHandledCorrectly:  Math.max(0, glutenApp - glutenServed),
+      averageDishPrepTimeSeconds:   (perf > 0 && ts !== -1) ? parseFloat((ts / perf).toFixed(2)) : -1,
+    };
+
+    session.levels.push(level);
+    if (n > session.lastLevelReached) session.lastLevelReached = n;
+  }
+
+  const sessions = Array.from(map.values());
+  // Sort levels within each session by levelNumber
+  for (const s of sessions)
+    s.levels.sort((a, b) => levelSortKey(a.levelNumber) - levelSortKey(b.levelNumber));
+
+  return sessions;
+}
+
+// ── Loading / error UI ────────────────────────────────────────────────────────
+function showLoading(text) {
+  document.getElementById('loadingText').textContent = text;
+  document.getElementById('loadingOverlay').classList.remove('hidden');
+}
+function hideLoading() {
+  document.getElementById('loadingOverlay').classList.add('hidden');
+}
+function showError(msg) {
+  const el = document.getElementById('errorBanner');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+function hideError() {
+  document.getElementById('errorBanner').style.display = 'none';
+}
+
+// ── Filtering & sorting ───────────────────────────────────────────────────────
+function filteredSessions() {
+  let sessions = allSessions.filter(s => {
+    if (selectedPatient && s.displayName !== selectedPatient) return false;
+    if (filterDateFrom && s.sessionDateTimeISO < filterDateFrom) return false;
+    if (filterDateTo   && s.sessionDateTimeISO > filterDateTo + 'T23:59:59') return false;
+    if (filterLevel > 0 && !s.levels.some(l => l.levelNumber === filterLevel && l.attempted)) return false;
+    if (filterResult === 'pass' && levelsPassed(s) === 0) return false;
+    if (filterResult === 'fail' && levelsPassed(s) > 0)  return false;
+    return true;
+  });
+
+  sessions = sessions.slice().sort((a, b) => {
+    switch (sortMode) {
+      case 'oldest':    return a.sessionDateTimeISO.localeCompare(b.sessionDateTimeISO);
+      case 'coinsHigh': return totalCoins(b) - totalCoins(a);
+      case 'coinsLow':  return totalCoins(a) - totalCoins(b);
+      case 'time': {
+        const ta = a.levels.find(l => l.attempted && l.timeToTargetSeconds !== -1);
+        const tb = b.levels.find(l => l.attempted && l.timeToTargetSeconds !== -1);
+        return (ta ? ta.timeToTargetSeconds : 99999) - (tb ? tb.timeToTargetSeconds : 99999);
+      }
+      case 'duplicates':
+        return b.levels.reduce((s, l) => s + l.duplicateIngredientClicks, 0) -
+               a.levels.reduce((s, l) => s + l.duplicateIngredientClicks, 0);
+      case 'gluten':
+        return b.levels.reduce((s, l) => s + l.glutenChildServedByMistake, 0) -
+               a.levels.reduce((s, l) => s + l.glutenChildServedByMistake, 0);
+      case 'perfect': {
+        const rate = s => {
+          const t = s.levels.reduce((a, l) => a + l.totalServedDishes, 0);
+          return t ? s.levels.reduce((a, l) => a + l.perfectServedDishes, 0) / t : 0;
+        };
+        return rate(b) - rate(a);
+      }
+      default: return b.sessionDateTimeISO.localeCompare(a.sessionDateTimeISO);
+    }
+  });
+
+  return sessions;
+}
+
+// ── Render ────────────────────────────────────────────────────────────────────
+function render() {
+  renderPatientSelector();
+  renderCards();
+  renderSessionList();
+  renderDetail();
+  renderCharts();
+  renderPatientNotes();
+}
+
+function renderPatientSelector() {
+  const sel = document.getElementById('patientSelect');
+  const all = [...new Set(allSessions.map(s => s.displayName))].sort();
+  sel.innerHTML = `<option value="">כל המטופלים</option>` +
+    all.map(n => `<option value="${n}" ${n === selectedPatient ? 'selected' : ''}>${n}</option>`).join('');
+}
+
+function renderCards() {
+  const sessions  = filteredSessions();
+  const allLevels = sessions.flatMap(s =>
+    s.levels.filter(l => l.attempted && (filterLevel === 0 || l.levelNumber === filterLevel))
+  );
+  const avgCoins  = allLevels.length
+    ? Math.round(allLevels.reduce((a, l) => a + l.coins, 0) / allLevels.length) : 0;
+  const totalTime    = allLevels.reduce((a, l) => a + l.timeToTargetSeconds, 0);
+  const totalPerfect = allLevels.reduce((a, l) => a + l.perfectServedDishes, 0);
+  const avgPrepTime  = totalPerfect > 0 ? (totalTime / totalPerfect).toFixed(1) : -1;
+
+  document.getElementById('cardSessions').textContent    = sessions.length;
+  document.getElementById('cardAvgCoins').textContent    = avgCoins;
+  document.getElementById('cardAvgTime').textContent     = avgPrepTime === -1 ? 'לא זמין' : avgPrepTime;
+  document.getElementById('cardTotalServed').textContent = allLevels.reduce((a, l) => a + l.totalServedDishes, 0);
+  document.getElementById('cardErrors').textContent      = allLevels.reduce((a, l) => a + l.incorrectDishes + l.duplicateIngredientClicks + l.glutenChildServedByMistake, 0);
+}
+
+function renderSessionList() {
+  const sessions   = filteredSessions();
+  const container  = document.getElementById('sessionList');
+
+  if (sessions.length === 0) {
+    container.innerHTML = `<p style="color:#aaa;font-size:0.9rem;padding:10px 0">אין סשנים להצגה</p>`;
+    return;
+  }
+
+  container.innerHTML = sessions.map(s => {
+    const active = selectedSession && selectedSession.sessionId === s.sessionId ? 'active' : '';
+    const badge  = levelsPassed(s) > 0
+      ? `<span class="badge badge-pass">עבר</span>`
+      : `<span class="badge badge-fail">נכשל</span>`;
+    const levelsText = s.levels.filter(l => l.attempted).map(l => levelLabel(l.levelNumber)).join(', ');
+    return `<div class="session-row ${active}" onclick="selectSession('${s.sessionId}')">
+      <span class="session-name">${s.displayName}</span>
+      <span class="session-date">${fmtDate(s.sessionDateTimeISO)}</span>
+      ${badge}
+      <span style="font-size:0.82rem;color:#7a8a9e">מטבעות: ${totalCoins(s)}</span>
+      ${levelsText ? `<span style="font-size:0.8rem;color:#9aaabb">${levelsText}</span>` : ''}
+    </div>`;
+  }).join('');
+}
+
+function renderDetail() {
+  const panel = document.getElementById('detailPanel');
+  if (!selectedSession) {
+    panel.classList.remove('open');
+    document.getElementById('sessionNotesPanel').style.display = 'none';
+    return;
+  }
+  panel.classList.add('open');
+  document.getElementById('sessionNotesPanel').style.display = 'block';
+
+  const s = selectedSession;
+  document.getElementById('detailMeta').innerHTML =
+    `<span>תאריך: ${fmtDate(s.sessionDateTimeISO)}</span>` +
+    `<span>מטופל: ${s.displayName}</span>`;
+
+  renderLevelTable(s);
+  renderObsSections(s);
+  renderSessionNotes(s);
+}
+
+function renderLevelTable(s) {
+  const headers = ['רמה', 'תוצאה', 'מטבעות', 'זמן (שנ׳)', 'הוגש סה״כ', 'מושלם',
+    'שגוי', 'קליקים כפולים', 'ילד גלוטן הופיע', 'הוגש גלוטן', 'לא הוגש גלוטן', 'זמן הכנה ממוצע'];
+
+  const rows = s.levels.map(l => {
+    if (!l.attempted) {
+      return `<tr><td>${levelLabel(l.levelNumber)}</td><td colspan="11" class="na">לא שוחק</td></tr>`;
+    }
+    const res = l.passed
+      ? `<span class="badge badge-pass">עבר</span>`
+      : `<span class="badge badge-fail">נכשל</span>`;
+    const avg = l.averageDishPrepTimeSeconds === -1
+      ? `<span class="na">לא זמין</span>`
+      : l.averageDishPrepTimeSeconds.toFixed(1);
+    return `<tr>
+      <td>${levelLabel(l.levelNumber)}</td>
+      <td>${res}</td>
+      <td class="shade-good">${l.coins}</td>
+      <td class="${l.timeToTargetSeconds === -1 ? '' : 'shade-good'}">${fmt(l.timeToTargetSeconds)}</td>
+      <td>${l.totalServedDishes}</td>
+      <td>${l.perfectServedDishes}</td>
+      <td class="${l.incorrectDishes > 0 ? 'shade-bad' : ''}">${l.incorrectDishes}</td>
+      <td class="${l.duplicateIngredientClicks > 0 ? 'shade-bad' : ''}">${l.duplicateIngredientClicks}</td>
+      <td>${l.glutenChildAppeared}</td>
+      <td class="${l.glutenChildServedByMistake > 0 ? 'shade-bad' : ''}">${l.glutenChildServedByMistake}</td>
+      <td>${l.glutenChildHandledCorrectly}</td>
+      <td>${avg}</td>
+    </tr>`;
+  });
+
+  document.getElementById('levelTable').innerHTML =
+    `<thead><tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr></thead>` +
+    `<tbody>${rows.join('')}</tbody>`;
+}
+
+function renderObsSections(s) {
+  const attempted = s.levels.filter(l => l.attempted);
+  if (attempted.length === 0) { document.getElementById('obsSections').innerHTML = ''; return; }
+
+  const levelNums = attempted.map(l => `<th>${levelLabel(l.levelNumber)}</th>`).join('');
+
+  const mkRow = (label, vals) =>
+    `<tr><td class="table-label">${label}</td>` +
+    vals.map(v => `<td class="table-val">${v}</td>`).join('') + '</tr>';
+
+  const section = (title, rows) =>
+    `<div class="obs-section"><div class="obs-section-title">${title}</div>` +
+    `<div class="level-table-wrap"><table><thead><tr><th></th>${levelNums}</tr></thead>` +
+    `<tbody>${rows}</tbody></table></div></div>`;
+
+  document.getElementById('obsSections').innerHTML =
+    section('מנות שהוגשו',
+      mkRow('לקוחות שהגיעו',   attempted.map(l => l.customersArrived)) +
+      mkRow('לקוחות שלא קיבלו מנה', attempted.map(l => Math.max(0, l.customersArrived - l.totalServedDishes))) +
+      mkRow('הוגש סה״כ',    attempted.map(l => l.totalServedDishes)) +
+      mkRow('מושלם',         attempted.map(l => l.perfectServedDishes)) +
+      mkRow('שגוי',          attempted.map(l => l.incorrectDishes))
+    ) +
+    section('קשב וחזרתיות',
+      mkRow('קליקים כפולים', attempted.map(l => l.duplicateIngredientClicks))
+    ) +
+    section('הימנעות מהגשה לילד רגיש לגלוטן',
+      mkRow('ילד גלוטן הופיע',     attempted.map(l => l.glutenChildAppeared)) +
+      mkRow('הוגש גלוטן',          attempted.map(l => l.glutenChildServedByMistake)) +
+      mkRow('לא הוגש גלוטן',       attempted.map(l => l.glutenChildHandledCorrectly))
+    ) +
+    section('תוצאת רמה',
+      mkRow('מטבעות',  attempted.map(l => l.coins)) +
+      mkRow('תוצאה', attempted.map(l => l.passed
+        ? `<span class="badge badge-pass">עבר</span>`
+        : `<span class="badge badge-fail">נכשל</span>`))
+    ) +
+    section('תכנון ויעילות משימה',
+      mkRow('זמן (שנ׳)',    attempted.map(l => fmt(l.timeToTargetSeconds))) +
+      mkRow('זמן הכנה ממוצע', attempted.map(l =>
+        l.averageDishPrepTimeSeconds === -1
+          ? `<span class="na">לא זמין</span>`
+          : l.averageDishPrepTimeSeconds.toFixed(1)))
+    );
+}
+
+function renderSessionNotes(s) {
+  const key   = `sababich_note_${s.sessionId}`;
+  const saved = localStorage.getItem(key) || '';
+  const area  = document.getElementById('notesArea');
+  const meta  = document.getElementById('notesMeta');
+  area.value          = saved;
+  meta.textContent    = saved ? 'נשמר אוטומטית' : '';
+}
+
+function renderPatientNotes() {
+  const panel = document.getElementById('patientNotesPanel');
+  const area  = document.getElementById('patientNotesArea');
+  const meta  = document.getElementById('patientNotesMeta');
+  if (!selectedPatient) {
+    panel.style.display = 'none';
+    return;
+  }
+  panel.style.display = 'block';
+  const key   = `sababich_patient_note_${selectedPatient}`;
+  const saved = localStorage.getItem(key) || '';
+  area.value       = saved;
+  meta.textContent = saved ? 'נשמר אוטומטית' : '';
+}
+
+// ── Charts ────────────────────────────────────────────────────────────────────
+function renderCharts() {
+  if (typeof Chart === 'undefined') return;
+
+  const byLevel  = filterLevel > 0;
+  const sessions = filteredSessions().slice().reverse(); // oldest first
+  const labels   = sessions.map(s => fmtDate(s.sessionDateTimeISO));
+
+  const COLORS = ['#2a6fad','#e06c2a','#2a8a5a','#7a30a0','#c03030'];
+
+  // Level numbers: when filter active → only that level; otherwise all levels in game order
+  const levelNums = byLevel
+    ? [filterLevel]
+    : [...new Set(sessions.flatMap(s => s.levels.filter(l => l.attempted).map(l => l.levelNumber)))].sort((a, b) => levelSortKey(a) - levelSortKey(b));
+
+  // Per-level helpers — levelNums drives which levels appear
+  function levelLine(field) {
+    return levelNums.map((n, i) => ({
+      label: levelLabel(n),
+      data: sessions.map(s => {
+        const l = s.levels.find(l => l.levelNumber === n && l.attempted);
+        const v = l ? l[field] : null;
+        return (v === -1 || v == null) ? null : v;
+      }),
+      spanGaps: true, tension: 0.3, pointRadius: 4, borderWidth: 2, fill: false,
+      borderColor: COLORS[i % COLORS.length], backgroundColor: COLORS[i % COLORS.length],
+    }));
+  }
+  function levelBar(field) {
+    return levelNums.map((n, i) => ({
+      label: levelLabel(n),
+      data: sessions.map(s => { const l = s.levels.find(l => l.levelNumber === n && l.attempted); return l ? l[field] : null; }),
+      backgroundColor: COLORS[i % COLORS.length],
+    }));
+  }
+
+  const lineOpts = { responsive: true, plugins: { legend: { position: 'bottom' } }, scales: { y: { beginAtZero: true } } };
+  const barOpts  = { responsive: true, plugins: { legend: { position: 'bottom' } }, scales: { y: { beginAtZero: true } } };
+
+  // 1. Coins
+  if (coinsChart) coinsChart.destroy();
+  coinsChart = new Chart(document.getElementById('chartCoins').getContext('2d'), {
+    type: 'line', data: { labels, datasets: levelLine('coins') }, options: lineOpts
+  });
+
+  // 2. Total served
+  if (servedChart) servedChart.destroy();
+  servedChart = new Chart(document.getElementById('chartServed').getContext('2d'), {
+    type: 'bar', data: { labels, datasets: levelBar('totalServedDishes') }, options: barOpts
+  });
+
+  // 3. Duplicate clicks
+  if (dupChart) dupChart.destroy();
+  dupChart = new Chart(document.getElementById('chartDuplicates').getContext('2d'), {
+    type: 'bar', data: { labels, datasets: levelBar('duplicateIngredientClicks') }, options: barOpts
+  });
+
+  // 4. Time to target (-1 = target not reached → null)
+  if (timeChart) timeChart.destroy();
+  timeChart = new Chart(document.getElementById('chartTime').getContext('2d'), {
+    type: 'line', data: { labels, datasets: levelLine('timeToTargetSeconds') }, options: lineOpts
+  });
+
+  // 5. Avg prep time (-1 = N/A → null, handled by levelLine)
+  if (avgPrepChart) avgPrepChart.destroy();
+  avgPrepChart = new Chart(document.getElementById('chartAvgPrep').getContext('2d'), {
+    type: 'line', data: { labels, datasets: levelLine('averageDishPrepTimeSeconds') }, options: lineOpts
+  });
+
+  // Legend: deduplicate labels + sort red categories first (leftmost)
+  const RED_LABELS = ['שגוי', 'הוגש בטעות'];
+  const dedupeRedFirst = {
+    generateLabels: (chart) => {
+      const items = Chart.defaults.plugins.legend.labels.generateLabels(chart);
+      const seen = new Set();
+      const deduped = items.filter(item => { if (seen.has(item.text)) return false; seen.add(item.text); return true; });
+      return deduped.sort((a, b) => {
+        const aR = RED_LABELS.includes(a.text), bR = RED_LABELS.includes(b.text);
+        return aR === bR ? 0 : aR ? -1 : 1;
+      });
+    }
+  };
+
+  // 6. Accuracy — grouped stacked bars per level
+  // תקין: level color (distinguishes levels); שגוי/לא שורת: fixed color, label shown once
+  if (perfectChart) perfectChart.destroy();
+  const accuracyDatasets = [];
+  levelNums.forEach((n, i) => {
+    const sk = `lvl${n}`;
+    accuracyDatasets.push({ label: levelLabel(n), data: sessions.map(s => { const l = s.levels.find(l => l.levelNumber === n && l.attempted); return l ? l.perfectServedDishes : null; }), backgroundColor: COLORS[i % COLORS.length], stack: sk, barPercentage: 0.7 });
+    accuracyDatasets.push({ label: 'שגוי',         data: sessions.map(s => { const l = s.levels.find(l => l.levelNumber === n && l.attempted); return l ? l.incorrectDishes : null; }),      backgroundColor: '#f4a6a6',                 stack: sk, barPercentage: 0.7 });
+    accuracyDatasets.push({ label: 'לא שורת',      data: sessions.map(s => { const l = s.levels.find(l => l.levelNumber === n && l.attempted); return l ? Math.max(0, l.customersArrived - l.totalServedDishes) : null; }), backgroundColor: '#d0d8e4', stack: sk, barPercentage: 0.7 });
+  });
+  perfectChart = new Chart(document.getElementById('chartPerfect').getContext('2d'), {
+    type: 'bar',
+    data: { labels, datasets: accuracyDatasets },
+    options: { responsive: true, plugins: { legend: { position: 'bottom', labels: dedupeRedFirst } }, scales: { x: { stacked: false }, y: { stacked: true, beginAtZero: true } } }
+  });
+
+  // 7. Gluten — טופל נכון: level color; הוגש בטעות: red shown once in legend
+  if (glutenChart) glutenChart.destroy();
+  const glutenStacked = { responsive: true, plugins: { legend: { position: 'bottom', labels: dedupeRedFirst } }, scales: { y: { stacked: true, beginAtZero: true } } };
+  glutenChart = new Chart(document.getElementById('chartGluten').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: levelNums.flatMap((n, i) => [
+        { label: levelLabel(n),   data: sessions.map(s => { const l = s.levels.find(l => l.levelNumber === n && l.attempted); return l ? l.glutenChildHandledCorrectly : null; }), backgroundColor: COLORS[i % COLORS.length], stack: `lvl${n}` },
+        { label: 'הוגש בטעות',    data: sessions.map(s => { const l = s.levels.find(l => l.levelNumber === n && l.attempted); return l ? l.glutenChildServedByMistake : null; }),  backgroundColor: '#f4a6a6',                 stack: `lvl${n}` },
+      ])
+    },
+    options: glutenStacked
+  });
+}
+
+// ── Event handlers ────────────────────────────────────────────────────────────
+function selectSession(id) {
+  const s = allSessions.find(s => s.sessionId === id);
+  selectedSession = (selectedSession && selectedSession.sessionId === id) ? null : s;
+  render();
+}
+
+document.getElementById('patientSelect').addEventListener('change', e => {
+  selectedPatient = e.target.value;
+  selectedSession = null;
+  render();
+});
+
+document.getElementById('sortSelect').addEventListener('change', e => {
+  sortMode = e.target.value;
+  renderSessionList();
+});
+
+document.getElementById('filtersToggle').addEventListener('click', () => {
+  document.getElementById('filtersPanel').classList.toggle('open');
+});
+
+document.getElementById('filtersReset').addEventListener('click', () => {
+  filterDateFrom = filterDateTo = '';
+  filterLevel = 0;
+  filterResult = 'all';
+  document.getElementById('fDateFrom').value = '';
+  document.getElementById('fDateTo').value   = '';
+  document.getElementById('fLevel').value    = '0';
+  document.getElementById('fResult').value   = 'all';
+  selectedSession = null;
+  render();
+});
+
+document.getElementById('fDateFrom').addEventListener('change', e => { filterDateFrom = e.target.value; render(); });
+document.getElementById('fDateTo').addEventListener('change',   e => { filterDateTo   = e.target.value; render(); });
+document.getElementById('fLevel').addEventListener('change',    e => { filterLevel    = Number(e.target.value); render(); });
+document.getElementById('fResult').addEventListener('change',   e => { filterResult   = e.target.value; render(); });
+
+document.getElementById('notesArea').addEventListener('input', e => {
+  if (!selectedSession) return;
+  const key = `sababich_note_${selectedSession.sessionId}`;
+  localStorage.setItem(key, e.target.value);
+  document.getElementById('notesMeta').textContent = 'נשמר אוטומטית';
+});
+
+document.getElementById('patientNotesArea').addEventListener('input', e => {
+  if (!selectedPatient) return;
+  const key = `sababich_patient_note_${selectedPatient}`;
+  localStorage.setItem(key, e.target.value);
+  document.getElementById('patientNotesMeta').textContent = 'נשמר אוטומטית';
+});
+
+document.getElementById('refreshBtn').addEventListener('click', loadFromSupabase);
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+loadFromSupabase();
+</script>
+</body>
+</html>
