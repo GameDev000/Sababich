@@ -2746,7 +2746,7 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 0b6dffdbd7eeac14a94227ff3d841469, type: 3}
     scoreIfNotServed: 0
     successVoiceClip: {fileID: 8300000, guid: 4ba6c0c933fb2e141b3e2da04159ce91, type: 3}
-    failureVoiceClip: {fileID: 8300000, guid: 9f16fbb5ade4bfd4c952c3420894f581, type: 3}
+    failureVoiceClip: {fileID: 8300000, guid: 9130b0e5631711c428408913ab4b1333, type: 3}
   coinFlyVFX: {fileID: 2099307325}
   maxMissingItems: 2
   baseOrderReward: 30
@@ -7178,6 +7178,18 @@ PrefabInstance:
       propertyPath: 'worldVisualRootsToHideWhilePanelOpen.Array.data[4]'
       value: 
       objectReference: {fileID: 1083284498}
+    - target: {fileID: 1136545492500060991, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1136545492500060991, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1136545492500060991, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1985906100376915902, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
       propertyPath: m_Name
       value: ControlPanelUI
@@ -7309,6 +7321,14 @@ PrefabInstance:
     - target: {fileID: 8024828816976908650, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0.8000002
+      objectReference: {fileID: 0}
+    - target: {fileID: 9204472049247176857, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9204472049247176857, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

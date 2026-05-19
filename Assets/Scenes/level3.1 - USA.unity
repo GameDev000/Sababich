@@ -2743,8 +2743,8 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 37e17a60fde732d4aadc35b9465765e1, type: 3}
     - {fileID: 21300000, guid: 0b6dffdbd7eeac14a94227ff3d841469, type: 3}
     scoreIfNotServed: 0
-    successVoiceClip: {fileID: 8300000, guid: 4ba6c0c933fb2e141b3e2da04159ce91, type: 3}
-    failureVoiceClip: {fileID: 8300000, guid: 9f16fbb5ade4bfd4c952c3420894f581, type: 3}
+    successVoiceClip: {fileID: 8300000, guid: 9130b0e5631711c428408913ab4b1333, type: 3}
+    failureVoiceClip: {fileID: 8300000, guid: c5aed3e501226704286bd32e7f14d351, type: 3}
   coinFlyVFX: {fileID: 2099307325}
   maxMissingItems: 2
   baseOrderReward: 30
