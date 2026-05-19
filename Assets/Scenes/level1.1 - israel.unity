@@ -1766,6 +1766,7 @@ MonoBehaviour:
   selectionListManager: {fileID: 1770097434}
   clearPitaWhenIngredientCountChanges: 1
   refreshCustomerBubblesWhenIngredientCountChanges: 1
+  pitaBuilderToClear: {fileID: 0}
 --- !u!1 &320788932
 GameObject:
   m_ObjectHideFlags: 0
@@ -1796,10 +1797,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Scripts::FeatureHintsSequence
   steps:
-  - message: "\u05E9\u05D9\u05DE\u05D5 \u05DC\u05D1! \u05D7\u05DC\u05E7 \u05DE\u05D4\u05DC\u05E7\u05D5\u05D7\u05D5\u05EA
-      \u05D9\u05D1\u05E7\u05E9\u05D5 \u05DC\u05D4\u05D6\u05DE\u05D9\u05DF \u05DE\u05E0\u05D4
-      \u05E9\u05D5\u05E0\u05D4, \u05D1\u05D3\u05E7\u05D5 \u05D4\u05D9\u05D8\u05D1
-      \u05D0\u05EA \u05D4\u05D4\u05D6\u05DE\u05E0\u05D4"
+  - message: "\u05E9\u05D9\u05DE\u05D5 \u05DC\u05D1! \u05D4\u05E4\u05E2\u05DD \u05DC\u05D0
+      \u05DB\u05DC \u05D4\u05DC\u05E7\u05D5\u05D7\u05D5\u05EA \u05DE\u05D6\u05DE\u05D9\u05E0\u05D9\u05DD
+      \u05D0\u05D5\u05EA\u05D5 \u05D3\u05D1\u05E8"
     target: {fileID: 0}
     trigger: 0
     levelId: 1
@@ -2096,7 +2096,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 41.5, y: -68.416855}
+  m_AnchoredPosition: {x: -1.7999992, y: -55}
   m_SizeDelta: {x: 60, y: -70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &442228388
@@ -2132,9 +2132,9 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 265262812}
-  - {fileID: 853540892}
   - {fileID: 73352549}
   - {fileID: 526678343}
+  - {fileID: 853540892}
   - {fileID: 362991793}
   - {fileID: 637750401}
   m_Father: {fileID: 0}
@@ -2670,7 +2670,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -35.000004, y: -134.76001}
+  m_AnchoredPosition: {x: -35.000004, y: -241}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!225 &526678344
@@ -2705,7 +2705,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -3953024979187580505, guid: d0be6b1e8f596f748951972624e41a3f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c021fd341d471a246b8ef5de861d311f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3100,9 +3100,17 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6256193048542262859, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.8000002
+      objectReference: {fileID: 0}
     - target: {fileID: 7778021859470372432, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8024828816976908650, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.8000002
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
