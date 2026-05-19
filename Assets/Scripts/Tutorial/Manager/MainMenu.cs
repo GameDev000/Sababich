@@ -1,15 +1,15 @@
 // using UnityEngine;
 // using UnityEngine.SceneManagement;
 
-
 // /// <summary>
-// /// Manages the main menu interactions, including navigation to the tutorial and gameplay scenes.
+// /// Manages the main menu interactions and the navigation between gameplay scenes,
+// /// end-level scenes, tutorial, and main menu.
 // /// </summary>
 // public class MainMenu : MonoBehaviour
 // {
 //     public void OnTutorialButtonClicked()
 //     {
-//         SceneManager.LoadScene("TutorialScene"); // Load the tutorial scene
+//         SceneManager.LoadScene("TutorialScene");
 //     }
 
 //     public void OnPlayButtonClicked()
@@ -19,50 +19,67 @@
 
 //     public void OnBackToMainButtonClicked()
 //     {
-//         SceneManager.LoadScene("MainMenu"); // Load the main menu scene
+//         SceneManager.LoadScene("MainMenu");
 //     }
 
 //     public void PhaseOneButtonClicked()
 //     {
-//         SceneManager.LoadScene("level1 - israel"); // Load the main menu scene
+//         SceneManager.LoadScene("level1 - israel");
 //     }
 
-//     // public void OnEndLevelOne()
-//     // {
-//     //     if (LevelOneState.IsSuccess)
-//     //         SceneManager.LoadScene("level2 - china");
-//     //     else
-//     //         SceneManager.LoadScene("level1 - israel");
-//     // }
-
-//     // public void OnEndLevelTwo()
-//     // {
-//     //     if (LevelTwoState.IsSuccess)
-//     //         SceneManager.LoadScene("level3 - USA");
-//     //     else
-//     //         SceneManager.LoadScene("level2 - china");
-//     // }
-
-//     // public void OnEndLevelThree()
-//     // {
-//     //     if (LevelThreeState.IsSuccess)
-//     //         SceneManager.LoadScene("MainMenu");
-//     //     else
-//     //         SceneManager.LoadScene("level3 - USA");
-//     // }
-
-
+//     /// <summary>
+//     /// Handles the continue button from Level 1 end scene.
+//     /// If Level 1 was completed successfully, load Level 1.1.
+//     /// Otherwise, replay Level 1.
+//     /// </summary>
 //     public void OnEndLevelOne()
 //     {
 //         ShowAdThen(() =>
 //         {
 //             if (LevelOneState.IsSuccess)
-//                 SceneManager.LoadScene("level2 - china");
+//                 SceneManager.LoadScene("level1.1 - israel");
 //             else
 //                 SceneManager.LoadScene("level1 - israel");
 //         });
 //     }
 
+//     /// <summary>
+//     /// Handles the continue button from Level 1.1 end scene.
+//     /// If Level 1.1 was completed successfully, load Level 1.2.
+//     /// Otherwise, replay Level 1.1.
+//     /// </summary>
+//     public void OnEndLevelOneOne()
+//     {
+//         ShowAdThen(() =>
+//         {
+//             if (LevelOneOneState.IsSuccess)
+//                 SceneManager.LoadScene("level1.2 - china");
+//             else
+//                 SceneManager.LoadScene("level1.1 - israel");
+//         });
+//     }
+
+//     /// <summary>
+//     /// Handles the continue button from Level 1.2 end scene.
+//     /// If Level 1.2 was completed successfully, load Level 2.
+//     /// Otherwise, replay Level 1.2.
+//     /// </summary>
+//     public void OnEndLevelOneTwo()
+//     {
+//         ShowAdThen(() =>
+//         {
+//             if (LevelOneTwoState.IsSuccess)
+//                 SceneManager.LoadScene("level2 - china");
+//             else
+//                 SceneManager.LoadScene("level1.2 - china");
+//         });
+//     }
+
+//     /// <summary>
+//     /// Handles the continue button from Level 2 end scene.
+//     /// If Level 2 was completed successfully, load Level 3.
+//     /// Otherwise, replay Level 2.
+//     /// </summary>
 //     public void OnEndLevelTwo()
 //     {
 //         ShowAdThen(() =>
@@ -74,6 +91,11 @@
 //         });
 //     }
 
+//     /// <summary>
+//     /// Handles the continue button from Level 3 end scene.
+//     /// If Level 3 was completed successfully, return to the main menu.
+//     /// Otherwise, replay Level 3.
+//     /// </summary>
 //     public void OnEndLevelThree()
 //     {
 //         ShowAdThen(() =>
@@ -85,7 +107,10 @@
 //         });
 //     }
 
-
+//     /// <summary>
+//     /// Shows an interstitial ad before continuing, if AdsManager exists.
+//     /// If AdsManager is missing, continues immediately.
+//     /// </summary>
 //     private void ShowAdThen(System.Action afterAd)
 //     {
 //         if (global::AdsManager.Instance == null)
@@ -99,8 +124,8 @@
 //             afterAd?.Invoke();
 //         });
 //     }
-
 // }
+
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -180,7 +205,7 @@ public class MainMenu : MonoBehaviour
 
     /// <summary>
     /// Handles the continue button from Level 2 end scene.
-    /// If Level 2 was completed successfully, load Level 3.
+    /// If Level 2 was completed successfully, load Level 3.1 USA.
     /// Otherwise, replay Level 2.
     /// </summary>
     public void OnEndLevelTwo()
@@ -188,9 +213,25 @@ public class MainMenu : MonoBehaviour
         ShowAdThen(() =>
         {
             if (LevelTwoState.IsSuccess)
-                SceneManager.LoadScene("level3 - USA");
+                SceneManager.LoadScene("level3.1 - USA");
             else
                 SceneManager.LoadScene("level2 - china");
+        });
+    }
+
+    /// <summary>
+    /// Handles the continue button from Level 3.1 USA end scene.
+    /// If Level 3.1 was completed successfully, load Level 3 USA.
+    /// Otherwise, replay Level 3.1 USA.
+    /// </summary>
+    public void OnEndLevelThreeOne()
+    {
+        ShowAdThen(() =>
+        {
+            if (LevelThreeOneState.IsSuccess)
+                SceneManager.LoadScene("level3 - USA");
+            else
+                SceneManager.LoadScene("level3.1 - USA");
         });
     }
 
