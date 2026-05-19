@@ -447,6 +447,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03819f107db8e3a4abd58db65c80fe0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Scripts::LevelIngredientAvailabilityManager
+  eggplantFryerToReset: {fileID: 881219679}
+  chipsFryerToReset: {fileID: 1292984848}
+  eggplantTrayToReset: {fileID: 407841700}
+  chipsTrayToReset: {fileID: 1788359166}
   maxIngredientCount: 7
   maxRemovableIngredients: 4
   removalOrder:

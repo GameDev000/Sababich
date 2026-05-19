@@ -181,5 +181,15 @@ public class FryZoneIngredient : MonoBehaviour
             ClearPan();
         }
     }
+
+    public void ResetFryProcess()
+    {
+        Debug.Log($"[FryZone] ResetFryProcess on {name} id={GetInstanceID()} type={currentType}");
+
+        fryTimer = 0f;
+        readyTimer = 0f;
+
+        SetState(FryState.Empty);
+    }
 }
 

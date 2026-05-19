@@ -8,6 +8,11 @@ using UnityEngine;
 /// </summary>
 public class LevelIngredientAvailabilityManager : MonoBehaviour
 {
+    [Header("Frying Reset")]
+    [SerializeField] private FryZoneIngredient eggplantFryerToReset;
+    [SerializeField] private FryZoneIngredient chipsFryerToReset;
+    [SerializeField] private FriedTrayState eggplantTrayToReset;
+    [SerializeField] private FriedTrayState chipsTrayToReset;
     public static LevelIngredientAvailabilityManager Instance { get; private set; }
 
     [System.Serializable]
@@ -93,7 +98,7 @@ public class LevelIngredientAvailabilityManager : MonoBehaviour
         RebuildDisabledIngredients();
 
         Debug.Log($"[LevelIngredientAvailabilityManager] Disabled ingredients after rebuild: {string.Join(", ", disabledIngredients)}");
-
+        ResetFryingIfNeeded();
         Debug.Log("[LevelIngredientAvailabilityManager] Applying scene object visibility...");
         ApplySceneObjectsVisibility();
 
@@ -256,6 +261,31 @@ public class LevelIngredientAvailabilityManager : MonoBehaviour
         else
         {
             Debug.LogWarning("[LevelIngredientAvailabilityManager] No PitaBuilder found to clear pita visuals.");
+        }
+    }
+
+    private void ResetFryingIfNeeded()
+    {
+        if (disabledIngredients.Contains("eggplant"))
+        {
+            Debug.Log("[LevelIngredientAvailabilityManager] Eggplant disabled -> resetting eggplant frying process.");
+
+            if (eggplantFryerToReset != null)
+                eggplantFryerToReset.ResetFryProcess();
+
+            if (eggplantTrayToReset != null)
+                eggplantTrayToReset.ResetTray();
+        }
+
+        if (disabledIngredients.Contains("chips"))
+        {
+            Debug.Log("[LevelIngredientAvailabilityManager] Chips disabled -> resetting chips frying process.");
+
+            if (chipsFryerToReset != null)
+                chipsFryerToReset.ResetFryProcess();
+
+            if (chipsTrayToReset != null)
+                chipsTrayToReset.ResetTray();
         }
     }
 }

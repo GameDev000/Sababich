@@ -9,7 +9,7 @@ public class FriedTrayState : MonoBehaviour
     [SerializeField] private SpriteRenderer trayRenderer;
 
     [SerializeField] private Sprite fullSprite;
-    [SerializeField] private Sprite midSprite;
+    [SerializeField] private Sprite midSprite;  
     [SerializeField] private Sprite lowSprite;
 
     [SerializeField] private int usesPerStage = 2;
@@ -24,6 +24,12 @@ public class FriedTrayState : MonoBehaviour
     private void Awake()
     {
         ApplyStage();                 // start empty, no overlay
+    }
+    public void ResetTray()
+    {
+        stage = 3;
+        usesLeft = 0;
+        ApplyStage();
     }
 
     public void Refill()
