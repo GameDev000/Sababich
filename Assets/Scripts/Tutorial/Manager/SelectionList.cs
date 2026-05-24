@@ -27,6 +27,10 @@ public class SelectionList : MonoBehaviour
     // For negative indication
     [SerializeField] private CoinFlyVFX coinFlyVFX;
 
+    [Header("Audio")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip ingredientAddClip;
+
     private readonly List<string> selectedIngredients = new List<string>();
 
     private void Awake()
@@ -95,6 +99,8 @@ public class SelectionList : MonoBehaviour
         // Add the ingredient and refresh UI + pita visual.
         Debug.Log("Adding ingredient: " + lower);
         selectedIngredients.Add(lower);
+        if (audioSource != null && ingredientAddClip != null)
+            audioSource.PlayOneShot(ingredientAddClip);
         UpdateText();
         return true;
     }

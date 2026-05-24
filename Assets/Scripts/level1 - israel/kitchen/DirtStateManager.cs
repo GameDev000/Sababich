@@ -144,6 +144,10 @@ public class DirtStateManager : MonoBehaviour
     [SerializeField] private bool triggerTutorialOnFirstDirtStage = true;
     [SerializeField] private TutorialManager tutorialOverride;
 
+    [Header("Audio")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip[] dirtStageClips;
+
     private bool tutorialTriggeredThisDirty;
     private int clickCount;
 
@@ -192,6 +196,9 @@ public class DirtStateManager : MonoBehaviour
         {
             DirtStage = newStage;
             ApplyVisuals();
+
+            if (audioSource != null && dirtStageClips != null && newStage - 1 < dirtStageClips.Length)
+                audioSource.PlayOneShot(dirtStageClips[newStage - 1]);
 
             if (DirtStage == 1)
                 TryTriggerTutorialDirtyStep();

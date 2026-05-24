@@ -56,6 +56,15 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Level3.1 - endScene.unity
     guid: 35bcc9e71656f28498c7c533c9f42c77
+  - enabled: 0
+    path: Assets/Scenes/ChinaTransitionVideoScene.unity
+    guid: 21406648297abf34ea8221bc2e803a8f
+  - enabled: 1
+    path: Assets/Scenes/USATransitionVideoScene.unity
+    guid: edae7302f385a2348a422c7f657a5a57
+  - enabled: 1
+    path: Assets/Scenes/ChinaTransitionVideoScene.unity
+    guid: 2eec9b6b11961f04dbaaa904dce77797
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

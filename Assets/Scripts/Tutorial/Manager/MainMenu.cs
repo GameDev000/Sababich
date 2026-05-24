@@ -53,7 +53,7 @@
 //         ShowAdThen(() =>
 //         {
 //             if (LevelOneOneState.IsSuccess)
-//                 SceneManager.LoadScene("level1.2 - china");
+//                 SceneManager.LoadScene("ChinaTransitionVideoScene");
 //             else
 //                 SceneManager.LoadScene("level1.1 - israel");
 //         });
@@ -85,7 +85,7 @@
 //         ShowAdThen(() =>
 //         {
 //             if (LevelTwoState.IsSuccess)
-//                 SceneManager.LoadScene("level3 - USA");
+//                 SceneManager.LoadScene("ChinaTransitionVideoScene");
 //             else
 //                 SceneManager.LoadScene("level2 - china");
 //         });
@@ -181,7 +181,7 @@ public class MainMenu : MonoBehaviour
         ShowAdThen(() =>
         {
             if (LevelOneOneState.IsSuccess)
-                SceneManager.LoadScene("level1.2 - china");
+                SceneManager.LoadScene("ChinaTransitionVideoScene");
             else
                 SceneManager.LoadScene("level1.1 - israel");
         });
@@ -213,7 +213,7 @@ public class MainMenu : MonoBehaviour
         ShowAdThen(() =>
         {
             if (LevelTwoState.IsSuccess)
-                SceneManager.LoadScene("level3.1 - USA");
+                SceneManager.LoadScene("USATransitionVideoScene");
             else
                 SceneManager.LoadScene("level2 - china");
         });
@@ -229,7 +229,7 @@ public class MainMenu : MonoBehaviour
         ShowAdThen(() =>
         {
             if (LevelThreeOneState.IsSuccess)
-                SceneManager.LoadScene("level3 - USA");
+                SceneManager.LoadScene("MainMenu");
             else
                 SceneManager.LoadScene("level3.1 - USA");
         });
@@ -245,7 +245,7 @@ public class MainMenu : MonoBehaviour
         ShowAdThen(() =>
         {
             if (LevelThreeState.IsSuccess)
-                SceneManager.LoadScene("MainMenu");
+                SceneManager.LoadScene("level3.1 - USA");
             else
                 SceneManager.LoadScene("level3 - USA");
         });
