@@ -9,7 +9,7 @@ public class FriedTrayState : MonoBehaviour
     [SerializeField] private SpriteRenderer trayRenderer;
 
     [SerializeField] private Sprite fullSprite;
-    [SerializeField] private Sprite midSprite;  
+    [SerializeField] private Sprite midSprite;
     [SerializeField] private Sprite lowSprite;
 
     [SerializeField] private int usesPerStage = 2;
