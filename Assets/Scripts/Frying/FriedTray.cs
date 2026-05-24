@@ -4,17 +4,13 @@ using UnityEngine;
 public class FriedTray : MonoBehaviour
 {
     public enum TrayType { Eggplant, Chips }
-
     [Header("Type")]
     [SerializeField] private TrayType trayType = TrayType.Eggplant; //Default-> Eggplant
-
     [Header("State")]
     [SerializeField] private FriedTrayState trayState;
-
     public void FillFromPan()
     {
         Debug.Log($"[Tray:{trayType}] FillFromPan CALLED");
-
         if (trayState != null)
             trayState.Refill();
 
