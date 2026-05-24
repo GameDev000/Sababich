@@ -2578,7 +2578,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 557fb1b5f0f4be545b9f5c533435bdd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Scripts::CustomerManager
-  speed: 6
+  speed: 5
+  goodServiceExitSpeed: 5
+  badServiceExitSpeed: 3
   playerBaseBodyType:
     name: base
     sprite: {fileID: 21300000, guid: 98b1fb0fd8a4e5946b4d129fe2cf086a, type: 3}
