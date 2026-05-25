@@ -3178,6 +3178,13 @@ MonoBehaviour:
   burntSprite: {fileID: 0}
   fryTimeSeconds: 5
   burnAfterReadySeconds: 10
+  shakeWhenReady: 1
+  readyShakeTarget: {fileID: 881219674}
+  shakeOnlyInLevel3: 1
+  shakeEverySeconds: 2.5
+  shakeDurationSeconds: 0.35
+  shakeAmount: 0.08
+  shakeSpeed: 45
   eggplantTray: {fileID: 407841701}
   chipsTray: {fileID: 0}
 --- !u!1 &884481071
@@ -5105,6 +5112,13 @@ MonoBehaviour:
   burntSprite: {fileID: 0}
   fryTimeSeconds: 5
   burnAfterReadySeconds: 10
+  shakeWhenReady: 1
+  readyShakeTarget: {fileID: 1292984843}
+  shakeOnlyInLevel3: 1
+  shakeEverySeconds: 2.5
+  shakeDurationSeconds: 0.35
+  shakeAmount: 0.08
+  shakeSpeed: 45
   eggplantTray: {fileID: 0}
   chipsTray: {fileID: 1788359167}
 --- !u!1 &1352756599
