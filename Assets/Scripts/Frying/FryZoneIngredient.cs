@@ -193,7 +193,6 @@
 //     }
 // }
 
-
 using System.Collections;
 using UnityEngine;
 
@@ -202,7 +201,6 @@ public class FryZoneIngredient : MonoBehaviour
 {
     public enum FryType { Eggplant, Chips }
 
-    // Added Burnt state
     private enum FryState { Empty, Frying, Ready, Burnt }
 
     [SerializeField] private bool is_level3 = false; // Controls burn behavior in level 3
@@ -222,6 +220,13 @@ public class FryZoneIngredient : MonoBehaviour
     [Header("Timing")]
     [SerializeField] private float fryTimeSeconds = 5f;
     [SerializeField] private float burnAfterReadySeconds = 10f;
+
+    [Header("Frying Timer Audio")]
+    [SerializeField] private AudioSource fryingTimerAudioSource;
+    [SerializeField] private AudioClip tickingClockClip;
+    [SerializeField] private AudioClip timerFinishedClip;
+    [SerializeField, Range(0f, 1f)] private float tickingClockVolume = 1f;
+    [SerializeField, Range(0f, 1f)] private float timerFinishedVolume = 1f;
 
     [Header("Ready Shake")]
     [SerializeField] private bool shakeWhenReady = true;
@@ -294,6 +299,7 @@ public class FryZoneIngredient : MonoBehaviour
     private void OnDisable()
     {
         StopReadyShake();
+        StopTickingClockSound();
     }
 
     public void SetType(FryType type)
@@ -325,7 +331,13 @@ public class FryZoneIngredient : MonoBehaviour
 
     private void SetState(FryState newState)
     {
+        FryState previousState = state;
         state = newState;
+
+        if (state != FryState.Frying)
+        {
+            StopTickingClockSound();
+        }
 
         if (state != FryState.Ready)
         {
@@ -335,10 +347,18 @@ public class FryZoneIngredient : MonoBehaviour
 
         UpdateVisualByState();
 
+        if (state == FryState.Frying)
+        {
+            StartTickingClockSound();
+        }
+
         if (state == FryState.Ready)
         {
+            PlayTimerFinishedSound();
             StartReadyShake();
         }
+
+        Debug.Log($"[FryZone] State changed: {previousState} -> {state}");
     }
 
     private void UpdateVisualByState()
@@ -370,6 +390,45 @@ public class FryZoneIngredient : MonoBehaviour
                 overlayRenderer.sprite = burntSprite;
                 break;
         }
+    }
+
+    private void StartTickingClockSound()
+    {
+        if (fryingTimerAudioSource == null || tickingClockClip == null)
+        {
+            return;
+        }
+
+        fryingTimerAudioSource.Stop();
+        fryingTimerAudioSource.clip = tickingClockClip;
+        fryingTimerAudioSource.volume = tickingClockVolume;
+        fryingTimerAudioSource.loop = true;
+        fryingTimerAudioSource.Play();
+    }
+
+    private void StopTickingClockSound()
+    {
+        if (fryingTimerAudioSource == null)
+        {
+            return;
+        }
+
+        if (fryingTimerAudioSource.isPlaying && fryingTimerAudioSource.clip == tickingClockClip)
+        {
+            fryingTimerAudioSource.Stop();
+        }
+
+        fryingTimerAudioSource.loop = false;
+    }
+
+    private void PlayTimerFinishedSound()
+    {
+        if (fryingTimerAudioSource == null || timerFinishedClip == null)
+        {
+            return;
+        }
+
+        fryingTimerAudioSource.PlayOneShot(timerFinishedClip, timerFinishedVolume);
     }
 
     private void OnReady()
