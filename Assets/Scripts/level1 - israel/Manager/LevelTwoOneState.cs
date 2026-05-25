@@ -1,7 +1,7 @@
 /// <summary>
 /// Holds the state of Level 3.1 USA regarding success status and served dishes statistics.
 /// </summary>
-public static class LevelThreeOneState
+public static class LevelTwoOneState
 {
     // Whether the level objective was completed successfully
     public static bool IsSuccess;

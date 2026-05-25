@@ -15,7 +15,11 @@
 // public class CustomerManager : MonoBehaviour
 // {
 //     [Header("Movement Settings")]
-//     [SerializeField] private float speed = 3f;
+//     [SerializeField] private float speed = 3f; // General movement speed: entering, timeout leaving, default movement
+
+//     [Header("Exit Speed After Service")]
+//     [SerializeField] private float goodServiceExitSpeed = 3f; // Speed after correct order
+//     [SerializeField] private float badServiceExitSpeed = 1.2f; // Speed after wrong order / forbidden customer served
 
 //     public static CustomerManager Instance { get; private set; }
 
@@ -90,6 +94,11 @@
 
 //         public float firstDelay;
 //         public float respawnDelay;
+
+//         // Used only when the customer starts leaving.
+//         // If nextLeaveSpeedOverride is positive, it will be used for this leave sequence.
+//         public float nextLeaveSpeedOverride = -1f;
+//         public float currentLeaveSpeed = -1f;
 
 //         public Action<bool> moodHandler;
 //     }
@@ -552,6 +561,10 @@
 //                     coinFlyVFX.PlayCoinsFromWorld(target.transform);
 //             }
 
+//             // Set the good-service exit speed BEFORE CustomerServed,
+//             // because CustomerServed may invoke OnCustomerFinished and start the leave sequence.
+//             SetNextLeaveSpeed(slotIndex, goodServiceExitSpeed);
+
 //             if (target.MoodTimer != null)
 //                 target.MoodTimer.CustomerServed();
 
@@ -624,6 +637,18 @@
 //         return mistakes;
 //     }
 
+//     /// <summary>
+//     /// Sets the speed that will be used the next time this slot's customer starts leaving.
+//     /// Must be called before StartLeaveSequence, or before CustomerServed if that invokes the leave event.
+//     /// </summary>
+//     private void SetNextLeaveSpeed(int slotIndex, float leaveSpeed)
+//     {
+//         if (!IsValidSlot(slotIndex))
+//             return;
+
+//         slots[slotIndex].nextLeaveSpeedOverride = Mathf.Max(0.01f, leaveSpeed);
+//     }
+
 //     private void StartLeaveSequence(int slotIndex)
 //     {
 //         if (!IsValidSlot(slotIndex))
@@ -635,6 +660,16 @@
 //             return;
 
 //         slot.isHandlingLeave = true;
+
+//         // Choose the leave speed for this specific leave sequence.
+//         // If no special service speed was set, use the general movement speed.
+//         slot.currentLeaveSpeed = slot.nextLeaveSpeedOverride > 0f
+//             ? slot.nextLeaveSpeedOverride
+//             : speed;
+
+//         slot.nextLeaveSpeedOverride = -1f;
+
+//         Debug.Log($"[CustomerManager] Customer leaving from slot {slotIndex} with speed {slot.currentLeaveSpeed}");
 
 //         if (slot.customer != null)
 //             slot.customer.MarkLeaving();
@@ -660,7 +695,8 @@
 
 //         if (slot.customer != null && exitPoint != null)
 //         {
-//             yield return MoveToPoint(slot.customer.transform, exitPoint.position);
+//             float leaveSpeed = slot.currentLeaveSpeed > 0f ? slot.currentLeaveSpeed : speed;
+//             yield return MoveToPoint(slot.customer.transform, exitPoint.position, leaveSpeed);
 //         }
 
 //         CleanupSlot(slotIndex);
@@ -717,6 +753,8 @@
 
 //         slot.isHandlingLeave = false;
 //         slot.moodHandler = null;
+//         slot.nextLeaveSpeedOverride = -1f;
+//         slot.currentLeaveSpeed = -1f;
 
 //         if (slotIndex >= 0 && slotIndex < slotTypes.Length)
 //             slotTypes[slotIndex] = null;
@@ -732,14 +770,17 @@
 //         if (slot.moveRoutine != null)
 //             StopCoroutine(slot.moveRoutine);
 
-//         slot.moveRoutine = StartCoroutine(MoveToPoint(t, target));
+//         // Entering the stand point uses the general movement speed.
+//         slot.moveRoutine = StartCoroutine(MoveToPoint(t, target, speed));
 //     }
 
-//     private IEnumerator MoveToPoint(Transform t, Vector3 target)
+//     private IEnumerator MoveToPoint(Transform t, Vector3 target, float moveSpeed)
 //     {
+//         moveSpeed = Mathf.Max(0.01f, moveSpeed);
+
 //         while (t != null && Vector3.Distance(t.position, target) > 0.01f)
 //         {
-//             t.position = Vector3.MoveTowards(t.position, target, speed * Time.deltaTime);
+//             t.position = Vector3.MoveTowards(t.position, target, moveSpeed * Time.deltaTime);
 //             yield return null;
 //         }
 
@@ -780,6 +821,7 @@
 
 //         yield return new WaitForSeconds(delay);
 
+//         SetNextLeaveSpeed(slotIndex, badServiceExitSpeed);
 //         StartLeaveSequence(slotIndex);
 //     }
 
@@ -830,30 +872,24 @@
 
 
 
-
-
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Modular manager that supports N simultaneous customers (N = standPoints.Count).
-/// Each stand point represents a "slot".
-/// - Each slot can have a first spawn delay.
-/// - Each slot can have a respawn delay after the customer leaves.
-/// - Runtime control panel can limit how many slots are allowed to spawn customers.
-/// Clicking a customer serves THAT specific customer.
+/// Modular manager that supports N simultaneous customers.
+/// Each stand point represents one customer slot.
+/// This manager is used by all levels, so level-specific statistics are routed by levelNumber.
 /// </summary>
 public class CustomerManager : MonoBehaviour
 {
     [Header("Movement Settings")]
-    [SerializeField] private float speed = 3f; // General movement speed: entering, timeout leaving, default movement
+    [SerializeField] private float speed = 3f;
 
     [Header("Exit Speed After Service")]
-    [SerializeField] private float goodServiceExitSpeed = 3f; // Speed after correct order
-    [SerializeField] private float badServiceExitSpeed = 1.2f; // Speed after wrong order / forbidden customer served
+    [SerializeField] private float goodServiceExitSpeed = 3f;
+    [SerializeField] private float badServiceExitSpeed = 1.2f;
 
     public static CustomerManager Instance { get; private set; }
 
@@ -865,35 +901,36 @@ public class CustomerManager : MonoBehaviour
     [SerializeField] private Transform exitPoint;
 
     [Header("Stand points = number of simultaneous customers")]
-    [Tooltip("Add 1 stand point for 1 customer, 2 for stage 2, 3 for future, etc.")]
+    [Tooltip("Add 1 stand point for 1 customer, 2 for 2 customers, 3 for 3 customers.")]
     [SerializeField] private List<Transform> standPoints = new List<Transform>();
 
     [Header("Delays per slot (seconds)")]
-    [Tooltip("Delay BEFORE the first customer appears in each slot. If missing, uses defaultFirstSpawnDelay.")]
+    [Tooltip("Delay before the first customer appears in each slot.")]
     [SerializeField] private List<float> firstSpawnDelays = new List<float>();
 
-    [Tooltip("Delay AFTER a customer leaves, BEFORE spawning the next customer in the same slot. If missing, uses defaultRespawnDelay.")]
+    [Tooltip("Delay after a customer leaves, before spawning the next customer in the same slot.")]
     [SerializeField] private List<float> respawnDelays = new List<float>();
 
     [SerializeField] private float defaultFirstSpawnDelay = 0f;
     [SerializeField] private float defaultRespawnDelay = 0f;
 
-    [Header("Customer types")]
+    [Header("Customer Types")]
     [SerializeField] private List<CustomerType> customerTypes = new List<CustomerType>();
 
     [Header("Visual FX - Coins Animation")]
     [SerializeField] private CoinFlyVFX coinFlyVFX;
 
-    [Header("Removing ingredients")]
+    [Header("Removing Ingredients")]
     [SerializeField] private int maxMissingItems = 0;
 
-    [Header("Scoring per-order")]
+    [Header("Scoring Per Order")]
     [SerializeField] private int baseOrderReward = 30;
     [SerializeField] private int wrongDishPenalty = -5;
     [SerializeField] private int alergicServePenalty = -10;
     [SerializeField] private int alergicOrderReward = 20;
 
-    // Set this in Inspector per scene (Level1=1, Level2=2, Level3=3)
+    [Header("Level Number")]
+    [Tooltip("Level1=1, Level1.1=11, Level1.2=12, Level2=2, Level2.1=21, Level2.2=22, Level3=3")]
     [SerializeField] private int levelNumber = 1;
 
     [Header("Instructions UI")]
@@ -908,13 +945,8 @@ public class CustomerManager : MonoBehaviour
     private CustomerType lastSpawnedType = null;
     private readonly CustomerType[] slotTypes = new CustomerType[3];
 
-    // Runtime limit controlled by the control panel.
-    // Default is initialized after slots are built, according to standPoints count.
     private int currentMaxConcurrentCustomers = 1;
 
-    /// <summary>
-    /// Holds per-slot state so we don't duplicate variables.
-    /// </summary>
     private class SlotState
     {
         public Transform standPoint;
@@ -929,8 +961,6 @@ public class CustomerManager : MonoBehaviour
         public float firstDelay;
         public float respawnDelay;
 
-        // Used only when the customer starts leaving.
-        // If nextLeaveSpeedOverride is positive, it will be used for this leave sequence.
         public float nextLeaveSpeedOverride = -1f;
         public float currentLeaveSpeed = -1f;
 
@@ -938,8 +968,6 @@ public class CustomerManager : MonoBehaviour
     }
 
     private readonly List<SlotState> slots = new List<SlotState>();
-
-    // Fast routing: when clicking a customer, we instantly know which slot he belongs to.
     private readonly Dictionary<Customer, int> customerToSlot = new Dictionary<Customer, int>();
 
     private void Awake()
@@ -970,36 +998,30 @@ public class CustomerManager : MonoBehaviour
         shouldRunInstructions_level3 = false;
     }
 
-    /// <summary>
-    /// Returns how many simultaneous customers this scene supports according to standPoints count.
-    /// </summary>
     public int GetMaxSupportedConcurrentCustomers()
     {
         int supported = slots.Count;
 
         if (supported <= 0 && standPoints != null)
+        {
             supported = standPoints.Count;
+        }
 
         return Mathf.Clamp(supported, 1, 3);
     }
 
-    /// <summary>
-    /// Returns the current runtime limit.
-    /// </summary>
     public int GetCurrentMaxConcurrentCustomers()
     {
         int supported = GetMaxSupportedConcurrentCustomers();
 
         if (currentMaxConcurrentCustomers <= 0)
+        {
             currentMaxConcurrentCustomers = supported;
+        }
 
         return Mathf.Clamp(currentMaxConcurrentCustomers, 1, supported);
     }
 
-    /// <summary>
-    /// Sets how many customer slots are allowed to spawn new customers.
-    /// Existing customers in disabled slots are NOT destroyed; they leave normally.
-    /// </summary>
     public void SetMaxConcurrentCustomers(int amount)
     {
         int supported = GetMaxSupportedConcurrentCustomers();
@@ -1010,23 +1032,18 @@ public class CustomerManager : MonoBehaviour
 
         Debug.Log($"[CustomerManager] Max concurrent customers changed: {previousLimit} -> {newLimit} / supported={supported}");
 
-        // If the limit increased, start empty newly-allowed slots.
         if (newLimit > previousLimit)
         {
             for (int i = previousLimit; i < newLimit && i < slots.Count; i++)
             {
                 if (CanStartSpawnForSlot(i))
+                {
                     StartSlotSpawnCoroutine(i, 0f);
+                }
             }
         }
-
-        // If the limit decreased, do nothing to existing customers.
-        // When they leave, CustomerLeaveAndRespawn will prevent respawn for disabled slots.
     }
 
-    /// <summary>
-    /// Builds the slots list based on Inspector configuration.
-    /// </summary>
     private void BuildSlotsFromInspector()
     {
         slots.Clear();
@@ -1065,18 +1082,19 @@ public class CustomerManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Starts spawning only in slots allowed by the current runtime limit.
-    /// </summary>
     private void StartAllSlots()
     {
         if (slots.Count == 0)
+        {
             return;
+        }
 
         for (int i = 0; i < slots.Count; i++)
         {
             if (!IsSlotAllowedByRuntimeLimit(i))
+            {
                 continue;
+            }
 
             StartSlotSpawnCoroutine(i, slots[i].firstDelay);
         }
@@ -1085,18 +1103,26 @@ public class CustomerManager : MonoBehaviour
     private void StartSlotSpawnCoroutine(int slotIndex, float delay)
     {
         if (!IsValidSlot(slotIndex))
+        {
             return;
+        }
 
         if (!IsSlotAllowedByRuntimeLimit(slotIndex))
+        {
             return;
+        }
 
         SlotState slot = slots[slotIndex];
 
         if (slot.customer != null || slot.isHandlingLeave)
+        {
             return;
+        }
 
         if (slot.spawnRoutine != null)
+        {
             StopCoroutine(slot.spawnRoutine);
+        }
 
         slot.spawnRoutine = StartCoroutine(SpawnInSlotAfterDelay(slotIndex, delay));
     }
@@ -1104,30 +1130,37 @@ public class CustomerManager : MonoBehaviour
     private IEnumerator SpawnInSlotAfterDelay(int slotIndex, float delay)
     {
         if (delay > 0f)
+        {
             yield return new WaitForSeconds(delay);
+        }
 
         if (!IsValidSlot(slotIndex))
+        {
             yield break;
+        }
 
         SlotState slot = slots[slotIndex];
         slot.spawnRoutine = null;
 
         if (!IsSlotAllowedByRuntimeLimit(slotIndex))
+        {
             yield break;
+        }
 
         SpawnCustomerInSlot(slotIndex);
     }
 
-    /// <summary>
-    /// Spawns a new customer into the given slot and moves him to that slot's stand point.
-    /// </summary>
     private void SpawnCustomerInSlot(int slotIndex)
     {
         if (!IsValidSlot(slotIndex))
+        {
             return;
+        }
 
         if (!IsSlotAllowedByRuntimeLimit(slotIndex))
+        {
             return;
+        }
 
         if (customerPrefabNormal == null || spawnPoint == null || exitPoint == null)
         {
@@ -1162,13 +1195,15 @@ public class CustomerManager : MonoBehaviour
             if (attempts >= maxAttempts)
             {
                 if (chosen != type0 && chosen != type1 && chosen != type2)
+                {
                     break;
+                }
 
                 chosen = customerTypes[UnityEngine.Random.Range(0, customerTypes.Count)];
                 break;
             }
-
-        } while (
+        }
+        while (
             chosen == lastSpawnedType ||
             (slotIndex != 0 && chosen == type0) ||
             (slotIndex != 1 && chosen == type1) ||
@@ -1178,7 +1213,9 @@ public class CustomerManager : MonoBehaviour
         lastSpawnedType = chosen;
 
         if (slotIndex >= 0 && slotIndex < slotTypes.Length)
+        {
             slotTypes[slotIndex] = chosen;
+        }
 
         bool isPlayerCustomer = chosen != null && chosen.name == "player_customer";
         Customer prefabToSpawn = customerPrefabNormal;
@@ -1186,33 +1223,23 @@ public class CustomerManager : MonoBehaviour
         if (isPlayerCustomer)
         {
             if (customerPrefabPlayerHead != null)
+            {
                 prefabToSpawn = customerPrefabPlayerHead;
+            }
             else
+            {
                 Debug.LogWarning("CustomerManager: player_customer chosen but customerPrefabPlayerHead is not assigned. Falling back to normal prefab.");
+            }
         }
 
         slot.customer = Instantiate(prefabToSpawn, spawnPoint.position, Quaternion.identity);
         slot.customer.Init(chosen, maxMissingItems);
 
-        // Count every customer that arrives, regardless of type
-        if (levelNumber == 1) LevelOneState.CustomersArrived++;
-        else if (levelNumber == 2) LevelTwoState.CustomersArrived++;
-        else if (levelNumber == 3) LevelThreeState.CustomersArrived++;
-        else if (levelNumber == 11) LevelOneOneState.CustomersArrived++;
-        else if (levelNumber == 12) LevelOneTwoState.CustomersArrived++;
+        RegisterCustomerArrived();
 
         if (chosen != null && chosen.scoreIfNotServed)
         {
-            if (levelNumber == 1)
-                LevelOneState.GlutenChildAppeared++;
-            else if (levelNumber == 2)
-                LevelTwoState.GlutenChildAppeared++;
-            else if (levelNumber == 3)
-                LevelThreeState.GlutenChildAppeared++;
-            else if (levelNumber == 11)
-                LevelOneOneState.GlutenChildAppeared++;
-            else if (levelNumber == 12)
-                LevelOneTwoState.GlutenChildAppeared++;
+            RegisterGlutenChildAppeared();
         }
 
         customerToSlot[slot.customer] = slotIndex;
@@ -1232,16 +1259,17 @@ public class CustomerManager : MonoBehaviour
         StartMove(slotIndex, slot.customer.transform, slot.standPoint.position);
 
         if (instructionManager != null)
+        {
             instructionManager.OnCustomerSpawned();
+        }
     }
 
-    /// <summary>
-    /// Called when a customer's mood timer finishes for a specific slot.
-    /// </summary>
     private void OnCustomerFinishedInSlot(int slotIndex, bool served)
     {
         if (!IsValidSlot(slotIndex))
+        {
             return;
+        }
 
         SlotState slot = slots[slotIndex];
         Customer c = slot.customer;
@@ -1255,7 +1283,9 @@ public class CustomerManager : MonoBehaviour
                 ScoreManager.Instance.AddMoney(alergicOrderReward);
 
                 if (coinFlyVFX != null)
+                {
                     coinFlyVFX.PlayCoinsFromWorld(c.transform, alergicOrderReward, true);
+                }
             }
         }
 
@@ -1269,55 +1299,106 @@ public class CustomerManager : MonoBehaviour
             LevelOneState.TotalServedDishes++;
 
             if (isPerfect)
+            {
                 LevelOneState.PerfectServedDishes++;
-        }
-        else if (levelNumber == 2)
-        {
-            LevelTwoState.TotalServedDishes++;
-
-            if (isPerfect)
-                LevelTwoState.PerfectServedDishes++;
-        }
-        else if (levelNumber == 3)
-        {
-            LevelThreeState.TotalServedDishes++;
-
-            if (isPerfect)
-                LevelThreeState.PerfectServedDishes++;
+            }
         }
         else if (levelNumber == 11)
         {
             LevelOneOneState.TotalServedDishes++;
 
             if (isPerfect)
+            {
                 LevelOneOneState.PerfectServedDishes++;
+            }
         }
         else if (levelNumber == 12)
         {
             LevelOneTwoState.TotalServedDishes++;
 
             if (isPerfect)
+            {
                 LevelOneTwoState.PerfectServedDishes++;
+            }
+        }
+        else if (levelNumber == 2)
+        {
+            LevelTwoState.TotalServedDishes++;
+
+            if (isPerfect)
+            {
+                LevelTwoState.PerfectServedDishes++;
+            }
+        }
+        else if (levelNumber == 21)
+        {
+            LevelTwoOneState.TotalServedDishes++;
+
+            if (isPerfect)
+            {
+                LevelTwoOneState.PerfectServedDishes++;
+            }
+        }
+        else if (levelNumber == 22)
+        {
+            LevelTwoTwoState.TotalServedDishes++;
+
+            if (isPerfect)
+            {
+                LevelTwoTwoState.PerfectServedDishes++;
+            }
+        }
+        else if (levelNumber == 3)
+        {
+            LevelThreeState.TotalServedDishes++;
+
+            if (isPerfect)
+            {
+                LevelThreeState.PerfectServedDishes++;
+            }
+        }
+        else
+        {
+            Debug.LogWarning("[CustomerManager] RegisterServedDish: unsupported levelNumber=" + levelNumber);
         }
     }
 
     public void RegisterDuplicateIngredientClick()
     {
         if (levelNumber == 1)
+        {
             LevelOneState.DuplicateIngredientClicks++;
-        else if (levelNumber == 2)
-            LevelTwoState.DuplicateIngredientClicks++;
-        else if (levelNumber == 3)
-            LevelThreeState.DuplicateIngredientClicks++;
+        }
         else if (levelNumber == 11)
+        {
             LevelOneOneState.DuplicateIngredientClicks++;
+        }
         else if (levelNumber == 12)
+        {
             LevelOneTwoState.DuplicateIngredientClicks++;
+        }
+        else if (levelNumber == 2)
+        {
+            LevelTwoState.DuplicateIngredientClicks++;
+        }
+        else if (levelNumber == 21)
+        {
+            LevelTwoOneState.DuplicateIngredientClicks++;
+        }
+        else if (levelNumber == 22)
+        {
+            LevelTwoTwoState.DuplicateIngredientClicks++;
+        }
+        else if (levelNumber == 3)
+        {
+            LevelThreeState.DuplicateIngredientClicks++;
+        }
+        else
+        {
+            Debug.LogWarning("[CustomerManager] RegisterDuplicateIngredientClick: unsupported levelNumber=" + levelNumber);
+        }
     }
 
-    /// <summary>
-    /// Serves the customer that was clicked.
-    /// </summary>
     public void ServeCustomer(Customer target)
     {
         if (target == null)
@@ -1327,7 +1408,9 @@ public class CustomerManager : MonoBehaviour
         }
 
         if (target.IsLeaving)
+        {
             return;
+        }
 
         if (SelectionList.Instance == null)
         {
@@ -1348,16 +1431,7 @@ public class CustomerManager : MonoBehaviour
             Debug.Log("Special customer: served -> NO score.");
             PlayCustomerVoice(target, false);
 
-            if (levelNumber == 1)
-                LevelOneState.GlutenChildServed++;
-            else if (levelNumber == 2)
-                LevelTwoState.GlutenChildServed++;
-            else if (levelNumber == 3)
-                LevelThreeState.GlutenChildServed++;
-            else if (levelNumber == 11)
-                LevelOneOneState.GlutenChildServed++;
-            else if (levelNumber == 12)
-                LevelOneTwoState.GlutenChildServed++;
+            RegisterGlutenChildServed();
 
             if (ScoreManager.Instance != null)
             {
@@ -1365,11 +1439,15 @@ public class CustomerManager : MonoBehaviour
                 ScoreManager.Instance.AddMoney(alergicServePenalty);
 
                 if (coinFlyVFX != null)
+                {
                     coinFlyVFX.PlayPenaltyFromWorld(target.transform, Mathf.Abs(alergicServePenalty), true);
+                }
             }
 
             if (ControlPanelUI.MarkAddedItemsEnabled)
+            {
                 target.PreserveIngredientMarkersUntilDestroyed();
+            }
 
             SelectionList.Instance.ClearIngredients();
 
@@ -1392,18 +1470,22 @@ public class CustomerManager : MonoBehaviour
                 ScoreManager.Instance.AddMoney(baseOrderReward);
 
                 if (baseOrderReward > 0 && coinFlyVFX != null)
+                {
                     coinFlyVFX.PlayCoinsFromWorld(target.transform);
+                }
             }
 
-            // Set the good-service exit speed BEFORE CustomerServed,
-            // because CustomerServed may invoke OnCustomerFinished and start the leave sequence.
             SetNextLeaveSpeed(slotIndex, goodServiceExitSpeed);
 
             if (target.MoodTimer != null)
+            {
                 target.MoodTimer.CustomerServed();
+            }
 
             if (ControlPanelUI.MarkAddedItemsEnabled)
+            {
                 target.PreserveIngredientMarkersUntilDestroyed();
+            }
 
             SelectionList.Instance.ClearIngredients();
 
@@ -1420,11 +1502,15 @@ public class CustomerManager : MonoBehaviour
             ScoreManager.Instance.AddMoney(wrongDishPenalty);
 
             if (coinFlyVFX != null)
+            {
                 coinFlyVFX.PlayPenaltyFromWorld(target.transform, Mathf.Abs(wrongDishPenalty));
+            }
         }
 
         if (ControlPanelUI.MarkAddedItemsEnabled)
+        {
             target.PreserveIngredientMarkersUntilDestroyed();
+        }
 
         SelectionList.Instance.ClearIngredients();
 
@@ -1434,24 +1520,32 @@ public class CustomerManager : MonoBehaviour
     private int CountOrderMistakes(Customer target, List<string> givenIngredients)
     {
         if (target == null)
+        {
             return 0;
+        }
 
         List<string> activeOrder = target.GetActiveRequiredIngredients();
 
         if (activeOrder == null)
+        {
             return 0;
+        }
 
         List<string> required = new List<string>();
 
-        foreach (var r in activeOrder)
+        foreach (string r in activeOrder)
+        {
             required.Add(r.ToLower());
+        }
 
         List<string> given = new List<string>();
 
         if (givenIngredients != null)
         {
-            foreach (var g in givenIngredients)
+            foreach (string g in givenIngredients)
+            {
                 given.Add(g.ToLower());
+            }
         }
 
         int mistakes = 0;
@@ -1459,26 +1553,28 @@ public class CustomerManager : MonoBehaviour
         foreach (string r in required)
         {
             if (!given.Contains(r))
+            {
                 mistakes++;
+            }
         }
 
         foreach (string g in given)
         {
             if (!required.Contains(g))
+            {
                 mistakes++;
+            }
         }
 
         return mistakes;
     }
 
-    /// <summary>
-    /// Sets the speed that will be used the next time this slot's customer starts leaving.
-    /// Must be called before StartLeaveSequence, or before CustomerServed if that invokes the leave event.
-    /// </summary>
     private void SetNextLeaveSpeed(int slotIndex, float leaveSpeed)
     {
         if (!IsValidSlot(slotIndex))
+        {
             return;
+        }
 
         slots[slotIndex].nextLeaveSpeedOverride = Mathf.Max(0.01f, leaveSpeed);
     }
@@ -1486,17 +1582,19 @@ public class CustomerManager : MonoBehaviour
     private void StartLeaveSequence(int slotIndex)
     {
         if (!IsValidSlot(slotIndex))
+        {
             return;
+        }
 
         SlotState slot = slots[slotIndex];
 
         if (slot.isHandlingLeave)
+        {
             return;
+        }
 
         slot.isHandlingLeave = true;
 
-        // Choose the leave speed for this specific leave sequence.
-        // If no special service speed was set, use the general movement speed.
         slot.currentLeaveSpeed = slot.nextLeaveSpeedOverride > 0f
             ? slot.nextLeaveSpeedOverride
             : speed;
@@ -1506,10 +1604,14 @@ public class CustomerManager : MonoBehaviour
         Debug.Log($"[CustomerManager] Customer leaving from slot {slotIndex} with speed {slot.currentLeaveSpeed}");
 
         if (slot.customer != null)
+        {
             slot.customer.MarkLeaving();
+        }
 
         if (slot.leaveRoutine != null)
+        {
             StopCoroutine(slot.leaveRoutine);
+        }
 
         slot.leaveRoutine = StartCoroutine(CustomerLeaveAndRespawn(slotIndex));
     }
@@ -1517,7 +1619,9 @@ public class CustomerManager : MonoBehaviour
     private IEnumerator CustomerLeaveAndRespawn(int slotIndex)
     {
         if (!IsValidSlot(slotIndex))
+        {
             yield break;
+        }
 
         SlotState slot = slots[slotIndex];
 
@@ -1538,13 +1642,19 @@ public class CustomerManager : MonoBehaviour
         slot.isHandlingLeave = false;
 
         if (!IsSlotAllowedByRuntimeLimit(slotIndex))
+        {
             yield break;
+        }
 
         if (slot.respawnDelay > 0f)
+        {
             yield return new WaitForSeconds(slot.respawnDelay);
+        }
 
         if (!IsSlotAllowedByRuntimeLimit(slotIndex))
+        {
             yield break;
+        }
 
         SpawnCustomerInSlot(slotIndex);
     }
@@ -1552,14 +1662,18 @@ public class CustomerManager : MonoBehaviour
     private void CleanupSlot(int slotIndex)
     {
         if (!IsValidSlot(slotIndex))
+        {
             return;
+        }
 
         SlotState slot = slots[slotIndex];
 
         if (slot.customer != null)
         {
             if (slot.customer.MoodTimer != null && slot.moodHandler != null)
+            {
                 slot.customer.MoodTimer.OnCustomerFinished -= slot.moodHandler;
+            }
 
             customerToSlot.Remove(slot.customer);
 
@@ -1591,20 +1705,25 @@ public class CustomerManager : MonoBehaviour
         slot.currentLeaveSpeed = -1f;
 
         if (slotIndex >= 0 && slotIndex < slotTypes.Length)
+        {
             slotTypes[slotIndex] = null;
+        }
     }
 
     private void StartMove(int slotIndex, Transform t, Vector3 target)
     {
         if (!IsValidSlot(slotIndex))
+        {
             return;
+        }
 
         SlotState slot = slots[slotIndex];
 
         if (slot.moveRoutine != null)
+        {
             StopCoroutine(slot.moveRoutine);
+        }
 
-        // Entering the stand point uses the general movement speed.
         slot.moveRoutine = StartCoroutine(MoveToPoint(t, target, speed));
     }
 
@@ -1619,7 +1738,9 @@ public class CustomerManager : MonoBehaviour
         }
 
         if (t != null)
+        {
             t.position = target;
+        }
     }
 
     private bool IsValidSlot(int slotIndex)
@@ -1635,10 +1756,14 @@ public class CustomerManager : MonoBehaviour
     private bool CanStartSpawnForSlot(int slotIndex)
     {
         if (!IsValidSlot(slotIndex))
+        {
             return false;
+        }
 
         if (!IsSlotAllowedByRuntimeLimit(slotIndex))
+        {
             return false;
+        }
 
         SlotState slot = slots[slotIndex];
 
@@ -1648,10 +1773,14 @@ public class CustomerManager : MonoBehaviour
     private IEnumerator LeaveAfterWrongFeedback(int slotIndex, Customer target, float delay)
     {
         if (target != null)
+        {
             target.MarkLeaving();
+        }
 
         if (target != null && target.MoodTimer != null)
+        {
             target.MoodTimer.ShowAngryNow(target);
+        }
 
         yield return new WaitForSeconds(delay);
 
@@ -1662,13 +1791,19 @@ public class CustomerManager : MonoBehaviour
     public void AddCustomerType(CustomerType type)
     {
         if (type == null)
+        {
             return;
+        }
 
         if (customerTypes == null)
+        {
             customerTypes = new List<CustomerType>();
+        }
 
         if (!customerTypes.Contains(type))
+        {
             customerTypes.Add(type);
+        }
     }
 
     public void RegisterPlayerCustomer(Sprite happy, Sprite angry, Sprite furious)
@@ -1690,16 +1825,130 @@ public class CustomerManager : MonoBehaviour
     private void PlayCustomerVoice(Customer target, bool success)
     {
         if (target == null || target.Data == null)
+        {
             return;
+        }
 
         AudioClip clip = success
             ? target.Data.successVoiceClip
             : target.Data.failureVoiceClip;
 
         if (clip == null)
+        {
             return;
+        }
 
         if (customerVoiceAudioSource != null)
+        {
             customerVoiceAudioSource.PlayOneShot(clip, customerVoiceVolume);
+        }
+    }
+
+    private void RegisterCustomerArrived()
+    {
+        if (levelNumber == 1)
+        {
+            LevelOneState.CustomersArrived++;
+        }
+        else if (levelNumber == 11)
+        {
+            LevelOneOneState.CustomersArrived++;
+        }
+        else if (levelNumber == 12)
+        {
+            LevelOneTwoState.CustomersArrived++;
+        }
+        else if (levelNumber == 2)
+        {
+            LevelTwoState.CustomersArrived++;
+        }
+        else if (levelNumber == 21)
+        {
+            LevelTwoOneState.CustomersArrived++;
+        }
+        else if (levelNumber == 22)
+        {
+            LevelTwoTwoState.CustomersArrived++;
+        }
+        else if (levelNumber == 3)
+        {
+            LevelThreeState.CustomersArrived++;
+        }
+        else
+        {
+            Debug.LogWarning("[CustomerManager] RegisterCustomerArrived: unsupported levelNumber=" + levelNumber);
+        }
+    }
+
+    private void RegisterGlutenChildAppeared()
+    {
+        if (levelNumber == 1)
+        {
+            LevelOneState.GlutenChildAppeared++;
+        }
+        else if (levelNumber == 11)
+        {
+            LevelOneOneState.GlutenChildAppeared++;
+        }
+        else if (levelNumber == 12)
+        {
+            LevelOneTwoState.GlutenChildAppeared++;
+        }
+        else if (levelNumber == 2)
+        {
+            LevelTwoState.GlutenChildAppeared++;
+        }
+        else if (levelNumber == 21)
+        {
+            LevelTwoOneState.GlutenChildAppeared++;
+        }
+        else if (levelNumber == 22)
+        {
+            LevelTwoTwoState.GlutenChildAppeared++;
+        }
+        else if (levelNumber == 3)
+        {
+            LevelThreeState.GlutenChildAppeared++;
+        }
+        else
+        {
+            Debug.LogWarning("[CustomerManager] RegisterGlutenChildAppeared: unsupported levelNumber=" + levelNumber);
+        }
+    }
+
+    private void RegisterGlutenChildServed()
+    {
+        if (levelNumber == 1)
+        {
+            LevelOneState.GlutenChildServed++;
+        }
+        else if (levelNumber == 11)
+        {
+            LevelOneOneState.GlutenChildServed++;
+        }
+        else if (levelNumber == 12)
+        {
+            LevelOneTwoState.GlutenChildServed++;
+        }
+        else if (levelNumber == 2)
+        {
+            LevelTwoState.GlutenChildServed++;
+        }
+        else if (levelNumber == 21)
+        {
+            LevelTwoOneState.GlutenChildServed++;
+        }
+        else if (levelNumber == 22)
+        {
+            LevelTwoTwoState.GlutenChildServed++;
+        }
+        else if (levelNumber == 3)
+        {
+            LevelThreeState.GlutenChildServed++;
+        }
+        else
+        {
+            Debug.LogWarning("[CustomerManager] RegisterGlutenChildServed: unsupported levelNumber=" + levelNumber);
+        }
     }
 }
