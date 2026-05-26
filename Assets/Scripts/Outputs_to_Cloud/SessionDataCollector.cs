@@ -101,15 +101,15 @@ public static class SessionDataCollector
         // Collect control panel settings from live managers at the moment EndLevel fires
         var controlSettings = new LevelControlSettings
         {
-            levelDurationSeconds   = levelDurationSeconds,
-            levelDurationDefault   = originalDurationSeconds,
-            angerTimeSeconds       = Mathf.RoundToInt(CustomerMoodTimer_levels.RuntimeSecondsPerStage),
-            markAddedItemsEnabled  = ControlPanelUI.MarkAddedItemsEnabled,
-            dirtEnabled            = ControlPanelUI.DirtEnabled,
-            concurrentCustomers    = CustomerManager.Instance != null ? CustomerManager.Instance.GetCurrentMaxConcurrentCustomers() : 1,
+            levelDurationSeconds = levelDurationSeconds,
+            levelDurationDefault = originalDurationSeconds,
+            angerTimeSeconds = Mathf.RoundToInt(CustomerMoodTimer_levels.RuntimeSecondsPerStage),
+            markAddedItemsEnabled = ControlPanelUI.MarkAddedItemsEnabled,
+            dirtEnabled = ControlPanelUI.DirtEnabled,
+            concurrentCustomers = CustomerManager.Instance != null ? CustomerManager.Instance.GetCurrentMaxConcurrentCustomers() : 1,
             concurrentCustomersMax = CustomerManager.Instance != null ? CustomerManager.Instance.GetMaxSupportedConcurrentCustomers() : 1,
-            ingredientCount        = LevelIngredientAvailabilityManager.Instance != null ? LevelIngredientAvailabilityManager.Instance.CurrentIngredientCount : 0,
-            ingredientCountMax     = LevelIngredientAvailabilityManager.Instance != null ? LevelIngredientAvailabilityManager.Instance.MaxIngredientCount : 0,
+            ingredientCount = LevelIngredientAvailabilityManager.Instance != null ? LevelIngredientAvailabilityManager.Instance.CurrentIngredientCount : 0,
+            ingredientCountMax = LevelIngredientAvailabilityManager.Instance != null ? LevelIngredientAvailabilityManager.Instance.MaxIngredientCount : 0,
         };
 
         attempts[levelNumber] = new LevelAttempt

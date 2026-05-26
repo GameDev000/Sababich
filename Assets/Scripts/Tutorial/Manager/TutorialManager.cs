@@ -425,7 +425,7 @@ public class TutorialManager : MonoBehaviour
     /// </summary>
     private void UpdateCustomerSprite()
     {
-        
+
         if (customerRenderer == null || customerSprites == null || customerSprites.Length == 0)
             return;
 
