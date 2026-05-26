@@ -1735,8 +1735,8 @@ MonoBehaviour:
     - {fileID: 66903516, guid: 74df7af14c285f940945a97b042bce0a, type: 3}
     - {fileID: -1426621035, guid: 74df7af14c285f940945a97b042bce0a, type: 3}
     scoreIfNotServed: 0
-    successVoiceClip: {fileID: 0}
-    failureVoiceClip: {fileID: 0}
+    successVoiceClip: {fileID: 8300000, guid: 6406ebd826d282143815e41325d2bc57, type: 3}
+    failureVoiceClip: {fileID: 8300000, guid: 02ae482c6514d234e9b21dc52f103096, type: 3}
   - name: full3
     sprite: {fileID: 21300000, guid: 1444700c6ef4b7647b1f01d1ff9da676, type: 3}
     requiredIngredients:
@@ -1752,7 +1752,7 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 5973f473922649146a7c2b1dcf907f1d, type: 3}
     - {fileID: 21300000, guid: dd87182cf7566e64595499ba7d9f8379, type: 3}
     scoreIfNotServed: 0
-    successVoiceClip: {fileID: 8300000, guid: 7ce67ec84c536a84daf893e42662b2c9, type: 3}
+    successVoiceClip: {fileID: 8300000, guid: db90bfa3058b2e54ba64c8832640b521, type: 3}
     failureVoiceClip: {fileID: 8300000, guid: badd1596f4559ac4380d7970ad616acd, type: 3}
   - name: notToServe
     sprite: {fileID: 631383137157731774, guid: 9532189d6153b0a44a26d00b91076d93, type: 3}
@@ -1804,7 +1804,7 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 0383b516467e4284784ab0e40a87ed67, type: 3}
     scoreIfNotServed: 0
     successVoiceClip: {fileID: 8300000, guid: 53604e213a4204b4880a9bd15fdf2154, type: 3}
-    failureVoiceClip: {fileID: 8300000, guid: 7a7c1223488e3b04892f06ac20fb894c, type: 3}
+    failureVoiceClip: {fileID: 8300000, guid: a9e289d1d2385c54cae46347db671038, type: 3}
   - name: full6
     sprite: {fileID: -5830445100083647898, guid: cb7fa44c95b2fe04fb0f94b63f0d4900, type: 3}
     requiredIngredients:
@@ -1820,8 +1820,10 @@ MonoBehaviour:
     - {fileID: 6166413747506897929, guid: b5a71e12070283345ad636355f444476, type: 3}
     - {fileID: 4933529048943361695, guid: c598d565db042804485004d54fb26ce6, type: 3}
     scoreIfNotServed: 0
-    successVoiceClip: {fileID: 0}
-    failureVoiceClip: {fileID: 0}
+    successVoiceClip: {fileID: 8300000, guid: 70a3ebc238cc15847b5a3161be6096e8, type: 3}
+    failureVoiceClip: {fileID: 8300000, guid: 3984093a01eac0a419f341c30d481578, type: 3}
+  preventGlutenCustomerAsFirstSpawn: 1
+  minCustomersBeforeGlutenCustomer: 1
   coinFlyVFX: {fileID: 95312388}
   maxMissingItems: 1
   baseOrderReward: 30
@@ -1834,6 +1836,9 @@ MonoBehaviour:
   shouldRunInstructions_level3: 1
   customerVoiceAudioSource: {fileID: 485516106}
   customerVoiceVolume: 1
+  reminderAudioSource: {fileID: 0}
+  glutenReminderClip: {fileID: 0}
+  reminderVolume: 1
 --- !u!4 &485516105
 Transform:
   m_ObjectHideFlags: 0
@@ -10976,6 +10981,10 @@ MonoBehaviour:
   timerFinishedClip: {fileID: 8300000, guid: 4cd7def18c3320048ad4d1fd58e89507, type: 3}
   tickingClockVolume: 0.2
   timerFinishedVolume: 0.2
+  burnWarningAudioSource: {fileID: 0}
+  eggplantBurnWarningClip: {fileID: 0}
+  secondsBeforeBurntWarning: 3
+  burnWarningVolume: 2
   shakeWhenReady: 1
   readyShakeTarget: {fileID: 0}
   shakeOnlyInLevel3: 1
@@ -11660,6 +11669,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1891575257}
   - component: {fileID: 1891575256}
+  - component: {fileID: 1891575258}
   m_Layer: 0
   m_Name: instructionManager
   m_TagString: Untagged
@@ -11686,7 +11696,11 @@ MonoBehaviour:
     trigger: 0
     levelId: 2
     customerIndex: 0
+    instructionVoiceClip: {fileID: 8300000, guid: 3ef672e4ec168ee47ab5054acc46ec0a, type: 3}
   overlay: {fileID: 8196991}
+  instructionVoiceAudioSource: {fileID: 1891575258}
+  instructionVoiceVolume: 1
+  ignoreListenerPause: 1
   currentLevelId: 2
 --- !u!4 &1891575257
 Transform:
@@ -11703,6 +11717,103 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &1891575258
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1891575255}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1892431055
 GameObject:
   m_ObjectHideFlags: 0
@@ -12448,7 +12559,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.057693563}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 11, y: 400.99997}
+  m_AnchoredPosition: {x: 11, y: 401}
   m_SizeDelta: {x: 0, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2079683473

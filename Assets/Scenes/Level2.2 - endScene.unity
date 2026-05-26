@@ -1205,8 +1205,8 @@ MonoBehaviour:
   failClip_level2: {fileID: 0}
   successClip_level2_1: {fileID: 0}
   failClip_level2_1: {fileID: 0}
-  successClip_level2_2: {fileID: 0}
-  failClip_level2_2: {fileID: 0}
+  successClip_level2_2: {fileID: 8300000, guid: 0e1251d0d03f07943af1d87733122279, type: 3}
+  failClip_level2_2: {fileID: 8300000, guid: a8705620d8364574db54e88252bf10e6, type: 3}
   successClip_level3: {fileID: 0}
   failClip_level3: {fileID: 0}
   endLevelAudioSource: {fileID: 877708386}
@@ -3198,7 +3198,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 13, y: -248.00002}
+  m_AnchoredPosition: {x: 13, y: -248}
   m_SizeDelta: {x: 2732.19, y: 1080}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &2026232229
