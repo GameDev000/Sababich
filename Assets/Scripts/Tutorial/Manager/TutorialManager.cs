@@ -51,6 +51,10 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] private int tutorialCustomersCount = 3; // Number of customers in the tutorial
     private int servedCustomers = 0; // Counter for served customers
 
+    [Header("Gluten Customer Audio")]
+    [SerializeField] private AudioSource customerAudioSource;
+    [SerializeField] private AudioClip glutenClip;
+
     [Header("Game Flow Manager")]
     [SerializeField] private GameFlowManager gameFlowManager; // Reference to the GameFlowManager to update game phases
 
@@ -351,6 +355,9 @@ public class TutorialManager : MonoBehaviour
 
         forbiddenFlowActive = false;
 
+        if (customerAudioSource != null && glutenClip != null)
+            customerAudioSource.PlayOneShot(glutenClip);
+
         OnCustomerLeftScene();
     }
 
@@ -361,11 +368,14 @@ public class TutorialManager : MonoBehaviour
     /// </summary> 
     private void UpdateCustomerSprite()
     {
+        
         if (customerRenderer == null || customerSprites == null || customerSprites.Length == 0)
             return;
 
         int index = servedCustomers % customerSprites.Length;
+        //Sent index to CheckOrder()
         customerRenderer.sprite = customerSprites[index];
+        CheckOrder.setIndex(index);
     }
 
     /// <summary>

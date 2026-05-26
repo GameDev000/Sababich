@@ -1752,8 +1752,8 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 5973f473922649146a7c2b1dcf907f1d, type: 3}
     - {fileID: 21300000, guid: dd87182cf7566e64595499ba7d9f8379, type: 3}
     scoreIfNotServed: 0
-    successVoiceClip: {fileID: 0}
-    failureVoiceClip: {fileID: 0}
+    successVoiceClip: {fileID: 8300000, guid: 7ce67ec84c536a84daf893e42662b2c9, type: 3}
+    failureVoiceClip: {fileID: 8300000, guid: badd1596f4559ac4380d7970ad616acd, type: 3}
   - name: notToServe
     sprite: {fileID: 631383137157731774, guid: 9532189d6153b0a44a26d00b91076d93, type: 3}
     requiredIngredients:
@@ -12448,7 +12448,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.057693563}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 11, y: 401}
+  m_AnchoredPosition: {x: 11, y: 400.99997}
   m_SizeDelta: {x: 0, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2079683473

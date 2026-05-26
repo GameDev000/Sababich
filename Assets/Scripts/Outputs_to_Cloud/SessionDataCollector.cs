@@ -77,13 +77,13 @@ public static class SessionDataCollector
         }
         else if (levelNumber == 31)
         {
-            passed = LevelThreeOneState.IsSuccess;
-            totalServed = LevelThreeOneState.TotalServedDishes;
-            perfectServed = LevelThreeOneState.PerfectServedDishes;
-            duplicateClicks = LevelThreeOneState.DuplicateIngredientClicks;
-            glutenAppeared = LevelThreeOneState.GlutenChildAppeared;
-            glutenServed = LevelThreeOneState.GlutenChildServed;
-            customersArrived = LevelThreeOneState.CustomersArrived;
+            passed = LevelThreeState.IsSuccess;
+            totalServed = LevelThreeState.TotalServedDishes;
+            perfectServed = LevelThreeState.PerfectServedDishes;
+            duplicateClicks = LevelThreeState.DuplicateIngredientClicks;
+            glutenAppeared = LevelThreeState.GlutenChildAppeared;
+            glutenServed = LevelThreeState.GlutenChildServed;
+            customersArrived = LevelThreeState.CustomersArrived;
         }
         else // level 3
         {
