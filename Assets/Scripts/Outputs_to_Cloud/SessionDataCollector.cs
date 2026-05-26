@@ -7,10 +7,13 @@ public static class SessionDataCollector
     // Keyed by levelNumber — last attempt wins if player retries a level
     static readonly Dictionary<int, LevelAttempt> attempts = new Dictionary<int, LevelAttempt>();
     static string currentSessionId;
+    static int nextPlayOrder = 0;
 
     // Called from EndLevel() in each level's timer script.
-    // timeToTargetSeconds is passed directly from the timer (-1 if target was never reached).
-    public static void RecordLevelAttempt(int levelNumber, int timeToTargetSeconds)
+    // timeToTargetSeconds is passed directly from the timer.
+    // levelDurationSeconds is the actual duration used (after +30/-30 adjustments).
+    // originalDurationSeconds is the Inspector default before any adjustments.
+    public static void RecordLevelAttempt(int levelNumber, int timeToTargetSeconds, int levelDurationSeconds, int originalDurationSeconds)
     {
         bool passed;
         int totalServed, perfectServed, duplicateClicks, glutenAppeared, glutenServed, coins, customersArrived;
@@ -75,16 +78,6 @@ public static class SessionDataCollector
             glutenServed = LevelTwoTwoState.GlutenChildServed;
             customersArrived = LevelTwoTwoState.CustomersArrived;
         }
-        else if (levelNumber == 31)
-        {
-            passed = LevelThreeState.IsSuccess;
-            totalServed = LevelThreeState.TotalServedDishes;
-            perfectServed = LevelThreeState.PerfectServedDishes;
-            duplicateClicks = LevelThreeState.DuplicateIngredientClicks;
-            glutenAppeared = LevelThreeState.GlutenChildAppeared;
-            glutenServed = LevelThreeState.GlutenChildServed;
-            customersArrived = LevelThreeState.CustomersArrived;
-        }
         else // level 3
         {
             passed = LevelThreeState.IsSuccess;
@@ -105,10 +98,25 @@ public static class SessionDataCollector
             ? (float)timeToTargetSeconds / perfectServed
             : -1f;
 
+        // Collect control panel settings from live managers at the moment EndLevel fires
+        var controlSettings = new LevelControlSettings
+        {
+            levelDurationSeconds   = levelDurationSeconds,
+            levelDurationDefault   = originalDurationSeconds,
+            angerTimeSeconds       = Mathf.RoundToInt(CustomerMoodTimer_levels.RuntimeSecondsPerStage),
+            markAddedItemsEnabled  = ControlPanelUI.MarkAddedItemsEnabled,
+            dirtEnabled            = ControlPanelUI.DirtEnabled,
+            concurrentCustomers    = CustomerManager.Instance != null ? CustomerManager.Instance.GetCurrentMaxConcurrentCustomers() : 1,
+            concurrentCustomersMax = CustomerManager.Instance != null ? CustomerManager.Instance.GetMaxSupportedConcurrentCustomers() : 1,
+            ingredientCount        = LevelIngredientAvailabilityManager.Instance != null ? LevelIngredientAvailabilityManager.Instance.CurrentIngredientCount : 0,
+            ingredientCountMax     = LevelIngredientAvailabilityManager.Instance != null ? LevelIngredientAvailabilityManager.Instance.MaxIngredientCount : 0,
+        };
+
         attempts[levelNumber] = new LevelAttempt
         {
             levelNumber = levelNumber,
             attempted = true,
+            playOrder = ++nextPlayOrder,
             passed = passed,
             coins = coins,
             timeToTargetSeconds = timeToTargetSeconds,
@@ -121,6 +129,7 @@ public static class SessionDataCollector
             glutenChildHandledCorrectly = glutenHandled,
             averageDishPrepTimeSeconds = avgPrepTime,
             customersArrived = customersArrived,
+            controlSettings = controlSettings,
         };
 
         Debug.Log(
@@ -169,5 +178,6 @@ public static class SessionDataCollector
     {
         attempts.Clear();
         currentSessionId = null;
+        nextPlayOrder = 0;
     }
 }

@@ -332,6 +332,26 @@
     }
     .notes-meta { font-size: 0.8rem; color: #aaa; margin-top: 6px; }
 
+    /* ── Control panel popover ─────────────── */
+    .cp-btn {
+      background: none; border: 1px solid #c5cdd8; border-radius: 4px;
+      padding: 2px 7px; cursor: pointer; font-size: 0.82rem; color: #7a8fa6;
+    }
+    .cp-btn.modified { border-color: #2a6fad; color: #2a6fad; font-weight: 700; }
+    .cp-popover {
+      display: none; position: fixed; z-index: 1000;
+      background: #fff; border: 1px solid #c5cdd8; border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15); padding: 14px 16px;
+      min-width: 230px; font-size: 0.85rem; direction: rtl;
+    }
+    .cp-popover.visible { display: block; }
+    .cp-title { font-weight: 700; color: #1e3a5f; margin-bottom: 10px;
+      border-bottom: 1px solid #eee; padding-bottom: 6px; font-size: 0.88rem; }
+    .cp-row { display: flex; justify-content: space-between; gap: 12px;
+      padding: 3px 0; color: #b0bec5; }
+    .cp-row.changed { color: #1e3a5f; font-weight: 600; }
+    .cp-val { white-space: nowrap; }
+
     /* ── Print styles ───────────────────────── */
     @media print {
       .loading-overlay,
@@ -665,6 +685,18 @@ function reconstructSessions(rows) {
       glutenChildServedByMistake:   glutenServed,
       glutenChildHandledCorrectly:  Math.max(0, glutenApp - glutenServed),
       averageDishPrepTimeSeconds:   (perf > 0 && ts !== -1) ? parseFloat((ts / perf).toFixed(2)) : -1,
+      playOrder:                    row.play_order || 0,
+      controlSettings: row.level_duration_default > 0 ? {
+        levelDurationSeconds:   row.level_duration_seconds,
+        levelDurationDefault:   row.level_duration_default,
+        angerTimeSeconds:       row.anger_time_seconds,
+        markAddedItemsEnabled:  !!row.mark_added_items_enabled,
+        dirtEnabled:            !!row.dirt_enabled,
+        concurrentCustomers:    row.concurrent_customers,
+        concurrentCustomersMax: row.concurrent_customers_max,
+        ingredientCount:        row.ingredient_count,
+        ingredientCountMax:     row.ingredient_count_max,
+      } : null,
     };
 
     session.levels.push(level);
@@ -672,9 +704,13 @@ function reconstructSessions(rows) {
   }
 
   const sessions = Array.from(map.values());
-  // Sort levels within each session by levelNumber
-  for (const s of sessions)
-    s.levels.sort((a, b) => levelSortKey(a.levelNumber) - levelSortKey(b.levelNumber));
+  // Sort levels within each session: by play order if available, otherwise by fixed game order
+  for (const s of sessions) {
+    const hasPlayOrder = s.levels.some(l => l.playOrder > 0);
+    s.levels.sort((a, b) => hasPlayOrder
+      ? (a.playOrder || 99) - (b.playOrder || 99)
+      : levelSortKey(a.levelNumber) - levelSortKey(b.levelNumber));
+  }
 
   return sessions;
 }
@@ -820,11 +856,13 @@ function renderDetail() {
 
 function renderLevelTable(s) {
   const headers = ['רמה', 'תוצאה', 'מטבעות', 'זמן (שנ׳)', 'הוגש סה״כ', 'מושלם',
-    'שגוי', 'קליקים כפולים', 'ילד גלוטן הופיע', 'הוגש גלוטן', 'לא הוגש גלוטן', 'זמן הכנה ממוצע'];
+    'שגוי', 'קליקים כפולים', 'ילד גלוטן הופיע', 'הוגש גלוטן', 'לא הוגש גלוטן', 'זמן הכנה ממוצע', '⚙'];
+
+  window._cpData = [];
 
   const rows = s.levels.map(l => {
     if (!l.attempted) {
-      return `<tr><td>${levelLabel(l.levelNumber)}</td><td colspan="11" class="na">לא שוחק</td></tr>`;
+      return `<tr><td>${levelLabel(l.levelNumber)}</td><td colspan="12" class="na">לא שוחק</td></tr>`;
     }
     const res = l.passed
       ? `<span class="badge badge-pass">עבר</span>`
@@ -832,6 +870,14 @@ function renderLevelTable(s) {
     const avg = l.averageDishPrepTimeSeconds === -1
       ? `<span class="na">לא זמין</span>`
       : l.averageDishPrepTimeSeconds.toFixed(1);
+
+    const cpIdx = window._cpData.length;
+    window._cpData.push(l.controlSettings || null);
+    const modified = isControlModified(l.controlSettings);
+    const cpBtn = l.controlSettings
+      ? `<button class="cp-btn${modified ? ' modified' : ''}" onclick="showControlPopover(this,${cpIdx})">⚙</button>`
+      : `<span class="na">—</span>`;
+
     return `<tr>
       <td>${levelLabel(l.levelNumber)}</td>
       <td>${res}</td>
@@ -845,6 +891,7 @@ function renderLevelTable(s) {
       <td class="${l.glutenChildServedByMistake > 0 ? 'shade-bad' : ''}">${l.glutenChildServedByMistake}</td>
       <td>${l.glutenChildHandledCorrectly}</td>
       <td>${avg}</td>
+      <td style="text-align:center">${cpBtn}</td>
     </tr>`;
   });
 
@@ -1095,6 +1142,53 @@ document.getElementById('refreshBtn').addEventListener('click', loadFromSupabase
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 loadFromSupabase();
+
+// ── Control panel popover ─────────────────────────────────────────────────────
+window._cpData = [];
+
+function isControlModified(cs) {
+  if (!cs) return false;
+  return cs.levelDurationSeconds !== cs.levelDurationDefault ||
+    cs.angerTimeSeconds !== 7 ||
+    cs.markAddedItemsEnabled ||
+    !cs.dirtEnabled ||
+    cs.concurrentCustomers !== cs.concurrentCustomersMax ||
+    cs.ingredientCount !== cs.ingredientCountMax;
+}
+
+function showControlPopover(btn, idx) {
+  const cs = window._cpData[idx];
+  if (!cs) return;
+  const pop = document.getElementById('cpPopover');
+
+  const r = (label, val, changed) =>
+    `<div class="cp-row${changed ? ' changed' : ''}">
+      <span>${label}</span><span class="cp-val">${val}</span>
+    </div>`;
+
+  const durDiff = cs.levelDurationSeconds - cs.levelDurationDefault;
+  const durStr  = cs.levelDurationSeconds + ' שנ׳' + (durDiff !== 0 ? ` (${durDiff > 0 ? '+' : ''}${durDiff})` : '');
+
+  pop.innerHTML =
+    `<div class="cp-title">הגדרות לוח בקרה</div>` +
+    r('זמן השלב',        durStr,                                          durDiff !== 0) +
+    r('מד סבלנות',       cs.angerTimeSeconds + ' שנ׳',                   cs.angerTimeSeconds !== 7) +
+    r('סימון מרכיבים',   cs.markAddedItemsEnabled ? 'מופעל' : 'כבוי',   cs.markAddedItemsEnabled) +
+    r('לכלוך',           cs.dirtEnabled ? 'מופעל' : 'כבוי',             !cs.dirtEnabled) +
+    r('לקוחות במקביל',   cs.concurrentCustomers + ' / ' + cs.concurrentCustomersMax, cs.concurrentCustomers !== cs.concurrentCustomersMax) +
+    r('מרכיבים בשלב',    cs.ingredientCount + ' / ' + cs.ingredientCountMax,          cs.ingredientCount !== cs.ingredientCountMax);
+
+  const rect = btn.getBoundingClientRect();
+  pop.style.top  = (rect.bottom + 6) + 'px';
+  pop.style.right = (window.innerWidth - rect.right) + 'px';
+  pop.style.left  = 'auto';
+  pop.classList.add('visible');
+  event.stopPropagation();
+}
+
+document.addEventListener('click', () =>
+  document.getElementById('cpPopover').classList.remove('visible'));
 </script>
+<div id="cpPopover" class="cp-popover" onclick="event.stopPropagation()"></div>
 </body>
 </html>

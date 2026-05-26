@@ -3669,6 +3669,7 @@ GameObject:
   - component: {fileID: 1139197420}
   - component: {fileID: 1139197419}
   - component: {fileID: 1139197421}
+  - component: {fileID: 1139197422}
   m_Layer: 0
   m_Name: TutorialManager
   m_TagString: Untagged
@@ -3707,6 +3708,18 @@ MonoBehaviour:
   tutorialCustomersCount: 3
   customerAudioSource: {fileID: 1139197421}
   glutenClip: {fileID: 8300000, guid: 5dd655fa7b64e1347b446242260a5f87, type: 3}
+  instructionAudioSource: {fileID: 1139197422}
+  instructionDelay: 3
+  clipEndOffset: 0.3
+  clipAddEggplant: {fileID: 8300000, guid: fa0240dc26cb0824188a4e8cd52380d5, type: 3}
+  clipWaitFrying: {fileID: 8300000, guid: 733661c14825f6b40aa6f6c34f801c07, type: 3}
+  clipBuildSandwich: {fileID: 8300000, guid: f86573cb68ba44a4589c1efc80dad956, type: 3}
+  clipServeCustomer: {fileID: 8300000, guid: 2761aaeadbb71484eae397d43bc41c5a, type: 3}
+  clipNextCustomer: {fileID: 8300000, guid: 957488b7c71089645b6580989324d01f, type: 3}
+  clipGoWash: {fileID: 8300000, guid: 4dbb743a76f627c48abda1d7a45644bb, type: 3}
+  clipWashHands: {fileID: 8300000, guid: 63096ddb5140d1b4bad7716402496205, type: 3}
+  clipGoBack: {fileID: 8300000, guid: 919dabc9affb80e47beb2fda382b27dc, type: 3}
+  clipGlutenWarning: {fileID: 8300000, guid: 06ae99eb116a30743a580e2f60ff04dc, type: 3}
   gameFlowManager: {fileID: 1497615210}
   customerLogic: {fileID: 0}
   dirtOverlay: {fileID: 1982988286}
@@ -3737,6 +3750,103 @@ Transform:
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &1139197421
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1139197418}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!82 &1139197422
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

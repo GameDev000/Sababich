@@ -42,6 +42,16 @@ public static class SupabaseClient
         public int duplicate_clicks;
         public int gluten_appeared;
         public int gluten_served;
+        public int level_duration_seconds;
+        public int level_duration_default;
+        public int anger_time_seconds;
+        public bool mark_added_items_enabled;
+        public bool dirt_enabled;
+        public int concurrent_customers;
+        public int concurrent_customers_max;
+        public int ingredient_count;
+        public int ingredient_count_max;
+        public int play_order;
     }
 
     // ── Public API ────────────────────────────────────────────────
@@ -90,6 +100,16 @@ public static class SupabaseClient
             duplicate_clicks = level.duplicateIngredientClicks,
             gluten_appeared = level.glutenChildAppeared,
             gluten_served = level.glutenChildServedByMistake,
+            level_duration_seconds   = level.controlSettings != null ? level.controlSettings.levelDurationSeconds  : 0,
+            level_duration_default   = level.controlSettings != null ? level.controlSettings.levelDurationDefault   : 0,
+            anger_time_seconds       = level.controlSettings != null ? level.controlSettings.angerTimeSeconds       : 0,
+            mark_added_items_enabled = level.controlSettings != null && level.controlSettings.markAddedItemsEnabled,
+            dirt_enabled             = level.controlSettings == null || level.controlSettings.dirtEnabled,
+            concurrent_customers     = level.controlSettings != null ? level.controlSettings.concurrentCustomers    : 1,
+            concurrent_customers_max = level.controlSettings != null ? level.controlSettings.concurrentCustomersMax : 1,
+            ingredient_count         = level.controlSettings != null ? level.controlSettings.ingredientCount        : 0,
+            ingredient_count_max     = level.controlSettings != null ? level.controlSettings.ingredientCountMax     : 0,
+            play_order               = level.playOrder,
         };
 
         string json = JsonUtility.ToJson(row);

@@ -30,6 +30,8 @@ public class LevelTwoTwoTimerWinLose : MonoBehaviour
     private float frozenTimeLeft = -1f;
     private int timeToTargetSeconds = -1;
 
+    private float originalDurationSeconds;
+
     private const string LevelTwoTwoTimeSecondsKey = "Level2_2TimeSeconds";
     private const string LevelTwoTwoCoinsKey = "Level2_2Coins";
     private const string LevelTwoTwoTotalServedKey = "Level2_2TotalServed";
@@ -40,6 +42,7 @@ public class LevelTwoTwoTimerWinLose : MonoBehaviour
     {
         LevelTwoTwoState.Reset();
 
+        originalDurationSeconds = levelDurationSeconds;
         timeLeft = levelDurationSeconds;
         UpdateTimerUI(timeLeft);
     }
@@ -194,7 +197,7 @@ public class LevelTwoTwoTimerWinLose : MonoBehaviour
             await DatabaseManager.SaveData((CloudSaveKeys.CustomersArrivedKey(22), LevelTwoTwoState.CustomersArrived));
         }
 
-        SessionDataCollector.RecordLevelAttempt(22, timeToTargetSeconds);
+        SessionDataCollector.RecordLevelAttempt(22, timeToTargetSeconds, Mathf.RoundToInt(levelDurationSeconds), Mathf.RoundToInt(originalDurationSeconds));
 
         Time.timeScale = 1f;
         SceneManager.LoadScene(endSceneName);

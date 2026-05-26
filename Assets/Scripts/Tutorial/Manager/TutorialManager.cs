@@ -55,6 +55,20 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] private AudioSource customerAudioSource;
     [SerializeField] private AudioClip glutenClip;
 
+    [Header("Instruction Audio")]
+    [SerializeField] private AudioSource instructionAudioSource;
+    [SerializeField] private float instructionDelay = 1f;
+    [SerializeField] private float clipEndOffset = 0.3f;
+    [SerializeField] private AudioClip clipAddEggplant;
+    [SerializeField] private AudioClip clipWaitFrying;
+    [SerializeField] private AudioClip clipBuildSandwich;
+    [SerializeField] private AudioClip clipServeCustomer;
+    [SerializeField] private AudioClip clipNextCustomer;
+    [SerializeField] private AudioClip clipGoWash;
+    [SerializeField] private AudioClip clipWashHands;
+    [SerializeField] private AudioClip clipGoBack;
+    [SerializeField] private AudioClip clipGlutenWarning;
+
     [Header("Game Flow Manager")]
     [SerializeField] private GameFlowManager gameFlowManager; // Reference to the GameFlowManager to update game phases
 
@@ -146,8 +160,9 @@ public class TutorialManager : MonoBehaviour
 
         if (fryZoneIngredient != null)
         {
-            fryZoneIngredient.StartFry(); // Start frying the eggplant
-            SetGamePhase(GamePhase.FryingEggplant); // Update game phase to frying eggplant
+            fryZoneIngredient.StartFry();
+            SetGamePhase(GamePhase.FryingEggplant);
+            StartCoroutine(PlayInstruction(clipWaitFrying)); // Narrate while player waits for frying to complete
         }
     }
 
@@ -187,8 +202,12 @@ public class TutorialManager : MonoBehaviour
 
         if (otherItems != null && otherItems.Length > 0 && otherItems[0] != null)
         {
-            otherItems[0].SetClickable(true); // Enable the first other item for sandwich building
-            ShowArrowAbove(otherItems[0].transform, 2f); // Show arrow above the first item
+            // Narrate before enabling first ingredient and showing arrow
+            StartCoroutine(PlayInstructionThenAct(clipBuildSandwich, () =>
+            {
+                otherItems[0].SetClickable(true);
+                ShowArrowAbove(otherItems[0].transform, 2f);
+            }));
         }
     }
 
@@ -229,8 +248,10 @@ public class TutorialManager : MonoBehaviour
 
             if (customerTarget != null)
             {
-                ShowArrowAbove(customerTarget, 2f); // Show arrow above the customer
-                SetGamePhase(GamePhase.ServeCustomer); // Update game phase to serve customer
+                SetGamePhase(GamePhase.ServeCustomer);
+                // Narrate before showing arrow above customer
+                StartCoroutine(PlayInstructionThenAct(clipServeCustomer, () =>
+                    ShowArrowAbove(customerTarget, 2f)));
             }
             else
             {
@@ -264,6 +285,7 @@ public class TutorialManager : MonoBehaviour
 
         Debug.Log("[Tutorial] Customer served successfully");
         ShowArrow(false);
+        StartCoroutine(PlayInstruction(clipNextCustomer)); // Narrate the transition to the next customer
 
         if (ScoreManager.Instance != null)
             ScoreManager.Instance.AddMoney(30);
@@ -297,6 +319,7 @@ public class TutorialManager : MonoBehaviour
             ShowArrow(false);
 
             SetGamePhase(GamePhase.ForbiddenCustomerWarning);
+            StartCoroutine(PlayInstruction(clipGlutenWarning, instructionDelay)); // Warn player not to serve this customer
 
             if (forbiddenRoutine != null) StopCoroutine(forbiddenRoutine);
             forbiddenRoutine = StartCoroutine(ForbiddenCustomerAutoLeaveRoutine());
@@ -308,12 +331,17 @@ public class TutorialManager : MonoBehaviour
             phase = TutorialPhase.FryEggplant;
             buildStep = 0;
 
-            if (eggplantItem != null)
-                eggplantItem.SetClickable(true);
-
             SetAllOtherItemsClickable(false);
-            ShowArrowAbove(eggplantItem ? eggplantItem.transform : null, 2.5f);
             SetGamePhase(GamePhase.AddRowEggplant);
+            // Narrate before enabling eggplant and showing arrow
+            StartCoroutine(PlayInstructionThenAct(clipAddEggplant, () =>
+            {
+                if (eggplantItem != null)
+                {
+                    eggplantItem.SetClickable(true);
+                    ShowArrowAbove(eggplantItem.transform, 2.5f);
+                }
+            }));
         }
         else
         {
@@ -325,13 +353,17 @@ public class TutorialManager : MonoBehaviour
 
             SetAllOtherItemsClickable(false);
 
+            SetGamePhase(GamePhase.AssembleDish);
+
             if (otherItems != null && otherItems.Length > 0 && otherItems[0] != null)
             {
-                otherItems[0].SetClickable(true);
-                ShowArrowAbove(otherItems[0].transform, 2f);
+                // Delay before narration to avoid overlap with previous instruction
+                StartCoroutine(PlayInstructionThenAct(clipBuildSandwich, () =>
+                {
+                    otherItems[0].SetClickable(true);
+                    ShowArrowAbove(otherItems[0].transform, 2f);
+                }, instructionDelay));
             }
-
-            SetGamePhase(GamePhase.AssembleDish);
         }
     }
 
@@ -363,9 +395,34 @@ public class TutorialManager : MonoBehaviour
 
 
 
+    // Plays a narration clip with an optional pre-delay before playback
+    private IEnumerator PlayInstruction(AudioClip clip, float preDelay = 0f)
+    {
+        if (preDelay > 0f)
+            yield return new WaitForSeconds(preDelay);
+
+        if (clip != null && instructionAudioSource != null)
+            instructionAudioSource.PlayOneShot(clip);
+    }
+
+    // Plays a narration clip, waits for it to finish, then executes onDone (show arrow + enable clickable)
+    // preDelay adds a buffer before playback for transitions where instructions are back-to-back
+    private IEnumerator PlayInstructionThenAct(AudioClip clip, System.Action onDone, float preDelay = 0f)
+    {
+        if (preDelay > 0f)
+            yield return new WaitForSeconds(preDelay);
+
+        if (clip != null && instructionAudioSource != null)
+        {
+            instructionAudioSource.PlayOneShot(clip);
+            yield return new WaitForSeconds(Mathf.Max(0f, clip.length - clipEndOffset));
+        }
+        onDone?.Invoke();
+    }
+
     /// <summary>
     /// Updates the customer sprite based on the number of served customers.
-    /// </summary> 
+    /// </summary>
     private void UpdateCustomerSprite()
     {
         
@@ -479,9 +536,10 @@ public class TutorialManager : MonoBehaviour
             if (eggplantItem != null) eggplantItem.SetClickable(false);
             SetAllOtherItemsClickable(false);
         }
-        ShowArrowAbove(kitchenArrowTarget, kitchenArrowYOffset);
-
         SetGamePhase(GamePhase.GoWashInKitchen);
+        // Narrate before showing kitchen arrow
+        StartCoroutine(PlayInstructionThenAct(clipGoWash, () =>
+            ShowArrowAbove(kitchenArrowTarget, kitchenArrowYOffset)));
     }
 
 
@@ -493,7 +551,9 @@ public class TutorialManager : MonoBehaviour
             if (arrow.Type != ArrowMoveCamera.ArrowType.ToKitchen) return;
 
             SetGamePhase(GamePhase.WashHands);
-            ShowArrowAbove(faucetTarget, faucetArrowYOffset);
+            // Narrate before showing faucet arrow
+            StartCoroutine(PlayInstructionThenAct(clipWashHands, () =>
+                ShowArrowAbove(faucetTarget, faucetArrowYOffset)));
             return;
         }
 
@@ -511,8 +571,10 @@ public class TutorialManager : MonoBehaviour
         if (phase != TutorialPhase.GoWashInKitchen) return;
         phase = TutorialPhase.ReturnToStand;
 
-        ShowArrowAbove(backArrowTarget, backArrowYOffset);
         SetGamePhase(GamePhase.GoBackToStand);
+        // Narrate before showing return arrow
+        StartCoroutine(PlayInstructionThenAct(clipGoBack, () =>
+            ShowArrowAbove(backArrowTarget, backArrowYOffset)));
 
     }
 

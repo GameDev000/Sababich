@@ -29,11 +29,14 @@ public class LevelTwoTimerWinLose : MonoBehaviour
     private float frozenTimeLeft = -1f;
     private int timeToTargetSeconds = -1;
 
+    private float originalDurationSeconds;
+
     private void Start()
     {
         // Clear stats from any previous attempt so retries don't accumulate
         LevelTwoState.Reset();
 
+        originalDurationSeconds = levelDurationSeconds;
         timeLeft = levelDurationSeconds;
         UpdateTimerUI(timeLeft);
     }
@@ -187,7 +190,7 @@ public class LevelTwoTimerWinLose : MonoBehaviour
         }
 
         // Record this level's attempt for dashboard export before leaving the scene
-        SessionDataCollector.RecordLevelAttempt(2, timeToTargetSeconds);
+        SessionDataCollector.RecordLevelAttempt(2, timeToTargetSeconds, Mathf.RoundToInt(levelDurationSeconds), Mathf.RoundToInt(originalDurationSeconds));
 
         Time.timeScale = 1f;
         SceneManager.LoadScene(endSceneName);

@@ -59,7 +59,7 @@ public class GameFlowManager : MonoBehaviour
                 break;
 
             case GamePhase.GoBackToStand:
-                uiInstructions.SetInstructions("עבודה טובה! \n עכשיו לחץ על החץ כדי להמשיך בעבודה.");
+                uiInstructions.SetInstructions("עכשיו לחץ על החץ כדי להמשיך בעבודה.");
                 break;
             case GamePhase.ForbiddenCustomerWarning:
                 uiInstructions.SetInstructions("רגע! הלקוח הנוכחי רגיש לגלוטן \n אסור להגיש לו מנה בכלל!");
