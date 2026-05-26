@@ -1203,8 +1203,8 @@ MonoBehaviour:
   failClip_level1_2: {fileID: 0}
   successClip_level2: {fileID: 0}
   failClip_level2: {fileID: 0}
-  successClip_level2_1: {fileID: 0}
-  failClip_level2_1: {fileID: 0}
+  successClip_level2_1: {fileID: 8300000, guid: 70d9bf60df97d064dbbe4dad2f66f23c, type: 3}
+  failClip_level2_1: {fileID: 8300000, guid: 7101c734416880046b34fdf700071ea8, type: 3}
   successClip_level2_2: {fileID: 0}
   failClip_level2_2: {fileID: 0}
   successClip_level3: {fileID: 0}

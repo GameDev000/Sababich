@@ -153,7 +153,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 37.8, y: -127.80002}
+  m_AnchoredPosition: {x: 37.8, y: -127.80003}
   m_SizeDelta: {x: 2291.4, y: 1170}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &70586133
@@ -630,6 +630,12 @@ MonoBehaviour:
   successMessage_level2: "\u05DB\u05DC \u05D4\u05DB\u05D1\u05D5\u05D3! \u05E2\u05DE\u05D3\u05EA
     \u05D1\u05DE\u05E9\u05D9\u05DE\u05D4. \u05D4\u05D9\u05E2\u05D3 \u05D4\u05D1\u05D0
     - \u05D0\u05E8\u05E6\u05D5\u05EA \u05D4\u05D1\u05E8\u05D9\u05EA!"
+  successMessage_level2_1: "\u05DB\u05DC \u05D4\u05DB\u05D1\u05D5\u05D3! \u05E2\u05DE\u05D3\u05EA
+    \u05D1\u05DE\u05E9\u05D9\u05DE\u05D4. \u05D4\u05D9\u05E2\u05D3 \u05D4\u05D1\u05D0
+    - \u05D0\u05E8\u05E6\u05D5\u05EA \u05D4\u05D1\u05E8\u05D9\u05EA 2!"
+  successMessage_level2_2: "\u05DB\u05DC \u05D4\u05DB\u05D1\u05D5\u05D3! \u05E2\u05DE\u05D3\u05EA
+    \u05D1\u05DE\u05E9\u05D9\u05DE\u05D4. \u05D4\u05D9\u05E2\u05D3 \u05D4\u05D1\u05D0
+    - \u05D0\u05E8\u05E6\u05D5\u05EA \u05D4\u05D1\u05E8\u05D9\u05EA 3!"
   successMessage_level3: "\u05DB\u05DC \u05D4\u05DB\u05D1\u05D5\u05D3! \u05E1\u05D9\u05D9\u05DE\u05EA
     \u05D0\u05EA \u05DB\u05DC \u05D4\u05E9\u05DC\u05D1\u05D9\u05DD!"
   failMessage_level1: "\u05DC\u05D0 \u05E0\u05D5\u05E8\u05D0.. \u05E0\u05E1\u05D4
@@ -640,6 +646,10 @@ MonoBehaviour:
     \u05E9\u05D5\u05D1"
   failMessage_level2: "\u05DC\u05D0 \u05E0\u05D5\u05E8\u05D0.. \u05E0\u05E1\u05D4
     \u05E9\u05D5\u05D1"
+  failMessage_level2_1: "\u05DC\u05D0 \u05E0\u05D5\u05E8\u05D0.. \u05E0\u05E1\u05D4
+    \u05E9\u05D5\u05D1"
+  failMessage_level2_2: "\u05DC\u05D0 \u05E0\u05D5\u05E8\u05D0.. \u05E0\u05E1\u05D4
+    \u05E9\u05D5\u05D1"
   failMessage_level3: "\u05DC\u05D0 \u05E0\u05D5\u05E8\u05D0.. \u05E0\u05E1\u05D4
     \u05E9\u05D5\u05D1"
   successClip_level1: {fileID: 0}
@@ -648,8 +658,12 @@ MonoBehaviour:
   failClip_level1_1: {fileID: 0}
   successClip_level1_2: {fileID: 0}
   failClip_level1_2: {fileID: 0}
-  successClip_level2: {fileID: 8300000, guid: 97665bf6165fe9f40a3474b0ce5b580f, type: 3}
-  failClip_level2: {fileID: 8300000, guid: bf6705e2fa15a964b8ab3ff6939e2494, type: 3}
+  successClip_level2: {fileID: 8300000, guid: 128ce32ea93baf4499033362bac7f516, type: 3}
+  failClip_level2: {fileID: 8300000, guid: 640982cb9e864f948a674ef8c8f8868f, type: 3}
+  successClip_level2_1: {fileID: 0}
+  failClip_level2_1: {fileID: 0}
+  successClip_level2_2: {fileID: 0}
+  failClip_level2_2: {fileID: 0}
   successClip_level3: {fileID: 0}
   failClip_level3: {fileID: 0}
   endLevelAudioSource: {fileID: 252420754}

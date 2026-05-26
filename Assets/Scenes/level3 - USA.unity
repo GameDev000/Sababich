@@ -2782,8 +2782,8 @@ MonoBehaviour:
     - {fileID: 21300000, guid: ef10a405a369d0340b64557b098ad3d5, type: 3}
     - {fileID: 21300000, guid: 17ca3daab5e235045bae164b643da746, type: 3}
     scoreIfNotServed: 0
-    successVoiceClip: {fileID: 8300000, guid: bf1d5144f96a9774fb362d9aadfecce8, type: 3}
-    failureVoiceClip: {fileID: 8300000, guid: 9f16fbb5ade4bfd4c952c3420894f581, type: 3}
+    successVoiceClip: {fileID: 8300000, guid: 0cac01ee0d99ec443bdd47fa82b0b1df, type: 3}
+    failureVoiceClip: {fileID: 8300000, guid: 0f7adac93300096488112cf580ad919c, type: 3}
   - name: full5
     sprite: {fileID: 21300000, guid: 87aada0da78c7dc49a4ea93479d16e57, type: 3}
     requiredIngredients:
@@ -2799,8 +2799,8 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 269c56fca0535f84a8c291f7e0a1a957, type: 3}
     - {fileID: 21300000, guid: 25f43392e10e4ef4bbadf1f6c546959b, type: 3}
     scoreIfNotServed: 0
-    successVoiceClip: {fileID: 8300000, guid: 4ba6c0c933fb2e141b3e2da04159ce91, type: 3}
-    failureVoiceClip: {fileID: 8300000, guid: 4601f110fcb130341b0fcd7f1aed44fd, type: 3}
+    successVoiceClip: {fileID: 8300000, guid: b5ea08ca6b81ce9429c26d57741165a6, type: 3}
+    failureVoiceClip: {fileID: 8300000, guid: 4c2dc2bf7b09e1a49bf4ebe7b01cad94, type: 3}
   - name: not_ToServe_1
     sprite: {fileID: 21300000, guid: f95b9f80c8ab2d04eb4cab7e8ab04360, type: 3}
     requiredIngredients:
@@ -2850,8 +2850,10 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 37e17a60fde732d4aadc35b9465765e1, type: 3}
     - {fileID: 21300000, guid: 0b6dffdbd7eeac14a94227ff3d841469, type: 3}
     scoreIfNotServed: 0
-    successVoiceClip: {fileID: 8300000, guid: 4ba6c0c933fb2e141b3e2da04159ce91, type: 3}
-    failureVoiceClip: {fileID: 8300000, guid: 9130b0e5631711c428408913ab4b1333, type: 3}
+    successVoiceClip: {fileID: 8300000, guid: bf1d5144f96a9774fb362d9aadfecce8, type: 3}
+    failureVoiceClip: {fileID: 8300000, guid: 4601f110fcb130341b0fcd7f1aed44fd, type: 3}
+  preventGlutenCustomerAsFirstSpawn: 1
+  minCustomersBeforeGlutenCustomer: 1
   coinFlyVFX: {fileID: 2099307325}
   maxMissingItems: 2
   baseOrderReward: 30
@@ -2864,6 +2866,9 @@ MonoBehaviour:
   shouldRunInstructions_level3: 1
   customerVoiceAudioSource: {fileID: 824672116}
   customerVoiceVolume: 1
+  reminderAudioSource: {fileID: 0}
+  glutenReminderClip: {fileID: 0}
+  reminderVolume: 1
 --- !u!4 &824672115
 Transform:
   m_ObjectHideFlags: 0
@@ -3186,6 +3191,10 @@ MonoBehaviour:
   timerFinishedClip: {fileID: 8300000, guid: 4cd7def18c3320048ad4d1fd58e89507, type: 3}
   tickingClockVolume: 0.2
   timerFinishedVolume: 0.2
+  burnWarningAudioSource: {fileID: 0}
+  eggplantBurnWarningClip: {fileID: 0}
+  secondsBeforeBurntWarning: 3
+  burnWarningVolume: 2
   shakeWhenReady: 1
   readyShakeTarget: {fileID: 881219674}
   shakeOnlyInLevel3: 1
@@ -5223,6 +5232,10 @@ MonoBehaviour:
   timerFinishedClip: {fileID: 8300000, guid: 4cd7def18c3320048ad4d1fd58e89507, type: 3}
   tickingClockVolume: 1
   timerFinishedVolume: 1
+  burnWarningAudioSource: {fileID: 0}
+  eggplantBurnWarningClip: {fileID: 0}
+  secondsBeforeBurntWarning: 3
+  burnWarningVolume: 2
   shakeWhenReady: 1
   readyShakeTarget: {fileID: 1292984843}
   shakeOnlyInLevel3: 1
@@ -6692,6 +6705,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1605576798}
   - component: {fileID: 1605576797}
+  - component: {fileID: 1605576799}
   m_Layer: 0
   m_Name: instructionManager
   m_TagString: Untagged
@@ -6719,7 +6733,11 @@ MonoBehaviour:
     trigger: 0
     levelId: 3
     customerIndex: 0
+    instructionVoiceClip: {fileID: 8300000, guid: 9161061b7134338428a0208fd5e663e1, type: 3}
   overlay: {fileID: 482482092}
+  instructionVoiceAudioSource: {fileID: 1605576799}
+  instructionVoiceVolume: 1
+  ignoreListenerPause: 1
   currentLevelId: 3
 --- !u!4 &1605576798
 Transform:
@@ -6736,6 +6754,103 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &1605576799
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1605576796}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1615110012
 GameObject:
   m_ObjectHideFlags: 0
