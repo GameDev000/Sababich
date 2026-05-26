@@ -55,6 +55,36 @@ public static class SessionDataCollector
             glutenServed = LevelOneTwoState.GlutenChildServed;
             customersArrived = LevelOneTwoState.CustomersArrived;
         }
+        else if (levelNumber == 21)
+        {
+            passed = LevelTwoOneState.IsSuccess;
+            totalServed = LevelTwoOneState.TotalServedDishes;
+            perfectServed = LevelTwoOneState.PerfectServedDishes;
+            duplicateClicks = LevelTwoOneState.DuplicateIngredientClicks;
+            glutenAppeared = LevelTwoOneState.GlutenChildAppeared;
+            glutenServed = LevelTwoOneState.GlutenChildServed;
+            customersArrived = LevelTwoOneState.CustomersArrived;
+        }
+        else if (levelNumber == 22)
+        {
+            passed = LevelTwoTwoState.IsSuccess;
+            totalServed = LevelTwoTwoState.TotalServedDishes;
+            perfectServed = LevelTwoTwoState.PerfectServedDishes;
+            duplicateClicks = LevelTwoTwoState.DuplicateIngredientClicks;
+            glutenAppeared = LevelTwoTwoState.GlutenChildAppeared;
+            glutenServed = LevelTwoTwoState.GlutenChildServed;
+            customersArrived = LevelTwoTwoState.CustomersArrived;
+        }
+        else if (levelNumber == 31)
+        {
+            passed = LevelThreeOneState.IsSuccess;
+            totalServed = LevelThreeOneState.TotalServedDishes;
+            perfectServed = LevelThreeOneState.PerfectServedDishes;
+            duplicateClicks = LevelThreeOneState.DuplicateIngredientClicks;
+            glutenAppeared = LevelThreeOneState.GlutenChildAppeared;
+            glutenServed = LevelThreeOneState.GlutenChildServed;
+            customersArrived = LevelThreeOneState.CustomersArrived;
+        }
         else // level 3
         {
             passed = LevelThreeState.IsSuccess;

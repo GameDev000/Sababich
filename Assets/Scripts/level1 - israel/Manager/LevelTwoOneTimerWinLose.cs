@@ -191,6 +191,7 @@ public class LevelTwoOneTimerWinLose : MonoBehaviour
             await DatabaseManager.SaveData((CloudSaveKeys.DuplicateClicksKey(21), LevelTwoOneState.DuplicateIngredientClicks));
             await DatabaseManager.SaveData((CloudSaveKeys.GlutenChildAppearedKey(21), LevelTwoOneState.GlutenChildAppeared));
             await DatabaseManager.SaveData((CloudSaveKeys.GlutenChildServedKey(21), LevelTwoOneState.GlutenChildServed));
+            await DatabaseManager.SaveData((CloudSaveKeys.CustomersArrivedKey(21), LevelTwoOneState.CustomersArrived));
         }
 
         SessionDataCollector.RecordLevelAttempt(21, timeToTargetSeconds);

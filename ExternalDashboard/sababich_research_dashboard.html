@@ -394,6 +394,8 @@
         <option value="11">רמה 1.1</option>
         <option value="12">רמה 1.2</option>
         <option value="2">רמה 2</option>
+        <option value="21">רמה 2.1</option>
+        <option value="22">רמה 2.2</option>
         <option value="3">רמה 3</option>
       </select>
     </div>
@@ -554,10 +556,12 @@ let glutenChart   = null;
 function levelLabel(n) {
   if (n === 11) return 'רמה 1.1';
   if (n === 12) return 'רמה 1.2';
+  if (n === 21) return 'רמה 2.1';
+  if (n === 22) return 'רמה 2.2';
   return `רמה ${n}`;
 }
 
-const LEVEL_ORDER = [1, 11, 12, 2, 3];
+const LEVEL_ORDER = [1, 11, 12, 2, 21, 22, 3];
 function levelSortKey(n) { const i = LEVEL_ORDER.indexOf(n); return i === -1 ? 99 : i; }
 
 function fmt(val) {
