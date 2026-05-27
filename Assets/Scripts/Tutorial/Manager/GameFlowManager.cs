@@ -26,7 +26,7 @@ public class GameFlowManager : MonoBehaviour
         switch (newPhase) // Update UI instructions based on the current phase, will be on hebrew later
         {
             case GamePhase.AddRowEggplant:
-                uiInstructions.SetInstructions("הכנס חצילים אל עמדת הטיגון .");
+                uiInstructions.SetInstructions("הכנס חצילים אל עמדת הטיגון ");
                 //uiInstructions.SetInstructions("Insert eggplants into the frying station");
                 break;
 

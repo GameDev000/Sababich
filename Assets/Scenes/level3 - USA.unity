@@ -146,14 +146,14 @@ RectTransform:
   m_GameObject: {fileID: 17208866}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.18745315, y: 0.8331251, z: 0.8331251}
+  m_LocalScale: {x: 0.13789403, y: 0.61286235, z: 0.61286235}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 482482090}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -0.001953125}
+  m_AnchoredPosition: {x: 0, y: 3}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &17208868
@@ -203,8 +203,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 28
+  m_fontSizeBase: 28
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -241,7 +241,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -95.3956, y: 0, z: -94.04248, w: 0}
+  m_margin: {x: -158.42496, y: 0, z: -167.29277, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -1883,18 +1883,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 482482089}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 14.735328, y: 2.5263247, z: 2.5263247}
+  m_LocalScale: {x: 20.031204, y: 3.4342859, z: 3.4342859}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 310236953}
   - {fileID: 17208867}
+  - {fileID: 310236953}
   m_Father: {fileID: 1051982458}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -272}
+  m_AnchoredPosition: {x: 0, y: -285.06}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!225 &482482091
@@ -1941,7 +1941,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0.99215686, b: 0.8156863, a: 0.78431374}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3191,6 +3191,10 @@ MonoBehaviour:
   timerFinishedClip: {fileID: 8300000, guid: 4cd7def18c3320048ad4d1fd58e89507, type: 3}
   tickingClockVolume: 0.2
   timerFinishedVolume: 0.2
+  firstTimerFinishedAudioSource: {fileID: 0}
+  eggplantFirstTimerFinishedClip: {fileID: 0}
+  chipsFirstTimerFinishedClip: {fileID: 0}
+  firstTimerFinishedVolume: 1
   burnWarningAudioSource: {fileID: 0}
   eggplantBurnWarningClip: {fileID: 0}
   secondsBeforeBurntWarning: 3
@@ -5232,6 +5236,10 @@ MonoBehaviour:
   timerFinishedClip: {fileID: 8300000, guid: 4cd7def18c3320048ad4d1fd58e89507, type: 3}
   tickingClockVolume: 1
   timerFinishedVolume: 1
+  firstTimerFinishedAudioSource: {fileID: 0}
+  eggplantFirstTimerFinishedClip: {fileID: 0}
+  chipsFirstTimerFinishedClip: {fileID: 0}
+  firstTimerFinishedVolume: 1
   burnWarningAudioSource: {fileID: 0}
   eggplantBurnWarningClip: {fileID: 0}
   secondsBeforeBurntWarning: 3
