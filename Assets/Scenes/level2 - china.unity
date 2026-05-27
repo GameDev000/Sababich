@@ -1753,7 +1753,7 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 5973f473922649146a7c2b1dcf907f1d, type: 3}
     - {fileID: 21300000, guid: dd87182cf7566e64595499ba7d9f8379, type: 3}
     scoreIfNotServed: 0
-    successVoiceClip: {fileID: 8300000, guid: db90bfa3058b2e54ba64c8832640b521, type: 3}
+    successVoiceClip: {fileID: 8300000, guid: b3a62a7f55b88b74a8fda45486ea2b39, type: 3}
     failureVoiceClip: {fileID: 8300000, guid: badd1596f4559ac4380d7970ad616acd, type: 3}
   - name: notToServe
     sprite: {fileID: 631383137157731774, guid: 9532189d6153b0a44a26d00b91076d93, type: 3}
@@ -13105,6 +13105,10 @@ PrefabInstance:
     - target: {fileID: 4173742809619845330, guid: 4c0914c7c8f14894696d4b40bed48725, type: 3}
       propertyPath: ingredientIcons.Array.data[6].localPosition.y
       value: 0.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 7229633725886005063, guid: 4c0914c7c8f14894696d4b40bed48725, type: 3}
+      propertyPath: m_SortingOrder
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 8304715749176166037, guid: 4c0914c7c8f14894696d4b40bed48725, type: 3}
       propertyPath: m_Name
