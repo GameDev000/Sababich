@@ -1173,6 +1173,12 @@ MonoBehaviour:
   successMessage_level2: "\u05DB\u05DC \u05D4\u05DB\u05D1\u05D5\u05D3! \u05E2\u05DE\u05D3\u05EA
     \u05D1\u05DE\u05E9\u05D9\u05DE\u05D4. \u05D4\u05D9\u05E2\u05D3 \u05D4\u05D1\u05D0
     - \u05D0\u05E8\u05E6\u05D5\u05EA \u05D4\u05D1\u05E8\u05D9\u05EA!"
+  successMessage_level2_1: "\u05DB\u05DC \u05D4\u05DB\u05D1\u05D5\u05D3! \u05E2\u05DE\u05D3\u05EA
+    \u05D1\u05DE\u05E9\u05D9\u05DE\u05D4. \u05D4\u05D9\u05E2\u05D3 \u05D4\u05D1\u05D0
+    - \u05D0\u05E8\u05E6\u05D5\u05EA \u05D4\u05D1\u05E8\u05D9\u05EA 2!"
+  successMessage_level2_2: "\u05DB\u05DC \u05D4\u05DB\u05D1\u05D5\u05D3! \u05E2\u05DE\u05D3\u05EA
+    \u05D1\u05DE\u05E9\u05D9\u05DE\u05D4. \u05D4\u05D9\u05E2\u05D3 \u05D4\u05D1\u05D0
+    - \u05D0\u05E8\u05E6\u05D5\u05EA \u05D4\u05D1\u05E8\u05D9\u05EA 3!"
   successMessage_level3: "\u05DB\u05DC \u05D4\u05DB\u05D1\u05D5\u05D3! \u05E1\u05D9\u05D9\u05DE\u05EA
     \u05D0\u05EA \u05DB\u05DC \u05D4\u05E9\u05DC\u05D1\u05D9\u05DD!"
   failMessage_level1: "\u05DC\u05D0 \u05E0\u05D5\u05E8\u05D0.. \u05E0\u05E1\u05D4
@@ -1182,6 +1188,10 @@ MonoBehaviour:
   failMessage_level1_2: "\u05DC\u05D0 \u05E0\u05D5\u05E8\u05D0.. \u05E0\u05E1\u05D4
     \u05E9\u05D5\u05D1"
   failMessage_level2: "\u05DC\u05D0 \u05E0\u05D5\u05E8\u05D0.. \u05E0\u05E1\u05D4
+    \u05E9\u05D5\u05D1"
+  failMessage_level2_1: "\u05DC\u05D0 \u05E0\u05D5\u05E8\u05D0.. \u05E0\u05E1\u05D4
+    \u05E9\u05D5\u05D1"
+  failMessage_level2_2: "\u05DC\u05D0 \u05E0\u05D5\u05E8\u05D0.. \u05E0\u05E1\u05D4
     \u05E9\u05D5\u05D1"
   failMessage_level3: "\u05DC\u05D0 \u05E0\u05D5\u05E8\u05D0.. \u05E0\u05E1\u05D4
     \u05E9\u05D5\u05D1"
@@ -1193,6 +1203,10 @@ MonoBehaviour:
   failClip_level1_2: {fileID: 0}
   successClip_level2: {fileID: 0}
   failClip_level2: {fileID: 0}
+  successClip_level2_1: {fileID: 0}
+  failClip_level2_1: {fileID: 0}
+  successClip_level2_2: {fileID: 0}
+  failClip_level2_2: {fileID: 0}
   successClip_level3: {fileID: 8300000, guid: 8909ac15442a5a14088fbf6158a9c5d0, type: 3}
   failClip_level3: {fileID: 8300000, guid: 23c93fb37e5caae48a791a118e3d7ee7, type: 3}
   endLevelAudioSource: {fileID: 877708386}
@@ -1572,7 +1586,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 192, y: 9}
+  m_AnchoredPosition: {x: 165, y: 9}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1209533631
