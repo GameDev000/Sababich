@@ -584,6 +584,9 @@ function levelLabel(n) {
 const LEVEL_ORDER = [1, 11, 12, 2, 21, 22, 3];
 function levelSortKey(n) { const i = LEVEL_ORDER.indexOf(n); return i === -1 ? 99 : i; }
 
+const LEVEL_COLORS = { 1: '#2a6fad', 11: '#4da6d9', 12: '#2a9d8f', 2: '#e06c2a', 21: '#2a8a5a', 22: '#e84393', 3: '#795548' };
+function levelColor(n) { return LEVEL_COLORS[n] || '#888888'; }
+
 function fmt(val) {
   if (val === null || val === undefined || val === -1) return 'לא זמין';
   return String(val);
@@ -978,8 +981,6 @@ function renderCharts() {
   const sessions = filteredSessions().slice().reverse(); // oldest first
   const labels   = sessions.map(s => fmtDate(s.sessionDateTimeISO));
 
-  const COLORS = ['#2a6fad','#e06c2a','#2a8a5a','#7a30a0','#c03030'];
-
   // Level numbers: when filter active → only that level; otherwise all levels in game order
   const levelNums = byLevel
     ? [filterLevel]
@@ -995,14 +996,14 @@ function renderCharts() {
         return (v === -1 || v == null) ? null : v;
       }),
       spanGaps: true, tension: 0.3, pointRadius: 4, borderWidth: 2, fill: false,
-      borderColor: COLORS[i % COLORS.length], backgroundColor: COLORS[i % COLORS.length],
+      borderColor: levelColor(n), backgroundColor: levelColor(n),
     }));
   }
   function levelBar(field) {
     return levelNums.map((n, i) => ({
       label: levelLabel(n),
       data: sessions.map(s => { const l = s.levels.find(l => l.levelNumber === n && l.attempted); return l ? l[field] : null; }),
-      backgroundColor: COLORS[i % COLORS.length],
+      backgroundColor: levelColor(n),
     }));
   }
 
@@ -1059,7 +1060,7 @@ function renderCharts() {
   const accuracyDatasets = [];
   levelNums.forEach((n, i) => {
     const sk = `lvl${n}`;
-    accuracyDatasets.push({ label: levelLabel(n), data: sessions.map(s => { const l = s.levels.find(l => l.levelNumber === n && l.attempted); return l ? l.perfectServedDishes : null; }), backgroundColor: COLORS[i % COLORS.length], stack: sk, barPercentage: 0.7 });
+    accuracyDatasets.push({ label: levelLabel(n), data: sessions.map(s => { const l = s.levels.find(l => l.levelNumber === n && l.attempted); return l ? l.perfectServedDishes : null; }), backgroundColor: levelColor(n), stack: sk, barPercentage: 0.7 });
     accuracyDatasets.push({ label: 'שגוי',         data: sessions.map(s => { const l = s.levels.find(l => l.levelNumber === n && l.attempted); return l ? l.incorrectDishes : null; }),      backgroundColor: '#f4a6a6',                 stack: sk, barPercentage: 0.7 });
     accuracyDatasets.push({ label: 'לא שורת',      data: sessions.map(s => { const l = s.levels.find(l => l.levelNumber === n && l.attempted); return l ? Math.max(0, l.customersArrived - l.totalServedDishes) : null; }), backgroundColor: '#d0d8e4', stack: sk, barPercentage: 0.7 });
   });
@@ -1077,7 +1078,7 @@ function renderCharts() {
     data: {
       labels,
       datasets: levelNums.flatMap((n, i) => [
-        { label: levelLabel(n),   data: sessions.map(s => { const l = s.levels.find(l => l.levelNumber === n && l.attempted); return l ? l.glutenChildHandledCorrectly : null; }), backgroundColor: COLORS[i % COLORS.length], stack: `lvl${n}` },
+        { label: levelLabel(n),   data: sessions.map(s => { const l = s.levels.find(l => l.levelNumber === n && l.attempted); return l ? l.glutenChildHandledCorrectly : null; }), backgroundColor: levelColor(n), stack: `lvl${n}` },
         { label: 'הוגש בטעות',    data: sessions.map(s => { const l = s.levels.find(l => l.levelNumber === n && l.attempted); return l ? l.glutenChildServedByMistake : null; }),  backgroundColor: '#f4a6a6',                 stack: `lvl${n}` },
       ])
     },

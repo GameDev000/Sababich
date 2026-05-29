@@ -58,7 +58,6 @@ public class TutorialManager : MonoBehaviour
     [Header("Instruction Audio")]
     [SerializeField] private AudioSource instructionAudioSource;
     [SerializeField] private float instructionDelay = 1f;
-    [SerializeField] private float clipEndOffset = 0.3f;
     [SerializeField] private AudioClip clipAddEggplant;
     [SerializeField] private AudioClip clipWaitFrying;
     [SerializeField] private AudioClip clipBuildSandwich;
@@ -156,7 +155,7 @@ public class TutorialManager : MonoBehaviour
 
         Debug.Log("[TutorialManager] Eggplant clicked - starting fry");
 
-        ShowArrow(false);
+        StopInstruction();
 
         if (fryZoneIngredient != null)
         {
@@ -181,7 +180,7 @@ public class TutorialManager : MonoBehaviour
     public void OnEggplantTakenFromPan()
     {
         Debug.Log("[TutorialManager] Eggplant taken from pan");
-        ShowArrow(false);
+        StopInstruction();
     }
 
     /// <summary>
@@ -231,11 +230,13 @@ public class TutorialManager : MonoBehaviour
 
         Debug.Log($"[Tutorial] Correct ingredient: {ingredientName} (step {buildStep})");
 
+        StopInstruction();
+
         if (otherItems != null &&
             buildStep < otherItems.Length &&
             otherItems[buildStep] != null)
         {
-            otherItems[buildStep].SetClickable(false);// Disable the current item after it's been used
+            otherItems[buildStep].SetClickable(false);
         }
 
         buildStep++; // Move to the next step
@@ -284,7 +285,7 @@ public class TutorialManager : MonoBehaviour
         }
 
         Debug.Log("[Tutorial] Customer served successfully");
-        ShowArrow(false);
+        StopInstruction();
         StartCoroutine(PlayInstruction(clipNextCustomer)); // Narrate the transition to the next customer
 
         if (ScoreManager.Instance != null)
@@ -395,6 +396,14 @@ public class TutorialManager : MonoBehaviour
 
 
 
+    // Stops the current instruction audio and hides the arrow when the player acts
+    private void StopInstruction()
+    {
+        if (instructionAudioSource != null)
+            instructionAudioSource.Stop();
+        ShowArrow(false);
+    }
+
     // Plays a narration clip with an optional pre-delay before playback
     private IEnumerator PlayInstruction(AudioClip clip, float preDelay = 0f)
     {
@@ -405,7 +414,7 @@ public class TutorialManager : MonoBehaviour
             instructionAudioSource.PlayOneShot(clip);
     }
 
-    // Plays a narration clip, waits for it to finish, then executes onDone (show arrow + enable clickable)
+    // Plays a narration clip and immediately executes onDone (show arrow + enable clickable)
     // preDelay adds a buffer before playback for transitions where instructions are back-to-back
     private IEnumerator PlayInstructionThenAct(AudioClip clip, System.Action onDone, float preDelay = 0f)
     {
@@ -413,10 +422,8 @@ public class TutorialManager : MonoBehaviour
             yield return new WaitForSeconds(preDelay);
 
         if (clip != null && instructionAudioSource != null)
-        {
             instructionAudioSource.PlayOneShot(clip);
-            yield return new WaitForSeconds(Mathf.Max(0f, clip.length - clipEndOffset));
-        }
+
         onDone?.Invoke();
     }
 
@@ -550,6 +557,7 @@ public class TutorialManager : MonoBehaviour
         {
             if (arrow.Type != ArrowMoveCamera.ArrowType.ToKitchen) return;
 
+            StopInstruction();
             SetGamePhase(GamePhase.WashHands);
             // Narrate before showing faucet arrow
             StartCoroutine(PlayInstructionThenAct(clipWashHands, () =>
@@ -561,6 +569,7 @@ public class TutorialManager : MonoBehaviour
         {
             if (arrow.Type != ArrowMoveCamera.ArrowType.ToMain) return;
 
+            StopInstruction();
             ResumeBuildAfterCleaning();
             return;
         }
@@ -571,6 +580,7 @@ public class TutorialManager : MonoBehaviour
         if (phase != TutorialPhase.GoWashInKitchen) return;
         phase = TutorialPhase.ReturnToStand;
 
+        StopInstruction();
         SetGamePhase(GamePhase.GoBackToStand);
         // Narrate before showing return arrow
         StartCoroutine(PlayInstructionThenAct(clipGoBack, () =>
