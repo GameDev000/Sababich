@@ -268,6 +268,17 @@
       border-bottom: 1px solid #eaeef3;
     }
 
+    /* ── Info tooltips ──────────────────────── */
+    .info-icon {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 15px; height: 15px; border-radius: 50%;
+      background: #2a6fad; color: white;
+      font-size: 0.65rem; font-weight: bold; font-style: italic;
+      cursor: help; position: relative;
+      margin-inline-start: 5px; vertical-align: middle; flex-shrink: 0;
+      font-family: Georgia, serif;
+    }
+
     /* ── Domain charts ──────────────────────── */
     .domain-section {
       background: #fff;
@@ -285,14 +296,24 @@
       border-inline-start: 4px solid #2a6fad;
       padding: 8px 14px;
       border-radius: 4px;
-      margin-bottom: 14px;
+      margin-bottom: 0;
       letter-spacing: 0.03em;
+      cursor: pointer;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      user-select: none;
     }
-    .charts-row {
+    .domain-title:hover { background: #ddeaf8; }
+    .domain-arrow { transition: transform 0.2s; display: inline-block; margin-inline-end: 8px; }
+    .domain-section.open .domain-arrow { transform: rotate(-90deg); }
+    .domain-section .charts-row { display: none; margin-top: 14px; }
+    .domain-section.open .charts-row {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 18px;
     }
+    th { overflow: visible; }
     .chart-card {
       background: #f8fafc;
       border: 1px solid #dde3ec;
@@ -432,11 +453,72 @@
 
   <!-- Summary cards -->
   <div class="cards-row">
-    <div class="card"><div class="card-label">סשנים</div><div class="card-value" id="cardSessions">—</div></div>
-<div class="card"><div class="card-label">ממוצע מטבעות</div><div class="card-value" id="cardAvgCoins">—</div></div>
-    <div class="card"><div class="card-label">זמן ממוצע להכנת מנה (שנ')</div><div class="card-value" id="cardAvgTime">—</div></div>
-    <div class="card"><div class="card-label">מנות שהוגשו סה״כ</div><div class="card-value" id="cardTotalServed">—</div></div>
-    <div class="card"><div class="card-label">שגיאות סה״כ</div><div class="card-value" id="cardErrors">—</div></div>
+    <div class="card"><div class="card-label">סשנים <i class="info-icon" data-tip="מספר פעמים שהשחקן שיחק">i</i></div><div class="card-value" id="cardSessions">—</div></div>
+    <div class="card"><div class="card-label">ממוצע מטבעות <i class="info-icon" data-tip="ממוצע המטבעות שנאספו בכל סשן">i</i></div><div class="card-value" id="cardAvgCoins">—</div></div>
+    <div class="card"><div class="card-label">זמן ממוצע להכנת מנה (שנ') <i class="info-icon" data-tip="זמן עד היעד חלקי מנות מושלמות — מדד לקצב ודיוק">i</i></div><div class="card-value" id="cardAvgTime">—</div></div>
+    <div class="card"><div class="card-label">מנות שהוגשו סה״כ <i class="info-icon" data-tip="סך כל המנות שהוגשו ללקוחות (כולל מושלמות ושגויות)">i</i></div><div class="card-value" id="cardTotalServed">—</div></div>
+    <div class="card"><div class="card-label">שגיאות סה״כ <i class="info-icon" data-tip="מנות שגויות + קליקים כפולים + הגשות גלוטן בטעות">i</i></div><div class="card-value" id="cardErrors">—</div></div>
+  </div>
+
+  <!-- Charts by functional domain -->
+  <div class="section-title" style="margin-top:8px">גרפים לפי תחומים תפקודיים לאורך זמן</div>
+
+  <div class="domain-section" id="domain1">
+    <div class="domain-title" onclick="toggleDomain('domain1')"><span class="domain-arrow">◀</span>עמידה ביעדים והישגיות</div>
+    <div class="charts-row">
+      <div class="chart-card">
+        <div class="chart-label">מטבעות <i class="info-icon" data-tip="ניקוד שנצבר בכל רמה — מדד ליעילות כוללת">i</i></div>
+        <canvas id="chartCoins"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-label">מנות שהוגשו <i class="info-icon" data-tip="כמות הלקוחות שקיבלו מנה (כולל מושלמות ושגויות)">i</i></div>
+        <canvas id="chartServed"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="domain-section" id="domain2">
+    <div class="domain-title" onclick="toggleDomain('domain2')"><span class="domain-arrow">◀</span>קשב וחזרתיות</div>
+    <div class="charts-row">
+      <div class="chart-card">
+        <div class="chart-label">קליקים כפולים <i class="info-icon" data-tip="לחיצה חוזרת על מרכיב שכבר נמצא בצלחת">i</i></div>
+        <canvas id="chartDuplicates"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="domain-section" id="domain3">
+    <div class="domain-title" onclick="toggleDomain('domain3')"><span class="domain-arrow">◀</span>תכנון זמן ויעילות משימה</div>
+    <div class="charts-row">
+      <div class="chart-card">
+        <div class="chart-label">זמן למטרה <i class="info-icon" data-tip="שניות שחלפו עד שנצבר מספיק מטבעות ליעד הרמה">i</i></div>
+        <canvas id="chartTime"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-label">זמן הכנת מנה ממוצע <i class="info-icon" data-tip="זמן למטרה חלקי מנות מושלמות — מדד לקצב ויעילות">i</i></div>
+        <canvas id="chartAvgPrep"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="domain-section" id="domain4">
+    <div class="domain-title" onclick="toggleDomain('domain4')"><span class="domain-arrow">◀</span>דיוק</div>
+    <div class="charts-row">
+      <div class="chart-card">
+        <div class="chart-label">מנות מושלמות מול שגויות <i class="info-icon" data-tip="מנות עם כל המרכיבים הנכונים לעומת מנות עם טעות או חוסר">i</i></div>
+        <canvas id="chartPerfect"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="domain-section" id="domain5">
+    <div class="domain-title" onclick="toggleDomain('domain5')"><span class="domain-arrow">◀</span>ניהול גלוטן</div>
+    <div class="charts-row">
+      <div class="chart-card">
+        <div class="chart-label">אירועי גלוטן <i class="info-icon" data-tip="ילד עם אלרגיה לגלוטן הגיע — האם זוהה ולא הוגש לו גלוטן">i</i></div>
+        <canvas id="chartGluten"></canvas>
+      </div>
+    </div>
   </div>
 
   <!-- Session list -->
@@ -464,72 +546,6 @@
       <table id="levelTable"></table>
     </div>
     <div id="obsSections"></div>
-  </div>
-
-  <!-- Charts by functional domain -->
-  <div class="section-title" style="margin-top:8px">גרפים לפי תחומים תפקודיים לאורך זמן</div>
-
-  <!-- Domain 1: תפוקה ויעילות -->
-  <div class="domain-section">
-    <div class="domain-title">תפוקה ויעילות</div>
-    <div class="charts-row">
-      <div class="chart-card">
-        <div class="chart-label">מטבעות</div>
-        <canvas id="chartCoins"></canvas>
-      </div>
-      <div class="chart-card">
-        <div class="chart-label">מנות שהוגשו</div>
-        <canvas id="chartServed"></canvas>
-      </div>
-    </div>
-  </div>
-
-  <!-- Domain 2: קשב וחזרתיות -->
-  <div class="domain-section">
-    <div class="domain-title">קשב וחזרתיות</div>
-    <div class="charts-row">
-      <div class="chart-card">
-        <div class="chart-label">קליקים כפולים</div>
-        <canvas id="chartDuplicates"></canvas>
-      </div>
-    </div>
-  </div>
-
-  <!-- Domain 3: תכנון ויעילות משימה -->
-  <div class="domain-section">
-    <div class="domain-title">תכנון ויעילות משימה</div>
-    <div class="charts-row">
-      <div class="chart-card">
-        <div class="chart-label">זמן למטרה</div>
-        <canvas id="chartTime"></canvas>
-      </div>
-      <div class="chart-card">
-        <div class="chart-label">זמן הכנת מנה ממוצע</div>
-        <canvas id="chartAvgPrep"></canvas>
-      </div>
-    </div>
-  </div>
-
-  <!-- Domain 4: דיוק -->
-  <div class="domain-section">
-    <div class="domain-title">דיוק</div>
-    <div class="charts-row">
-      <div class="chart-card">
-        <div class="chart-label">מנות מושלמות מול שגויות</div>
-        <canvas id="chartPerfect"></canvas>
-      </div>
-    </div>
-  </div>
-
-  <!-- Domain 5: ניהול גלוטן -->
-  <div class="domain-section">
-    <div class="domain-title">ניהול גלוטן</div>
-    <div class="charts-row">
-      <div class="chart-card">
-        <div class="chart-label">אירועי גלוטן</div>
-        <canvas id="chartGluten"></canvas>
-      </div>
-    </div>
   </div>
 
   <!-- Per-patient notes (always visible when patient selected) -->
@@ -858,8 +874,22 @@ function renderDetail() {
 }
 
 function renderLevelTable(s) {
-  const headers = ['רמה', 'תוצאה', 'מטבעות', 'זמן (שנ׳)', 'הוגש סה״כ', 'מושלם',
-    'שגוי', 'קליקים כפולים', 'ילד גלוטן הופיע', 'הוגש גלוטן', 'לא הוגש גלוטן', 'זמן הכנה ממוצע', '⚙'];
+  function tip(text, tooltip) { return `${text} <i class="info-icon" data-tip="${tooltip}">i</i>`; }
+  const headers = [
+    'רמה',
+    tip('תוצאה', 'האם נצברו מספיק מטבעות ליעד הרמה'),
+    tip('מטבעות', 'סך המטבעות שנצברו בסיום הרמה'),
+    tip('זמן (שנ׳)', 'שניות עד הגעת המטבעות ליעד. ריק אם היעד לא הושג'),
+    tip('הוגש סה״כ', 'מספר מנות שהוגשו ללקוחות (כולל מושלמות ושגויות)'),
+    tip('מושלם', 'מנות שכל המרכיבים בהן היו נכונים'),
+    tip('שגוי', 'מנות שהוגשו עם מרכיב שגוי או חסר'),
+    tip('קליקים כפולים', 'לחיצה חוזרת על מרכיב שכבר נמצא בצלחת'),
+    tip('ילד גלוטן הופיע', 'מספר פעמים שהגיע ילד עם אלרגיה לגלוטן'),
+    tip('הוגש גלוטן', 'פעמים שהוגש מזון עם גלוטן לילד הרגיש בטעות'),
+    tip('לא הוגש גלוטן', 'פעמים שזוהה ילד גלוטן ולא הוגש לו גלוטן — תגובה נכונה'),
+    tip('זמן הכנה ממוצע', 'זמן למטרה חלקי מנות מושלמות'),
+    tip('⚙', 'הגדרות לוח בקרה ברמה')
+  ];
 
   window._cpData = [];
 
@@ -1142,6 +1172,40 @@ document.getElementById('patientNotesArea').addEventListener('input', e => {
 document.getElementById('refreshBtn').addEventListener('click', loadFromSupabase);
 
 // ── Init ──────────────────────────────────────────────────────────────────────
+// Global tooltip for info icons (works inside tables)
+(function() {
+  const tt = document.createElement('div');
+  tt.style.cssText = 'position:fixed;background:#1e3a5f;color:white;padding:7px 11px;border-radius:6px;font-size:0.75rem;max-width:220px;white-space:normal;line-height:1.5;z-index:9999;pointer-events:none;opacity:0;transition:opacity 0.15s;box-shadow:0 2px 8px rgba(0,0,0,0.2);text-align:right;';
+  document.body.appendChild(tt);
+  document.addEventListener('mouseover', e => {
+    const icon = e.target.closest('.info-icon');
+    if (!icon) return;
+    tt.textContent = icon.dataset.tip || '';
+    tt.style.opacity = '1';
+  });
+  document.addEventListener('mousemove', e => {
+    if (tt.style.opacity === '1') {
+      tt.style.left = (e.clientX + 12) + 'px';
+      tt.style.top  = (e.clientY - 36) + 'px';
+    }
+  });
+  document.addEventListener('mouseout', e => {
+    if (e.target.closest('.info-icon')) tt.style.opacity = '0';
+  });
+})();
+
+function toggleDomain(id) {
+  const section = document.getElementById(id);
+  const wasOpen = section.classList.contains('open');
+  section.classList.toggle('open');
+  if (!wasOpen) {
+    setTimeout(() => {
+      [coinsChart, servedChart, dupChart, timeChart, avgPrepChart, perfectChart, glutenChart]
+        .forEach(c => { if (c) c.resize(); });
+    }, 50);
+  }
+}
+
 loadFromSupabase();
 
 // ── Control panel popover ─────────────────────────────────────────────────────
