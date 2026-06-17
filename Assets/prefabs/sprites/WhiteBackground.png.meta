@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 97a64788b40dc804088e08fdb37f6830
+guid: 788fd0e77931e8a41b5327de6ba4d9b9
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -6222545571083512147
-    second: israel_clean_street1_0
+      213: 3419579445345109759
+    second: WhiteBackground_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -72,7 +72,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 512
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: israel_clean_street1_0
+      name: WhiteBackground_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 2816
-        height: 1504
+        height: 1536
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: da613e485c315a9a0800000000000000
-      internalID: -6222545571083512147
+      spriteID: ff6c5094369c47f20800000000000000
+      internalID: 3419579445345109759
       vertices: []
       indices: 
       edges: []
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      israel_clean_street1_0: -6222545571083512147
+      WhiteBackground_0: 3419579445345109759
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

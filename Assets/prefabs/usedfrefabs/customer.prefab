@@ -120,6 +120,8 @@ MonoBehaviour:
   calmColor: {r: 0, g: 1, b: 0, a: 1}
   warningColor: {r: 1, g: 0.55, b: 0, a: 1}
   angryColor: {r: 1, g: 0, b: 0, a: 1}
+  keepBarVisibleWhenTimerDisabled: 0
+  disabledTimerColor: {r: 0.65, g: 0.65, b: 0.65, a: 1}
 --- !u!1 &3892966657409924463
 GameObject:
   m_ObjectHideFlags: 0
@@ -384,3 +386,5 @@ MonoBehaviour:
   fallbackAngerBarDurationSeconds: 17
   autoStartAngerBarOnInit: 1
   wrongIngredientMarkerPrefab: {fileID: 5766591070515856664, guid: 38b6c4e9b6fd5dc448d2c877f7e433b4, type: 3}
+  addedMarkerWorldScale: {x: 0.25, y: 0.25, z: 0.25}
+  wrongMarkerScale: {x: 0.45, y: 0.45, z: 0.45}

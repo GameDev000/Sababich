@@ -2,12 +2,14 @@
 // using System.Reflection;
 // using TMPro;
 // using UnityEngine;
+// using UnityEngine.SceneManagement;
 // using UnityEngine.UI;
 
 // /// <summary>
 // /// Controls the runtime control panel UI.
 // /// Uses the existing PauseButton/PauseManager flow when opening and closing the panel.
 // /// Applies level time changes immediately and applies saved settings on Save.
+// /// Also allows manual level navigation through a dropdown and confirmation dialog.
 // /// </summary>
 // public class ControlPanelUI : MonoBehaviour
 // {
@@ -35,6 +37,9 @@
 //     [Header("Anger Time")]
 //     [SerializeField] private Slider angerTimeSlider;
 //     [SerializeField] private TextMeshProUGUI angerTimeValueText;
+//     [Header("Anger Time Range")]
+//     [SerializeField] private int minAngerTimeSeconds = 7;
+//     [SerializeField] private int maxAngerTimeSeconds = 20;
 
 //     [Header("Added Items Marking")]
 //     [SerializeField] private Toggle markAddedItemsToggle;
@@ -66,7 +71,44 @@
 //     [SerializeField] private bool defaultMarkAddedItemsEnabled = false;
 //     [SerializeField] private bool defaultDirtEnabled = true;
 
+//     [Header("Level Navigation")]
+//     [SerializeField] private TMP_Dropdown levelSelectDropdown;
+//     [SerializeField] private Button goToLevelButton;
+//     [SerializeField] private MainMenu sceneNavigationManager;
+
+//     [Header("Level Navigation Confirmation")]
+//     [SerializeField] private GameObject confirmLevelChangePanel;
+//     [SerializeField] private TextMeshProUGUI confirmLevelChangeMessageText;
+//     [SerializeField] private Button confirmGoToLevelButton;
+//     [SerializeField] private Button cancelGoToLevelButton;
+
 //     private const string ADD_TIME_METHOD_NAME = "AddTimeSeconds";
+
+//     private class LevelNavigationTarget
+//     {
+//         public string DisplayName;
+//         public string SceneName;
+
+//         public LevelNavigationTarget(string displayName, string sceneName)
+//         {
+//             DisplayName = displayName;
+//             SceneName = sceneName;
+//         }
+//     }
+
+//     private readonly List<LevelNavigationTarget> levelNavigationTargets = new List<LevelNavigationTarget>
+//     {
+//         new LevelNavigationTarget("שלב 1 - ישראל", "level1 - israel"),
+//         new LevelNavigationTarget("שלב 1.1 - ישראל", "level1.1 - israel"),
+//         new LevelNavigationTarget("שלב 1.2 - סין", "level1.2 - china"),
+//         new LevelNavigationTarget("שלב 2 - סין", "level2 - china"),
+//         new LevelNavigationTarget("שלב 2.1 - ארה\"ב", "level2.1 - USA"),
+//         new LevelNavigationTarget("שלב 2.2 - ארה\"ב", "level2.2 - USA"),
+//         new LevelNavigationTarget("שלב 3 - ארה\"ב", "level3 - USA")
+//     };
+
+//     private string pendingLevelSceneName = string.Empty;
+//     private string pendingLevelDisplayName = string.Empty;
 
 //     private bool panelPausedGame;
 //     private MethodInfo addTimeMethod;
@@ -114,6 +156,7 @@
 //         SetupMarkAddedItemsToggle();
 //         SetupDirtToggle();
 //         SetupIngredientCountSlider();
+//         SetupLevelNavigation();
 
 //         ResolveLevelTimerIfNeeded();
 //         SyncCustomerLimitButtonsFromManager();
@@ -125,6 +168,7 @@
 //     {
 //         SyncCustomerLimitButtonsFromManager();
 //         SyncIngredientCountSliderFromManager();
+//         SelectCurrentSceneInDropdown();
 //     }
 
 //     private void OnDestroy()
@@ -153,6 +197,15 @@
 //         if (customerLimit3Button != null)
 //             customerLimit3Button.onClick.RemoveListener(OnCustomerLimit3Clicked);
 
+//         if (goToLevelButton != null)
+//             goToLevelButton.onClick.RemoveListener(OnGoToLevelClicked);
+
+//         if (confirmGoToLevelButton != null)
+//             confirmGoToLevelButton.onClick.RemoveListener(OnConfirmGoToLevelClicked);
+
+//         if (cancelGoToLevelButton != null)
+//             cancelGoToLevelButton.onClick.RemoveListener(OnCancelGoToLevelClicked);
+
 //         if (angerTimeSlider != null)
 //             angerTimeSlider.onValueChanged.RemoveListener(OnAngerTimeSliderChanged);
 
@@ -160,6 +213,163 @@
 //             ingredientCountSlider.onValueChanged.RemoveListener(OnIngredientCountSliderChanged);
 
 //         RestoreWorldVisualsAfterPanel();
+//     }
+
+//     private void SetupLevelNavigation()
+//     {
+//         PopulateLevelDropdown();
+//         SelectCurrentSceneInDropdown();
+//         SetConfirmLevelChangeVisible(false);
+
+//         if (goToLevelButton != null)
+//             goToLevelButton.onClick.AddListener(OnGoToLevelClicked);
+
+//         if (confirmGoToLevelButton != null)
+//             confirmGoToLevelButton.onClick.AddListener(OnConfirmGoToLevelClicked);
+
+//         if (cancelGoToLevelButton != null)
+//             cancelGoToLevelButton.onClick.AddListener(OnCancelGoToLevelClicked);
+
+//         if (sceneNavigationManager == null)
+//             sceneNavigationManager = FindObjectOfType<MainMenu>(true);
+//     }
+
+//     private void PopulateLevelDropdown()
+//     {
+//         if (levelSelectDropdown == null)
+//             return;
+
+//         levelSelectDropdown.ClearOptions();
+
+//         List<TMP_Dropdown.OptionData> options = new List<TMP_Dropdown.OptionData>();
+
+//         foreach (LevelNavigationTarget target in levelNavigationTargets)
+//         {
+//             options.Add(new TMP_Dropdown.OptionData(target.DisplayName));
+//         }
+
+//         levelSelectDropdown.AddOptions(options);
+//         levelSelectDropdown.RefreshShownValue();
+//     }
+
+//     private void SelectCurrentSceneInDropdown()
+//     {
+//         if (levelSelectDropdown == null)
+//             return;
+
+//         string currentSceneName = SceneManager.GetActiveScene().name;
+
+//         for (int i = 0; i < levelNavigationTargets.Count; i++)
+//         {
+//             if (levelNavigationTargets[i].SceneName == currentSceneName)
+//             {
+//                 levelSelectDropdown.SetValueWithoutNotify(i);
+//                 levelSelectDropdown.RefreshShownValue();
+//                 return;
+//             }
+//         }
+
+//         levelSelectDropdown.SetValueWithoutNotify(0);
+//         levelSelectDropdown.RefreshShownValue();
+//     }
+
+//     private void OnGoToLevelClicked()
+//     {
+//         LevelNavigationTarget target = GetSelectedLevelNavigationTarget();
+
+//         if (target == null)
+//         {
+//             Debug.LogWarning("[ControlPanelUI] No level was selected.");
+//             return;
+//         }
+
+//         pendingLevelSceneName = target.SceneName;
+//         pendingLevelDisplayName = target.DisplayName;
+
+//         if (confirmLevelChangeMessageText != null)
+//         {
+//             confirmLevelChangeMessageText.text =
+//                 $"האם לעבור אל {pendingLevelDisplayName}?\nההתקדמות הנוכחית בשלב תאבד.";
+//         }
+
+//         SetConfirmLevelChangeVisible(true);
+//     }
+
+//     private void OnCancelGoToLevelClicked()
+//     {
+//         pendingLevelSceneName = string.Empty;
+//         pendingLevelDisplayName = string.Empty;
+
+//         SetConfirmLevelChangeVisible(false);
+//     }
+
+//     private void OnConfirmGoToLevelClicked()
+//     {
+//         if (string.IsNullOrEmpty(pendingLevelSceneName))
+//         {
+//             Debug.LogWarning("[ControlPanelUI] Confirm was clicked, but no target scene was selected.");
+//             SetConfirmLevelChangeVisible(false);
+//             return;
+//         }
+
+//         string sceneToLoad = pendingLevelSceneName;
+
+//         SetConfirmLevelChangeVisible(false);
+//         RestoreWorldVisualsAfterPanel();
+//         SetPanelVisible(false);
+//         ForceResumeBeforeSceneChange();
+
+//         if (sceneNavigationManager == null)
+//             sceneNavigationManager = FindObjectOfType<MainMenu>(true);
+
+//         if (sceneNavigationManager != null)
+//         {
+//             sceneNavigationManager.LoadSceneFromControlPanel(sceneToLoad);
+//         }
+//         else
+//         {
+//             Debug.LogWarning("[ControlPanelUI] MainMenu navigation manager was not found. Loading scene directly.");
+//             Time.timeScale = 1f;
+//             SceneManager.LoadScene(sceneToLoad);
+//         }
+//     }
+
+//     private void ForceResumeBeforeSceneChange()
+//     {
+//         if (PauseManager.Instance != null && PauseManager.Instance.IsPaused)
+//         {
+//             if (pauseButton != null)
+//                 pauseButton.Toggle();
+//             else
+//                 PauseManager.Instance.TogglePause();
+//         }
+//         else
+//         {
+//             if (pauseButton != null)
+//                 pauseButton.UpdateIcon();
+//         }
+
+//         panelPausedGame = false;
+//         Time.timeScale = 1f;
+//     }
+
+//     private LevelNavigationTarget GetSelectedLevelNavigationTarget()
+//     {
+//         if (levelSelectDropdown == null)
+//             return null;
+
+//         int index = levelSelectDropdown.value;
+
+//         if (index < 0 || index >= levelNavigationTargets.Count)
+//             return null;
+
+//         return levelNavigationTargets[index];
+//     }
+
+//     private void SetConfirmLevelChangeVisible(bool visible)
+//     {
+//         if (confirmLevelChangePanel != null)
+//             confirmLevelChangePanel.SetActive(visible);
 //     }
 
 //     private void SetupCanvasGroup()
@@ -174,15 +384,21 @@
 //             controlPanelCanvasGroup = controlPanelOverlay.AddComponent<CanvasGroup>();
 //     }
 
-//     private void SetupAngerTimeSlider()
+//    private void SetupAngerTimeSlider()
 //     {
 //         if (angerTimeSlider == null)
 //             return;
 
-//         angerTimeSlider.minValue = 7;
-//         angerTimeSlider.maxValue = 12;
+//         angerTimeSlider.minValue = minAngerTimeSeconds;
+//         angerTimeSlider.maxValue = maxAngerTimeSeconds;
 //         angerTimeSlider.wholeNumbers = true;
-//         angerTimeSlider.value = CustomerMoodTimer_levels.RuntimeSecondsPerStage;
+
+//         angerTimeSlider.value = Mathf.Clamp(
+//             CustomerMoodTimer_levels.RuntimeSecondsPerStage,
+//             angerTimeSlider.minValue,
+//             angerTimeSlider.maxValue
+//         );
+
 //         angerTimeSlider.onValueChanged.AddListener(OnAngerTimeSliderChanged);
 //     }
 
@@ -226,6 +442,7 @@
 
 //         SyncCustomerLimitButtonsFromManager();
 //         SyncIngredientCountSliderFromManager();
+//         SelectCurrentSceneInDropdown();
 
 //         UpdateAngerTimeText();
 
@@ -242,6 +459,7 @@
 //         ApplyCustomerLimitSetting();
 //         ApplyIngredientCountSetting();
 
+//         SetConfirmLevelChangeVisible(false);
 //         SetPanelVisible(false);
 //         RestoreWorldVisualsAfterPanel();
 //         ResumeGameAfterPanel();
@@ -740,9 +958,6 @@
 //         return true;
 //     }
 // }
-
-
-
 using System.Collections.Generic;
 using System.Reflection;
 using TMPro;
@@ -760,6 +975,9 @@ public class ControlPanelUI : MonoBehaviour
 {
     public static bool MarkAddedItemsEnabled { get; private set; }
     public static bool DirtEnabled { get; private set; } = true;
+    public static bool CustomerPatienceTimerEnabled { get; private set; } = true;
+    public static bool GlutenChildEnabled { get; private set; } = true;
+    public static bool ColorfulBackgroundEnabled { get; private set; } = true;
 
     [Header("Root")]
     [SerializeField] private GameObject controlPanelOverlay;
@@ -782,12 +1000,27 @@ public class ControlPanelUI : MonoBehaviour
     [Header("Anger Time")]
     [SerializeField] private Slider angerTimeSlider;
     [SerializeField] private TextMeshProUGUI angerTimeValueText;
+    [SerializeField] private Toggle customerPatienceTimerToggle;
+
+    [Header("Anger Time Range")]
+    [SerializeField] private int minAngerTimeSeconds = 7;
+    [SerializeField] private int maxAngerTimeSeconds = 20;
+    [SerializeField] private Color disabledAngerTimeTextColor = new Color(0.65f, 0.65f, 0.65f, 1f);
 
     [Header("Added Items Marking")]
     [SerializeField] private Toggle markAddedItemsToggle;
 
     [Header("Dirt Settings")]
     [SerializeField] private Toggle showDirtToggle;
+
+    [Header("Gluten Child")]
+    [SerializeField] private Toggle glutenChildToggle;
+
+    [Header("Background Mode")]
+    [SerializeField] private Toggle colorfulBackgroundToggle;
+    [SerializeField] private SpriteRenderer backgroundRenderer;
+    [SerializeField] private Sprite colorfulBackgroundSprite;
+    [SerializeField] private Sprite plainWhiteBackgroundSprite;
 
     [Header("Concurrent Customers")]
     [SerializeField] private Button customerLimit1Button;
@@ -812,6 +1045,9 @@ public class ControlPanelUI : MonoBehaviour
     [SerializeField] private int defaultAngerTimeSeconds = 7;
     [SerializeField] private bool defaultMarkAddedItemsEnabled = false;
     [SerializeField] private bool defaultDirtEnabled = true;
+    [SerializeField] private bool defaultCustomerPatienceTimerEnabled = true;
+    [SerializeField] private bool defaultGlutenChildEnabled = true;
+    [SerializeField] private bool defaultColorfulBackgroundEnabled = true;
 
     [Header("Level Navigation")]
     [SerializeField] private TMP_Dropdown levelSelectDropdown;
@@ -855,6 +1091,11 @@ public class ControlPanelUI : MonoBehaviour
     private bool panelPausedGame;
     private MethodInfo addTimeMethod;
 
+    private Color angerTimeValueTextOriginalColor;
+    private bool hasAngerTimeValueTextOriginalColor;
+
+    private Sprite cachedOriginalBackgroundSprite;
+
     private int selectedCustomerLimit = 1;
     private int supportedCustomerLimit = 1;
 
@@ -895,8 +1136,11 @@ public class ControlPanelUI : MonoBehaviour
             customerLimit3Button.onClick.AddListener(OnCustomerLimit3Clicked);
 
         SetupAngerTimeSlider();
+        SetupCustomerPatienceTimerToggle();
         SetupMarkAddedItemsToggle();
         SetupDirtToggle();
+        SetupGlutenChildToggle();
+        SetupBackgroundModeToggle();
         SetupIngredientCountSlider();
         SetupLevelNavigation();
 
@@ -950,6 +1194,15 @@ public class ControlPanelUI : MonoBehaviour
 
         if (angerTimeSlider != null)
             angerTimeSlider.onValueChanged.RemoveListener(OnAngerTimeSliderChanged);
+
+        if (customerPatienceTimerToggle != null)
+            customerPatienceTimerToggle.onValueChanged.RemoveListener(OnCustomerPatienceTimerToggleChanged);
+
+        if (glutenChildToggle != null)
+            glutenChildToggle.onValueChanged.RemoveListener(OnGlutenChildToggleChanged);
+
+        if (colorfulBackgroundToggle != null)
+            colorfulBackgroundToggle.onValueChanged.RemoveListener(OnColorfulBackgroundToggleChanged);
 
         if (ingredientCountSlider != null)
             ingredientCountSlider.onValueChanged.RemoveListener(OnIngredientCountSliderChanged);
@@ -1131,11 +1384,38 @@ public class ControlPanelUI : MonoBehaviour
         if (angerTimeSlider == null)
             return;
 
-        angerTimeSlider.minValue = 7;
-        angerTimeSlider.maxValue = 12;
+        angerTimeSlider.minValue = minAngerTimeSeconds;
+        angerTimeSlider.maxValue = maxAngerTimeSeconds;
         angerTimeSlider.wholeNumbers = true;
-        angerTimeSlider.value = CustomerMoodTimer_levels.RuntimeSecondsPerStage;
+
+        angerTimeSlider.value = Mathf.Clamp(
+            CustomerMoodTimer_levels.RuntimeSecondsPerStage,
+            angerTimeSlider.minValue,
+            angerTimeSlider.maxValue
+        );
+
         angerTimeSlider.onValueChanged.AddListener(OnAngerTimeSliderChanged);
+    }
+
+    private void SetupCustomerPatienceTimerToggle()
+    {
+        if (angerTimeValueText != null && !hasAngerTimeValueTextOriginalColor)
+        {
+            angerTimeValueTextOriginalColor = angerTimeValueText.color;
+            hasAngerTimeValueTextOriginalColor = true;
+        }
+
+        if (customerPatienceTimerToggle == null)
+        {
+            CustomerPatienceTimerEnabled = true;
+            UpdateAngerTimeSliderAvailability();
+            return;
+        }
+
+        customerPatienceTimerToggle.SetIsOnWithoutNotify(CustomerPatienceTimerEnabled);
+        customerPatienceTimerToggle.onValueChanged.AddListener(OnCustomerPatienceTimerToggleChanged);
+
+        UpdateAngerTimeSliderAvailability();
     }
 
     private void SetupMarkAddedItemsToggle()
@@ -1154,6 +1434,35 @@ public class ControlPanelUI : MonoBehaviour
         showDirtToggle.isOn = DirtEnabled;
     }
 
+    private void SetupGlutenChildToggle()
+    {
+        if (glutenChildToggle == null)
+        {
+            GlutenChildEnabled = true;
+            return;
+        }
+
+        glutenChildToggle.SetIsOnWithoutNotify(GlutenChildEnabled);
+        glutenChildToggle.onValueChanged.AddListener(OnGlutenChildToggleChanged);
+    }
+
+    private void SetupBackgroundModeToggle()
+    {
+        CacheOriginalBackgroundSpriteIfNeeded();
+
+        if (colorfulBackgroundToggle == null)
+        {
+            ColorfulBackgroundEnabled = true;
+            UpdateBackgroundSprite();
+            return;
+        }
+
+        colorfulBackgroundToggle.SetIsOnWithoutNotify(ColorfulBackgroundEnabled);
+        colorfulBackgroundToggle.onValueChanged.AddListener(OnColorfulBackgroundToggleChanged);
+
+        UpdateBackgroundSprite();
+    }
+
     private void SetupIngredientCountSlider()
     {
         if (ingredientCountSlider == null)
@@ -1168,13 +1477,30 @@ public class ControlPanelUI : MonoBehaviour
         transform.SetAsLastSibling();
 
         if (angerTimeSlider != null)
-            angerTimeSlider.value = CustomerMoodTimer_levels.RuntimeSecondsPerStage;
+        {
+            angerTimeSlider.value = Mathf.Clamp(
+                CustomerMoodTimer_levels.RuntimeSecondsPerStage,
+                angerTimeSlider.minValue,
+                angerTimeSlider.maxValue
+            );
+        }
+
+        if (customerPatienceTimerToggle != null)
+            customerPatienceTimerToggle.SetIsOnWithoutNotify(CustomerPatienceTimerEnabled);
+
+        UpdateAngerTimeSliderAvailability();
 
         if (markAddedItemsToggle != null)
             markAddedItemsToggle.isOn = MarkAddedItemsEnabled;
 
         if (showDirtToggle != null)
             showDirtToggle.isOn = DirtEnabled;
+
+        if (glutenChildToggle != null)
+            glutenChildToggle.SetIsOnWithoutNotify(GlutenChildEnabled);
+
+        if (colorfulBackgroundToggle != null)
+            colorfulBackgroundToggle.SetIsOnWithoutNotify(ColorfulBackgroundEnabled);
 
         SyncCustomerLimitButtonsFromManager();
         SyncIngredientCountSliderFromManager();
@@ -1190,8 +1516,11 @@ public class ControlPanelUI : MonoBehaviour
     public void SaveAndClose()
     {
         ApplyAngerTimeSetting();
+        ApplyCustomerPatienceTimerSetting();
         ApplyMarkAddedItemsSetting();
         ApplyDirtSetting();
+        ApplyGlutenChildSetting();
+        ApplyBackgroundModeSetting();
         ApplyCustomerLimitSetting();
         ApplyIngredientCountSetting();
 
@@ -1212,8 +1541,23 @@ public class ControlPanelUI : MonoBehaviour
         if (showDirtToggle != null)
             showDirtToggle.isOn = defaultDirtEnabled;
 
+        if (glutenChildToggle != null)
+            glutenChildToggle.SetIsOnWithoutNotify(defaultGlutenChildEnabled);
+
+        if (colorfulBackgroundToggle != null)
+            colorfulBackgroundToggle.SetIsOnWithoutNotify(defaultColorfulBackgroundEnabled);
+
+        if (customerPatienceTimerToggle != null)
+            customerPatienceTimerToggle.SetIsOnWithoutNotify(defaultCustomerPatienceTimerEnabled);
+
         MarkAddedItemsEnabled = defaultMarkAddedItemsEnabled;
         DirtEnabled = defaultDirtEnabled;
+        GlutenChildEnabled = defaultGlutenChildEnabled;
+        ColorfulBackgroundEnabled = defaultColorfulBackgroundEnabled;
+        CustomerPatienceTimerEnabled = defaultCustomerPatienceTimerEnabled;
+
+        UpdateAngerTimeSliderAvailability();
+        UpdateBackgroundSprite();
 
         ResetCustomerLimitToLevelDefault();
         ResetIngredientCountToLevelDefault();
@@ -1238,6 +1582,21 @@ public class ControlPanelUI : MonoBehaviour
         CustomerMoodTimer_levels.SetRuntimeSecondsPerStage(selectedAngerTime);
 
         Debug.Log($"[ControlPanelUI] Anger time saved: {selectedAngerTime} seconds per stage.");
+    }
+
+    private void ApplyCustomerPatienceTimerSetting()
+    {
+        if (customerPatienceTimerToggle == null)
+        {
+            CustomerPatienceTimerEnabled = true;
+            Debug.LogWarning("[ControlPanelUI] Customer Patience Timer Toggle is not assigned. Timer remains enabled.");
+            return;
+        }
+
+        CustomerPatienceTimerEnabled = customerPatienceTimerToggle.isOn;
+        UpdateAngerTimeSliderAvailability();
+
+        Debug.Log($"[ControlPanelUI] Customer patience timer enabled: {CustomerPatienceTimerEnabled}");
     }
 
     private void ApplyMarkAddedItemsSetting()
@@ -1273,6 +1632,37 @@ public class ControlPanelUI : MonoBehaviour
             DirtStateManager.Instance.Clean();
 
         Debug.Log($"[ControlPanelUI] Dirt enabled saved: {DirtEnabled}");
+    }
+
+    private void ApplyGlutenChildSetting()
+    {
+        if (glutenChildToggle == null)
+        {
+            GlutenChildEnabled = true;
+            Debug.LogWarning("[ControlPanelUI] Gluten Child Toggle is not assigned. Gluten child remains enabled.");
+            return;
+        }
+
+        GlutenChildEnabled = glutenChildToggle.isOn;
+
+        Debug.Log($"[ControlPanelUI] Gluten child enabled: {GlutenChildEnabled}");
+    }
+
+    private void ApplyBackgroundModeSetting()
+    {
+        if (colorfulBackgroundToggle == null)
+        {
+            ColorfulBackgroundEnabled = true;
+            Debug.LogWarning("[ControlPanelUI] Colorful Background Toggle is not assigned. Colorful background remains enabled.");
+        }
+        else
+        {
+            ColorfulBackgroundEnabled = colorfulBackgroundToggle.isOn;
+        }
+
+        UpdateBackgroundSprite();
+
+        Debug.Log($"[ControlPanelUI] Colorful background enabled: {ColorfulBackgroundEnabled}");
     }
 
     private void ApplyCustomerLimitSetting()
@@ -1620,10 +2010,108 @@ public class ControlPanelUI : MonoBehaviour
         UpdateAngerTimeText();
     }
 
+    private void OnCustomerPatienceTimerToggleChanged(bool isOn)
+    {
+        CustomerPatienceTimerEnabled = isOn;
+        UpdateAngerTimeSliderAvailability();
+
+        Debug.Log($"[ControlPanelUI] Customer patience timer changed immediately: {CustomerPatienceTimerEnabled}");
+    }
+
+    private void OnGlutenChildToggleChanged(bool isOn)
+    {
+        GlutenChildEnabled = isOn;
+        Debug.Log($"[ControlPanelUI] Gluten child changed immediately: {GlutenChildEnabled}");
+    }
+
+    private void OnColorfulBackgroundToggleChanged(bool isOn)
+    {
+        ColorfulBackgroundEnabled = isOn;
+        UpdateBackgroundSprite();
+
+        Debug.Log($"[ControlPanelUI] Colorful background changed immediately: {ColorfulBackgroundEnabled}");
+    }
+
+    private void CacheOriginalBackgroundSpriteIfNeeded()
+    {
+        if (backgroundRenderer == null)
+            return;
+
+        if (cachedOriginalBackgroundSprite == null)
+            cachedOriginalBackgroundSprite = backgroundRenderer.sprite;
+
+        if (colorfulBackgroundSprite == null)
+            colorfulBackgroundSprite = cachedOriginalBackgroundSprite;
+    }
+
+    private void UpdateBackgroundSprite()
+    {
+        CacheOriginalBackgroundSpriteIfNeeded();
+
+        if (backgroundRenderer == null)
+        {
+            Debug.LogWarning("[ControlPanelUI] Background Renderer is not assigned.");
+            return;
+        }
+
+        if (ColorfulBackgroundEnabled)
+        {
+            if (colorfulBackgroundSprite != null)
+            {
+                backgroundRenderer.sprite = colorfulBackgroundSprite;
+            }
+
+            return;
+        }
+
+        if (plainWhiteBackgroundSprite != null)
+        {
+            backgroundRenderer.sprite = plainWhiteBackgroundSprite;
+        }
+        else
+        {
+            Debug.LogWarning("[ControlPanelUI] Plain White Background Sprite is not assigned.");
+        }
+    }
+
+    private void UpdateAngerTimeSliderAvailability()
+    {
+        bool isTimerEnabledInPanel = IsCustomerPatienceTimerEnabledInPanel();
+
+        if (angerTimeSlider != null)
+            angerTimeSlider.interactable = isTimerEnabledInPanel;
+
+        UpdateAngerTimeText();
+
+        if (angerTimeValueText != null)
+        {
+            if (!hasAngerTimeValueTextOriginalColor)
+            {
+                angerTimeValueTextOriginalColor = angerTimeValueText.color;
+                hasAngerTimeValueTextOriginalColor = true;
+            }
+
+            angerTimeValueText.color = isTimerEnabledInPanel
+                ? angerTimeValueTextOriginalColor
+                : disabledAngerTimeTextColor;
+        }
+    }
+
+    private bool IsCustomerPatienceTimerEnabledInPanel()
+    {
+        return customerPatienceTimerToggle == null || customerPatienceTimerToggle.isOn;
+    }
+
     private void UpdateAngerTimeText()
     {
         if (angerTimeValueText == null || angerTimeSlider == null)
             return;
+
+        if (!IsCustomerPatienceTimerEnabledInPanel())
+        {
+            angerTimeValueText.text = "יובכ";
+            return;
+        }
 
         angerTimeValueText.text = $"{Mathf.RoundToInt(angerTimeSlider.value)} sec";
     }

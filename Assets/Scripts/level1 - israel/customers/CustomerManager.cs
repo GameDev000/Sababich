@@ -1554,6 +1554,10 @@ public class CustomerManager : MonoBehaviour
             {
                 continue;
             }
+            if (!ControlPanelUI.GlutenChildEnabled && type.scoreIfNotServed)
+            {
+                continue;
+            }
 
             if (blockLastSpawnedType && type == lastSpawnedType)
             {

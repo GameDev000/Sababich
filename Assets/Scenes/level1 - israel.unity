@@ -1465,7 +1465,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 10.244999, y: 15.359999}
+    oldSize: {x: 10.24, y: 15.375014}
     newSize: {x: 10.24, y: 15.36}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -1999,7 +1999,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 2.86, y: 4.61}
+    oldSize: {x: 2.8652961, y: 4.6099997}
     newSize: {x: 3.52, y: 4.23}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -2892,7 +2892,11 @@ PrefabInstance:
     - target: {fileID: 880529583626645395, guid: b4fa36db6a605d744b0beb8c7ce0494d, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 97a64788b40dc804088e08fdb37f6830, type: 3}
+      objectReference: {fileID: 21300000, guid: 48a00ffa1ac5f1947890f5ddef1c9765, type: 3}
+    - target: {fileID: 880529583626645395, guid: b4fa36db6a605d744b0beb8c7ce0494d, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4820821974879478546, guid: b4fa36db6a605d744b0beb8c7ce0494d, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.86289674
@@ -2971,6 +2975,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4fa36db6a605d744b0beb8c7ce0494d, type: 3}
+--- !u!212 &557340269 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 880529583626645395, guid: b4fa36db6a605d744b0beb8c7ce0494d, type: 3}
+  m_PrefabInstance: {fileID: 557340268}
+  m_PrefabAsset: {fileID: 0}
 --- !u!212 &604447262 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 4553917795396081557, guid: de4c8b1251d1f8442be6fd1c2ee07a11, type: 3}
@@ -3534,7 +3543,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 22.72, y: 18.881563}
+    oldSize: {x: 22.744846, y: 18.88}
     newSize: {x: 10.24, y: 15.36}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -5894,7 +5903,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 22.72, y: 18.881563}
+    oldSize: {x: 22.744846, y: 18.88}
     newSize: {x: 10.24, y: 15.36}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -6325,7 +6334,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 10.244999, y: 15.359999}
+    oldSize: {x: 10.24, y: 15.375014}
     newSize: {x: 10.24, y: 15.36}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -6884,6 +6893,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1413050528}
     - target: {fileID: 1053789933039332494, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
+      propertyPath: backgroundRenderer
+      value: 
+      objectReference: {fileID: 557340269}
+    - target: {fileID: 1053789933039332494, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
       propertyPath: levelTimerBehaviour
       value: 
       objectReference: {fileID: 520318745}
@@ -6891,6 +6904,10 @@ PrefabInstance:
       propertyPath: markAddedItemsToggle
       value: 
       objectReference: {fileID: 947156983}
+    - target: {fileID: 1053789933039332494, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
+      propertyPath: colorfulBackgroundSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 48a00ffa1ac5f1947890f5ddef1c9765, type: 3}
     - target: {fileID: 1053789933039332494, guid: d0ede9bebf42b224a87f4810ad6e14ad, type: 3}
       propertyPath: worldVisualRootsToHideWhilePanelOpen.Array.size
       value: 1

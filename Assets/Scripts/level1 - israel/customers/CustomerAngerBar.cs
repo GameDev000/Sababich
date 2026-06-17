@@ -4,6 +4,8 @@ using UnityEngine.UI;
 /// <summary>
 /// Displays a visual anger timer above the customer.
 /// The bar fills over time and changes color from green to orange to red.
+/// If the customer patience timer is disabled from the control panel,
+/// the visual bar freezes and does not continue filling.
 /// </summary>
 public class CustomerAngerBar : MonoBehaviour
 {
@@ -14,6 +16,10 @@ public class CustomerAngerBar : MonoBehaviour
     [SerializeField] private Color calmColor = Color.green;
     [SerializeField] private Color warningColor = new Color(1f, 0.55f, 0f); // Orange
     [SerializeField] private Color angryColor = Color.red;
+
+    [Header("Disabled Timer Visual")]
+    [SerializeField] private bool keepBarVisibleWhenTimerDisabled = true;
+    [SerializeField] private Color disabledTimerColor = new Color(0.65f, 0.65f, 0.65f, 1f);
 
     private float duration;
     private float elapsedTime;
@@ -32,12 +38,11 @@ public class CustomerAngerBar : MonoBehaviour
 
         if (fillImage != null)
         {
+            fillImage.enabled = true;
             fillImage.fillAmount = 0f;
             fillImage.color = calmColor;
         }
     }
-
-
 
     /// <summary>
     /// Stops and hides the anger bar.
@@ -57,6 +62,7 @@ public class CustomerAngerBar : MonoBehaviour
 
         if (fillImage != null)
         {
+            fillImage.enabled = true;
             fillImage.fillAmount = 0f;
             fillImage.color = calmColor;
         }
@@ -65,10 +71,25 @@ public class CustomerAngerBar : MonoBehaviour
     private void Update()
     {
         if (!isRunning)
+        {
             return;
+        }
 
         if (fillImage == null)
+        {
             return;
+        }
+
+        if (!ControlPanelUI.CustomerPatienceTimerEnabled)
+        {
+            UpdateDisabledTimerVisual();
+            return;
+        }
+
+        if (!fillImage.enabled)
+        {
+            fillImage.enabled = true;
+        }
 
         elapsedTime += Time.deltaTime;
 
@@ -80,6 +101,24 @@ public class CustomerAngerBar : MonoBehaviour
         if (progress >= 1f)
         {
             isRunning = false;
+        }
+    }
+
+    private void UpdateDisabledTimerVisual()
+    {
+        if (fillImage == null)
+        {
+            return;
+        }
+
+        if (keepBarVisibleWhenTimerDisabled)
+        {
+            fillImage.enabled = true;
+            fillImage.color = disabledTimerColor;
+        }
+        else
+        {
+            fillImage.enabled = false;
         }
     }
 
