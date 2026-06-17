@@ -12,6 +12,9 @@ public class LevelControlSettings
     public int concurrentCustomersMax;   // max supported for this level (= default)
     public int ingredientCount;          // actual ingredient count
     public int ingredientCountMax;       // max for this level (= default)
+    public bool glutenChildEnabled;           // gluten child toggle
+    public bool customerPatienceTimerEnabled; // patience timer toggle
+    public bool colorfulBackgroundEnabled;    // background mode toggle
 }
 
 [System.Serializable]

@@ -110,6 +110,9 @@ public static class SessionDataCollector
             concurrentCustomersMax = CustomerManager.Instance != null ? CustomerManager.Instance.GetMaxSupportedConcurrentCustomers() : 1,
             ingredientCount = LevelIngredientAvailabilityManager.Instance != null ? LevelIngredientAvailabilityManager.Instance.CurrentIngredientCount : 0,
             ingredientCountMax = LevelIngredientAvailabilityManager.Instance != null ? LevelIngredientAvailabilityManager.Instance.MaxIngredientCount : 0,
+            glutenChildEnabled = ControlPanelUI.GlutenChildEnabled,
+            customerPatienceTimerEnabled = ControlPanelUI.CustomerPatienceTimerEnabled,
+            colorfulBackgroundEnabled = ControlPanelUI.ColorfulBackgroundEnabled,
         };
 
         attempts[levelNumber] = new LevelAttempt

@@ -877,6 +877,8 @@ function renderLevelTable(s) {
   function tip(text, tooltip) { return `${text} <i class="info-icon" data-tip="${tooltip}">i</i>`; }
   const headers = [
     'רמה',
+    tip('⚙', 'הגדרות לוח בקרה ברמה'),
+    'רמה',
     tip('תוצאה', 'האם נצברו מספיק מטבעות ליעד הרמה'),
     tip('מטבעות', 'סך המטבעות שנצברו בסיום הרמה'),
     tip('זמן (שנ׳)', 'שניות עד הגעת המטבעות ליעד. ריק אם היעד לא הושג'),
@@ -887,8 +889,7 @@ function renderLevelTable(s) {
     tip('ילד גלוטן הופיע', 'מספר פעמים שהגיע ילד עם אלרגיה לגלוטן'),
     tip('הוגש גלוטן', 'פעמים שהוגש מזון עם גלוטן לילד הרגיש בטעות'),
     tip('לא הוגש גלוטן', 'פעמים שזוהה ילד גלוטן ולא הוגש לו גלוטן — תגובה נכונה'),
-    tip('זמן הכנה ממוצע', 'זמן למטרה חלקי מנות מושלמות'),
-    tip('⚙', 'הגדרות לוח בקרה ברמה')
+    tip('זמן הכנה ממוצע', 'זמן למטרה חלקי מנות מושלמות')
   ];
 
   window._cpData = [];
@@ -912,6 +913,7 @@ function renderLevelTable(s) {
       : `<span class="na">—</span>`;
 
     return `<tr>
+      <td style="text-align:center">${cpBtn}</td>
       <td>${levelLabel(l.levelNumber)}</td>
       <td>${res}</td>
       <td class="shade-good">${l.coins}</td>
@@ -924,7 +926,6 @@ function renderLevelTable(s) {
       <td class="${l.glutenChildServedByMistake > 0 ? 'shade-bad' : ''}">${l.glutenChildServedByMistake}</td>
       <td>${l.glutenChildHandledCorrectly}</td>
       <td>${avg}</td>
-      <td style="text-align:center">${cpBtn}</td>
     </tr>`;
   });
 
@@ -1218,7 +1219,10 @@ function isControlModified(cs) {
     cs.markAddedItemsEnabled ||
     !cs.dirtEnabled ||
     cs.concurrentCustomers !== cs.concurrentCustomersMax ||
-    cs.ingredientCount !== cs.ingredientCountMax;
+    cs.ingredientCount !== cs.ingredientCountMax ||
+    !cs.glutenChildEnabled ||
+    !cs.customerPatienceTimerEnabled ||
+    !cs.colorfulBackgroundEnabled;
 }
 
 function showControlPopover(btn, idx) {
@@ -1241,7 +1245,10 @@ function showControlPopover(btn, idx) {
     r('סימון מרכיבים',   cs.markAddedItemsEnabled ? 'מופעל' : 'כבוי',   cs.markAddedItemsEnabled) +
     r('לכלוך',           cs.dirtEnabled ? 'מופעל' : 'כבוי',             !cs.dirtEnabled) +
     r('לקוחות במקביל',   cs.concurrentCustomers + ' / ' + cs.concurrentCustomersMax, cs.concurrentCustomers !== cs.concurrentCustomersMax) +
-    r('מרכיבים בשלב',    cs.ingredientCount + ' / ' + cs.ingredientCountMax,          cs.ingredientCount !== cs.ingredientCountMax);
+    r('מרכיבים בשלב',    cs.ingredientCount + ' / ' + cs.ingredientCountMax,          cs.ingredientCount !== cs.ingredientCountMax) +
+    r('ילד גלוטן',        cs.glutenChildEnabled ? 'מופעל' : 'כבוי',           !cs.glutenChildEnabled) +
+    r('מד סבלנות לקוח',  cs.customerPatienceTimerEnabled ? 'מופעל' : 'כבוי', !cs.customerPatienceTimerEnabled) +
+    r('רקע צבעוני',       cs.colorfulBackgroundEnabled ? 'מופעל' : 'כבוי',    !cs.colorfulBackgroundEnabled);
 
   const rect = btn.getBoundingClientRect();
   pop.style.top  = (rect.bottom + 6) + 'px';
