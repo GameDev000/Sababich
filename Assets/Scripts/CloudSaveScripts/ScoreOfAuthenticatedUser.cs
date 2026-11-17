@@ -9,6 +9,10 @@ using UnityEngine.UI;
 using System.Security.Cryptography;
 using System.Text;
 using System;
+using Unity.Services.CloudCode;
+using System.Collections.Generic;
+
+
 
 public class ScoreOfAuthenticatedUser : MonoBehaviour
 {
@@ -119,55 +123,281 @@ public class ScoreOfAuthenticatedUser : MonoBehaviour
     }
 
     // Runs after successful auth for register/login
-    private async Task PostSignInCommon()
-    {
-        // Save username right after sign-in (registered/logged-in users only)
-        Debug.Log($"[PostSignIn] displayName='{displayName}' internalUsername='{internalUsername}' isGuest={isGuest} IsSignedIn={AuthenticationService.Instance.IsSignedIn}");
+    // private async Task PostSignInCommon()
+    // {
+    //     // Save username right after sign-in (registered/logged-in users only)
+    //     Debug.Log($"[PostSignIn] displayName='{displayName}' internalUsername='{internalUsername}' isGuest={isGuest} IsSignedIn={AuthenticationService.Instance.IsSignedIn}");
 
-        if (!string.IsNullOrEmpty(displayName) && !string.IsNullOrEmpty(internalUsername))
+    //     if (!string.IsNullOrEmpty(displayName) && !string.IsNullOrEmpty(internalUsername))
+    //     {
+    //         if (AllowCloudSave())
+    //         {
+    //             try
+    //             {
+    //                 await DatabaseManager.SaveData(
+    //                     (CloudSaveKeys.DisplayName, displayName),
+    //                     (NameMapKey(displayName), internalUsername),
+    //                     (CloudSaveKeys.Username, internalUsername)
+    //                 );
+    //                 Debug.Log($"[PostSignIn] Username saved to cloud: displayName='{displayName}'");
+    //             }
+    //             catch (System.Exception e)
+    //             {
+    //                 Debug.LogError($"[PostSignIn] Failed to save username to cloud: {e.Message}");
+    //             }
+    //         }
+    //         else
+    //         {
+    //             Debug.LogWarning($"[PostSignIn] Cloud save skipped — AllowCloudSave()=false (isGuest={isGuest}, IsSignedIn={AuthenticationService.Instance.IsSignedIn})");
+    //         }
+    //     }
+    //     else
+    //     {
+    //         Debug.LogWarning($"[PostSignIn] Cloud save skipped — displayName or internalUsername is empty");
+    //     }
+
+    //     // Enable tracker after sign-in (so resumeScene can be saved automatically)
+    //     if (progressTracker == null)
+    //         progressTracker = FindObjectOfType<CloudProgressTracker>();
+
+    //     if (progressTracker != null)
+    //     {
+    //         if (!isGuest)
+    //             progressTracker.EnableAfterSignIn();
+    //         else
+    //             progressTracker.enabled = false;
+    //     }
+    //     else
+    //     {
+    //         Debug.LogWarning("ScoreOfAuthenticatedUser: CloudProgressTracker not found.");
+    //     }
+    // }
+
+
+    // private async Task PostSignInCommon()
+    // {
+    //     // Save player data after successful registration/login
+    //     Debug.Log(
+    //         $"[PostSignIn] displayName='{displayName}' " +
+    //         $"internalUsername='{internalUsername}' " +
+    //         $"isGuest={isGuest} " +
+    //         $"IsSignedIn={AuthenticationService.Instance.IsSignedIn}"
+    //     );
+
+    //     if (!string.IsNullOrWhiteSpace(displayName) &&
+    //         !string.IsNullOrWhiteSpace(internalUsername))
+    //     {
+    //         if (AllowCloudSave())
+    //         {
+    //             try
+    //             {
+    //                 // Step 1: Validate displayName on the server
+    //                 // and save it to Protected Player Data
+    //                 var result = await CloudCodeService.Instance
+    //                     .CallEndpointAsync<SetDisplayNameResult>(
+    //                         "SetDisplayName",
+    //                         new Dictionary<string, object>
+    //                         {
+    //                             { "displayName", displayName }
+    //                         }
+    //                     );
+
+    //                 if (result == null ||
+    //                     !result.success ||
+    //                     string.IsNullOrWhiteSpace(result.displayName))
+    //                 {
+    //                     throw new System.Exception(
+    //                         "Server rejected displayName"
+    //                     );
+    //                 }
+
+    //                 // Step 2: Use the validated server response
+    //                 displayName = result.displayName;
+
+    //                 Debug.Log(
+    //                     $"[PostSignIn] Protected displayName saved: '{displayName}'"
+    //                 );
+
+    //                 // Step 3: Save other player data as before
+    //                 // displayName is NOT saved to Default Cloud Save
+    //                 await DatabaseManager.SaveData(
+    //                     (NameMapKey(displayName), internalUsername),
+    //                     (CloudSaveKeys.Username, internalUsername)
+    //                 );
+
+    //                 Debug.Log(
+    //                     "[PostSignIn] Player mapping data saved successfully"
+    //                 );
+    //             }
+    //             catch (System.Exception e)
+    //             {
+    //                 Debug.LogError(
+    //                     $"[PostSignIn] Cloud Code validation/save failed: {e.Message}"
+    //                 );
+
+    //                 // Do not enable cloud progress tracking
+    //                 // when server-side validation fails
+    //                 return;
+    //             }
+    //         }
+    //         else
+    //         {
+    //             Debug.LogWarning(
+    //                 $"[PostSignIn] Cloud save skipped — " +
+    //                 $"AllowCloudSave()=false " +
+    //                 $"(isGuest={isGuest}, " +
+    //                 $"IsSignedIn={AuthenticationService.Instance.IsSignedIn})"
+    //             );
+    //         }
+    //     }
+    //     else
+    //     {
+    //         Debug.LogWarning(
+    //             "[PostSignIn] Cloud save skipped — " +
+    //             "displayName or internalUsername is empty"
+    //         );
+    //     }
+
+    //     // Enable tracker after successful sign-in
+    //     if (progressTracker == null)
+    //         progressTracker = FindObjectOfType<CloudProgressTracker>();
+
+    //     if (progressTracker != null)
+    //     {
+    //         if (!isGuest)
+    //             progressTracker.EnableAfterSignIn();
+    //         else
+    //             progressTracker.enabled = false;
+    //     }
+    //     else
+    //     {
+    //         Debug.LogWarning(
+    //             "ScoreOfAuthenticatedUser: CloudProgressTracker not found."
+    //         );
+    //     }
+    // }
+
+
+    private async Task<bool> PostSignInCommon()
+    {
+        Debug.Log(
+            $"[PostSignIn] displayName='{displayName}' " +
+            $"internalUsername='{internalUsername}' " +
+            $"isGuest={isGuest} " +
+            $"IsSignedIn={AuthenticationService.Instance.IsSignedIn}"
+        );
+
+        // Step 1: Validate local input before contacting the server
+        if (string.IsNullOrWhiteSpace(displayName) ||
+            string.IsNullOrWhiteSpace(internalUsername))
         {
-            if (AllowCloudSave())
+            Debug.LogWarning(
+                "[PostSignIn] Invalid displayName or internalUsername"
+            );
+
+            return false;
+        }
+
+        // Step 2: Handle authenticated players
+        if (!isGuest)
+        {
+            if (!AllowCloudSave())
             {
-                try
-                {
-                    await DatabaseManager.SaveData(
-                        (CloudSaveKeys.DisplayName, displayName),
-                        (NameMapKey(displayName), internalUsername),
-                        (CloudSaveKeys.Username, internalUsername)
-                    );
-                    Debug.Log($"[PostSignIn] Username saved to cloud: displayName='{displayName}'");
-                }
-                catch (System.Exception e)
-                {
-                    Debug.LogError($"[PostSignIn] Failed to save username to cloud: {e.Message}");
-                }
+                Debug.LogError(
+                    "[PostSignIn] Cloud services unavailable or player not signed in"
+                );
+
+                return false;
             }
-            else
+
+            try
             {
-                Debug.LogWarning($"[PostSignIn] Cloud save skipped — AllowCloudSave()=false (isGuest={isGuest}, IsSignedIn={AuthenticationService.Instance.IsSignedIn})");
+                // Step 3: Server-side validation and Protected Data save
+                var result = await CloudCodeService.Instance
+                    .CallEndpointAsync<SetDisplayNameResult>(
+                        "SetDisplayName",
+                        new Dictionary<string, object>
+                        {
+                            { "displayName", displayName }
+                           //{ "displayName", "   " }
+                        }
+                    );
+
+                // Step 4: Check the server response
+                if (result == null ||
+                    !result.success ||
+                    string.IsNullOrWhiteSpace(result.displayName))
+                {
+                    throw new System.Exception(
+                        "Server rejected displayName"
+                    );
+                }
+
+                // Step 5: Use the server-validated display name
+                displayName = result.displayName;
+
+                Debug.Log(
+                    $"[PostSignIn] Protected displayName saved: '{displayName}'"
+                );
+
+                // Step 6: Save remaining player mapping data
+                // displayName is NOT saved to Default Cloud Save
+                await DatabaseManager.SaveData(
+                    (NameMapKey(displayName), internalUsername),
+                    (CloudSaveKeys.Username, internalUsername)
+                );
+
+                Debug.Log(
+                    "[PostSignIn] Player mapping data saved successfully"
+                );
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError(
+                    $"[PostSignIn] Server validation/save failed: {e.Message}"
+                );
+
+                // Stop the flow when server-side validation fails
+                return false;
             }
         }
         else
         {
-            Debug.LogWarning($"[PostSignIn] Cloud save skipped — displayName or internalUsername is empty");
+            // Guests do not save player data to Cloud Save
+            Debug.Log(
+                "[PostSignIn] Guest login - Cloud Save skipped"
+            );
         }
 
-        // Enable tracker after sign-in (so resumeScene can be saved automatically)
+        // Step 7: Enable progress tracking only after success
         if (progressTracker == null)
+        {
             progressTracker = FindObjectOfType<CloudProgressTracker>();
+        }
 
         if (progressTracker != null)
         {
             if (!isGuest)
+            {
                 progressTracker.EnableAfterSignIn();
+            }
             else
+            {
                 progressTracker.enabled = false;
+            }
         }
         else
         {
-            Debug.LogWarning("ScoreOfAuthenticatedUser: CloudProgressTracker not found.");
+            Debug.LogWarning(
+                "[PostSignIn] CloudProgressTracker not found"
+            );
         }
+
+        // Step 8: Return success
+        return true;
     }
+
+
 
     /* ===================================================
      * START GAME IMMEDIATELY AFTER AUTH (NO SUCCESS/FAIL UI)
@@ -379,15 +609,55 @@ public class ScoreOfAuthenticatedUser : MonoBehaviour
         return false;
     }
 
+    // private async Task HandlePostAuth(ButtonType type)
+    // {
+    //     // Populate SessionIdentity so dashboard backend scripts know who is logged in
+    //     // without needing to access private fields of this class.
+    //     SessionIdentity.SetFromLogin(displayName, internalUsername, isGuest: false);
+
+    //     await PostSignInCommon();
+    //     enabled = true;
+
+    //     await StartAfterRegisteredLoginAsync(type);
+    // }
+
     private async Task HandlePostAuth(ButtonType type)
     {
-        // Populate SessionIdentity so dashboard backend scripts know who is logged in
-        // without needing to access private fields of this class.
-        SessionIdentity.SetFromLogin(displayName, internalUsername, isGuest: false);
+        // Validate and save player data on the server
+        bool validationSucceeded = await PostSignInCommon();
 
-        await PostSignInCommon();
+        // Stop login flow if server validation failed
+        if (!validationSucceeded)
+        {
+            Debug.LogError(
+                "[HandlePostAuth] Server validation failed. Login flow stopped."
+            );
+
+            if (statusField != null)
+            {
+                statusField.text = "אימות פרטי המשתמש נכשל. נסה שוב.";
+            }
+
+            return;
+        }
+
+        // Only validated users continue to the game
+        SessionIdentity.SetFromLogin(
+            displayName,
+            internalUsername,
+            isGuest: false
+        );
+
         enabled = true;
 
         await StartAfterRegisteredLoginAsync(type);
+    }
+
+
+    [Serializable]
+    private class SetDisplayNameResult
+    {
+        public bool success;
+        public string displayName;
     }
 }
